@@ -1,4 +1,4 @@
-include.apps('phui/menu','jquery/event/default').then(function(){
+steal.apps('phui/menu','jquery/event/default').then(function(){
    Jupiter.Menu({
 		CHILD_SELECTOR : "ul>li"
 	}).

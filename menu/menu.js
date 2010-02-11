@@ -1,4 +1,4 @@
-include.apps('phui/positionable','jquery/event/default','jquery/event/hover').then(function($){
+steal.apps('phui/positionable','jquery/event/default','jquery/event/hover').then(function($){
 	
 
 	$.Controller.extend('Jupiter.Menu',

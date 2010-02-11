@@ -1,4 +1,4 @@
-include.apps('jquery','event/default').then(function(){
+steal.apps('jquery','event/default').then(function(){
 	 
 	 /**
 	  * Allows you to 

@@ -4,7 +4,7 @@
 //load global selenium settings, change if you want something different
 load('settings/selenium.js')
 
-load('jmvc/rhino/loader.js');
+load('steal/rhino/loader.js');
 rhinoLoader(function(){
-    include.plugins('jupiter/selectable/test/funcunit');  // load tests
+    steal.plugins('jupiter/selectable/test/funcunit');  // load tests
 }, true);

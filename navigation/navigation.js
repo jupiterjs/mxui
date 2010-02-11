@@ -1,4 +1,4 @@
-include.apps('phui/toolbar').then(function(){
+steal.apps('phui/toolbar').then(function(){
 	
 	var J = Jupiter;
 	$.Controller.extend("Jupiter.Shiftable",{listensTo: ["shift"]},

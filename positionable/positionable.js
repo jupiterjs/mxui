@@ -1,4 +1,4 @@
-include.apps('jquery','jquery/controller').then(function(){
+steal.apps('jquery','jquery/controller').then(function(){
     $.Controller.extend("Jupiter.Positionable",
     {
         listensTo : ["show","hide"]
