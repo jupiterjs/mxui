@@ -1,11 +1,11 @@
 steal.apps('phui/menu','jquery/event/default').then(function(){
-   Jupiter.Menu({
+   Phui.Menu({
 		CHILD_SELECTOR : "ul>li"
 	}).
-    extend("Jupiter.Toolbar",
+    extend("Phui.Toolbar",
     {
        defaults : {
-           MENU_TYPE: Jupiter.Menu,
+           MENU_TYPE: Phui.Menu,
            POSITION_TOP : false,
            SELECT_TRIGGER : "click",
            BUTTON_CLASS_NAMES : "button"
@@ -30,13 +30,13 @@ steal.apps('phui/menu','jquery/event/default').then(function(){
 	   }
    })
    
-   Jupiter.Toolbar({
+   Phui.Toolbar({
        CLASS_NAMES: "ui-tabs ui-widget ui-widget-content ui-corner-all",
-       MENU_TYPE: Jupiter.UI.Menu,
+       MENU_TYPE: Phui.UI.Menu,
        CHILD_CLASS_NAMES: "ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all ui-toolbar",
        BUTTON_CLASS_NAMES: "ui-state-default ui-corner-all"
    }).
-   extend("Jupiter.UI.Toolbar",{})
+   extend("Phui.UI.Toolbar",{})
    
 
 });

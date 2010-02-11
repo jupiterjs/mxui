@@ -1,7 +1,7 @@
 steal.apps('phui/positionable','jquery/event/default','jquery/event/hover').then(function($){
 	
 
-	$.Controller.extend('Jupiter.Menu',
+	$.Controller.extend('Phui.Menu',
 	{
 		defaults : {
 			TYPES : [],
@@ -73,7 +73,7 @@ steal.apps('phui/positionable','jquery/event/default','jquery/event/hover').then
 		}
    })
 
-   $.Controller.extend("Jupiter.Highlight",
+   $.Controller.extend("Phui.Highlight",
    {
        defaults: {
            CHILD_SELECTOR : "li",
@@ -88,17 +88,17 @@ steal.apps('phui/positionable','jquery/event/default','jquery/event/hover').then
            el.removeClass(this.Class.HOVER_CLASS)
        }
    })
-   Jupiter.Highlight({HOVER_CLASS : "ui-state-hover"}).extend("Jupiter.UI.Highlight")
+   Phui.Highlight({HOVER_CLASS : "ui-state-hover"}).extend("Phui.UI.Highlight")
    
-   Jupiter.Menu({
-			TYPES : [Jupiter.Positionable, Jupiter.UI.Highlight],
+   Phui.Menu({
+			TYPES : [Phui.Positionable, Phui.UI.Highlight],
 			SELECT_TRIGGER : "hoverenter",
 			CHILD_SELECTOR : "li",
 			CLASS_NAMES : "ui-widget-content ui-menu ui-widget ui-corner-all",
 			CHILD_CLASS_NAMES : "ui-menu-item ui-state-default", 
 			POSITION_TOP : true,
             ACTIVE_STATE : "ui-state-active"
-	}).extend("Jupiter.UI.Menu")
+	}).extend("Phui.UI.Menu")
    
    
    

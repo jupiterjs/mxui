@@ -1,7 +1,7 @@
 steal.apps('phui/toolbar').then(function(){
 	
-	var J = Jupiter;
-	$.Controller.extend("Jupiter.Shiftable",{listensTo: ["shift"]},
+	var J = Phui;
+	$.Controller.extend("Phui.Shiftable",{listensTo: ["shift"]},
 	{
         "li shift" : function(el){
 			//move this guy to the first ... shift everything else around
@@ -48,7 +48,7 @@ steal.apps('phui/toolbar').then(function(){
 		}
 	})
 	
-	$.Controller.extend("Jupiter.FadeInable",{listensTo: ["show","hide"]}, {
+	$.Controller.extend("Phui.FadeInable",{listensTo: ["show","hide"]}, {
 	   show : function(el, ev){
 			ev.preventDefault();
 			this.element.css("opacity",0.2).show().animate({opacity: 1.0},"slow")
@@ -62,7 +62,7 @@ steal.apps('phui/toolbar').then(function(){
 	
 	
 	J.Menu({
-        TYPES: [J.Positionable, Jupiter.Shiftable, J.FadeInable, Jupiter.Highlight],
+        TYPES: [J.Positionable, Phui.Shiftable, J.FadeInable, Phui.Highlight],
 		CLASS_NAMES: "menu"
     }).extend("ClickMenu",{listensTo: ["shifted","hide"]},{
 		"li deselect" : function(el, ev){
@@ -87,10 +87,10 @@ steal.apps('phui/toolbar').then(function(){
 		}
 	})
 	//({MENU_TYPE: ClickMenu})
-	J.Toolbar({MENU_TYPE: ClickMenu, CHILD_CLASS_NAMES: "menu"}).extend("Jupiter.Navigation",{listensTo: ["shifted"]},{
+	J.Toolbar({MENU_TYPE: ClickMenu, CHILD_CLASS_NAMES: "menu"}).extend("Phui.Navigation",{listensTo: ["shifted"]},{
 		init : function(){
 			this._super.apply(this, arguments)
-			this.element.mixin(Jupiter.Shiftable, Jupiter.Highlight)
+			this.element.mixin(Phui.Shiftable, Phui.Highlight)
             this.element.children("ul").css("position","relative")
 		},
 		"li deselect" : function(el, ev){

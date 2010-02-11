@@ -1,5 +1,5 @@
 steal.apps('jquery','jquery/controller').then(function(){
-    $.Controller.extend("Jupiter.Positionable",
+    $.Controller.extend("Phui.Positionable",
     {
         listensTo : ["show","hide"]
     },
