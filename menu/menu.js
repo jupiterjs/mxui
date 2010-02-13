@@ -44,13 +44,19 @@ steal.apps('phui/positionable','jquery/event/default','jquery/event/hover').then
 		  el.trigger("select")
 		},
 		hideOld : function(){
-			var old = this.element.find("."+this.Class.ACTIVE_STATE).removeClass(this.Class.ACTIVE_STATE).data("menu-element")
+			var old = this.sub(this.element.find("."+this.Class.ACTIVE_STATE).removeClass(this.Class.ACTIVE_STATE))
 			if(old){
 				 old.trigger("hide")
 			}
 		},
+		/**
+		 * Returns the sub-menu from this item
+		 */
+		sub : function(el){
+			return el.data("menu-element");
+		},
 		"{CHILD_SELECTOR} default.select" : function(el, ev){
-		   var me = el.data("menu-element")
+		   var me = this.sub(el)
 		   if (me) {
 			 me.trigger("show",this.calculateSubmenuPosition(el, ev) )
 		   }
@@ -62,7 +68,7 @@ steal.apps('phui/positionable','jquery/event/default','jquery/event/hover').then
 			return off;
 		},
 		"default.hide" : function(){
-			var old = this.element.find("."+this.Class.ACTIVE_STATE).removeClass(this.Class.ACTIVE_STATE).data("menu-element")
+			var old = this.sub(this.element.find("."+this.Class.ACTIVE_STATE).removeClass(this.Class.ACTIVE_STATE));
 			  if(old){
 				 old.trigger("hide")
 			  }
