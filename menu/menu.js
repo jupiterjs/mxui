@@ -36,6 +36,11 @@ steal.apps('phui/positionable','jquery/event/default','jquery/event/hover').then
 		},
 		"{CHILD_SELECTOR} {SELECT_TRIGGER}" : function(el, ev){
             ev.preventDefault();
+			//make sure we aren't already active
+			if(el.hasClass(this.Class.ACTIVE_STATE)){
+				return;
+			}
+			
 			$(el).trigger("deselect")
 		},
 		"{CHILD_SELECTOR} default.deselect" : function(el, ev){
