@@ -35,6 +35,12 @@ steal.plugins('phui/menu').then(function($){
 		},
 		sub : function(el){
 			return this.element.find(el.find('a').attr('href'))
+		},
+		/**
+		 * Overwritten for performance
+		 */
+		calculateSubmenuPosition : function(){
+			
 		}
 	})
 	

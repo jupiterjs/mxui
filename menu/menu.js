@@ -35,7 +35,10 @@ steal.apps('phui/positionable','jquery/event/default','jquery/event/hover').then
 			//create sub menus
 		},
 		"{CHILD_SELECTOR} {SELECT_TRIGGER}" : function(el, ev){
-            ev.preventDefault();
+            if($(ev.target).closest("a").length){
+				ev.preventDefault();
+			}
+				
 			//make sure we aren't already active
 			if(el.hasClass(this.Class.ACTIVE_STATE)){
 				return;
@@ -45,13 +48,14 @@ steal.apps('phui/positionable','jquery/event/default','jquery/event/hover').then
 		},
 		"{CHILD_SELECTOR} default.deselect" : function(el, ev){
 		  //check if I have an li active
-		  this.hideOld()
+		  this.hideOld() //huh
 		  el.trigger("select")
 		},
 		hideOld : function(){
-			var old = this.sub(this.element.find("."+this.Class.ACTIVE_STATE).removeClass(this.Class.ACTIVE_STATE))
-			if(old){
-				 old.trigger("hide")
+			var active = this.find("."+this.Class.ACTIVE_STATE);
+			if(active.length){
+				var old = this.sub(active.removeClass(this.Class.ACTIVE_STATE))
+				old && old.trigger("hide")
 			}
 		},
 		/**
@@ -62,7 +66,7 @@ steal.apps('phui/positionable','jquery/event/default','jquery/event/hover').then
 		},
 		"{CHILD_SELECTOR} default.select" : function(el, ev){
 		   var me = this.sub(el)
-		   if (me) {
+		   if (me.length) {
 			 me.trigger("show",this.calculateSubmenuPosition(el, ev) )
 		   }
 		   el.addClass(this.Class.ACTIVE_STATE)
@@ -72,15 +76,17 @@ steal.apps('phui/positionable','jquery/event/default','jquery/event/hover').then
 			off.left =off.left+ el.outerWidth();
 			return off;
 		},
-		"default.hide" : function(){
-			var old = this.sub(this.element.find("."+this.Class.ACTIVE_STATE).removeClass(this.Class.ACTIVE_STATE));
-			  if(old){
-				 old.trigger("hide")
-			  }
-			this.element.hide();
+		"default.hide" : function(el, ev){
+			 if(ev.target == this.element[0]){
+			 	var old = this.sub(this.element.find("."+this.Class.ACTIVE_STATE).removeClass(this.Class.ACTIVE_STATE));
+				old && old.trigger("hide")
+				this.element.hide();
+			 }
+			
 		},
-		"default.show" : function(){
-		   this.element.show();
+		"default.show" : function(el, ev){
+		   if(ev.target == this.element[0])
+		   	this.element.show();
 		}
    })
 
