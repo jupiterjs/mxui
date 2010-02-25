@@ -3,14 +3,38 @@
 <html lang="en">
 	<head>
 		<title>tabs</title>
+		<link type="text/css" href="../smoothness/jquery-ui-1.7.2.custom.css" rel="stylesheet" />
         <style type='text/css'>
             body {font-family: verdana}
             .error {border: solid 1px red;}
             .error_text { color: red; font-size: 10px;}
             td {padding: 3px;}
+			#tabs {
+				border: solid 1px;
+			}
+			#tabs ul li{
+				float: left;
+				padding: 10px;
+				list-style: none;
+				border: solid 1px green;
+				background-color: black;
+				color: white;
+			}
+			#tabs ul {
+				height: 40px;
+				border-bottom: solid 1px gray;
+				padding: 0px;
+				margin: 0px;
+			}
+			#tabs .active {
+				background-color: white;
+				color: black;
+			}
         </style>
 	</head>
 	<body>
+		<h1>Tabs Demo</h1>
+		<h2>Basic Tab</h2>
 	    <div id="tabs">
 		    <ul>
 		        <li><a href="#fragment-1"><span>One</span></a></li>
@@ -31,6 +55,29 @@
 		        Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.
 		    </div>
 		</div>		
+		
+		<h2>UI Tab</h2>
+		<div id="uitabs">
+		    <ul>
+		        <li><a href="#fragment-1"><span>One</span></a></li>
+		        <li><a href="#fragment-2"><span>Two</span></a></li>
+		        <li><a href="#fragment-3"><span>Three</span></a></li>
+		    </ul>
+		    <div id="fragment-1">
+		        <p>First tab is active by default:</p>
+		        <pre><code>$('#example').tabs();</code></pre>
+		    </div>
+		    <div id="fragment-2">
+		        Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.
+		        Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.
+		    </div>
+		    <div id="fragment-3">
+		        Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.
+		        Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.
+		        Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.
+		    </div>
+		</div>	
+		
 		<script type='text/javascript' 
                 src='../../steal/steal.js?steal[app]=phui/tabs&steal[env]=development'
                 package='main.js'
@@ -38,6 +85,7 @@
         </script>
 		<script type='text/javascript'>
 			$("#tabs").phui_tabs()
+			$("#uitabs").phui_ui_tabs()
 		</script>
 	</body>
 </html>

@@ -11,12 +11,17 @@ steal.plugins('phui/menu').then(function($){
 	})
 	//problem with this is it will search and find everything ...
 	p.Menu({
-		TYPES: Phui.Tab
+		CHILD_TYPES: Phui.Tab,
+		TABS_CONAINER_CLASS : "",
+		TYPES : []
 	}).extend("Phui.Tabs",{
 		init : function(element, level){
 			var MyClass = this.Class;
 			var selected;
-			this.element.addClass(this.Class.CLASS_NAMES).
+			
+			
+			
+			this.element.mixin.apply(this.element, this.Class.TYPES).addClass(this.Class.CLASS_NAMES).
 					find(this.Class.CHILD_SELECTOR).
 					addClass(this.Class.CHILD_CLASS_NAMES).each(function(){
 						var el = $(this)
@@ -24,9 +29,9 @@ steal.plugins('phui/menu').then(function($){
 							selected = el;
 						}
 					})
-			
+			this.element.children('ul').addClass(this.Class.TABS_CONAINER_CLASS)
 			this.element.children("div").each(function(){
-						$(this).mixin(MyClass.TYPES);	
+						$(this).mixin(MyClass.CHILD_TYPES);	
 			}).trigger('hide')
 			selected = selected || $(this.element.find(this.Class.CHILD_SELECTOR)[0])
 			selected.trigger("select")
@@ -43,5 +48,14 @@ steal.plugins('phui/menu').then(function($){
 			
 		}
 	})
-	
+	Phui.Tabs({
+       CLASS_NAMES: "ui-tabs ui-widget ui-widget-content ui-corner-all",
+       CHILD_CLASS_NAMES: "ui-state-default ui-corner-top",
+       BUTTON_CLASS_NAMES: "ui-state-default ui-corner-all",
+	   TABS_CONAINER_CLASS : "ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all",
+	   ACTIVE_STATE : "ui-state-active",
+	   SELECTED_STATE  : "ui-tabs-selected",
+	   TYPES : [Phui.UI.Highlight]
+   }).
+   extend("Phui.UI.Tabs",{})
 })
