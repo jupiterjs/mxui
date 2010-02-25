@@ -10,7 +10,8 @@ steal.apps('phui/positionable','jquery/event/default','jquery/event/hover').then
 			CLASS_NAMES : "", //ui-widget-content ui-menu ui-widget ui-corner-all
 			CHILD_CLASS_NAMES : "", //ui-menu-item ui-state-default
 			POSITION_TOP : true,
-            ACTIVE_STATE : "active"
+            ACTIVE_STATE : "active",
+			SELECTED_STATE : "selected"
 		},
 		listensTo : ["default.show","default.hide"]
 	},
@@ -54,7 +55,7 @@ steal.apps('phui/positionable','jquery/event/default','jquery/event/hover').then
 		hideOld : function(){
 			var active = this.find("."+this.Class.ACTIVE_STATE);
 			if(active.length){
-				var old = this.sub(active.removeClass(this.Class.ACTIVE_STATE))
+				var old = this.sub(active.removeClass(this.Class.ACTIVE_STATE).removeClass(this.Class.SELECTED_STATE))
 				old && old.trigger("hide")
 			}
 		},
@@ -69,6 +70,7 @@ steal.apps('phui/positionable','jquery/event/default','jquery/event/hover').then
 		   if (me.length) {
 			 me.trigger("show",this.calculateSubmenuPosition(el, ev) )
 		   }
+		   el.addClass(this.Class.SELECTED_STATE)
 		   el.addClass(this.Class.ACTIVE_STATE)
 		},
 		calculateSubmenuPosition : function(el, ev){
