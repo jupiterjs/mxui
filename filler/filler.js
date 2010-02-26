@@ -17,7 +17,6 @@ steal.plugins('jquery/controller').then(function($){
 				this.element.parent().children().each(function(){
 					var $jq = $(this)
 					if(this != el && this.nodeName.toLowerCase() != 'script' && $jq.is(":visible")){
-						console.log(this,$jq.outerHeight(true) )
 						height = height - $jq.outerHeight(true)
 					}
 					
