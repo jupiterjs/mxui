@@ -1,4 +1,4 @@
-steal.plugins('jquery/controller','jquery/event/drag/limit').then(function($){
+steal.plugins('jquery/controller','jquery/event/drag/limit','jquery/dom/dimensions').then(function($){
 	
 	
 	$.Controller.extend("Phui.Splitter",
@@ -73,7 +73,32 @@ steal.plugins('jquery/controller','jquery/event/drag/limit').then(function($){
 			//drag.movingElement.css("top","")
 		},
 		resize : function(){
-			
+			//go through children and resize
+			var height = this.element.height();
+			console.log("starting", height)
+			var c = this.element.children(":not(.hsplitter)");
+			var splitters = this.element.children(".hsplitter");
+			var splitterHeight = splitters.outerHeight();
+			//size everything
+			var total  = this.element.height() - splitterHeight* splitters.length;
+			console.log("total = ",total)
+			for(var i =0; i < c.length; i++){
+				var $c = $(c[i]);
+				var cheight = $c.outerHeight();
+				console.log("outerHeight", cheight, total)
+				if(cheight > total){
+					cheight = total;
+				}
+				if(i == c.length - 1){
+					console.log("setting to total")
+					$c.outerHeight(total);
+				}else{
+					$c.outerHeight(cheight);
+				}
+				total = total - cheight;
+				
+			}
+
 		}
 	})
 })
