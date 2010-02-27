@@ -1,37 +1,30 @@
 steal.plugins('jquery/controller',
 			  'jquery/view/ejs').then(function(){
   	
+	
+	
+	
 	$.Controller.extend("Phui.Widget",{
-		show : function(params){
+		view : function(options){
 			var folder = this.getFolder(), self = this;
-			return {
-				toString : function(dataViewId){
-					return ["<div data-view-id='",dataViewId,"'>",$.View("//"+folder+"/show.ejs",params), "</div>"].join('')
-				},
-				hookup : function(el){
-					return new self(el, params);
-				}
-			}
-		},
-		edit : function(params){
-			var folder = this.getFolder(), self = this;
-			return {
-				toString : function(dataViewId){
-					return ["<div data-view-id='",dataViewId,"'>",$.View("//"+folder+"/edit.ejs",params), "</div>"].join('')
-				},
-				hookup : function(el){
-					return new self(el, params);
-				}
-			}
+			var id = $.View.hookup(function(el){
+				return new self(el, options);
+			})
+			return ["<div data-view-id='",id,"'>",
+						$.View("//"+folder+"/view.ejs",{
+							Class: self,
+							options: options
+						}), "</div>"].join('')
 		}
 	},{
-		
-		
+		init : function(el, options){
+			this.options = options;
+		}
 	})
 	
 	
 	EJS.Helpers.prototype.hookup = function(){
 		return "data-view-id='"+this._data.dataViewId+"'"
 	}
-				
+
 })
