@@ -60,11 +60,11 @@ steal.plugins('jquery/controller','jquery/event/drag/limit','jquery/dom/dimensio
 			
 			//do the shrinking one first
 			if(top > 0){
-				next.height( nextH - top);
-				prev.height( prevH + top)
+				next.height( nextH - top).trigger("resize");
+				prev.height( prevH + top).trigger("resize");
 			}else{
-				prev.height( prevH + top)
-				next.height( nextH - top);
+				prev.height( prevH + top).trigger("resize");
+				next.height( nextH - top).trigger("resize");
 			}
 			
 			
