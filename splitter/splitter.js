@@ -9,12 +9,13 @@ steal.plugins('jquery/controller','jquery/event/drag/limit','jquery/dom/dimensio
 			TYPES : [],
 			HOVER_STATE : "split-hover",
 			SPLITTER : "splitter"
-		}
+		},
+		listensTo : ["insert","remove"]
 	},
 	{
 		init : function(){
 			//determine if horizontal or vertical ...
-			this.element.mixin.apply(this.element, this.Class.TYPES)
+			this.element.mixin.apply(this.element, this.Class.TYPES).css("overflow","hidden")
 			//insert splitter
 			var c = this.element.children(), splitters = c.length - 1;
 			for(var i=0; i < c.length - 1; i++){
@@ -60,15 +61,18 @@ steal.plugins('jquery/controller','jquery/event/drag/limit','jquery/dom/dimensio
 			
 			//do the shrinking one first
 			if(top > 0){
-				next.height( nextH - top);
-				prev.height( prevH + top)
+				next.height( nextH - top)//.trigger("resize");
+				prev.height( prevH + top)//.trigger("resize");
 			}else{
-				prev.height( prevH + top)
-				next.height( nextH - top);
+				prev.height( prevH + top)//.trigger("resize");
+				next.height( nextH - top)//.trigger("resize");
 			}
 			
 			
-			
+			setTimeout(function(){
+				prev.trigger("resize")
+				next.trigger("resize")
+			},13)
 			
 			//drag.movingElement.css("top","")
 		},
@@ -99,6 +103,75 @@ steal.plugins('jquery/controller','jquery/event/drag/limit','jquery/dom/dimensio
 				
 			}
 
+		},
+		insert : function(el, ev){
+			if (ev.target.parentNode != this.element[0]) {
+				return;
+			}
+			var target = $(ev.target)
+			target.before("<div class='hsplitter'/>")
+			//add splitter before el
+			
+			//get height ...
+			var targetheight = target.outerHeight();
+			
+			var height = this.element.height();
+			var c = this.element.children(":not(.hsplitter)");
+			var splitters = this.element.children(".hsplitter");
+			var splitterHeight = splitters.outerHeight();
+			var total  = this.element.height() - splitterHeight* splitters.length;
+			//remove proportionally the heights of everyone
+			
+			
+			for(var i =0; i < c.length; i++){
+				if(c[i] == ev.target) continue;
+				var $c = $(c[i]);
+				var cheight = $c.height();
+				$c.animate({height: cheight - (cheight / total * targetheight)}, "fast",function(){
+					$(this).resize();
+				})
+				//console.log(c[i], cheight / total, cheight / total * targetheight)
+				
+				
+			}
+			//slide up others correct ammount
+			
+		},
+		remove : function(el, ev){
+			if (ev.target.parentNode != this.element[0]) {
+				return;
+			}
+			//basically expand everyone else 
+			
+			
+			var target = $(ev.target)
+			target.prev().remove()
+			//add splitter before el
+			
+			//get height ...
+			var targetheight = target.outerHeight();
+			
+			var height = this.element.height() - targetheight;
+			var c = this.element.children(":not(.hsplitter)");
+			var splitters = this.element.children(".hsplitter");
+			var splitterHeight = splitters.outerHeight();
+			var total  = this.element.height() - splitterHeight* splitters.length;
+			//add proportionally the heights of everyone
+			
+			
+			for(var i =0; i < c.length; i++){
+				if(c[i] == ev.target) continue;
+				var $c = $(c[i]);
+				var cheight = $c.height();
+				$c.animate({height: cheight + (cheight / total * targetheight)}, "fast",function(){
+					$(this).resize();
+				})
+				//console.log(c[i], cheight / total, cheight / total * targetheight)
+				
+				
+			}
+			
+			
 		}
 	})
 })
