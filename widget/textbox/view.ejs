@@ -1,1 +1,5 @@
-<input type='text' value='<%= options.value %>'/>
+<label class="<%= Class.LABEL_CLASS_NAMES %>">
+    <%= options.label %>
+    <span class="<%= Class.DESCRIPTION_CLASS_NAMES %>"><%= options.description %></span>
+</label>
+<input type='text' value='<%= options.value %>' class="<%= Class.INPUT_CLASS_NAMES %>"/>
