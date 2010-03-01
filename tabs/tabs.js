@@ -11,29 +11,28 @@ steal.plugins('phui/menu').then(function($){
 	})
 	//problem with this is it will search and find everything ...
 	p.Menu({
-		CHILD_TYPES: Phui.Tab,
-		TABS_CONAINER_CLASS : "",
-		TYPES : []
+		child_types: Phui.Tab,
+		tabs_container_class : "",
+		types : []
 	}).extend("Phui.Tabs",{
-		init : function(element, level){
-			var MyClass = this.Class;
-			var selected;
+		init : function(){
+			var MyClass = this.Class,
+				selected,
+				options = this.options;
 			
-			
-			
-			this.element.mixin.apply(this.element, this.Class.TYPES).addClass(this.Class.CLASS_NAMES).
-					find(this.Class.CHILD_SELECTOR).
-					addClass(this.Class.CHILD_CLASS_NAMES).each(function(){
+			this.element.mixin.apply(this.element, this.options.types).addClass(this.options.class_names).
+					find(this.options.child_selector).
+					addClass(this.options.child_class_names).each(function(){
 						var el = $(this)
-						if(!selected && el.hasClass(MyClass.ACTIVE_STATE)){
+						if(!selected && el.hasClass(options.active)){
 							selected = el;
 						}
 					})
-			this.element.children('ul').addClass(this.Class.TABS_CONAINER_CLASS)
+			this.element.children('ul').addClass(this.options.tabs_container_class)
 			this.element.children("div").each(function(){
-						$(this).mixin(MyClass.CHILD_TYPES);	
+						$(this).mixin(options.child_types);	
 			}).trigger('hide')
-			selected = selected || $(this.element.find(this.Class.CHILD_SELECTOR)[0])
+			selected = selected || $(this.element.find(this.options.child_selector)[0])
 			selected.trigger("select")
 			
 			return this.element;
@@ -49,13 +48,13 @@ steal.plugins('phui/menu').then(function($){
 		}
 	})
 	Phui.Tabs({
-       CLASS_NAMES: "ui-tabs ui-widget ui-widget-content ui-corner-all",
-       CHILD_CLASS_NAMES: "ui-state-default ui-corner-top",
-       BUTTON_CLASS_NAMES: "ui-state-default ui-corner-all",
-	   TABS_CONAINER_CLASS : "ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all",
-	   ACTIVE_STATE : "ui-state-active",
-	   SELECTED_STATE  : "ui-tabs-selected",
-	   TYPES : [Phui.UI.Highlight]
+       class_names: "ui-tabs ui-widget ui-widget-content ui-corner-all",
+       child_class_names: "ui-state-default ui-corner-top",
+       button_class_names: "ui-state-default ui-corner-all",
+	   tabs_container_class : "ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all",
+	   active : "ui-state-active",
+	   selected  : "ui-tabs-selected",
+	   types : [Phui.UI.Highlight]
    }).
    extend("Phui.UI.Tabs",{})
 })

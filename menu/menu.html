@@ -28,7 +28,14 @@
         <ul id='menu1'>
             <li>A
                 <ul>
-                    <li>A1</li>
+                    <li>A1
+						<ul>
+                            <li>A1.X</li>
+                            <li>A1.Y</li>
+                            <li>A1.Z</li>
+                        </ul>
+					
+					</li>
                     <li>A2</li>
                     <li>A3</li>
                 </ul>
@@ -80,8 +87,13 @@
                 compress='false'>   
         </script>
         <script type='text/javascript'>
-            $("#menu1").phui_menu();
-            $("#menu2").phui_ui_menu().trigger("show", {top: 40, left: 300});
+            $(function(){
+				$("#menu1").phui_menu();
+            	$("#menu2").phui_ui_menu().trigger("show", {top: 40, left: 300});
+				
+			})
+			
+			
         </script>
 	</body>
 </html>

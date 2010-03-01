@@ -4,58 +4,59 @@ steal.apps('phui/positionable','jquery/event/default','jquery/event/hover').then
 	$.Controller.extend('Phui.Menu',
 	{
 		defaults : {
-			TYPES : [],
-			SELECT_TRIGGER : "click",
-			CHILD_SELECTOR : "li",
-			CLASS_NAMES : "", //ui-widget-content ui-menu ui-widget ui-corner-all
-			CHILD_CLASS_NAMES : "", //ui-menu-item ui-state-default
-			POSITION_TOP : true,
-            ACTIVE_STATE : "active",
-			SELECTED_STATE : "selected"
+			types : [],
+			select_event : "click",
+			child_selector : "li",
+			class_names : "", //ui-widget-content ui-menu ui-widget ui-corner-all
+			child_class_names : "", //ui-menu-item ui-state-default
+			apply_types_to_top : false, 
+            active : "active",
+			selected : "selected"
 		},
 		listensTo : ["default.show","default.hide"]
 	},
 	{
-		init : function(element, level){
+		init : function(){
 			var MyClass = this.Class;
-			level = (level == null ? 0 : level+1);
-			if(level > 0 || this.Class.POSITION_TOP){
-				this.element.mixin.apply(this.element, this.Class.TYPES).hide()
+			var options = this.options;
+			options.level = (options.level == null ? 0 : options.level+1);
+			if(options.level > 0 || this.options.apply_types_to_top){
+				this.element.mixin.apply(this.element, this.options.types).hide()
 			}
-			return this.element.addClass(this.Class.CLASS_NAMES+" ui-menu-"+level).
-					children(this.Class.CHILD_SELECTOR).
-					addClass(this.Class.CHILD_CLASS_NAMES).
+			return this.element.addClass(this.options.class_names+" ui-menu-"+options.level).
+					children(this.options.child_selector).
+					addClass(this.options.child_class_names).
 					each(function(){
 						var el = $(this);
 						el.data("menu-element", el.find(">ul, >.ui-menu").each(function(){
-							new MyClass(this, level)  
+							new MyClass(this, {level: options.level})  
 						}));
 						
 					})
 			
 			//create sub menus
 		},
-		"{CHILD_SELECTOR} {SELECT_TRIGGER}" : function(el, ev){
+		"{child_selector} {select_event}" : function(el, ev){
             if($(ev.target).closest("a").length){
 				ev.preventDefault();
 			}
 				
 			//make sure we aren't already active
-			if(el.hasClass(this.Class.ACTIVE_STATE)){
+			if(el.hasClass(this.options.active)){
 				return;
 			}
 			
 			$(el).trigger("deselect")
 		},
-		"{CHILD_SELECTOR} default.deselect" : function(el, ev){
+		"{child_selector} default.deselect" : function(el, ev){
 		  //check if I have an li active
 		  this.hideOld() //huh
 		  el.trigger("select")
 		},
 		hideOld : function(){
-			var active = this.find("."+this.Class.ACTIVE_STATE);
+			var active = this.find("."+this.options.active);
 			if(active.length){
-				var old = this.sub(active.removeClass(this.Class.ACTIVE_STATE).removeClass(this.Class.SELECTED_STATE))
+				var old = this.sub(active.removeClass(this.options.active).removeClass(this.options.selected))
 				old && old.trigger("hide")
 			}
 		},
@@ -65,22 +66,20 @@ steal.apps('phui/positionable','jquery/event/default','jquery/event/hover').then
 		sub : function(el){
 			return el.data("menu-element");
 		},
-		"{CHILD_SELECTOR} default.select" : function(el, ev){
+		"{child_selector} default.select" : function(el, ev){
 		   var me = this.sub(el)
 		   if (me.length) {
-			 me.trigger("show",this.calculateSubmenuPosition(el, ev) )
+			 me.trigger("show", this.calculateSubmenuPosition(el, ev) )
 		   }
-		   el.addClass(this.Class.SELECTED_STATE)
-		   el.addClass(this.Class.ACTIVE_STATE)
+		   el.addClass(this.options.selected)
+		   el.addClass(this.options.active)
 		},
 		calculateSubmenuPosition : function(el, ev){
-			var off = el.offset();
-			off.left =off.left+ el.outerWidth();
-			return off;
+			return el;
 		},
 		"default.hide" : function(el, ev){
 			 if(ev.target == this.element[0]){
-			 	var old = this.sub(this.element.find("."+this.Class.ACTIVE_STATE).removeClass(this.Class.ACTIVE_STATE));
+			 	var old = this.sub(this.element.find("."+this.options.active).removeClass(this.options.active));
 				old && old.trigger("hide")
 				this.element.hide();
 			 }
@@ -95,28 +94,28 @@ steal.apps('phui/positionable','jquery/event/default','jquery/event/hover').then
    $.Controller.extend("Phui.Highlight",
    {
        defaults: {
-           CHILD_SELECTOR : "li",
-           HOVER_CLASS : "hover"
+           child_selector : "li",
+           hover : "hover"
        }
    },
    {
-       "{CHILD_SELECTOR} mouseenter" : function(el){
-           el.addClass(this.Class.HOVER_CLASS)
+       "{child_selector} mouseenter" : function(el){
+           el.addClass(this.options.hover)
        },
-       "{CHILD_SELECTOR} mouseleave" : function(el){
-           el.removeClass(this.Class.HOVER_CLASS)
+       "{child_selector} mouseleave" : function(el){
+           el.removeClass(this.options.hover)
        }
    })
    Phui.Highlight({HOVER_CLASS : "ui-state-hover"}).extend("Phui.UI.Highlight")
    
    Phui.Menu({
-			TYPES : [Phui.Positionable, Phui.UI.Highlight],
-			SELECT_TRIGGER : "hoverenter",
-			CHILD_SELECTOR : "li",
-			CLASS_NAMES : "ui-widget-content ui-menu ui-widget ui-corner-all",
-			CHILD_CLASS_NAMES : "ui-menu-item ui-state-default", 
-			POSITION_TOP : true,
-            ACTIVE_STATE : "ui-state-active"
+			types : [Phui.Positionable({my :"left top", at: "right top"}), Phui.UI.Highlight],
+			select_event : "hoverenter",
+			child_selector : "li",
+			class_names : "ui-widget-content ui-menu ui-widget ui-corner-all",
+			child_class_names : "ui-menu-item ui-state-default", 
+			apply_types_to_top : true,
+            active : "ui-state-active"
 	}).extend("Phui.UI.Menu")
    
    

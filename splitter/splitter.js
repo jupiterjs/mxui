@@ -4,18 +4,18 @@ steal.plugins('jquery/controller','jquery/event/drag/limit','jquery/dom/dimensio
 	$.Controller.extend("Phui.Splitter",
 	{
 		defaults : {
-			CHILD_CLASS_NAMES : "split",
-			ACTIVE_STATE : "active",
-			TYPES : [],
-			HOVER_STATE : "split-hover",
-			SPLITTER : "splitter"
+			child_class_names : "split",
+			active : "active",
+			types : [],
+			hover : "split-hover",
+			splitter : "splitter"
 		},
 		listensTo : ["insert","remove"]
 	},
 	{
 		init : function(){
 			//determine if horizontal or vertical ...
-			this.element.mixin.apply(this.element, this.Class.TYPES).css("overflow","hidden")
+			this.element.mixin.apply(this.element, this.options.types).css("overflow","hidden")
 			//insert splitter
 			var c = this.element.children(), splitters = c.length - 1;
 			for(var i=0; i < c.length - 1; i++){
@@ -36,16 +36,16 @@ steal.plugins('jquery/controller','jquery/event/drag/limit','jquery/dom/dimensio
 			//space guys accordingly	
 		},
 		".hsplitter mouseenter" : function(el){
-			el.addClass(this.Class.HOVER_STATE)
+			el.addClass(this.options.hover)
 		},
 		".hsplitter mouseleave" : function(el){
 			if(!this.dragging)
-				el.removeClass(this.Class.HOVER_STATE)
+				el.removeClass(this.options.hover)
 		},
 		".hsplitter dragstart" : function(el, ev, drag){
 			drag.limit(this.element)
 			drag.vertical()
-			drag.ghost().addClass("move").addClass(this.Class.HOVER_STATE)
+			drag.ghost().addClass("move").addClass(this.options.hover)
 			this.dragging = true;
 		},
 		".hsplitter dragend" : function(el, ev, drag){

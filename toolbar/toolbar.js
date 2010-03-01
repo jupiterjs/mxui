@@ -1,23 +1,23 @@
 steal.apps('phui/menu','jquery/event/default').then(function(){
    Phui.Menu({
-		CHILD_SELECTOR : "ul>li"
+		child_selector : "ul>li"
 	}).
     extend("Phui.Toolbar",
     {
        defaults : {
-           MENU_TYPE: Phui.Menu,
-           POSITION_TOP : false,
-           SELECT_TRIGGER : "click",
-           BUTTON_CLASS_NAMES : "button"
+           menu_type: Phui.Menu,
+           apply_types_to_top : false,
+           select_event : "click",
+           button_class_names : "button"
        }
    },
    {
        init : function(){
-           var menuType = this.Class.MENU_TYPE;
+           var menuType = this.options.menu_type;
            //make it look pretty
-           this.element.addClass(this.Class.CLASS_NAMES)
-               .children("ul").addClass(this.Class.CHILD_CLASS_NAMES)
-               .children("li").addClass(this.Class.BUTTON_CLASS_NAMES).each(function(){
+           this.element.addClass(this.options.class_names)
+               .children("ul").addClass(this.options.child_class_names)
+               .children("li").addClass(this.options.button_class_names).each(function(){
                    //need to keep a reference to each menu
 				   var el = $(this);
 				   el.data("menu-element", el.find(">ul, >.ui-menu").mixin(menuType))
@@ -31,10 +31,10 @@ steal.apps('phui/menu','jquery/event/default').then(function(){
    })
    
    Phui.Toolbar({
-       CLASS_NAMES: "ui-tabs ui-widget ui-widget-content ui-corner-all",
-       MENU_TYPE: Phui.UI.Menu,
-       CHILD_CLASS_NAMES: "ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all ui-toolbar",
-       BUTTON_CLASS_NAMES: "ui-state-default ui-corner-all"
+       class_names: "ui-tabs ui-widget ui-widget-content ui-corner-all",
+       menu_type: Phui.UI.Menu,
+       child_class_names: "ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all ui-toolbar",
+       button_class_names: "ui-state-default ui-corner-all"
    }).
    extend("Phui.UI.Toolbar",{})
    

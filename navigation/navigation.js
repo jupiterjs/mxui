@@ -51,6 +51,7 @@ steal.apps('phui/toolbar').then(function(){
 	$.Controller.extend("Phui.FadeInable",{listensTo: ["show","hide"]}, {
 	   show : function(el, ev){
 			ev.preventDefault();
+			console.log("showing ...")
 			this.element.css("opacity",0.2).show().animate({opacity: 1.0},"slow")
 	   },
        hide : function(el, ev){
@@ -62,15 +63,20 @@ steal.apps('phui/toolbar').then(function(){
 	
 	
 	J.Menu({
-        TYPES: [J.Positionable, Phui.Shiftable, J.FadeInable, Phui.Highlight],
-		CLASS_NAMES: "menu"
+        types: [J.Positionable({my: "left top", at : "right top"}), Phui.Shiftable, J.FadeInable, Phui.Highlight],
+		class_names: "menu",
+		apply_types_to_top : true
     }).extend("ClickMenu",{listensTo: ["shifted","hide"]},{
+		init : function(){
+			this.element.hide();
+			this._super.apply(this,arguments)
+		},
 		"li deselect" : function(el, ev){
 			ev.preventDefault();
 			ev.preventDefault();
 			this.hideOld();
 			
-			$(el).addClass("selected").removeClass("deslected").trigger("shift")
+			$(el).addClass("selected").removeClass("deselected").trigger("shift")
 		},
 		calculateSubmenuPosition : function(el, ev){
 			var off = this.element.offset();
@@ -80,14 +86,14 @@ steal.apps('phui/toolbar').then(function(){
 		},
 		"li shifted" : function(el){
 			el.trigger("select");
-			el.siblings().removeClass("selected").addClass("deslected")
+			el.siblings().removeClass("selected").addClass("deselected")
 		},
 		hide : function(){
-			this.element.find("li").removeClass("selected").removeClass("deslected")
+			this.element.find("li").removeClass("selected").removeClass("deselected")
 		}
 	})
-	//({MENU_TYPE: ClickMenu})
-	J.Toolbar({MENU_TYPE: ClickMenu, CHILD_CLASS_NAMES: "menu"}).extend("Phui.Navigation",{listensTo: ["shifted"]},{
+	//({menu_type: ClickMenu})
+	J.Toolbar({menu_type: ClickMenu, child_class_names: "menu"}).extend("Phui.Navigation",{listensTo: ["shifted"]},{
 		init : function(){
 			this._super.apply(this, arguments)
 			this.element.mixin(Phui.Shiftable, Phui.Highlight)
@@ -97,7 +103,7 @@ steal.apps('phui/toolbar').then(function(){
 			//$(el).siblings()
 			ev.preventDefault();
 			this.hideOld();
-			$(el).removeClass("deslected").addClass("selected").trigger("shift");
+			$(el).removeClass("deselected").addClass("selected").trigger("shift");
 		},
 		calculateSubmenuPosition : function(el, ev){
 	   		var off = this.element.offset();
@@ -107,8 +113,8 @@ steal.apps('phui/toolbar').then(function(){
 	   },
 	   "li shifted" : function(el, ev){
 			el.trigger("select");
-			el.siblings().removeClass("selected").addClass("deslected");
-			el.addClass("selected").removeClass("deslected");
+			el.siblings().removeClass("selected").addClass("deselected");
+			el.addClass("selected").removeClass("deselected");
 	   }
 	})
 	

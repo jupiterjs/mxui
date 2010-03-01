@@ -4,9 +4,9 @@ steal.plugins('phui/widget').then(function($){
     Phui.Widget.extend("Phui.Widget.Textbox",
     {
         defaults : {
-            INPUT_CLASS_NAMES : "",
-            LABEL_CLASS_NAMES : "label",    
-            DESCRIPTION_CLASS_NAMES : "description"
+            INPUT_class_names : "",
+            LABEL_class_names : "label",    
+            DESCRIPTION_class_names : "description"
         },
         listensTo: ["select"]
     },
