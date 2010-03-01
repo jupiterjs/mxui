@@ -14,7 +14,7 @@ steal.plugins('phui/widget').then(function($){
     {
         init : function(el, options){
             this.options = options;
-            this.element.addClass(this.Class.CLASS_NAMES);
+            this.element.addClass(this.Class.OPTIONS.CLASS_NAMES);
         },
         keypress : function(el, ev){
             if(this.options.allow && ev.charCode && ! this.options.allow.test(String.fromCharCode(ev.charCode)))

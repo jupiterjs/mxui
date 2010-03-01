@@ -10,7 +10,7 @@ steal.plugins('phui/widget').then(function($){
     },{
         init : function(el, options){
             this.options = options;
-            this.element.addClass(this.Class.CLASS_NAMES);
+            this.element.addClass(this.Class.OPTIONS.CLASS_NAMES);
         },
         value : function(){
             return this.options.value;

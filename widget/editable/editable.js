@@ -25,12 +25,12 @@ steal.plugins('phui/widget/textbox','phui/widget/show','jquery/dom/compare').the
 				
 				if(this.mode == 'SHOW'){
 					this.ignoreNextBlur = true;
-					this.element.html(this.Class.EDIT_TYPE.view(this.options)).hookupView()
+					this.element.html(this.Class.OPTIONS.EDIT_TYPE.view(this.options)).hookupView()
 					$(this.element.children()[0] ).trigger("select")
 					this.mode = 'EDIT';
 					
 				}else{
-					//this.element.html(this.Class.SHOW_TYPE.view(this.options)).hookupView()
+					//this.element.html(this.Class.OPTIONS.SHOW_TYPE.view(this.options)).hookupView()
 					//this.mode = 'SHOW'
 				}
 			}
@@ -49,7 +49,7 @@ steal.plugins('phui/widget/textbox','phui/widget/show','jquery/dom/compare').the
 					
 				}else{
 
-					var el = this.element, ST = this.Class.SHOW_TYPE, options = this.options;
+					var el = this.element, ST = this.Class.OPTIONS.SHOW_TYPE, options = this.options;
 					
 					setTimeout(function(){
 						el.html(ST.view(options)).hookupView()
