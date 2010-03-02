@@ -12,7 +12,7 @@ steal.plugins('jquery/controller','phui/wrapper','jquery/event/drag','jquery/dom
 				var diff = $(el).phui_wrapper()[0]
 				this._super(diff, options)
 				if(diff != el){
-					this.original = $(el).phui_filler(); //set to fill
+					this.original = $(el).phui_filler({width: true}); //set to fill
 				}
 			},
 			directionInfo: {
