@@ -51,7 +51,6 @@ steal.apps('phui/toolbar').then(function(){
 	$.Controller.extend("Phui.FadeInable",{listensTo: ["show","hide"]}, {
 	   show : function(el, ev){
 			ev.preventDefault();
-			console.log("showing ...")
 			this.element.css("opacity",0.2).show().animate({opacity: 1.0},"slow")
 	   },
        hide : function(el, ev){
