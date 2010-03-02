@@ -15,39 +15,67 @@ steal.plugins('jquery/controller','phui/wrapper','jquery/event/drag','jquery/dom
 					this.original = $(el).phui_filler(); //set to fill
 				}
 			},
+			directionInfo: {
+				"s" : {
+					limit : "vertical",
+					dim :  "height"
+				},
+				"e" : {
+					limit : "horizontal",
+					dim :  "width"
+				},
+				"se" : {
+					
+				}
+			},
 			init : function(el, options){
 				//draw in resizeable
 				this.element.prepend("<div class='ui-resizable-e ui-resizable-handle'/><div class='ui-resizable-s ui-resizable-handle'/><div class='ui-resizable-se ui-resizable-handle'/>")
 			},
-			".ui-resizable-s dragstart" : function(el, ev, drag){
-				ev.stopPropagation();
-				drag.vertical()
+			getDirection : function(el){
+				return el[0].className.match(/ui-resizable-(se|s|e)/)[1]
 			},
-			".ui-resizable-s dragmove" : function(el, ev, drag){
-				var top = drag.location.y();
+			".ui-resizable-handle dragstart" : function(el, ev, drag){
+				//get direction
+				//how far is top corner 
+				this.margin = this.element.offsetv().plus(this.element.dimensionsv()).minus(  el.offsetv()  ) 
 				
-				var start = this.element.offset().top;
-				var outerHeight = top-start
-				if(outerHeight < this.options.minHeight){
-					outerHeight = this.options.minHeight
-					drag.location.y(start+this.options.minWidth)
-				}
-				this.element.outerHeight(outerHeight).trigger("resize")
-			},
-			".ui-resizable-e dragstart" : function(el, ev, drag){
+				var direction = this.getDirection(el)
 				ev.stopPropagation();
-				drag.horizontal()
+				console.log(direction, this.directionInfo[direction].limit)
+				if(this.directionInfo[direction].limit)
+					drag[this.directionInfo[direction].limit]()
 			},
-			".ui-resizable-e dragmove" : function(el, ev, drag){
-				var left = drag.location.x();
+			".ui-resizable-handle dragmove" : function(el, ev, drag){
+
+				ev.preventDefault(); //prevent from drawing .. 
+				var direction = this.getDirection(el);
+
+				if(direction.indexOf("s") > -1){
+					//console.log("doing s")
+					var top = drag.location.y();
 				
-				var start = this.element.offset().left;
-				var outerWidth = left-start
-				if(outerHeight < this.options.minWidth){
-					outerWidth = this.options.minWidth
-					drag.location.y(start+this.options.outerWidth)
+					var start = this.element.offset().top;
+					var outerHeight = top-start
+					if(outerHeight < this.options.minHeight){
+						outerHeight = this.options.minHeight
+					}
+					this.element.outerHeight(outerHeight+this.margin.y())
+					
 				}
-				this.element.outerWidth(outerWidth).trigger("resize")
+				if(direction.indexOf("e") > -1){
+					//console.log("doing e")
+					var left = drag.location.x();
+				
+					var start = this.element.offset().left;
+					var outerWidth = left-start
+					if(outerHeight < this.options.minWidth){
+						outerWidth = this.options.minWidth
+					}
+					this.element.outerWidth(outerWidth+this.margin.x())
+					
+				}
+				this.element.trigger("resize")
 			}
 		})
 		
