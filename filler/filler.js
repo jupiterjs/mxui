@@ -1,4 +1,4 @@
-steal.plugins('jquery/controller').then(function($){
+steal.plugins('jquery/controller','jquery/dom/dimensions').then(function($){
 	$.Controller.extend("Phui.Filler",
 	{
 		listensTo : ["show"]
@@ -19,24 +19,31 @@ steal.plugins('jquery/controller').then(function($){
 			//console.log(ev.target)
 			if(ev.target == this.parent[0] && this.element.is(":visible")){
 				var p = this.parent,
-			    height = this.parent.height(),
-				el = this.element[0];
+				    height = this.parent.height(),
+					width = this.parent.width(),
+					el = this.element[0],
+					children = this.element.parent().children();
 				
-				this.element.parent().children().each(function(){
+				children.each(function(){
 					var $jq = $(this)
-					if(this != el && this.nodeName.toLowerCase() != 'script' && $jq.is(":visible")){
+					if(this != el && this.nodeName.toLowerCase() != 'script' && $jq.is(":visible") && $jq.css("position") != "absolute"){
 						height = height - $jq.outerHeight(true)
 					}
 					
 				})
 				
-				//subtract borders and margin
-				$.each(['Top','Bottom'], function(){
-					height -= parseFloat(jQuery.curCSS( el, "padding" + this, true)) || 0;
-					height -= parseFloat(jQuery.curCSS( el, "border" + this + "Width", true)) || 0;
-				})
+				this.element.outerHeight(height).outerWidth(width).trigger('resize');
+				
+				
+				//set width ... must take into account for scrolling :(
+				
+				/*children.each(function(){
+					var $jq = $(this)
+					if(this != el && this.nodeName.toLowerCase() != 'script' && $jq.is(":visible") && $jq.css("position") != "absolute"){
+						height = height - $jq.outerHeight(true)
+					}
 					
-				this.element.height(height).trigger('resize');
+				})*/
 				
 				
 			}

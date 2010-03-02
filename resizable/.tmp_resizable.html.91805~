@@ -1,0 +1,52 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
+            "http://www.w3.org/TR/html4/strict.dtd">
+<html lang="en">
+	<head>
+		<title>resizable</title>
+        <style type='text/css'>
+            body {font-family: verdana}
+            .error {border: solid 1px red;}
+            .error_text { color: red; font-size: 10px;}
+            td {padding: 3px;}
+			
+			.ui-resizable-s {
+				bottom:-5px;
+				cursor:s-resize;
+				height:7px;
+				left:0;
+				width:100%;
+			}
+			.ui-resizable-handle {
+				display:block;
+				font-size:0.1px;
+				position:absolute;
+				z-index:99999;
+			}
+			#first {
+				width: 300px;
+				height: 200px;
+				border: dashed 1px gray;
+				position: relative;
+			}
+        </style>
+	</head>
+	<body>
+	    <div class='wrap' id='first'>Here is some swell content</div>
+		<textarea class='wrap'>Here is my textarea</textarea>
+		<input class='wrap' type='text'/>
+		<select  class='wrap'><option>1</option></select>
+		<button type='button'  class='wrap'>try me</button>
+		<img src='http://cdn.javascriptmvc.com/jmvc/plugins/documentation/app/images/video.png'  class='wrap'/>
+		
+		<script type='text/javascript' 
+                src='../../steal/steal.js?steal[app]=phui/resizable&steal[env]=development'
+                package='main.js'
+                compress='false'>   
+        </script>
+		<script type='text/javascript'>
+			$(function(){
+				$('.wrap').phui_resizable()
+			})
+		</script>
+	</body>
+</html>

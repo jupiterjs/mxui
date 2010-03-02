@@ -1,0 +1,32 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
+            "http://www.w3.org/TR/html4/strict.dtd">
+<html lang="en">
+	<head>
+		<title>wrapper</title>
+        <style type='text/css'>
+            body {font-family: verdana}
+            .error {border: solid 1px red;}
+            .error_text { color: red; font-size: 10px;}
+            td {padding: 3px;}
+        </style>
+	</head>
+	<body>
+	    
+		<textarea class='wrap'>Here is my textarea</textarea>
+		<input class='wrap' type='text'/>
+		<select  class='wrap'><option>1</option></select>
+		<button type='button'  class='wrap'>try me</button>
+		<img src='http://cdn.javascriptmvc.com/jmvc/plugins/documentation/app/images/video.png'  class='wrap'/>
+
+		<script type='text/javascript' 
+                src='../../steal/steal.js?steal[app]=phui/wrapper&steal[env]=development'
+                package='main.js'
+                compress='false'>   
+        </script>
+		<script type='text/javascript'>
+			$(function(){
+				$('.wrap').phui_wrapper()
+			})
+		</script>
+	</body>
+</html>
