@@ -12,7 +12,7 @@ steal.plugins('jquery/controller','phui/wrapper','jquery/event/drag','jquery/dom
 				var diff = $(el).phui_wrapper()[0]
 				this._super(diff, options)
 				if(diff != el){
-					this.original = $(el).phui_filler(); //set to fill
+					this.original = $(el).phui_filler({width: true}); //set to fill
 				}
 			},
 			directionInfo: {
@@ -42,7 +42,6 @@ steal.plugins('jquery/controller','phui/wrapper','jquery/event/drag','jquery/dom
 				
 				var direction = this.getDirection(el)
 				ev.stopPropagation();
-				console.log(direction, this.directionInfo[direction].limit)
 				if(this.directionInfo[direction].limit)
 					drag[this.directionInfo[direction].limit]()
 			},
@@ -52,7 +51,6 @@ steal.plugins('jquery/controller','phui/wrapper','jquery/event/drag','jquery/dom
 				var direction = this.getDirection(el);
 
 				if(direction.indexOf("s") > -1){
-					//console.log("doing s")
 					var top = drag.location.y();
 				
 					var start = this.element.offset().top;
@@ -64,7 +62,6 @@ steal.plugins('jquery/controller','phui/wrapper','jquery/event/drag','jquery/dom
 					
 				}
 				if(direction.indexOf("e") > -1){
-					//console.log("doing e")
 					var left = drag.location.x();
 				
 					var start = this.element.offset().left;

@@ -12,6 +12,12 @@ steal.plugins('phui/widget').then(function($){
         listensTo: ["select"]
     },
     {
+        setup : function(el, options){
+            this._super(el, options);
+            if(this.options.name){
+                this.element.children('input').attr('name', this.options.name);
+            }
+        },
         init : function(el, options){
             this.options = options;
             this.element.addClass(this.Class.OPTIONS.CLASS_NAMES);

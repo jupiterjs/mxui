@@ -4,8 +4,8 @@ steal.plugins('jquery/controller','jquery/dom/dimensions').then(function($){
 		listensTo : ["show"]
 	},
 	{
-		init : function(el, parent){
-			this.parent = parent || this.element.parent()
+		init : function(el, options){
+			this.parent = this.options.parent || this.element.parent()
 			if(this.parent[0] === document.body || this.parent[0] === document.documentElement)
 				this.parent = $(window)
 			//listen on parent's resize
@@ -32,7 +32,11 @@ steal.plugins('jquery/controller','jquery/dom/dimensions').then(function($){
 					
 				})
 				
-				this.element.outerHeight(height).outerWidth(width).trigger('resize');
+				this.element.outerHeight(height)
+				if(this.options.width)
+					this.element.outerWidth(width)
+				
+				this.element.trigger('resize');
 				
 				
 				//set width ... must take into account for scrolling :(
