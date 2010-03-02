@@ -14,13 +14,7 @@ steal.plugins('phui/widget').then(function($){
         },
         value : function(){
             return this.options.value;
-        },
-        mouseenter : function(el, ev){
-            el.css('cursor','pointer');
-        },
-        mouseleave : function(el, ev){
-            el.css('cursor','');   
-        }            
+        }         
     })
     
 })
