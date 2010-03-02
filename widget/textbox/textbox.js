@@ -16,7 +16,7 @@ steal.plugins('phui/widget').then(function($){
             this._super(el, options);
             if(this.options.name){
                 this.element.children('input').attr('name', this.options.name);
-            }
+            }                 
         },
         init : function(el, options){
             this.options = options;

@@ -1,7 +1,6 @@
 steal.plugins('jquery/controller')
      .then(function(){
          $.Controller.extend("Phui.ModelHookup",{
-            listensTo : ['changed']
         },
         {
             init : function(){
