@@ -6,7 +6,7 @@ steal.plugins('jquery/controller')
         {
             selected : function(el, ev){
                 var group = $(ev.target).data('group');
-                if(group != this.currentGroup){
+                if(!group || group != this.currentGroup){
                     this.currentGroup = group;            
                     this.deselectAllEditables();
                     this.selectGroup(group);
