@@ -1,23 +1,26 @@
 steal.plugins('jquery/controller')
      .then(function(){
          $.Controller.extend("Phui.GroupEditable",{
-            listensTo : ['select']
+            listensTo : ['selected']
         },
         {
-            select : function(el, ev){
-                var group = $(ev.target).parents('.phui_widget_editable').data('group');
-                
+            selected : function(el, ev){
+                var group = $(ev.target).data('group');
                 if(group != this.currentGroup){
-                    this.find('.'+this.currentGroup).each(function(i, editableEl){
-                        $(editableEl).controller().drawShowView();
-                    });
+                    this.currentGroup = group;            
+                    this.deselectAllEditables();
+                    this.selectGroup(group);
                 }
-                
-                this.find('.'+group).each(function(i, editableEl){
-                        $(editableEl).controller().drawEditView(false);
-                    });
-                
-                this.currentGroup = group;
+            },
+            selectGroup : function(group){
+                this.find('.'+group).each(function(i,el){
+                    $(el).trigger('focus');
+                });
+            },
+            deselectAllEditables : function(group){
+                this.find('.phui_widget_editable').each(function(i,el){
+                    $(el).trigger('blur');
+                });            
             }
         })
         

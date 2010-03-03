@@ -30,7 +30,7 @@ steal.plugins('phui/widget').then(function($){
             return this.element.children('input').val();
         },
         select : function(){
-            this.element.children('input')[0].focus()
+            this.element.children('input')[0].focus();
         },
         mouseenter : function(el, ev){
             el.css('cursor','pointer');
