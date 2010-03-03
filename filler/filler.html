@@ -16,19 +16,42 @@
 				border: solid 1px green;
 				height: 100px;
 			}
+			
+			#modal {
+				position: absolute;
+				background-color: green;
+			}
         </style>
 	</head>
 	<body>
-	    <div id='header'><h1>Header</h1></div>
-		<div id='content'><h1>Content</h1></div>
+	    <div id='modal'>
+					Here is some content
+		</div>
+		<div id='header'><h1>Header</h1></div>
+		<div id='content'><h1>Content</h1>
+		
+			<p>
+				<a href="#" id='expand'>click to expand</a>
+				
+				
+			</p>
+		</div>
 		<div id='footer'><h1>Footer</h1></div>
+		
 		<script type='text/javascript' 
                 src='../../steal/steal.js?steal[app]=phui/filler&steal[env]=development'
                 package='main.js'
                 compress='false'>   
         </script>
 		<script type='text/javascript'>
-			$("#content").phui_filler()
+			$("#content").phui_filler();
+			$("#modal").css({
+				opacity: 0.5
+			})
+			$("#expand").click(function(){
+				$("#modal").phui_filler({width: true, parent: $([window, document.documentElement]), all: true})
+				
+			})
 		</script>
 	</body>
 </html>

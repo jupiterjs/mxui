@@ -71,7 +71,7 @@ steal(function($){
  */
 
 
-$.Controller.extend("Phui.Bigiframe",{
+$.Controller.extend("Phui.Bgiframe",{
 	init : function(){
 		if ( $.browser.msie && /6.0/.test(navigator.userAgent) ) {
 			s = $.extend({
@@ -80,7 +80,7 @@ $.Controller.extend("Phui.Bigiframe",{
 				width   : 'auto', // auto == offsetWidth
 				height  : 'auto', // auto == offsetHeight
 				opacity : true,
-				src     : 'javascript:false;'
+				src     : /^https/i.test(window.location.href || '') ? 'javascript:false' : 'about:blank'
 			}, s || {});
 			var prop = function(n){return n&&n.constructor==Number?n+'px':n;},
 			    html = '<iframe class="bgiframe"frameborder="0"tabindex="-1"src="'+s.src+'"'+

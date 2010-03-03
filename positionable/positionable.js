@@ -23,9 +23,10 @@ steal.apps('jquery','jquery/controller').then(function($){
            //clicks elsewhere should hide
        },
 	   move : function(el, ev, positionFrom){
-   			var options  = $.extend({},this.options);
-			    options.of= positionFrom;
-				
+   			
+			var options  = $.extend({},this.options);
+			    options.of= positionFrom || options.of;
+			if(!options.of)	return;
 			var target = $( options.of ),
 				collision = ( options.collision || "flip" ).split( " " ),
 				offset = options.offset ? options.offset.split( " " ) : [ 0, 0 ],

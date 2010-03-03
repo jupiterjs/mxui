@@ -9,20 +9,39 @@ steal.plugins('jquery/controller','jquery/dom/dimensions').then(function($){
 			if(this.parent[0] === document.body || this.parent[0] === document.documentElement)
 				this.parent = $(window)
 			//listen on parent's resize
-			this.parent_resize = this.callback('parentResize')
+			this.parent_resize = this.callback('parentResize');
 			//console.log("listening on ", this.parent[0])
-			this.parent.bind('resize', this.parent_resize)
-			this.parent.trigger("resize");
+			this.parent.bind('resize', this.parent_resize);
+			var parent = this.parent;
+			setTimeout(function(){
+				parent.trigger("resize");
+			},13)
+			
 		},
 		parentResize : function(ev){
 			//only if target was me
 			//console.log(ev.target)
 			if(ev.target == this.parent[0] && this.element.is(":visible")){
+				var height, width;
+				
+				if(this.options.all){
+					this.element.css({width: 0, height: 0})
+					height =  $(document).height() 
+					width = $(document).width()
+					this.element.css({
+						width: width+"px", 
+						height: height+"px"
+					}).trigger('resize');
+					return;
+				}
+				
 				var p = this.parent,
 				    height = this.parent.height(),
 					width = this.parent.width(),
 					el = this.element[0],
 					children = this.element.parent().children();
+				
+				//get the bigger of the parents
 				
 				children.each(function(){
 					var $jq = $(this)
@@ -31,25 +50,13 @@ steal.plugins('jquery/controller','jquery/dom/dimensions').then(function($){
 					}
 					
 				})
-				
+
 				this.element.outerHeight(height)
 				if(this.options.width)
 					this.element.outerWidth(width)
 				
 				this.element.trigger('resize');
-				
-				
-				//set width ... must take into account for scrolling :(
-				
-				/*children.each(function(){
-					var $jq = $(this)
-					if(this != el && this.nodeName.toLowerCase() != 'script' && $jq.is(":visible") && $jq.css("position") != "absolute"){
-						height = height - $jq.outerHeight(true)
-					}
-					
-				})*/
-				
-				
+
 			}
 			
 		},
