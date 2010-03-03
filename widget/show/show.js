@@ -2,10 +2,7 @@ steal.plugins('phui/widget').then(function($){
     
     Phui.Widget.extend("Phui.Widget.Show",{
         defaults : {
-            CLASS_NAMES : "entry",
-            VALUE_CLASS_NAMES : "value",
-            LABEL_CLASS_NAMES : "label",    
-            DESCRIPTION_CLASS_NAMES : "description"
+            CLASS_NAMES : "value"
         }
     },{
         init : function(el, options){
