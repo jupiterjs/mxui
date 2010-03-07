@@ -2,12 +2,11 @@ steal.plugins('phui/widget').then(function($){
     
     Phui.Widget.extend("Phui.Widget.Show",{
         defaults : {
-            CLASS_NAMES : "value"
+            class_names : ""
         }
     },{
         init : function(el, options){
-            this.options = options;
-            this.element.addClass(this.Class.OPTIONS.CLASS_NAMES);
+            this.element.addClass(this.options.class_names);
         },
         value : function(){
             return this.options.value;

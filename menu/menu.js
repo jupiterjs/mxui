@@ -54,7 +54,7 @@ steal.apps('phui/positionable','jquery/event/default','jquery/event/hover').then
 		  el.trigger("select")
 		},
 		hideOld : function(){
-			var active = this.find("."+this.options.active);
+			var active = this.find("."+this.options.active+":first");
 			if(active.length){
 				var old = this.sub(active.removeClass(this.options.active).removeClass(this.options.selected))
 				old && old.trigger("hide")
@@ -95,18 +95,18 @@ steal.apps('phui/positionable','jquery/event/default','jquery/event/hover').then
    {
        defaults: {
            child_selector : "li",
-           hover : "hover"
+           hover_class : "hover"
        }
    },
    {
        "{child_selector} mouseenter" : function(el){
-           el.addClass(this.options.hover)
+           el.addClass(this.options.hover_class)
        },
        "{child_selector} mouseleave" : function(el){
-           el.removeClass(this.options.hover)
+           el.removeClass(this.options.hover_class)
        }
    })
-   Phui.Highlight({HOVER_CLASS : "ui-state-hover"}).extend("Phui.UI.Highlight")
+   Phui.Highlight({hover_class : "ui-state-hover"}).extend("Phui.UI.Highlight")
    
    Phui.Menu({
 			types : [Phui.Positionable({my :"left top", at: "right top"}), Phui.UI.Highlight],

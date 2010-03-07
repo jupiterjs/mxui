@@ -4,8 +4,8 @@ steal.plugins('phui/widget/textbox','phui/widget/show','jquery/dom/compare').the
     Phui.Widget.extend("Phui.Widget.Editable",
     {
         defaults : {
-            SHOW_TYPE : Phui.Widget.Show,
-            EDIT_TYPE : Phui.Widget.Textbox
+            show_type : Phui.Widget.Show,
+            edit_type : Phui.Widget.Textbox
         },
         listenTo : ['focus','select','deselect']
     },
@@ -19,8 +19,7 @@ steal.plugins('phui/widget/textbox','phui/widget/show','jquery/dom/compare').the
         },
         init : function(el, options){
             this.mode = 'SHOW'
-            this.element.attr('tabindex','0').css("outline","none")
-            this.options= options;
+            this.element.attr('tabindex','0').css("outline","none");
         },
         click : function(){
             
@@ -33,12 +32,12 @@ steal.plugins('phui/widget/textbox','phui/widget/show','jquery/dom/compare').the
                 
                 if(this.mode == 'SHOW'){
                     this.ignoreNextBlur = true;
-                    this.element.html(this.Class.OPTIONS.EDIT_TYPE.view(this.options)).hookupView();
+                    this.element.html(this.options.edit_type.view(this.options)).hookupView();
                     $(this.element.children()[0] ).trigger("select");
                     this.mode = 'EDIT';
                     
                 }else{
-                    //this.element.html(this.Class.OPTIONS.SHOW_TYPE.view(this.options)).hookupView()
+                    //this.element.html(this.options.show_type.view(this.options)).hookupView()
                     //this.mode = 'SHOW'
                 }
             }
@@ -56,7 +55,7 @@ steal.plugins('phui/widget/textbox','phui/widget/show','jquery/dom/compare').the
 
                     $(this.element.children()[0] ).trigger("deselect");                    
                     
-                    var el = this.element, ST = this.Class.OPTIONS.SHOW_TYPE, options = this.options;
+                    var el = this.element, ST = this.options.show_type, options = this.options;
                     
                     setTimeout(function(){
                         el.html(ST.view(options)).hookupView()

@@ -4,7 +4,7 @@ steal.plugins('phui/widget').then(function($){
     Phui.Widget.extend("Phui.Widget.Textbox",
     {
         defaults : {
-            CLASS_NAMES : ""
+            class_names : ""
         },
         listensTo: ["select"]
     },
@@ -16,8 +16,7 @@ steal.plugins('phui/widget').then(function($){
             }                 
         },
         init : function(el, options){
-            this.options = options;
-            this.element.addClass(this.Class.OPTIONS.CLASS_NAMES);
+            this.element.addClass(this.options.class_names);
         },
         keypress : function(el, ev){
             if(this.options.allow && ev.charCode && ! this.options.allow.test(String.fromCharCode(ev.charCode)))
