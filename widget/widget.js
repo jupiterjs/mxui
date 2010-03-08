@@ -17,9 +17,6 @@ steal.plugins('jquery/controller',
 						}), "</div>"].join('')
 		}
 	},{
-		init : function(el, options){
-			this.options = options;
-		}
 	})
 	
 	

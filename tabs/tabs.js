@@ -2,10 +2,12 @@ steal.plugins('phui/menu').then(function($){
 	var p =Phui;
 	
 	$.Controller.extend("Phui.Tab",{listensTo: ["default.show","default.hide"]},{
-		"default.show" : function(){
+		"default.show" : function(el, ev){
+		    if (ev.target != this.element[0]) return;
 			this.element.show()
 		},
-		"default.hide" : function(){
+		"default.hide" : function(el, ev){
+		    if (ev.target != this.element[0]) return;			
 			this.element.hide()
 		}
 	})
@@ -32,19 +34,19 @@ steal.plugins('phui/menu').then(function($){
 			this.element.children("div").each(function(){
 						$(this).mixin(options.child_types);	
 			}).trigger('hide')
-			selected = selected || $(this.element.find(this.options.child_selector)[0])
+			selected = selected || $(this.element.find(this.options.child_selector)[0]);
 			selected.trigger("select")
 			
 			return this.element;
 		},
 		sub : function(el){
-			return this.element.find(el.find('a').attr('href'))
+			return this.element.find(el.find('a').attr('href'));
 		},
 		/**
 		 * Overwritten for performance
 		 */
 		calculateSubmenuPosition : function(){
-			
+		
 		}
 	})
 	Phui.Tabs({
