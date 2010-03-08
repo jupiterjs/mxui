@@ -4,8 +4,8 @@ steal.plugins('phui/widget/textbox','phui/widget/show','jquery/dom/compare','jqu
     Phui.Widget.extend("Phui.Widget.Editable",
     {
         defaults : {
-            SHOW_TYPE : Phui.Widget.Show,
-            EDIT_TYPE : Phui.Widget.Textbox
+            show_type : Phui.Widget.Show,
+            edit_type : Phui.Widget.Textbox
         },
         listensTo : ['selectin','default.selectout','selectout']
     },
@@ -26,6 +26,7 @@ steal.plugins('phui/widget/textbox','phui/widget/show','jquery/dom/compare','jqu
 		 * 
 		 */
 		selectin : function(el, ev){
+			//console.log("select..", ev.target, ev.target == this.element[0], this.mode == 'SHOW')
 			 //cancels all selects above me
 			if(ev.target == this.element[0] && this.mode == 'SHOW'){
                 this.mode = 'EDIT';
@@ -35,7 +36,7 @@ steal.plugins('phui/widget/textbox','phui/widget/show','jquery/dom/compare','jqu
 				this.element.removeAttr("tabindex");
 				
 				this.options.value = this.value();
-                this.element.html(this.Class.OPTIONS.EDIT_TYPE.view(this.options)).hookupView();
+                this.element.html(this.Class.OPTIONS.edit_type.view(this.options)).hookupView();
                 $(this.element.children()[0] ).trigger("select", ev.byFocus);
             }else{
 				ev.stopPropagation();
@@ -60,7 +61,7 @@ steal.plugins('phui/widget/textbox','phui/widget/show','jquery/dom/compare','jqu
             if(this.mode == 'EDIT'){
                 //$(this.element.children()[0] ).trigger("deselect");                    
                 this.mode = 'SHOW';
-                var el = this.element, ST = this.Class.OPTIONS.SHOW_TYPE, options = this.options;
+                var el = this.element, ST = this.Class.OPTIONS.show_type, options = this.options;
                 
                 setTimeout(function(){
                     el.html(ST.view(options)).hookupView()
