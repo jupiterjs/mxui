@@ -1,27 +1,54 @@
 steal.plugins('jquery/controller')
      .then(function(){
          $.Controller.extend("Phui.GroupEditable",{
-            listensTo : ['selected']
+            listensTo : ['selectin','selectout']
         },
         {
-            selected : function(el, ev){
-                var group = $(ev.target).data('group');
-                if(!group || group != this.currentGroup){
-                    this.currentGroup = group;            
-                    this.deselectAllEditables();
-                    this.selectGroup(group);
-                }
+            /**
+             * 
+             * @param {Object} el
+             * @param {Object} ev
+             * @param {Object} from
+             */
+			selectin : function(el, ev){
+				
+				//if we are new group select everyone else
+				var group =       $(ev.target).data('group'),
+				    blurGroup =   ev.relatedTarget && $(ev.relatedTarget).data('group')
+				if(group && ( group != blurGroup) ){
+					this.find('.'+group).each(function(i,brother){
+	                    if(ev.target != brother){
+							var event = jQuery.Event( 'selectin' );
+							event.stopPropagation();
+							jQuery.event.trigger( event, null, brother );
+						}
+	                });
+				}
+				
             },
-            selectGroup : function(group){
-                this.find('.'+group).each(function(i,el){
-                    $(el).trigger('focus');
-                });
-            },
-            deselectAllEditables : function(group){
-                this.find('.phui_widget_editable').each(function(i,el){
-                    $(el).trigger('blur');
-                });            
-            }
+			/**
+			 * Prevents things in the current group from being deselected
+			 */
+			selectout : function(el, ev){
+				 var group = $(ev.target).data('group'),
+				 	focusGroup =   ev.relatedTarget && $(ev.relatedTarget).data('group')
+				 if(group && (group == focusGroup)  ){
+				 	ev.preventDefault();
+				 }else
+				 {
+				 	//remove others
+					this.find('.'+group).each(function(i,brother){
+						if(brother != ev.target){
+							var event = jQuery.Event( 'selectout' );
+							event.stopPropagation();
+							jQuery.event.trigger( event, null, brother );
+							
+						}
+							
+	                });
+				 }
+
+			}
         })
         
      })

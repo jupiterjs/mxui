@@ -1,4 +1,4 @@
-steal.plugins('phui/widget/textbox','phui/widget/show','jquery/dom/compare').then(function($){
+steal.plugins('phui/widget/textbox','phui/widget/show','jquery/dom/compare','jquery/event/default','jquery/event/select').then(function($){
         
 
     Phui.Widget.extend("Phui.Widget.Editable",
@@ -7,7 +7,7 @@ steal.plugins('phui/widget/textbox','phui/widget/show','jquery/dom/compare').the
             SHOW_TYPE : Phui.Widget.Show,
             EDIT_TYPE : Phui.Widget.Textbox
         },
-        listenTo : ['focus','select','deselect']
+        listensTo : ['selectin','default.selectout','selectout']
     },
     {
         setup : function(el, options){
@@ -19,66 +19,59 @@ steal.plugins('phui/widget/textbox','phui/widget/show','jquery/dom/compare').the
         },
         init : function(el, options){
             this.mode = 'SHOW'
-            this.element.attr('tabindex','0').css("outline","none")
+            this.element.attr('tabindex','0')//.css("outline","none")
             this.options= options;
         },
-        click : function(){
-            
-        },
-        focus : function(el, ev){
-            if(ev.target == this.element[0]){
-                this.options.value = this.value();
-                //this.element[0].tabindex = null //.attr('tabindex','')
-                this.element.removeAttr("tabindex");
+		/**
+		 * 
+		 */
+		selectin : function(el, ev){
+			 //cancels all selects above me
+			if(ev.target == this.element[0] && this.mode == 'SHOW'){
+                this.mode = 'EDIT';
+				if(ev.byFocus) //we have focus
+					this.ignoreDeselect = true;
+				
+				this.element.removeAttr("tabindex");
+				
+				this.options.value = this.value();
+                this.element.html(this.Class.OPTIONS.EDIT_TYPE.view(this.options)).hookupView();
+                $(this.element.children()[0] ).trigger("select", ev.byFocus);
+            }else{
+				ev.stopPropagation();
+			}
+		},
+		"selectout" : function(el, ev){
+			//if I am already deselected, stop this event
+			if(this.mode == 'SHOW'){
+				ev.preventDefault();
+				ev.stopPropagation();
+			}else if(this.ignoreDeselect){
+				this.ignoreDeselect = false;
+				ev.stopPropagation();
+				ev.preventDefault();
+				return;
+			}else{
+				var i =1;
+			}
+		},
+		"default.selectout" : function(){
+			this.options.value = this.value();
+            if(this.mode == 'EDIT'){
+                //$(this.element.children()[0] ).trigger("deselect");                    
+                this.mode = 'SHOW';
+                var el = this.element, ST = this.Class.OPTIONS.SHOW_TYPE, options = this.options;
                 
-                if(this.mode == 'SHOW'){
-                    this.ignoreNextBlur = true;
-                    this.element.html(this.Class.OPTIONS.EDIT_TYPE.view(this.options)).hookupView();
-                    $(this.element.children()[0] ).trigger("select");
-                    this.mode = 'EDIT';
-                    
-                }else{
-                    //this.element.html(this.Class.OPTIONS.SHOW_TYPE.view(this.options)).hookupView()
-                    //this.mode = 'SHOW'
-                }
-            }
-        },
-        blur : function(el, ev){
-            /*if(this.ignoreNextBlur){
-                this.ignoreNextBlur = false;
-                return;
-            }*/
-            if(true ){
-                this.options.value = this.value();
-                if(this.mode == 'SHOW'){
-                    
-                }else{
+                setTimeout(function(){
+                    el.html(ST.view(options)).hookupView()
+                },10)
 
-                    $(this.element.children()[0] ).trigger("deselect");                    
-                    
-                    var el = this.element, ST = this.Class.OPTIONS.SHOW_TYPE, options = this.options;
-                    
-                    setTimeout(function(){
-                        el.html(ST.view(options)).hookupView()
-                    },10)
-
-                    this.mode = 'SHOW';
-                    this.element.attr('tabindex','0');
-                }
+                this.mode = 'SHOW';
+                this.element.attr('tabindex','0');
             }
-        },
+		},
         value : function(){
             return this.element.children().controller().value()
-        },
-        select : function(el, ev){
-            ev.stopPropagation();
-            this.element.addClass('selected');            
-            this.element.trigger('selected');
-        },
-        deselect : function(el, ev){
-            ev.stopPropagation();
-            this.element.removeClass('selected');            
-            this.element.trigger('deselected');
         }
     });
 
