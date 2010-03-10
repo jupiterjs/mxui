@@ -19,8 +19,8 @@ steal.plugins('phui/widget/textbox','phui/widget/show','jquery/dom/compare','jqu
         },
         init : function(el, options){
             this.mode = 'SHOW'
-            this.element.attr('tabindex','0')//.css("outline","none")
-            this.options= options;
+            this.element.attr('tabindex','0').css("outline","none")
+            //this.options= options;
         },
 		/**
 		 * 

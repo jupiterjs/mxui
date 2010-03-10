@@ -9,16 +9,16 @@ steal.plugins('jquery/controller','jquery/dom/dimensions').then(function($){
 			if(this.parent[0] === document.body || this.parent[0] === document.documentElement)
 				this.parent = $(window)
 			//listen on parent's resize
-			this.parent_resize = this.callback('parentResize');
+			
 			//console.log("listening on ", this.parent[0])
-			this.parent.bind('resize', this.parent_resize);
+			this.bind(this.parent, 'resize', 'parentResize');
 			var parent = this.parent;
 			setTimeout(function(){
 				parent.trigger("resize");
 			},13)
 			
 		},
-		parentResize : function(ev){
+		parentResize : function(el, ev){
 			//only if target was me
 			//console.log(ev.target)
 			if(ev.target == this.parent[0] && this.element.is(":visible")){

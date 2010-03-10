@@ -39,8 +39,20 @@ steal.plugins('phui/menu').then(function($){
 			
 			return this.element;
 		},
+		/**
+		 * Gets the sub element from the href, or just the order of things.
+		 * @param {Object} el
+		 */
 		sub : function(el){
-			return this.element.find(el.find('a').attr('href'));
+			var a = el.find("a[href]"), c
+			if(a.length){
+				c = this.element.find(a.attr('href'))
+				if(c.length)
+					return c;
+			}
+			return this.element.children(':eq('+(el.index()+1)+')')
+			
+			
 		},
 		/**
 		 * Overwritten for performance
