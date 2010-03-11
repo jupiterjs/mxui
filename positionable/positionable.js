@@ -22,6 +22,9 @@ steal.apps('jquery','jquery/controller').then(function($){
 		   this.move.apply(this, arguments)
            //clicks elsewhere should hide
        },
+	   hide : function(el, ev){
+	       this.element.hide();
+	   },
 	   move : function(el, ev, positionFrom){
    			
 			var options  = $.extend({},this.options);
