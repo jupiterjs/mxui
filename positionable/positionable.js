@@ -117,7 +117,6 @@ steal.apps('jquery','jquery/controller').then(function($){
 				position.left -= elemWidth;
 			} else if ( options.my[0] === horizontalDefault ) {
 				position.left -= elemWidth / 2;
-				//position.left -= elemWidth / 2 * 3;
 			}
 	
 			if ( options.my[1] === "bottom" ) {
