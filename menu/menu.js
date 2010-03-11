@@ -113,9 +113,9 @@ steal.apps('phui/positionable','jquery/event/default','jquery/event/hover').then
 		 * -> triggers "select"
 		 */
 		"{child_selector} default.deselect" : function(el, ev){
-		  //check if I have an li active
-		  if(this.hideOld(ev))
-			el.trigger("select")
+			//check if I have an li active
+			if(this.hideOld(ev))
+				el.trigger("select")
 		},
 		/**
 		 * Will try to hide the submenu.  It will return true if the submenu allowed it.
