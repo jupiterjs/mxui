@@ -17,7 +17,7 @@ steal.plugins('jquery/controller','jquery/event/drag/limit','jquery/dom/dimensio
 			//determine if horizontal or vertical ...
 			this.element.mixin.apply(this.element, this.options.types).css("overflow","hidden")
 			//insert splitter
-			var c = this.element.children(), splitters = c.length - 1;
+			var c = this.element.children(":visible"), splitters = c.length - 1;
 			for(var i=0; i < c.length - 1; i++){
 				$(c[i]).after("<div class='hsplitter'/>")
 			}
@@ -56,9 +56,17 @@ steal.plugins('jquery/controller','jquery/event/drag/limit','jquery/dom/dimensio
 			var top = drag.movingElement.offset().top - el.offset().top || 0 ,
 				prev = el.prev(),
 				next = drag.movingElement.next(),
-				prevH = prev.height(),
+				//prevOH = prev.outerHeight(),
+				prevH = prev.height()
+				//nextOH = next.outerHeight(),
 				nextH = next.height();
-			
+			//make sure we can't go to 0 height
+			if(nextH - top < 0){
+				top = nextH - top
+			}
+			if(prevH + top < 0){
+				top = prevH + top
+			}
 			//do the shrinking one first
 			if(top > 0){
 				next.height( nextH - top)//.trigger("resize");
@@ -67,75 +75,42 @@ steal.plugins('jquery/controller','jquery/event/drag/limit','jquery/dom/dimensio
 				prev.height( prevH + top)//.trigger("resize");
 				next.height( nextH - top)//.trigger("resize");
 			}
-			
+		
 			
 			setTimeout(function(){
-				prev.trigger("resize")
-				next.trigger("resize")
+				prev.triggerHandler("resize")
+				next.triggerHandler("resize")
 			},13)
 			
 			//drag.movingElement.css("top","")
 		},
-		resize : function(){
-			//go through children and resize
-			var height = this.element.height();
-			
-			var c = this.element.children(":not(.hsplitter)");
-			var splitters = this.element.children(".hsplitter");
-			var splitterHeight = splitters.outerHeight();
-			//size everything
-			var total  = this.element.height() - splitterHeight* splitters.length;
-
-			for(var i =0; i < c.length; i++){
-				var $c = $(c[i]);
-				var cheight = $c.outerHeight();
-
-				if(cheight > total){
-					cheight = total;
-				}
-				if(i == c.length - 1){
-
-					$c.outerHeight(total);
-				}else{
-					$c.outerHeight(cheight);
-				}
-				total = total - cheight;
-				
+		resize : function(el, ev){
+			//if not visible do nothing
+			if(!this.element.is(":visible"))
+				return;
+			var h = this.element.height(), w = this.element.width()
+			if (this.oldHeight == h && this.oldWidth == w) {
+				ev.stopPropagation();
+				return;
 			}
-
+			this.oldHeight = h;
+			this.oldWidth = w;
+			//console.log("resizing splitter")
+			//go through children and resize
+			this.size()
+			return;
 		},
 		insert : function(el, ev){
-			if (ev.target.parentNode != this.element[0]) {
+			ev.stopPropagation();
+			if (ev.target.parentNode != this.element[0] ) {
 				return;
 			}
 			var target = $(ev.target)
+			if(target.hasClass('split')) return;
+			target.addClass("split")
 			target.before("<div class='hsplitter'/>")
 			//add splitter before el
-			
-			//get height ...
-			var targetheight = target.outerHeight();
-			
-			var height = this.element.height();
-			var c = this.element.children(":not(.hsplitter)");
-			var splitters = this.element.children(".hsplitter");
-			var splitterHeight = splitters.outerHeight();
-			var total  = this.element.height() - splitterHeight* splitters.length;
-			//remove proportionally the heights of everyone
-			
-			
-			for(var i =0; i < c.length; i++){
-				if(c[i] == ev.target) continue;
-				var $c = $(c[i]);
-				var cheight = $c.height();
-				$c.animate({height: cheight - (cheight / total * targetheight)}, "fast",function(){
-					$(this).resize();
-				})
-				//console.log(c[i], cheight / total, cheight / total * targetheight)
-				
-				
-			}
-			//slide up others correct ammount
-			
+			this.size(null, true, target);
 		},
 		remove : function(el, ev){
 			if (ev.target.parentNode != this.element[0]) {
@@ -145,33 +120,68 @@ steal.plugins('jquery/controller','jquery/event/drag/limit','jquery/dom/dimensio
 			
 			
 			var target = $(ev.target)
-			target.prev().remove()
-			//add splitter before el
+			//remove the splitter before us
+			var prev = target.prev();
+			if(prev.length){
+				prev.remove()
+			}else{
+				target.next().remove()
+			}
 			
-			//get height ...
-			var targetheight = target.outerHeight();
+			this.size(this.element.children(":not(.hsplitter):visible").not(target), true )
+		},
+		/**
+		 * Takes elements and animates them to the right size
+		 * @param {Object} els
+		 */
+		size : function(els, animate, keep){
+			els = els || this.element.children(":not(.hsplitter):visible")
+			//makes els the right height
+			if(keep){
+				els = els.not(keep)
+			}
+			var splitters = this.element.children(".hsplitter"),
+				splitterHeight = splitters.outerHeight(),
+				total  = this.element.height() - splitterHeight* splitters.length;
 			
-			var height = this.element.height() - targetheight;
-			var c = this.element.children(":not(.hsplitter)");
-			var splitters = this.element.children(".hsplitter");
-			var splitterHeight = splitters.outerHeight();
-			var total  = this.element.height() - splitterHeight* splitters.length;
-			//add proportionally the heights of everyone
+			if(keep){
+				total = total - $(keep).outerHeight();
+			}
 			
+			//calculate current percentage of height
+			var heights = [], sum = 0;
 			
-			for(var i =0; i < c.length; i++){
-				if(c[i] == ev.target) continue;
-				var $c = $(c[i]);
-				var cheight = $c.height();
-				$c.animate({height: cheight + (cheight / total * targetheight)}, "fast",function(){
-					$(this).resize();
-				})
-				//console.log(c[i], cheight / total, cheight / total * targetheight)
-				
+			for(var i =0; i < els.length; i++){
+				var $c = $(els[i]), 
+					height = $c.outerHeight();
+				heights.push(height)
+				sum += height;
+			}
+			var increase = total / sum, keepSized = false;
+			if(increase > 0.99 && increase < 1.01) return;
+			//go through and resize
+			for(var i =0; i < els.length; i++){
+				var $c = $(els[i]), 
+					height = heights[i];
+				console.log("splitter",height)
+				if(animate){
+					//console.log("animating", $c, Math.round(height* increase))
+					
+					$c.animate({outerHeight: Math.round(height* increase)}, "fast",function(){
+						$(this).triggerHandler('resize');
+						if(keep && !keepSized){
+							keep.triggerHandler('resize')
+							keepSized = true;
+						}
+					})
+				}else{
+					$c.outerHeight(height* increase).triggerHandler('resize');
+				}
 				
 			}
 			
 			
+			//first
 		}
 	})
 })

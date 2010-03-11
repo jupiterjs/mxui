@@ -28,22 +28,31 @@
 			.split {
 				overflow: auto;
 			}
+			#container .panel:nth-child(even) {
+				background-color: #ddddee;
+			}
+			#container .panel:nth-child(odd) {
+				background-color: #eedddd;
+			}
         </style>
 	</head>
 	<body>
 	    <div id='container'>
-	    	<div class='top'>
-	    		Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.
+	    	<div class='panel'>
+	    		<a href='javsacript://' class='remove'>remove</a>
+				Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.
 		        Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.
 		        Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.
 	    	</div>
-			<div class='top'>
-	    		Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.
+			<div class='panel'>
+	    		<a href='javsacript://' class='remove'>remove</a>
+				Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.
 		        Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.
 		        Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.
 	    	</div>
-			
 	    </div>
+		<a href='javascript://' id="add">add</a>
+		<a href='javascript://' id="resize">resize</a>
 		<script type='text/javascript' 
                 src='../../steal/steal.js?steal[app]=phui/splitter&steal[env]=development'
                 package='main.js'
@@ -51,6 +60,23 @@
         </script>
 		<script type='text/javascript'>
 			$("#container").phui_splitter()
+			$("#add").click(function(){
+				$("<div class='panel'><a href='javsacript://' class='remove'>remove</a>Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.</div>")
+					.appendTo($("#container")).trigger("insert")
+			})
+			$(".remove").live("click", function(ev){
+				ev.preventDefault();
+				$(this).parent().trigger("remove").remove();
+			})
+			var big = true;
+			$("#resize").click(function(){
+				if(big){
+					$("#container").height(600).trigger("resize")
+				}else{
+					$("#container").height(400).trigger("resize")
+				}
+				big = ! big;
+			})
 		</script>
 	</body>
 </html>

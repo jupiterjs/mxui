@@ -14,7 +14,7 @@ steal.plugins('phui/widget/textbox','phui/widget/show','jquery/dom/compare','jqu
             this._super(el, options);
             if(this.options.group){
                 this.element.addClass(this.options.group);
-                this.element.data('group', this.options.group);
+                jQuery.data(el, 'group', this.options.group);
             }                    
         },
         init : function(el, options){

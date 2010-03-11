@@ -69,7 +69,7 @@ steal.apps('phui/positionable','jquery/event/default','jquery/event/hover').then
 		"{child_selector} default.select" : function(el, ev){
 		   var me = this.sub(el)
 		   if (me.length) {
-			 me.trigger("show", this.calculateSubmenuPosition(el, ev) )
+			 me.triggerOne("show", this.calculateSubmenuPosition(el, ev) )
 		   }
 		   el.addClass(this.options.selected)
 		   el.addClass(this.options.active)
@@ -80,14 +80,16 @@ steal.apps('phui/positionable','jquery/event/default','jquery/event/hover').then
 		"default.hide" : function(el, ev){
 			 if(ev.target == this.element[0]){
 			 	var old = this.sub(this.element.find("."+this.options.active).removeClass(this.options.active));
-				old && old.trigger("hide")
+				old && old.triggerOne("hide")
 				this.element.hide();
 			 }
 			
 		},
 		"default.show" : function(el, ev){
-		   if(ev.target == this.element[0])
-		   	this.element.show();
+		   if(ev.target == this.element[0]){
+		   		this.element.show();
+		   }
+		   	
 		}
    })
 

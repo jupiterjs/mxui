@@ -14,7 +14,7 @@ steal.plugins('jquery/controller','jquery/dom/dimensions').then(function($){
 			this.bind(this.parent, 'resize', 'parentResize');
 			var parent = this.parent;
 			setTimeout(function(){
-				parent.trigger("resize");
+				parent.triggerHandler("resize");
 			},13)
 			
 		},
@@ -31,7 +31,7 @@ steal.plugins('jquery/controller','jquery/dom/dimensions').then(function($){
 					this.element.css({
 						width: width+"px", 
 						height: height+"px"
-					}).trigger('resize');
+					}).triggerHandler('resize');
 					return;
 				}
 				
@@ -55,7 +55,7 @@ steal.plugins('jquery/controller','jquery/dom/dimensions').then(function($){
 				if(this.options.width)
 					this.element.outerWidth(width)
 				
-				this.element.trigger('resize');
+				this.element.triggerHandler('resize');
 
 			}
 			
