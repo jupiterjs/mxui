@@ -57,7 +57,7 @@ steal.apps('phui/positionable','jquery/event/default','jquery/event/hover').then
 			var active = this.find("."+this.options.active+":first");
 			if(active.length){
 				var old = this.sub(active.removeClass(this.options.active).removeClass(this.options.selected))
-				old && old.trigger("hide")
+				old && old.triggerOne("hide")
 			}
 		},
 		/**

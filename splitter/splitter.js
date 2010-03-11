@@ -110,7 +110,7 @@ steal.plugins('jquery/controller','jquery/event/drag/limit','jquery/dom/dimensio
 				return;
 			}
 			var target = $(ev.target)
-			if(target.hasClass('split')) return;
+			//if(target.hasClass('split')) return;
 			target.addClass("split")
 			target.before("<div class='hsplitter'/>")
 			//add splitter before el
