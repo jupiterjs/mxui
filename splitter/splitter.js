@@ -163,7 +163,7 @@ steal.plugins('jquery/controller','jquery/event/drag/limit','jquery/dom/dimensio
 			for(var i =0; i < els.length; i++){
 				var $c = $(els[i]), 
 					height = heights[i];
-				console.log("splitter",height)
+
 				if(animate){
 					//console.log("animating", $c, Math.round(height* increase))
 					
