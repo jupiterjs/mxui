@@ -116,20 +116,24 @@ steal.plugins('jquery/controller','jquery/event/drag/limit','jquery/dom/dimensio
 			//add splitter before el
 			this.size(null, true, target);
 		},
+		/**
+		 * If an element is removed from this guy, react to it.
+		 * @param {Object} el
+		 * @param {Object} ev
+		 */
 		remove : function(el, ev){
 			if (ev.target.parentNode != this.element[0]) {
 				return;
 			}
-			//basically expand everyone else 
-			
-			
 			var target = $(ev.target)
 			//remove the splitter before us
-			var prev = target.prev();
-			if(prev.length){
+			var prev = target.prev(), next;
+			if(prev.length && prev.hasClass('hsplitter')){
 				prev.remove()
-			}else{
-				target.next().remove()
+			}else {
+				next = target.next();
+				if(next.hasClass('hsplitter'))
+					next.remove()
 			}
 			
 			this.size(this.element.children(":not(.hsplitter):visible").not(target), true )
