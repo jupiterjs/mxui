@@ -72,7 +72,6 @@ steal.apps('phui/toolbar').then(function(){
 		},
 		"li deselect" : function(el, ev){
 			ev.preventDefault();
-			ev.preventDefault();
 			this.hideOld();
 			
 			$(el).addClass("selected").removeClass("deselected").trigger("shift")

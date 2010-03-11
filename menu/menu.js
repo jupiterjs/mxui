@@ -50,15 +50,24 @@ steal.apps('phui/positionable','jquery/event/default','jquery/event/hover').then
 		},
 		"{child_selector} default.deselect" : function(el, ev){
 		  //check if I have an li active
-		  this.hideOld() //huh
-		  el.trigger("select")
+		  if(this.hideOld(ev))
+		  	el.trigger("select")
 		},
-		hideOld : function(){
-			var active = this.find("."+this.options.active+":first");
+		hideOld : function(ev){
+			var active = this.find("."+this.options.active+":first"),
+				oldSubMenu,
+				result;
 			if(active.length){
-				var old = this.sub(active.removeClass(this.options.active).removeClass(this.options.selected))
-				old && old.triggerOne("hide")
+				oldSubmenu = this.sub(active);
+				if(oldSubmenu){
+					result = oldSubmenu.triggerDefault("hide", ev);
+					if(result){
+						active.removeClass(this.options.active).removeClass(this.options.selected)
+					}
+					return result;
+				}
 			}
+			return true;
 		},
 		/**
 		 * Returns the sub-menu from this item
@@ -69,7 +78,7 @@ steal.apps('phui/positionable','jquery/event/default','jquery/event/hover').then
 		"{child_selector} default.select" : function(el, ev){
 		   var me = this.sub(el)
 		   if (me.length) {
-			 me.triggerOne("show", this.calculateSubmenuPosition(el, ev) )
+			 me.triggerDefault("show", this.calculateSubmenuPosition(el, ev) )
 		   }
 		   el.addClass(this.options.selected)
 		   el.addClass(this.options.active)
@@ -80,7 +89,7 @@ steal.apps('phui/positionable','jquery/event/default','jquery/event/hover').then
 		"default.hide" : function(el, ev){
 			 if(ev.target == this.element[0]){
 			 	var old = this.sub(this.element.find("."+this.options.active).removeClass(this.options.active));
-				old && old.triggerOne("hide")
+				old && old.triggerDefault("hide")
 				this.element.hide();
 			 }
 			
