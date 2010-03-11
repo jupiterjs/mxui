@@ -65,7 +65,7 @@ steal.plugins('jquery/controller','jquery/dom/dimensions').then(function($){
 			var element = this.parent;
 			setTimeout(function(){
 				element.trigger("resize");
-			},100)
+			},13)
 			//this.element.trigger("resize");
 		},
 		destroy : function(){

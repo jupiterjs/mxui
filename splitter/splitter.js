@@ -80,25 +80,29 @@ steal.plugins('jquery/controller','jquery/event/drag/limit','jquery/dom/dimensio
 			setTimeout(function(){
 				prev.triggerHandler("resize")
 				next.triggerHandler("resize")
-			},13)
+			},1)
 			
 			//drag.movingElement.css("top","")
 		},
-		resize : function(el, ev){
+		resize : function(el, ev, data){
 			//if not visible do nothing
+
+			
 			if(!this.element.is(":visible"))
 				return;
-			var h = this.element.height(), w = this.element.width()
-			if (this.oldHeight == h && this.oldWidth == w) {
-				ev.stopPropagation();
-				return;
+			
+			if( !(data && data.force === true)){
+				var h = this.element.height(), w = this.element.width()
+				if (this.oldHeight == h && this.oldWidth == w) {
+					ev.stopPropagation();
+					return;
+				}
+				this.oldHeight = h;
+				this.oldWidth = w;
 			}
-			this.oldHeight = h;
-			this.oldWidth = w;
-			//console.log("resizing splitter")
-			//go through children and resize
-			this.size()
-			return;
+			
+			this.size(null, null, data && data.keep)
+			
 		},
 		insert : function(el, ev){
 			ev.stopPropagation();
