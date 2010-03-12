@@ -52,13 +52,13 @@ steal.plugins('jquery/controller','jquery/view/ejs').then(function($){
 			return new Date(a) > new Date(b) ? 1 : -1;
 		},
 		
-		'th mousenter' : function(el, ev){
-			el.addClass("ui-state-highlight");
+		'th mouseover' : function(el, ev){
+			el.addClass("ui-state-hover");
 			el.css("cursor","pointer");
 		},
 		
-		'th mouseleave' : function(el, ev){
-			el.removeClass("ui-state-highlight");
+		'th mouseout' : function(el, ev){
+			el.removeClass("ui-state-hover");
 			el.css("cursor","");			
 		}		
     
