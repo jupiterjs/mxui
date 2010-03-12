@@ -19,6 +19,7 @@ steal.plugins('jquery/controller','jquery/view/ejs','jquery/event/default').then
 				'rows' : this.options.rows
 			}
 			this.element.html(this.view('//phui/datatable/table.ejs', data));
+			this.find('tbody tr:odd').css('background-color','#DFDFDF');
 		}
 	});
 
