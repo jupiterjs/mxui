@@ -1,15 +1,15 @@
 <table class="ui-widget">
 	
-	<theader>
+	<thead>
 		<tr class="ui-widget-header">
 			
 	<%  for(var f=0;f<fields.length;f++){ 
 	       var field = fields[f]; %>			
-		   <th><%= field.text %></th>
+		   <th field="<%= field.name %>"><%= field.text %></th>
      <% } %>
 	 
 		</tr>
-	</theader>
+	</thead>
 		
 	<tbody>
 	<%  for(var r=0;r<rows.length;r++){ 
