@@ -13,8 +13,9 @@ steal.plugins('jquery/controller','jquery/view/ejs','jquery/event/default').then
 		/**
 		 * Setup
 		 */
-		init : function(el){
+		init : function(){
 			data = {
+				'fields' : this.options.fields,
 				'rows' : this.options.rows
 			}
 			this.element.html(this.view('//phui/datatable/table.ejs', data));

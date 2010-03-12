@@ -11,18 +11,21 @@
             td {padding: 3px;}
 			
 			/* Phui.Datatable css */
-			table {
+			.phui_datatable {
+             	font-size: 0.7em;
+            }			
+			.phui_datatable table {
 				border-width: 0px;
 				border-style: outset;
 				border-collapse: collapse;
 				background-color: white;
 			}
-			table th {
+			.phui_datatable table th {
 				border-width: 1px;
 				border-style: solid;
 				padding: 7px;
 			}
-			table td {
+			.phui_datatable table td {
 				border-width: 1px;
 				padding: 7px;
 				border-style: solid;
@@ -43,7 +46,18 @@
         </script>
 		<script type='text/javascript'>
 	        var loans = [{"auto_extended_flg":false,"created_on":"2009/11/20 16:52:53.117391 +0000","funding_date_actual":"2009-11-23","gov_law_state_cd":"IL","rules_file_id":8,"brand_id":1,"hidden_flg":false,"loan_type_cd":"installment","payment_flg":null,"requested_time":"2009/11/20 16:46:19.720789 +0000","bank_authorization_revoked_on":null,"run_callcredit_flg":false,"comment_hidden":"","created_by":"C:13161918 I:75.57.210.217","interest_rate":2.61,"pay_stub_id":null,"status_cd":"issued","updated_on":"2009/11/20 18:26:56.44254 +0000","discount_instances":[{"created_on":"2009/11/20 16:52:54.157613 +0000","expired_flg":false,"confirmed_on":"2009/11/20 16:52:03.576008 +0000","created_by":"C:13161918 I:75.57.210.217","discount_id":12068,"hash_key":"b900973f9a453dd415462d4744e7488c","loan_id":27152052,"referred_by_id":null,"updated_on":"2009/11/20 16:52:54.157613 +0000","lock_version":0,"referrals_id":null,"id":2837375,"updated_by":"C:13161918 I:75.57.210.217","confirmation_ip":null,"customer_id":13161918,"loan_task_id":null}],"cso_lender_cd":null,"lock_version":3,"funding_date":"2009-11-23","id":27152052,"loan_rule_set_id":706,"updated_by":"issue_all_approved","amount":300.0,"base_loan_id":null,"coupon_code":null,"customer_id":13161918,"end_action_cd":"pay_in_full","fee_amount":0.0,"payoff_by_ach_flg":true,"coupon_discount_amount":0.0,"due_date":"2009-12-03","currency_cd":"USD","end_partial_payment_amount":0.0,"comment":"","due_date_adjusted":"2009-12-03","approved_time":"2009/11/20 17:46:19.82527 +0000","country_cd":"US","cso_interest_rate":null,"grace_period_status_id":null,"paid_off_date":null,"payment_method_cd":"bank_account_ach","status_onhold_cd":null},{"auto_extended_flg":false,"created_on":"2009/11/19 18:40:40.160330 +0000","funding_date_actual":"2009-11-20","gov_law_state_cd":"IL","rules_file_id":7,"brand_id":1,"hidden_flg":true,"loan_type_cd":"installment","payment_flg":null,"requested_time":"2009/11/19 18:39:31.480115 +0000","bank_authorization_revoked_on":null,"run_callcredit_flg":false,"comment_hidden":"","created_by":"C:13161918 I:99.36.29.124","interest_rate":2.61,"pay_stub_id":null,"status_cd":"withdrawn","updated_on":"2009/11/19 20:59:01.299594 +0000","discount_instances":[{"created_on":"2009/11/19 18:40:40.365705 +0000","expired_flg":false,"confirmed_on":"2009/11/19 18:39:34.262285 +0000","created_by":"C:13161918 I:99.36.29.124","discount_id":12068,"hash_key":"0fa01c29e8eeddece282c21222b841a8","loan_id":27146702,"referred_by_id":null,"updated_on":"2009/11/19 18:40:40.365705 +0000","lock_version":0,"referrals_id":null,"id":2835114,"updated_by":"C:13161918 I:99.36.29.124","confirmation_ip":null,"customer_id":13161918,"loan_task_id":null}],"cso_lender_cd":null,"lock_version":2,"funding_date":"2009-11-20","id":27146702,"loan_rule_set_id":2,"updated_by":"E:acooks I:10.224.88.194","amount":300.0,"base_loan_id":null,"coupon_code":null,"customer_id":13161918,"end_action_cd":"pay_in_full","fee_amount":0.0,"payoff_by_ach_flg":true,"coupon_discount_amount":0.0,"due_date":"2009-12-03","currency_cd":"USD","end_partial_payment_amount":0.0,"comment":"","due_date_adjusted":"2009-12-03","approved_time":null,"country_cd":"US","cso_interest_rate":null,"grace_period_status_id":null,"paid_off_date":null,"payment_method_cd":"bank_account_ach","status_onhold_cd":null}];
-			$('.loans').phui_datatable({rows: loans});
+			$('.loans').phui_datatable({
+				fields: [{name:'loan_type_cd', text: 'Loan Type'},
+				         {name:'id', text: 'Loan Id'},
+						 {name:'gov_law_state_cd', text: 'Gov Law State'},
+						 {name:'status_cd', text: 'Status'},
+						 {name:'end_action_cd', text: 'End Action'},
+						 {name:'funding_date_actual', text: 'Funding date'},
+						 {name:'due_date_adjusted', text: 'Due date adjusted'},
+						 {name:'amount', text: 'Amount'},
+						 {name:'coupon_discount_amount', text: 'Discounted Fee'}],    
+				rows: loans
+			});
 		</script>
 	</body>
 </html>

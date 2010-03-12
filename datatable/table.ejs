@@ -2,15 +2,12 @@
 	
 	<theader>
 		<tr class="ui-widget-header">
-			<th>Loan type</th>
-			<th>#</th>
-			<th>Gov law state</th>
-			<th>Status</th>
-			<th>End action</th>
-			<th>Funding date</th>
-			<th>Due date adjusted</th>
-			<th>Amount</th>
-			<th>Discounted fee</th>
+			
+	<%  for(var f=0;f<fields.length;f++){ 
+	       var field = fields[f]; %>			
+		   <th><%= field.text %></th>
+     <% } %>
+	 
 		</tr>
 	</theader>
 		
@@ -19,15 +16,12 @@
 	       var row = rows[r]; %>
 		   
 		   <tr>
-		   	   <td><%= row['loan_type_cd'] %></td>
-			   <td><%= row['id'] %></td>
-		       <td><%= row['gov_law_state_cd'] %></td>
-			   <td><%= row['status_cd'] %></td>
-			   <td><%= row['end_action_cd'] %></td>
-			   <td><%= row['funding_date_actual'] %></td>
-			   <td><%= row['due_date_adjusted'] %></td>
-   			   <td><%= row['amount'] %></td>
-   			   <td><%= row['coupon_discount_amount'] %></td>
+	   <%  for(var f=0;f<fields.length;f++){ 
+	           var field = fields[f]; %>			   	
+		
+		   	   <td><%= row[field.name] %></td>
+		
+        <% } %>			   
 		   </tr>
 		   
      <% } %>		   
