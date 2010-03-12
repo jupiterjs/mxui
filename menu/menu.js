@@ -100,7 +100,6 @@ steal.apps('phui/positionable','jquery/event/default','jquery/event/hover').then
 			if($(ev.target).closest("a").length){
 				ev.preventDefault();
 			}
-				
 			//make sure we aren't already active
 			if(el.hasClass(this.options.active)){
 				return;
