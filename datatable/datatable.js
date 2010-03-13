@@ -32,24 +32,31 @@ steal.plugins('jquery/controller','jquery/view/ejs').then(function($){
 			var field = el.attr('field');
 			$.each( this.data.fields, function(i,f){
 				if(f.name === field){
+					// defaults to string type and sort ascending
 					var type = f.type ? f.type : 'string';
-        			self.data.rows.sort(function(a, b){return self[type+'Sort'](a[f.name], b[f.name])});
+					var order = f.order ? f.order : 'descending';
+					// toggles sorting order
+					f.order = (f.order === 'ascending') ? 'descending' : 'ascending'; 
+        			self.data.rows.sort(function(a, b){return self[type+'Sort'](a[f.name], b[f.name], f.order)});
 		            return false;			
 				};
 			});
 			this.draw(this.data);
 		},
 		
-		stringSort : function(a, b){
-		    return a > b ? 1 : -1;  
+		stringSort : function(a, b, order){
+		    if(order == 'ascending') return a > b ? 1 : -1;
+			return a < b ? 1 : -1;
 		},
 		
-		numericSort : function(a, b){
-		    return a > b ? 1 : -1;  
+		numericSort : function(a, b, order){
+		    if(order == 'ascending') return a > b ? 1 : -1;
+			return a < b ? 1 : -1;  
 		},
 		
-		dateSort: function(a, b){
-			return new Date(a) > new Date(b) ? 1 : -1;
+		dateSort: function(a, b, order){
+			if(order == 'ascending') return new Date(a) > new Date(b) ? 1 : -1;
+			return new Date(a) < new Date(b) ? 1 : -1;
 		},
 		
 		'th mouseover' : function(el, ev){
