@@ -67,7 +67,17 @@ steal.plugins('jquery/controller','jquery/view/ejs').then(function($){
 		'th mouseout' : function(el, ev){
 			el.removeClass("ui-state-hover");
 			el.css("cursor","");			
-		}		
+		},
+		
+		'tbody tr mouseover' : function(el, ev){
+			el.addClass("ui-state-highlight");
+			el.css("cursor","pointer");
+		},
+		
+		'tbody tr mouseout' : function(el, ev){
+			el.removeClass("ui-state-highlight");
+			el.css("cursor","");			
+		}				
     
 	});
 	
