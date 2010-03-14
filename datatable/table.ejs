@@ -2,7 +2,14 @@
 	
 	<thead>
 		<tr class="ui-widget-header">
-			
+			<th colspan="<%= fields.length %>">
+				<span class="search">Search</span>
+				<span class="search_box"><input name="search_box"/></span>
+				<span class="ui-icon ui-icon-search" style="display:inline">&nbsp;&nbsp;&nbsp;&nbsp;</span>
+			</th>			
+		</tr>
+		
+		<tr class="ui-widget-header">
 	<%  for(var f=0;f<fields.length;f++){ 
 	       var field = fields[f]; %>			
 		   <th field="<%= field.name %>" class="ascending">

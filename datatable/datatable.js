@@ -52,24 +52,6 @@ steal.plugins('jquery/controller','jquery/view/ejs').then(function($){
 			this.find('tbody tr:odd').css('background-color','#FFFFFF');					
 		},
 		
-		/*'th click' : function(el, ev){
-			// default to string type
-			var self = this;
-			var field = el.attr('field');
-			$.each( this.data.fields, function(i,f){
-				if(f.name === field){
-					// defaults to string type and sort ascending
-					var type = f.type ? f.type : 'string';
-					var order = f.order ? f.order : 'descending';
-					// toggles sorting order
-					f.order = (f.order === 'ascending') ? 'descending' : 'ascending'; 
-        			self.data.rows.sort(function(a, b){return self[type+'Sort'](a[f.name], b[f.name], f.order)});
-		            return false;			
-				};
-			});
-			this.draw(this.data);
-		},*/
-		
 	    /**
 	     * Guesses at the type of an object.  This is useful when you want to know more than just typeof.
 	     * @param {Object} object the object you want to test.
@@ -109,6 +91,25 @@ steal.plugins('jquery/controller','jquery/view/ejs').then(function($){
 				
 			if(order === 'ascending') return a > b ? 1 : -1;
 			return a < b ? 1 : -1;
+		},
+		
+		".search_box input keypress" : function(el, ev){
+            //if(ev.keyCode == 13 || ev.keyCode == 10){
+                this.search(el.val());
+            //}
+        },
+		
+		search : function(text){
+			this.find('tbody tr').each(function(i, tr){
+				var match = false;
+			    $(tr).find('td').each(function(j, td){
+					if($.String.include($(td).html(), text)) match = true;
+				});
+				match ? $(tr).show() : $(tr).hide()
+			});
+			
+			this.find('tbody tr:even').css('background-color','#DFDFDF');
+			this.find('tbody tr:odd').css('background-color','#FFFFFF');					
 		},
 		
 		'th mouseover' : function(el, ev){
