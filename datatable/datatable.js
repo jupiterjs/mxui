@@ -27,7 +27,7 @@ steal.plugins('jquery/controller','jquery/view/ejs').then(function($){
 		
 		draw : function(data){
 			this.element.html(this.view('//phui/datatable/table.ejs', data));
-			this.find('tbody tr:even').css('background-color','#DFDFDF');			
+			this.find('tbody tr:even').css('background-color','#E7E7E7');			
 		},
 		
 		'th click' : function(el, ev){
@@ -48,7 +48,7 @@ steal.plugins('jquery/controller','jquery/view/ejs').then(function($){
 				
 		    tbody.find('tr').sort(this.callback('sort', field, order)).appendTo(tbody);
 			
-			this.find('tbody tr:even').css('background-color','#DFDFDF');
+			this.find('tbody tr:even').css('background-color','#E7E7E7');
 			this.find('tbody tr:odd').css('background-color','#FFFFFF');					
 		},
 		
@@ -108,7 +108,7 @@ steal.plugins('jquery/controller','jquery/view/ejs').then(function($){
 				match ? $(tr).show() : $(tr).hide()
 			});
 			
-			this.find('tbody tr:even').css('background-color','#DFDFDF');
+			this.find('tbody tr:even').css('background-color','#E7E7E7');
 			this.find('tbody tr:odd').css('background-color','#FFFFFF');					
 		},
 		
@@ -123,12 +123,12 @@ steal.plugins('jquery/controller','jquery/view/ejs').then(function($){
 		},
 		
 		'tbody tr mouseover' : function(el, ev){
-			el.addClass("ui-state-highlight");
+			el.addClass("ui-state-hover");
 			el.css("cursor","pointer");
 		},
 		
 		'tbody tr mouseout' : function(el, ev){
-			el.removeClass("ui-state-highlight");
+			el.removeClass("ui-state-hover");
 			el.css("cursor","");			
 		}				
     
