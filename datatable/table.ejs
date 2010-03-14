@@ -5,7 +5,10 @@
 			
 	<%  for(var f=0;f<fields.length;f++){ 
 	       var field = fields[f]; %>			
-		   <th field="<%= field.name %>"><%= field.text %></th>
+		   <th field="<%= field.name %>" class="ascending">
+		       <span><%= field.text %></span>
+			   <span class="ui-icon ui-icon-arrow-1-n" style="display:inline;">&nbsp;&nbsp;&nbsp;</span>
+		   </th>
      <% } %>
 	 
 		</tr>
@@ -19,7 +22,7 @@
 	   <%  for(var f=0;f<fields.length;f++){ 
 	           var field = fields[f]; %>			   	
 		
-		   	   <td><%= row[field.name] %></td>
+		   	   <td field="<%= field.name %>"><%= row[field.name] %></td>
 		
         <% } %>			   
 		   </tr>
