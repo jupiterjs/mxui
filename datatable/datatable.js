@@ -10,6 +10,7 @@ steal.plugins('jquery/controller','jquery/view/ejs').then(function($){
 	$.Controller.extend('Phui.Datatable',
 	{
 		defaults : {
+			content: '//phui/datatable/table.ejs'
 		},
 		listensTo : []
 	},
@@ -18,15 +19,11 @@ steal.plugins('jquery/controller','jquery/view/ejs').then(function($){
 		 * Setup
 		 */
 		init : function(){
-			this.data = {
-				'fields' : this.options.fields,
-				'rows' : this.options.rows
-			}
 			this.draw(this.data);
 		},
 		
 		draw : function(data){
-			this.element.html(this.view('//phui/datatable/table.ejs', data));
+			this.element.html(this.view(this.options.content, this.options));
 			this.find('tbody tr:even').css('background-color','#E7E7E7');			
 		},
 		
