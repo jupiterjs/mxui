@@ -1,16 +1,46 @@
 steal.plugins('jquery/controller','jquery/dom/dimensions').then(function($){
+	var cushin = function(el){
+		if(el === document) return 0;
+		var start = 0;
+		var get = {
+			paddingBottom : true,
+			borderBottomWidth : true,
+			marginBottom : true,
+			paddingTop: true,
+			borderTopWidth : true,
+			marginTop : true
+		}
+		$.curStyles(el, get)
+		$.each(get, function(name, value){
+			start += parseFloat(value, 10) || 0
+		})
+		return start;
+	}
+	var siblings = function(el){
+		if(el === document) return 0;
+		var total = 0;
+		$(el).siblings().each(function(){
+			var $jq = $(this)
+			if(this.nodeName.toLowerCase() != 'script' && 
+			   $jq.is(":visible") && 
+			   $jq.css("position") != "absolute"){
+				total += $jq.outerHeight(true)
+			}
+		})
+		return total;
+	}
+
+	
 	$.Controller.extend("Phui.Filler",
 	{
 		listensTo : ["show"]
 	},
 	{
 		init : function(el, options){
-			this.parent = this.options.parent || this.element.parent()
+			this.parent = this.options.parent ? $(this.options.parent) : this.element.parent()
 			if(this.parent[0] === document.body || this.parent[0] === document.documentElement)
 				this.parent = $(window)
 			//listen on parent's resize
-			
-			//console.log("listening on ", this.parent[0])
 			this.bind(this.parent, 'resize', 'parentResize');
 			var parent = this.parent;
 			setTimeout(function(){
@@ -20,10 +50,8 @@ steal.plugins('jquery/controller','jquery/dom/dimensions').then(function($){
 		},
 		parentResize : function(el, ev){
 			//only if target was me
-			//console.log(ev.target)
 			if(ev.target == this.parent[0] && this.element.is(":visible")){
 				var height, width;
-				
 				if(this.options.all){
 					this.element.css({width: 0, height: 0})
 					height =  $(document).height() 
@@ -34,29 +62,44 @@ steal.plugins('jquery/controller','jquery/dom/dimensions').then(function($){
 					}).triggerHandler('resize');
 					return;
 				}
+				//if it is the document, documentElement, window, or body
+				//we have to shrink ourselves to not affect the layout
+				var nakedParent = this.parent[0], shrink = false, oldOverflow;
+				if(nakedParent === document ||
+				   nakedParent === document.documentElement ||
+				   nakedParent === window ||
+				   nakedParent === document.body){
+				   	shrink = true;
+				}
+				if(shrink){
+					oldOverflow = jQuery.curCSS(this.element[0], "overflow")
+					this.element.css({width: 0, height: 0, overflow: "auto"})
+				}
+				//now lets figure out how much space there is above us
+				var spaceUsed = 0, currentParent;
+				//if we are a direct child of our parent
+				//now we have to go through our parents, summing up what is under us
+				//and under each parent until we get to our parent
+				currentParent = this.element[0].parentNode
+				spaceUsed += siblings(this.element[0])
+				while(currentParent && currentParent != nakedParent ){
+					spaceUsed += cushin(currentParent);
+					spaceUsed += siblings(currentParent)
+					currentParent = currentParent.parentNode;
+				}
 				
-				var p = this.parent,
-				    height = this.parent.height(),
-					width = this.parent.width(),
-					el = this.element[0],
-					children = this.element.parent().children();
+				//now set the height
 				
-				//get the bigger of the parents
-				
-				children.each(function(){
-					var $jq = $(this)
-					if(this != el && this.nodeName.toLowerCase() != 'script' && $jq.is(":visible") && $jq.css("position") != "absolute"){
-						height = height - $jq.outerHeight(true)
-					}
-					
-				})
 
-				this.element.outerHeight(height)
+				this.element.outerHeight(this.parent.height() - spaceUsed)
 				if(this.options.width)
 					this.element.outerWidth(width)
+				else if(shrink){
+					this.element.css({width: "", overflow: oldOverflow})
+				}
 				
 				this.element.triggerHandler('resize');
-
+				
 			}
 			
 		},
