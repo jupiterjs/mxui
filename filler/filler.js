@@ -50,7 +50,8 @@ steal.plugins('jquery/controller','jquery/dom/dimensions').then(function($){
 		},
 		parentResize : function(el, ev){
 			//only if target was me
-			if(ev.target == this.parent[0] && this.element.is(":visible")){
+			if( this.element.is(":visible")){
+				ev.stopPropagation();
 				var height, width;
 				if(this.options.all){
 					this.element.css({width: 0, height: 0})
