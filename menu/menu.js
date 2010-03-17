@@ -120,10 +120,10 @@ steal.apps('phui/positionable','jquery/event/default','jquery/event/hover').then
 		 * Will try to hide the submenu.  It will return true if the submenu allowed it.
 		 * @return {Boolean} false if the submenu canceled "hide"
 		 */
-		hideOld : function(ev){
+		hideOld : function(ev, active){
 			//Find who is currently active.
-			var active = this.find("."+this.options.active+":first"),
-				oldSubMenu,
+			active = active || this.find("."+this.options.active+":first")
+			var	oldSubMenu,
 				result;
 			
 			//If we have something active

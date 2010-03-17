@@ -100,7 +100,8 @@ steal.apps('phui/toolbar').then(function(){
 		"li deselect" : function(el, ev){
 			//$(el).siblings()
 			ev.preventDefault();
-			this.hideOld();
+			this.hideOld();//this gets canceled so it doesn't remove the active state ....
+			this.find("."+this.options.active+":first").removeClass(this.options.active);
 			$(el).removeClass("deselected").addClass("selected").trigger("shift");
 		},
 		calculateSubmenuPosition : function(el, ev){
