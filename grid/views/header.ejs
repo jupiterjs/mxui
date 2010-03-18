@@ -1,0 +1,3 @@
+<%$.each(this.options.columns, function(name, title){%>
+<th class="<%= name%>-column-header <%= sortedClass(name)%>"><a title='sort column'><%= title %></a></th>
+<%})%>

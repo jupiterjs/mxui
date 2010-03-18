@@ -73,7 +73,7 @@ steal.plugins('jquery/controller','jquery/dom/dimensions').then(function($){
 				   	shrink = true;
 				}
 				if(shrink){
-					oldOverflow = jQuery.curCSS(this.element[0], "overflow")
+					oldOverflow = jQuery.curCSS(this.element[0], "overflow", true)
 					this.element.css({width: 0, height: 0, overflow: "auto"})
 				}
 				//now lets figure out how much space there is above us
