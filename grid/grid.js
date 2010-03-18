@@ -105,7 +105,6 @@ steal.plugins('jquery/controller','jquery/view/ejs','jquery/event/drag').then(fu
 				}
 			}
 			this.options.order.unshift(attr+" "+sort)
-			console.log(this.options.order)
 			this.findAll();
 		},
 		"th draginit" : function(el, ev, drag){
