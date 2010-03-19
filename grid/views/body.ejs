@@ -2,7 +2,7 @@
 	<%var item= items[i]%>
 	<tr <%= item%> class='<%= i==0 ? "first-row" : ""%>'>
 		<%$.each(options.columns, function(name, title){%>
-			<td><%= item[name] %></td>
+			<td><%= options.render && options.render[name] ?  options.render[name](item) : item[name] %></td>
 		<%})%>
 	</tr>
 
