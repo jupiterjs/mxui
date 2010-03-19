@@ -186,6 +186,16 @@ steal.apps('phui/positionable','jquery/event/default','jquery/event/hover').then
 				this.element.show();
 		   }
 			
+		},
+		windowresize: function(el, ev){
+			var lis = this.element.find('li'), $me, self=this, $li;
+		    lis.each(function(i, li){
+				$li = $(li);
+				$me = self.sub($li);
+			   	if ($li.hasClass(self.options.active) && $me.length) {
+					$me.triggerDefault("show", self.calculateSubmenuPosition($li, ev) )
+			   	}
+			})
 		}
    })
    /**
