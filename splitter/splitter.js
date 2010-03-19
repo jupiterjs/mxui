@@ -42,7 +42,7 @@ steal.plugins('jquery/controller','jquery/event/drag/limit','jquery/dom/dimensio
 			if(!this.dragging)
 				el.removeClass(this.options.hover)
 		},
-		".hsplitter dragstart" : function(el, ev, drag){
+		".hsplitter draginit" : function(el, ev, drag){
 			drag.limit(this.element)
 			drag.vertical()
 			drag.ghost().addClass("move").addClass(this.options.hover)
@@ -183,7 +183,7 @@ steal.plugins('jquery/controller','jquery/event/drag/limit','jquery/dom/dimensio
 						}
 					})
 				}else{
-					$c.outerHeight(height* increase).triggerHandler('resize');
+					$c.outerHeight(height* increase, true).triggerHandler('resize');
 				}
 				
 			}

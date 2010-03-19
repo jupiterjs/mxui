@@ -35,7 +35,7 @@ steal.plugins('jquery/controller','phui/wrapper','jquery/event/drag','jquery/dom
 			getDirection : function(el){
 				return el[0].className.match(/ui-resizable-(se|s|e)/)[1]
 			},
-			".ui-resizable-handle dragstart" : function(el, ev, drag){
+			".ui-resizable-handle draginit" : function(el, ev, drag){
 				//get direction
 				//how far is top corner 
 				this.margin = this.element.offsetv().plus(this.element.dimensionsv()).minus(  el.offsetv()  ) 

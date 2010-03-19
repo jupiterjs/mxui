@@ -1,4 +1,4 @@
-steal.plugins('jquery/controller','jquery/view/ejs','jquery/event/drag').then(function($){
+steal.plugins('jquery/controller','jquery/view/ejs','jquery/event/drag','phui/paginator/page').then(function($){
 	$.Controller.extend("Phui.Grid",{
 		defaults:{
 			columns: null,
@@ -8,22 +8,55 @@ steal.plugins('jquery/controller','jquery/view/ejs','jquery/event/drag').then(fu
 			order: [],
 			group: [],
 			model: null,
-			display: {}
-		}
+			display: {},
+			paginatorType : Phui.Paginator
+		},
+		listensTo : ["paginate"]
 		
 	},{
 		init : function(){
 			//make the request ....
 			//this.options.model.findAll(this.params(), this.callback('found'));
+			this.element.$html(this.view("//phui/grid/views/init.ejs"));
 			this.findAll();
 			//draw basic....
-			this.element.$html(this.view());
+			this.widths = {};
+			
 			this.bind(this.element.children('.body'),"scroll","bodyScroll")
-			this.delegate(this.element.find('.header tr'),"th","mousemove","th_mousemove")
+			this.delegate(this.element.find('.header tr'),"th","mousemove","th_mousemove");
+			this.paginator().mixin(this.options.paginatorType);
+			this.element.parent().trigger('resize');
+		},
+		paginate : function(el, ev, data){
+			if(typeof data.offset == "number" && this.options.offset != data.offset){
+				data.offset = Math.min(data.offset, Math.floor(this.options.count / this.options.limit)* this.options.limit)
+				
+				this.options.offset = data.offset;
+				//update paginators
+				this.findAll();
+			}
+		},
+		".pagenumber keypress" : function(el, ev){
+			if(ev.charCode && !/\d/.test(String.fromCharCode(ev.charCode))){
+				ev.preventDefault()
+			}
+		},
+		"form.pageinput submit" : function(el, ev){
+			ev.preventDefault();
+			var page = parseInt(el.find('input').val(),10) - 1,
+				offset = page*this.options.limit;
+			
+			this.element.trigger("paginate", {
+				offset: offset
+			})
 		},
 		findAll : function(){
 			this.element.children('.body').find("table").html("<tbody><tr><td>Loading ...<td></tr></tbody>")
+
 			this.options.model.findAll(this.params(), this.callback('found'));
+		},
+		paginator : function(){
+			return this.element.children('.footer').find(".gridpages")
 		},
 		found : function(items){
 			if(!this.options.columns){
@@ -33,12 +66,17 @@ steal.plugins('jquery/controller','jquery/view/ejs','jquery/event/drag').then(fu
 						columns[name] = $.String.capitalize(name)
 				})
 			}
-			//do columns ...
-			this.element.children('.header').find("tr").html(this.view('header'));
+			this.options.count = items.count;
+			
 			
 			var body = this.element.children('.body')
-			body.find("table").prepend(this.view('columns', this.options.columns))
-			var tbody = body.find("tbody").html(this.view('body', {
+			
+			//draw column with set widths
+			body.find("table").prepend(this.view('//phui/grid/views/columns.ejs', {
+				columns: this.options.columns,
+				widths: this.widths
+			}))
+			var tbody = body.find("tbody").$html(this.view('//phui/grid/views/body.ejs', {
 				options: this.options,
 				items: items
 			}))
@@ -46,10 +84,19 @@ steal.plugins('jquery/controller','jquery/view/ejs','jquery/event/drag').then(fu
 				var $td = $(this), 
 					$spacer = $td.children().eq(0),
 					width = $spacer.outerWidth(), height = $spacer.outerHeight();
-				//console.log($td.text(),width)
 				$td.css({padding: 0, margin: 0})
 				$spacer.outerWidth(width+2).css("float","none").html("").height(1)
 			})
+			var mainPaginator = this.paginator().controller()
+			mainPaginator.update(this.params());
+			var foot = this.element.children('.footer')
+			foot.find('input').val(mainPaginator.currentPage+1)
+			foot.find('.pagelisting').html("Page "+(mainPaginator.currentPage+1)+" of "+mainPaginator.totalPages+" ("+this.options.count+" records)")
+			this.element.trigger("updated", {params: this.params(), items: items})
+			
+			//do columns ...
+			this.element.children('.header').find("tr").html(this.view('//phui/grid/views/header.ejs'));
+			tbody.trigger("resize")
 			setTimeout(this.callback('sizeTitle'),1)
 		},
 		sizeTitle : function(){
@@ -71,12 +118,13 @@ steal.plugins('jquery/controller','jquery/view/ejs','jquery/event/drag').then(fu
 			this.titleSized = true;
 		},
 		params : function(){
-			return {
+			return $.extend({},this.options.params,{
 				order: this.options.order,
-				offset: this.options.ofset,
+				offset: this.options.offset,
 				limit: this.options.limit,
-				group: this.options.group
-			}
+				group: this.options.group,
+				count: this.options.count
+			})
 		},
 		resize : function(){
 			if(this.titleSized){
@@ -123,8 +171,7 @@ steal.plugins('jquery/controller','jquery/view/ejs','jquery/event/drag').then(fu
 				drag.cancel();
 			}
 			
-			//somehow we need to tranfer this drag to something else ....
-			//console.log(this.element.children(".body"))
+
 			
 		},
 		"th dragmove" : function(el, ev, drag){
@@ -133,22 +180,22 @@ steal.plugins('jquery/controller','jquery/view/ejs','jquery/event/drag').then(fu
 			
 			if(width > el.find(":first").outerWidth())
 				$("#column-resizer").width(width)
-			//console.log(width)
 		},
 		"th dragend" : function(el, ev, drag){
 			ev.preventDefault();
-			var width =  ev.vector().minus(el.offsetv()).left();
-			
+			var width =  ev.vector().minus(el.offsetv()).left(),
+				attr = el[0].className.match(/([^ ]+)-column-header/)[1],
+				cg;
 			if(width > el.find(":first").outerWidth())
-				this.element.find("colgroup:eq("+el.index()+")").outerWidth( width )
+				cg = this.element.find("colgroup:eq("+el.index()+")").outerWidth( width )
 			else{
-				this.element.find("colgroup:eq("+el.index()+")").outerWidth( el.find(":first").outerWidth() )
+				cg = this.element.find("colgroup:eq("+el.index()+")").outerWidth( el.find(":first").outerWidth() )
 			}
+			this.widths[attr] = cg.width();
 			setTimeout(this.callback('sizeTitle'),1)
 			$("#column-resizer").remove();
 		},
 		th_mousemove : function(el, ev){
-			//console.log( el.offset().left + el.outerWidth()-6 , ev.vector().left()  )
 			if(this.isMouseOnRight(el, ev)){
 				el.css("cursor","e-resize")
 			}else{

@@ -92,7 +92,7 @@ steal.plugins('jquery/controller','jquery/dom/dimensions').then(function($){
 				//now set the height
 				
 
-				this.element.outerHeight(this.parent.height() - spaceUsed)
+				this.element.outerHeight(this.parent.height() - spaceUsed, true)
 				if(this.options.width)
 					this.element.outerWidth(width)
 				else if(shrink){
