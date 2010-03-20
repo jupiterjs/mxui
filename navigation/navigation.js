@@ -39,10 +39,11 @@ steal.apps('phui/toolbar').then(function(){
 						el.trigger("shifted")
 					}
 					
-					// fix weird IE cleartype font bug
-					$('li.button').each(function(){
-						$(this).get(0).style.removeAttribute('filter');
-					})
+					if($.browser.msie)
+						// fix weird IE cleartype font bug
+						$('li.button').each(function(){
+							$(this).get(0).style.removeAttribute('filter');
+						})
 					
 				}, duration: "slow"}
 			)
