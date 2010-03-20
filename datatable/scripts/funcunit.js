@@ -1,4 +1,4 @@
-load('phui/datatable/test/funcunit/settings.js')
+load('phui/datatable/test/settings.js')
 load('steal/rhino/env.js');
 
 Envjs('phui/datatable/funcunit.html', 
