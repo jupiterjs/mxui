@@ -4,7 +4,7 @@ steal.plugins('phui/menu').then(function($){
 		defaults : {
 			lastNode: "last-child",
 			rootNode: "root-node",
-			hasChildren : "has-children",
+			hasChildren : "has-children"
 			
 		},
 		listensTo: ["default.show","default.hide","show","hide"]

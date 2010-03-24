@@ -1,8 +1,15 @@
+.ui-helper-clearfix:after { content: "."; display: block; height: 0; clear: both; visibility: hidden; }
+.ui-helper-clearfix { display: inline-block; }
+/* required comment for clearfix to work in Opera \*/
+* html .ui-helper-clearfix { height:1%; }
+.ui-helper-clearfix { display:block; }
+
+
 .phui_grid th {
 	text-align: left;
 }
  .phui_grid .body  {
-	overflow-y: auto;
+	overflow: auto;
 	width: 100%;
 }
 table {
@@ -14,19 +21,21 @@ table {
 .header {
 	overflow: hidden;
 	border-bottom: solid 1px gray;
+	width: 100%;
 }
 .phui_grid th {
 	padding: 2px;
 }
 .footer {
-	height: 26px;
+
 	border-top: solid 1px gray;
 	overflow: hidden;
 }
-
+div {
+	position: relative;
+}
 .pagelisting {
-	width: 30%;
-	float: left;
+	width: 35%;
 }
 .gridpages {
 	text-align:center;
@@ -38,12 +47,10 @@ table {
 	padding: 0px 3px;
 }
 .gridpages {
-	width: 40%;
-	float: left;
+	
 }
 .pageinput {
-	float: left;
-	width: 30%;
+	width: 35%;
 	margin: 0px;
 	padding: 3px 0px;
 	text-align: right;

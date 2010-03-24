@@ -80,7 +80,7 @@ steal.plugins('jquery/controller','jquery/dom/dimensions').then(function($){
 				var get = {"position": true, "display": true};
 				$.curStyles(this, get);
 				return get.position !== "absolute" && 
-					   get.display !== "none"
+					   get.display !== "none" && !jQuery.expr.filters.hidden(this)
 			}),
 			spaceUsed = 0,
 			child,
@@ -117,6 +117,7 @@ steal.plugins('jquery/controller','jquery/dom/dimensions').then(function($){
 				mySpaceUsed += parseFloat(value, 10) || 0;
 				
 			})
+			//logg(mySpaceUsed+" "+child.nodeName+"."+child.className)
 			spaceUsed += mySpaceUsed;
 		}
 		return spaceUsed;
@@ -138,6 +139,7 @@ steal.plugins('jquery/controller','jquery/dom/dimensions').then(function($){
 			this.bind(this.parent, 'resize', 'parentResize');
 			var parent = this.parent, el = this.element;
 			var func = function(){
+					//logg("triggering ..")
 					setTimeout(function(){
 						if(jQuery.support.containerSizeAdjustments.width){
 							var c= el.children();
@@ -160,11 +162,13 @@ steal.plugins('jquery/controller','jquery/dom/dimensions').then(function($){
 		},
 		parentResize : function(el, ev){
 			//only if target was me
+			//return;
 			if(ev.originalEvent && this.parent[0] != window){
 				return;
 			}
 
 			if( !jQuery.expr.filters.hidden(this.element[0])){
+				//logg(">STARTING .. "+this.parent[0].nodeName+"."+this.parent[0].className)
 				ev.stopPropagation();
 				var height, width;
 				if(this.options.all){
@@ -211,11 +215,13 @@ steal.plugins('jquery/controller','jquery/dom/dimensions').then(function($){
 				}
 
 				//now set the height
+				//logg("SETTING "+(this.parent.height() - spaceUsed)+" "+this.element[0].nodeName+"."+this.element[0].className+"; parent = "+this.parent.height())
 				this.element.height(this.parent.height() - spaceUsed, true)
+				
 				if(this.options.width)
 					this.element.outerWidth(width)
 				else if(shrink){
-					this.element.css({width: "", overflow: oldOverflow})
+					this.element.css({width: "", overflow: oldOverflow == "visible" && jQuery.support.containerSizeAdjustments.width ? "hidden"  : oldOverflow})
 				}
 				//console.log(new Date() - start)
 				this.element.triggerHandler('resize');
