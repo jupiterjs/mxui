@@ -8,17 +8,79 @@
             .error {border: solid 1px red;}
             .error_text { color: red; font-size: 10px;}
             td {padding: 3px;}
+
+			body {
+				padding: 0px;
+				margin: 0px;
+			}
         </style>
+		<link type="text/css" href="grid.css" rel="stylesheet" />
 	</head>
 	<body>
-	    <h1>Welcome to JavaScriptMVC 3.0!</h1>
-        <ul>
-            <li>Include plugins and files in <i>phui/grid/grid.js</i>.</li>
-            <li>Change to production mode by changing <i>development</i> to <i>production</i> in this file.</li>
-        </ul>
+	    <div class='grid'>
+	    	
+	    </div>
 		<script type='text/javascript' 
-                src='../../steal/steal.js?steal[app]=phui/grid&steal[env]=development'>   
+                src='../../steal/steal.js'>   
         </script>
-		<script type='text/javascript'></script>
+		<script type='text/javascript'>
+			steal.plugins("phui/grid",
+							"phui/filler",
+							"jquery/model",
+							"jquery/dom/fixtures").then(function($){
+				$.fixture["-make"](["resources","resource"],Math.round(Math.random()*2000)+1,function(num){
+					return {
+						id		:	num,
+						name : "Resource "+num,
+						description: "Resource "+num+" description.  You might want to read this.",
+						date: new Date(Math.random()*1000*60*60*24*365*30),
+						location: Math.round(Math.random()*2000)+" Pinetree Ln",
+						users_count: Math.round(Math.random()*20),
+						active_days: Math.round(Math.random()*20),
+						other_things : "Blah blah blah"
+					}
+				})
+				
+				
+				$.Model.extend("Resource",{
+					findAll : function(params, success, error){
+						$.ajax({
+				            url: '/resource',
+				            type: 'get',
+				            dataType: 'json',
+				            data: params,
+				            success: this.callback(['wrapMany',success]),
+							error: error,
+				            fixture: "-resources" //calculates the fixture path from the url and type.
+				        })
+					},
+					findOne : function(params, success, error){
+						$.ajax({
+				            url: '/resources',
+				            type: 'get',
+				            dataType: 'json',
+				            data: params,
+				            success: this.callback(['wrap',success]),
+							error: error,
+				            fixture: "-resource" //calculates the fixture path from the url and type.
+				        })
+					}
+				},{})
+				
+				
+				$(".grid").phui_filler().phui_grid({
+					model: Resource,
+					limit: 100,
+					offset: 0,
+					render : {
+					}
+				})
+				
+				
+			})
+			
+			steal.start();
+			
+		</script>
 	</body>
 </html>

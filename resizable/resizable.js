@@ -1,6 +1,21 @@
 steal.plugins('jquery/controller','phui/wrapper','jquery/event/drag','jquery/dom/dimensions','phui/filler')
      .then(function(){
-	 	$.Controller.extend("Phui.Resizable",{
+	 	//we need to check we aren't evil and have overflow size our container
+		
+		$.support.correctOverflow = false;
+		
+		
+		
+		$(function(){
+			var container =$("<div style='height: 18px; padding: 0; margin: 0'><div style='height: 20px; padding: 0; margin: 0'></div></div>").appendTo(document.body)
+			$.support.correctOverflow = container.height() == 18;
+			container.remove();
+			container = null;
+		})
+		
+		
+		
+		$.Controller.extend("Phui.Resizable",{
 			defaults : {
 				minHeight: 10,
 				minWidth: 10,
@@ -30,6 +45,7 @@ steal.plugins('jquery/controller','phui/wrapper','jquery/event/drag','jquery/dom
 			},
 			init : function(el, options){
 				//draw in resizeable
+				this.element.height(this.element.height())
 				this.element.prepend("<div class='ui-resizable-e ui-resizable-handle'/><div class='ui-resizable-s ui-resizable-handle'/><div class='ui-resizable-se ui-resizable-handle'/>")
 			},
 			getDirection : function(el){
@@ -39,7 +55,10 @@ steal.plugins('jquery/controller','phui/wrapper','jquery/event/drag','jquery/dom
 				//get direction
 				//how far is top corner 
 				this.margin = this.element.offsetv().plus(this.element.dimensionsv()).minus(  el.offsetv()  ) 
-				
+				this.overflow = $.curCSS(this.element[0], "overflow")
+				if(!$.support.correctOverflow && this.overflow == "visible"){
+					this.element.css("overflow","hidden")
+				}
 				var direction = this.getDirection(el)
 				ev.stopPropagation();
 				if(this.directionInfo[direction].limit)
@@ -70,9 +89,16 @@ steal.plugins('jquery/controller','phui/wrapper','jquery/event/drag','jquery/dom
 						outerWidth = this.options.minWidth
 					}
 					this.element.outerWidth(outerWidth+this.margin.x())
-					
 				}
-				this.element.trigger("resize")
+				var el = this.element;
+				el.trigger("resize")
+				
+
+			},
+			".ui-resizable-handle dragend" : function(){
+				if (!$.support.correctOverflow && this.overflow == "visible") {
+					this.element.css("overflow","visible")
+				}
 			}
 		})
 		

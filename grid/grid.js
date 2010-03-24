@@ -1,4 +1,4 @@
-steal.plugins('jquery/controller','jquery/view/ejs','jquery/event/drag','phui/paginator/page').then(function($){
+steal.plugins('jquery/controller','jquery/view/ejs','jquery/event/drag','phui/paginator/page',"jquery/dom/dimensions").then(function($){
 	$.Controller.extend("Phui.Grid",{
 		defaults:{
 			columns: null,
@@ -9,7 +9,7 @@ steal.plugins('jquery/controller','jquery/view/ejs','jquery/event/drag','phui/pa
 			group: [],
 			model: null,
 			display: {},
-			paginatorType : Phui.Paginator
+			paginatorType : Phui.Paginator.Page
 		},
 		listensTo : ["paginate"]
 		
@@ -80,7 +80,7 @@ steal.plugins('jquery/controller','jquery/view/ejs','jquery/event/drag','phui/pa
 				options: this.options,
 				items: items
 			}))
-			tbody.find("tr.spacing").children("td").each(function(){
+			tbody.find("tr.spacing").children("th").each(function(){
 				var $td = $(this), 
 					$spacer = $td.children().eq(0),
 					width = $spacer.outerWidth(), height = $spacer.outerHeight();
@@ -91,7 +91,7 @@ steal.plugins('jquery/controller','jquery/view/ejs','jquery/event/drag','phui/pa
 			mainPaginator.update(this.params());
 			var foot = this.element.children('.footer')
 			foot.find('input').val(mainPaginator.currentPage+1)
-			foot.find('.pagelisting').html("Page "+(mainPaginator.currentPage+1)+" of "+mainPaginator.totalPages+" ("+this.options.count+" records)")
+			foot.find('.pagelisting').html("<label>Page "+(mainPaginator.currentPage+1)+" of "+mainPaginator.totalPages+" ("+this.options.count+" records)</label>")
 			this.element.trigger("updated", {params: this.params(), items: items})
 			
 			//do columns ...
