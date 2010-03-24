@@ -1,0 +1,95 @@
+.phui_grid th {
+	text-align: left;
+}
+ .phui_grid .body  {
+	overflow-y: auto;
+	width: 100%;
+}
+table {
+	width: 100%;
+}
+.phui_grid {
+
+}
+.header {
+	overflow: hidden;
+	border-bottom: solid 1px gray;
+}
+.phui_grid th {
+	padding: 2px;
+}
+.footer {
+	height: 26px;
+	border-top: solid 1px gray;
+	overflow: hidden;
+}
+
+.pagelisting {
+	width: 30%;
+	float: left;
+}
+.gridpages {
+	text-align:center;
+}
+.gridpages, .pagelisting {
+	padding: 3px 0px;
+}
+.pagelisting label {
+	padding: 0px 3px;
+}
+.gridpages {
+	width: 40%;
+	float: left;
+}
+.pageinput {
+	float: left;
+	width: 30%;
+	margin: 0px;
+	padding: 3px 0px;
+	text-align: right;
+}
+.pageinput div {
+	padding: 0px 3px;
+	
+}
+.pagenumber {
+	font-size: 10px;
+}
+.phui_paginator_page {
+	float: left;
+}
+.phui_paginator_page .toolbar_button {
+	display:inline;
+	cursor: pointer;
+	margin: 0px 2px;
+}
+.phui_paginator_page .active{
+		cursor: pointer;
+}
+.phui_paginator_page .toolbar_range {
+	display:inline;
+}
+.pages{
+	display:inline;
+	font-size: 10px;
+}
+.page a {
+	border: solid 1px black;
+	padding: 2px;
+	cursor: pointer;
+	position: relative;
+	top: -2px;
+}
+.page {
+	margin: 0px 2px;
+	display:inline;
+}
+.page a:hover{
+	border: solid 1px red;
+	color: red;
+}
+
+.phui_grid .active a:hover, .phui_grid .active a{
+	border-color: gray;
+	color: gray;
+}
