@@ -24,10 +24,15 @@ steal.plugins('jquery/controller','jquery/view/ejs','jquery/event/drag','phui/pa
 			//draw basic....
 			this.widths = {};
 			
-			this.bind(this.element.children('.body'),"scroll","bodyScroll")
+			this.bind(this.element.children('.body').children().eq(0),"scroll","bodyScroll")
 			this.delegate(this.element.find('.header tr'),"th","mousemove","th_mousemove");
 			this.paginator().mixin(this.options.paginatorType);
 			this.element.parent().trigger('resize');
+		},
+		windowresize : function(){
+			var  body = this.element.children('.body');
+			body.find('table').width(body.width()-20);
+			body.children().eq(0).width(body.width());
 		},
 		paginate : function(el, ev, data){
 			if(typeof data.offset == "number" && this.options.offset != data.offset){
