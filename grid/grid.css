@@ -10,11 +10,12 @@ body .grid {
 		overflow: hidden;
 }
  .grid .body  {
-	overflow: auto;
+	overflow: hidden;
 	width:100%;
 }
 .grid table {
 	width: 100%;
+	width:100%;
 
 }
 .grid .innerBody {
