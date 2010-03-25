@@ -17,7 +17,9 @@ steal.plugins('jquery/controller','jquery/view/ejs','jquery/event/drag','phui/pa
 		init : function(){
 			//make the request ....
 			//this.options.model.findAll(this.params(), this.callback('found'));
+			this.element.addClass("grid")
 			this.element.$html(this.view("//phui/grid/views/init.ejs"));
+			this.element.find('.innerBody').phui_filler({parent: this.element})
 			this.findAll();
 			//draw basic....
 			this.widths = {};
@@ -80,6 +82,7 @@ steal.plugins('jquery/controller','jquery/view/ejs','jquery/event/drag','phui/pa
 				options: this.options,
 				items: items
 			}))
+			
 			tbody.find("tr.spacing").children("th").each(function(){
 				var $td = $(this), 
 					$spacer = $td.children().eq(0),

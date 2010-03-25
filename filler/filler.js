@@ -1,5 +1,9 @@
 steal.plugins('jquery/controller','jquery/dom/dimensions').then(function($){
-
+	
+	logg = function(text){
+		$(".archer_ui_grid").prepend("<p>"+text+"</p>")
+	}
+	
 	//lets test what makes an element include the margin in something
 	$(function(){
 		var affects = {
@@ -34,10 +38,10 @@ steal.plugins('jquery/controller','jquery/dom/dimensions').then(function($){
 	 */
 	$.curStyles.adjustForMargins  = function(parent){
 		//see if there is a value set on the parent
-		if(parent == document || parent == document.body || parent == document.documentElement) 
+		//if(parent == document || parent == document.body || parent == document.documentElement) 
 			return {first: true, last: true};
 		
-		var get = {
+		/*var get = {
 			paddingBottom : true,
 			borderBottomWidth : true,
 			paddingTop: true,
@@ -57,7 +61,8 @@ steal.plugins('jquery/controller','jquery/dom/dimensions').then(function($){
 		}
 		if(ads.width && ( parseInt(parent.style.width) )){
 			ret.first = ret.last = true;
-		}
+		}*/
+		
 		return ret;
 	}
 	var matches = /script/
@@ -92,9 +97,9 @@ steal.plugins('jquery/controller','jquery/dom/dimensions').then(function($){
 		for(i =0; i < children.length; i++){
 			child = children[i];
 			get = {
-				paddingBottom : true,
+				//paddingBottom : true,
 				borderBottomWidth : true,
-				paddingTop: true,
+				//paddingTop: true,
 				borderTopWidth : true
 			};
 			mySpaceUsed = 0;
@@ -104,6 +109,10 @@ steal.plugins('jquery/controller','jquery/dom/dimensions').then(function($){
 			}
 			if(i!=children.length-1 || adjust.last || force){
 				get.marginBottom = true //get bottom margin
+			}
+			if(child == adjustingChild && ! force){
+				get.paddingBottom = true;
+				get.paddingTop = true;
 			}
 			$.curStyles(child, get)
 			if(child != adjustingChild || force){
@@ -117,6 +126,7 @@ steal.plugins('jquery/controller','jquery/dom/dimensions').then(function($){
 				mySpaceUsed += parseFloat(value, 10) || 0;
 				
 			})
+			
 			//logg(mySpaceUsed+" "+child.nodeName+"."+child.className)
 			spaceUsed += mySpaceUsed;
 		}
@@ -206,16 +216,19 @@ steal.plugins('jquery/controller','jquery/dom/dimensions').then(function($){
 					//get the space around the first element
 					spaceUsed  += $.curStyles.getSpaceUsed(current, null, currentParent);
 					//walk up the document until you reach the parent
+					//console.log("immediate", current, spaceUsed)
 					while(currentParent && (currentParent != nakedParent) && (currentParent !== document) ){
 						current = currentParent;
 						currentParent = currentParent.parentNode;
 						spaceUsed += $.curStyles.getSpaceUsed(current, null, currentParent);
+						//console.log("parent", current, spaceUsed)
 					}
 					this.cachedSpaceUsed = spaceUsed;
 				}
-
+				//console.log("spaceUsed", this.element[0], spaceUsed)
 				//now set the height
 				//logg("SETTING "+(this.parent.height() - spaceUsed)+" "+this.element[0].nodeName+"."+this.element[0].className+"; parent = "+this.parent.height())
+				
 				this.element.height(this.parent.height() - spaceUsed, true)
 				
 				if(this.options.width)

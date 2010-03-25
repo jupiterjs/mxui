@@ -1,33 +1,35 @@
-.ui-helper-clearfix:after { content: "."; display: block; height: 0; clear: both; visibility: hidden; }
-.ui-helper-clearfix { display: inline-block; }
-/* required comment for clearfix to work in Opera \*/
-* html .ui-helper-clearfix { height:1%; }
-.ui-helper-clearfix { display:block; }
-
-
-.phui_grid th {
-	text-align: left;
-}
- .phui_grid .body  {
+body .grid {
 	overflow: auto;
-	width: 100%;
 }
-table {
-	width: 100%;
+.phui_filler {
+	overflow: hidden;
 }
-.phui_grid {
 
+.grid th {
+	text-align: left;
+		overflow: hidden;
+}
+ .grid .body  {
+	overflow: auto;
+	width:100%;
+}
+.grid table {
+	width: 100%;
+
+}
+.grid .innerBody {
+	overflow: auto;
 }
 .header {
 	overflow: hidden;
 	border-bottom: solid 1px gray;
 	width: 100%;
 }
-.phui_grid th {
+.grid th {
 	padding: 2px;
 }
 .footer {
-
+	margin:0px;padding:0px;
 	border-top: solid 1px gray;
 	overflow: hidden;
 }
@@ -63,7 +65,7 @@ div {
 	font-size: 10px;
 }
 .phui_paginator_page {
-	float: left;
+
 }
 .phui_paginator_page .toolbar_button {
 	display:inline;
@@ -74,7 +76,7 @@ div {
 		cursor: pointer;
 }
 .phui_paginator_page .toolbar_range {
-	display:inline;
+	
 }
 .pages{
 	display:inline;
@@ -96,7 +98,13 @@ div {
 	color: red;
 }
 
-.phui_grid .active a:hover, .phui_grid .active a{
+.grid .active a:hover, .grid .active a{
 	border-color: gray;
 	color: gray;
+}
+.grid .footer form {
+	padding:0px 3px;
+}
+.footer form {
+	margin:0px;padding:0px
 }
