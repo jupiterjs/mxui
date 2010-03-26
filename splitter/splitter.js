@@ -161,7 +161,7 @@ steal.plugins('jquery/controller','jquery/event/drag/limit','jquery/dom/dimensio
 			
 			for(var i =0; i < els.length; i++){
 				var $c = $(els[i]), 
-					height = $c.outerHeight();
+					height = $c.outerHeight(true);
 				heights.push(height)
 				sum += height;
 			}

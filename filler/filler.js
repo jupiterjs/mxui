@@ -1,9 +1,22 @@
 steal.plugins('jquery/controller','jquery/dom/dimensions','jquery/event/resize').then(function($){
 	
-	logg = function(text){
-		$(".archer_ui_grid").prepend("<p>"+text+"</p>")
+	/*logg = function(text){
+		if(!$("#clear-logg").length){
+			$(".message_window").html("<a id='clear-logg'>Clear</a>")
+			$("#clear-logg").click(function(){
+				$(this).siblings().remove();
+			})
+		}
+		$(".message_window").append("<p>"+text+"</p>")
 	}
-	
+	var out = function(el){
+		if(el === window){
+			return "window"
+		}else if(el === document){
+			return "document"
+		}
+		return el.nodeName+"."+el.className
+	}*/
 	//lets test what makes an element include the margin in something
 	$(function(){
 		var affects = {
@@ -173,9 +186,7 @@ steal.plugins('jquery/controller','jquery/dom/dimensions','jquery/event/resize')
 		parentResize : function(el, ev){
 			//only if target was me
 			//return;
-			if(ev.originalEvent && this.parent[0] != window){
-				return;
-			}
+			//logg(out(this.parent[0]))
 
 			if( !jQuery.expr.filters.hidden(this.element[0])){
 				//logg(">STARTING .. "+this.parent[0].nodeName+"."+this.parent[0].className)
