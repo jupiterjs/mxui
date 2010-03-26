@@ -53,7 +53,7 @@ steal.apps('phui/positionable','jquery/event/default','jquery/event/hover').then
 			 */
 			selected : "selected"
 		},
-		listensTo : ["default.show","default.hide"]
+		listensTo : ["default.deactivate","default.activate"]
 	},
 	{
 		/**
@@ -105,60 +105,69 @@ steal.apps('phui/positionable','jquery/event/default','jquery/event/hover').then
 				return;
 			}
 			
-			$(el).trigger("deselect")
+			$(el).trigger("select")
 		},
-		/**
-		 * Checks if it was ok to hide the old submenu, if it is
-		 * -> triggers "select"
-		 */
-		"{child_selector} default.deselect" : function(el, ev){
-			//check if I have an li active
-			if(this.hideOld(ev))
-				el.trigger("select")
-		},
-		/**
-		 * Will try to hide the submenu.  It will return true if the submenu allowed it.
-		 * @return {Boolean} false if the submenu canceled "hide"
-		 */
-		hideOld : function(ev, active){
-			//Find who is currently active.
-			active = active || this.find("."+this.options.active+":first")
-			var	oldSubMenu,
-				result;
+		"{child_selector} default.select" : function(el, ev){
+			this.deactivateOld(ev, null, el) 
 			
+			//if(this.deaOld(ev))
+			//	el.trigger("activate")
+			
+		},
+		deactivateOld : function(ev, oldActive, newActive, onDeactivated){
+			oldActive = oldActive || this.find("."+this.options.active+":first")
 			//If we have something active
-			if(active.length){
+			if(oldActive.length){
 				//Find the submenu element
-				oldSubmenu = this.sub(active);
-				if(oldSubmenu){
-					//trigger a hide on the submenu, see if it went OK.
-					result = oldSubmenu.triggerDefault("hide", ev);
-					if(result){
-						//if hide went ok, remove 'active' styling.
-						active.removeClass(this.options.active).removeClass(this.options.selected)
-					}
-					return result;
+				if(newActive || onDeactivated){
+					oldActive.one("deactivated", onDeactivated || function(){
+						newActive.trigger("activate")
+					})
 				}
+				oldActive.trigger("deactivate")
+				
+			}else{
+				newActive.trigger("activate")
 			}
-			return true;
+		},
+		"{child_selector} default.deactivate" : function(el){
+			//deactivate child
+			var oldSubmenu = this.sub(el), options = this.options;
+			if(oldSubmenu.length){
+				oldSubmenu.one("deactivated", function(){
+					el.removeClass(options.active).removeClass(options.selected)
+					el.trigger("deactivated");
+				})
+				oldSubmenu.triggerDefault("deactivate") //we assume this will call deactivated
+			}else{
+				el.removeClass(this.options.active).removeClass(this.options.selected)
+				el.trigger("deactivated")
+			}
+		},
+		"{child_selector} default.activate" : function(el, ev){
+			//deactivate child
+			var oldSubmenu = this.sub(el), options = this.options;
+			if(oldSubmenu.length){
+				
+				oldSubmenu.one("activated", function(){
+					el.addClass(options.active).addClass(options.selected)
+					el.trigger("activated");
+				})
+				console.log(oldSubmenu)
+				oldSubmenu.triggerDefault("activate", this.calculateSubmenuPosition(el, ev)) //we assume this will call deactivated
+			}else{
+				el.addClass(options.active).addClass(options.selected)
+				el.trigger("activated")
+			}
+		},
+		"{child_selector} default.activated" : function(){
+			this.element.trigger("change")
 		},
 		/**
 		 * Returns the sub-menu from this item
 		 */
 		sub : function(el){
 			return el.data("menu-element");
-		},
-		/**
-		 * By default, finds the sub-menu for an LI, triggers show on it,
-		 * then adds "active" styles.
-		 */
-		"{child_selector} default.select" : function(el, ev){
-		   var me = this.sub(el)
-		   if (me.length) {
-			 me.triggerDefault("show", this.calculateSubmenuPosition(el, ev) )
-		   }
-		   el.addClass(this.options.selected)
-		   el.addClass(this.options.active)
 		},
 		/**
 		 * Returns where a sub-menu element should be positioned from.
@@ -170,20 +179,33 @@ steal.apps('phui/positionable','jquery/event/default','jquery/event/hover').then
 		 * Checks if we are the target for the hide, and hides any active submenus.
 		 * This could check that those submenu hides are ok, but doesnt .... yet.
 		 */
-		"default.hide" : function(el, ev){
+		"default.deactivate" : function(el, ev){
 			 if(ev.target == this.element[0]){
-				var old = this.sub(this.element.find("."+this.options.active).removeClass(this.options.active));
-				old && old.triggerDefault("hide")
-				this.element.hide();
+				//find and remove active
+				
+				var curActive = this.element.find("."+this.options.active).removeClass(this.options.active);
+				
+				if(curActive.length){
+					var elem = this.element;
+					curActive.one("deactivated",  function(){
+						elem.hide();
+						el.triggerDefault("deactivated")
+					})
+					curActive.trigger("deactivate")
+				}else{
+					this.element.hide();
+					el.triggerDefault("deactivated")
+				}
 			 }
 			
 		},
 		/**
 		 * By default, shows the child element.
 		 */
-		"default.show" : function(el, ev){
+		"default.activate" : function(el, ev){
 		   if(ev.target == this.element[0]){
 				this.element.show();
+				this.element.triggerDefault("activated")
 		   }
 			
 		}
