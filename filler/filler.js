@@ -1,4 +1,4 @@
-steal.plugins('jquery/controller','jquery/dom/dimensions').then(function($){
+steal.plugins('jquery/controller','jquery/dom/dimensions','jquery/event/resize').then(function($){
 	
 	logg = function(text){
 		$(".archer_ui_grid").prepend("<p>"+text+"</p>")
