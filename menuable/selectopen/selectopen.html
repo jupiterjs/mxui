@@ -11,13 +11,64 @@
         </style>
 	</head>
 	<body>
-	    <h1>Welcome to JavaScriptMVC 3.0!</h1>
-        <ul>
-            <li>Include plugins and files in <i>phui/menuable/selectopen/selectopen.js</i>.</li>
-            <li>Change to production mode by changing <i>development</i> to <i>production</i> in this file.</li>
+        <ul id="menu3">
+            <li><a>Folder 2</a>
+                <div>
+					<ul class='submenu'>
+                        <li><a>Folder Control</a>
+                        	<div>
+							<ul class='submenu'>
+	                        	<li><a>Another</a></li>
+	                        	<li><a>Exec</a></li>
+	                        	<li><a>Policy</a></li>
+							</ul>
+							</div>
+						</li>
+                        <li><a>Search Policies</a></li>
+                        <li><a>View Policies</a></li>
+					</ul>
+                </div>
+			</li>
+			<li><a>Google</a>
+                <div>
+					<ul class='submenu'>
+                        <li><a>Risk</a></li>
+                        <li><a>Enterprise</a></li>
+                        <li><a>Incident</a></li>
+					</ul>
+                </div>
+			</li>
         </ul>
 		<script type='text/javascript' 
                 src='../../../steal/steal.js?steal[app]=phui/menuable/selectopen&steal[env]=development'>   
         </script>
+		<script type='text/javascript'>
+			//menu with focus
+			Phui.Menuable.extend("Archer.UI.Menuable",
+			{
+				init: function(){
+					var self = this;
+					return this.element.children("li").each(function(){
+						$(this).find("ul").each(function(){
+							new self.Class(this)  
+						});
+					})
+				}
+			});
+			$("#menu3").archer_ui_menuable().find("div").hide()
+			  .bind("show", function(){
+			  	$(this).show();
+				$(this).trigger("show:after")
+
+			})
+			.bind("hide", function(){
+			  	$(this).hide();
+				$(this).trigger("hide:after")
+			});
+			$('#menu3').find("li").click(function(){
+				$(this).trigger("activate")
+			});
+			
+		</script>
 	</body>
 </html>

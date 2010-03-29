@@ -1,9 +1,3 @@
-steal.plugins('jquery/controller','jquery/controller/subscribe',
-			  'jquery/view/ejs',
-			  'jquery/model',
-			  'jquery/dom/fixtures',
-			  'jquery/dom/form_params')
-     .resources()
-     .models()
-     .controllers()
-     .views()
+steal.apps('phui/menuable').then(function(){
+	
+})
