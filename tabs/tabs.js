@@ -1,14 +1,16 @@
 steal.plugins('phui/menu').then(function($){
 	var p =Phui;
 	
-	$.Controller.extend("Phui.Tab",{listensTo: ["default.show","default.hide"]},{
-		"default.show" : function(el, ev){
+	$.Controller.extend("Phui.Tab",{listensTo: ["default.activate","default.deactivate"]},{
+		"default.activate" : function(el, ev){
 		    if (ev.target != this.element[0]) return;
-			this.element.show()
+			this.element.show();
+			this.element.triggerDefault("activated")
 		},
-		"default.hide" : function(el, ev){
+		"default.deactivate" : function(el, ev){
 		    if (ev.target != this.element[0]) return;			
 			this.element.hide()
+			this.element.triggerDefault("deactivated")
 		}
 	})
 	//problem with this is it will search and find everything ...
@@ -33,7 +35,7 @@ steal.plugins('phui/menu').then(function($){
 			this.element.children('ul').addClass(this.options.tabs_container_class)
 			this.element.children("div").each(function(){
 						$(this).mixin(options.child_types);	
-			}).trigger('hide')
+			}).trigger('deactivate')
 			selected = selected || $(this.element.find(this.options.child_selector)[0]);
 			selected.trigger("select")
 			
