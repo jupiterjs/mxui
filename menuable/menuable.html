@@ -48,14 +48,14 @@
         </script>
 		<script type='text/javascript'>
 			$("#menu1").phui_menuable().find("div").hide()
-			  .bind("activate", function(){
+			  .bind("show", function(){
 				$(this).fadeIn(function(){
-					$(this).trigger("activate:after")
+					$(this).trigger("show:after")
 				});
 			})
-			.bind("deactivate", function(){
+			.bind("hide", function(){
 				$(this).fadeOut(function(){
-					$(this).trigger("deactivate:after")
+					$(this).trigger("hide:after")
 				});
 			});
         	$("#menu1").find("li").click(function(){
@@ -65,14 +65,14 @@
 			
 			//menu with focus
 			$("#menu2").phui_menuable().find("div").hide()
-			  .bind("activate", function(){
+			  .bind("show", function(){
 				$(this).fadeIn(function(){
-					$(this).trigger("activate:after")
+					$(this).trigger("show:after")
 				});
 			})
-			.bind("deactivate", function(){
+			.bind("hide", function(){
 				$(this).fadeOut(function(){
-					$(this).trigger("deactivate:after")
+					$(this).trigger("hide:after")
 				});
 			});
         	$("#menu2").find("a").focus(function(){

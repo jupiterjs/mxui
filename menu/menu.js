@@ -1,4 +1,4 @@
-steal.apps('phui/positionable','jquery/event/default','jquery/event/hover').then(function($){
+steal.apps('phui/positionable','phui/menuable','jquery/event/hover').then(function($){
 	
 	/**
 	 * A general Menu System.
@@ -17,7 +17,7 @@ steal.apps('phui/positionable','jquery/event/default','jquery/event/hover').then
 	 * "hide" -> hides the menu
 	 * "show" -> shows the menu
 	 */
-	$.Controller.extend('Phui.Menu',
+	Phui.Menuable.extend("Phui.Menu",
 	{
 		defaults : {
 			/**
@@ -43,22 +43,11 @@ steal.apps('phui/positionable','jquery/event/default','jquery/event/hover').then
 			/**
 			 * If you want the top level menu to have 'types' mixed in.
 			 */
-			apply_types_to_top : false, 
-			/**
-			 * The active className
-			 */
-			active : "active",
-			/**
-			 * The selected className
-			 */
-			selected : "selected"
+			apply_types_to_top : false
 		},
-		listensTo : ["default.deactivate","default.activate"]
+		listensTo : ["default.show","default.hide:before", "default.hide"]
 	},
 	{
-		/**
-		 * Setup
-		 */
 		init : function(){
 			var MyClass = this.Class;
 			var options = this.options;
@@ -92,80 +81,12 @@ steal.apps('phui/positionable','jquery/event/default','jquery/event/hover').then
 			
 			//create sub menus
 		},
-		/**
-		 * By default this listens to "li click"
-		 * Triggers deselect to get the party started.
-		 */
 		"{child_selector} {select_event}" : function(el, ev){
 			if($(ev.target).closest("a").length){
 				ev.preventDefault();
 			}
-			//make sure we aren't already active
-			if(el.hasClass(this.options.active)){
-				return;
-			}
-			
-			$(el).trigger("select")
+			$(el).trigger("activate")
 		},
-		"{child_selector} default.select" : function(el, ev){
-			this.deactivateOld(ev, null, el) 
-			
-			//if(this.deaOld(ev))
-			//	el.trigger("activate")
-			
-		},
-		deactivateOld : function(ev, oldActive, newActive, onDeactivated){
-			oldActive = oldActive || this.find("."+this.options.active+":first")
-			//If we have something active
-			if(oldActive.length){
-				//Find the submenu element
-				if(newActive || onDeactivated){
-					oldActive.one("deactivated", onDeactivated || function(){
-						newActive.trigger("activate")
-					})
-				}
-				oldActive.trigger("deactivate")
-				
-			}else{
-				newActive.trigger("activate")
-			}
-		},
-		"{child_selector} default.deactivate" : function(el){
-			//deactivate child
-			var oldSubmenu = this.sub(el), options = this.options;
-			if(oldSubmenu.length){
-				oldSubmenu.one("deactivated", function(){
-					el.removeClass(options.active).removeClass(options.selected)
-					el.trigger("deactivated");
-				})
-				oldSubmenu.triggerDefault("deactivate") //we assume this will call deactivated
-			}else{
-				el.removeClass(this.options.active).removeClass(this.options.selected)
-				el.trigger("deactivated")
-			}
-		},
-		"{child_selector} default.activate" : function(el, ev){
-			//deactivate child
-			var oldSubmenu = this.sub(el), options = this.options;
-			if(oldSubmenu.length){
-				
-				oldSubmenu.one("activated", function(){
-					el.addClass(options.active).addClass(options.selected)
-					el.trigger("activated");
-				})
-				console.log(oldSubmenu)
-				oldSubmenu.triggerDefault("activate", this.calculateSubmenuPosition(el, ev)) //we assume this will call deactivated
-			}else{
-				el.addClass(options.active).addClass(options.selected)
-				el.trigger("activated")
-			}
-		},
-		"{child_selector} default.activated" : function(){
-			this.element.trigger("change")
-		},
-		/**
-		 * Returns the sub-menu from this item
-		 */
 		sub : function(el){
 			return el.data("menu-element");
 		},
@@ -175,41 +96,23 @@ steal.apps('phui/positionable','jquery/event/default','jquery/event/hover').then
 		calculateSubmenuPosition : function(el, ev){
 			return el;
 		},
-		/**
-		 * Checks if we are the target for the hide, and hides any active submenus.
-		 * This could check that those submenu hides are ok, but doesnt .... yet.
-		 */
-		"default.deactivate" : function(el, ev){
-			 if(ev.target == this.element[0]){
-				//find and remove active
-				
-				var curActive = this.element.find("."+this.options.active).removeClass(this.options.active);
-				
-				if(curActive.length){
-					var elem = this.element;
-					curActive.one("deactivated",  function(){
-						elem.hide();
-						el.triggerDefault("deactivated")
-					})
-					curActive.trigger("deactivate")
-				}else{
-					this.element.hide();
-					el.triggerDefault("deactivated")
-				}
-			 }
-			
+		"default.hide:before" : function(el, ev){
+			if (ev.target == this.element[0]) {
+				this.element.hide();
+				el.trigger("hide:after")
+			}
 		},
 		/**
 		 * By default, shows the child element.
 		 */
-		"default.activate" : function(el, ev){
+		"default.show" : function(el, ev){
 		   if(ev.target == this.element[0]){
 				this.element.show();
-				this.element.triggerDefault("activated")
+				this.element.triggerDefault("show:after")
 		   }
 			
 		}
-   })
+   });
    /**
     * Adds basic higlighting.
     */
