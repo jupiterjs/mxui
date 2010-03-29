@@ -81,7 +81,7 @@ steal.plugins('jquery/controller','jquery/event/default','jquery/event/livehack'
 			this.selecting = true;
 			this.ifThereIsAn({
 				old: this.find("."+this.options.select+":first"),
-				trigger: "deselect:before",
+				trigger: "deselect",
 				andWaitFor: "deselect:after",
 				beforeTriggering: "select:before",
 				on: el
@@ -89,7 +89,7 @@ steal.plugins('jquery/controller','jquery/event/default','jquery/event/livehack'
 		},
 		//check if deselect is ok?
 		//start loading stuff?
-		"{child_selector} default.deselect:before" : function(el, ev ){ //preventDefault pauses, 
+		"{child_selector} default.deselect" : function(el, ev ){ //preventDefault pauses, 
 			el.trigger("deselect:after")
 		},
 		//do stuff on deselect
