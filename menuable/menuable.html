@@ -43,6 +43,36 @@
             
             </li>
         </ul>
+		<h1>Menuable with submenus and no activate</h1>
+		
+        <ul id="menu3">
+            <li><a>Folder 2</a>
+                <div>
+					<ul class='submenu'>
+                        <li><a>Folder Control</a>
+                        	<div>
+							<ul class='submenu'>
+	                        	<li><a>Another</a></li>
+	                        	<li><a>Exec</a></li>
+	                        	<li><a>Policy</a></li>
+							</ul>
+							</div>
+						</li>
+                        <li><a>Search Policies</a></li>
+                        <li><a>View Policies</a></li>
+					</ul>
+                </div>
+			</li>
+			<li><a>Google</a>
+                <div>
+					<ul class='submenu'>
+                        <li><a>Risk</a></li>
+                        <li><a>Enterprise</a></li>
+                        <li><a>Incident</a></li>
+					</ul>
+                </div>
+			</li>
+        </ul>
 		<script type='text/javascript' 
                 src='../../steal/steal.js?steal[app]=phui/menuable&steal[env]=development'>   
         </script>
@@ -81,6 +111,33 @@
 			$("#menu2").find("a").keypress(function(ev){
 				if(ev.keyCode == 13 || ev.keyCode == 10)
 					$(this).trigger("activate")
+			});
+			
+			
+			//menu with focus
+			Phui.Menuable.extend("Archer.UI.Menuable",
+			{
+				init: function(){
+					var self = this;
+					return this.element.children("li").each(function(){
+						$(this).find("ul").each(function(){
+							new self.Class(this)  
+						});
+					})
+				}
+			});
+			$("#menu3").archer_ui_menuable().find("div").hide()
+			  .bind("show", function(){
+			  	$(this).show();
+				$(this).trigger("show:after")
+
+			})
+			.bind("hide", function(){
+			  	$(this).hide();
+				$(this).trigger("hide:after")
+			});
+			$('#menu3').find("li").click(function(){
+				$(this).trigger("activate")
 			});
 			
 		</script>
