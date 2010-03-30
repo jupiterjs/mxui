@@ -78,7 +78,7 @@ steal.plugins('jquery/controller','jquery/dom/dimensions','jquery/event/resize')
 		
 		return ret;
 	}
-	var matches = /script/
+	var matches = /script|td/
 	/**
 	 * Gets the space used by siblings of the 'adjustingChild'
 	 * @param {Object} adjustingChild
@@ -93,7 +93,7 @@ steal.plugins('jquery/controller','jquery/dom/dimensions','jquery/event/resize')
 		var parent = cachedParent || adjustingChild.parentNode,
 			adjust = $.curStyles.adjustForMargins(parent),
 			children = $(parent).children().filter(function(){
-				if(matches.test(this.nodeName.toLowerCase()))
+				if (matches.test(this.nodeName.toLowerCase()) && this !== adjustingChild)
 					return false;
 				var get = {"position": true, "display": true};
 				$.curStyles(this, get);
@@ -123,7 +123,7 @@ steal.plugins('jquery/controller','jquery/dom/dimensions','jquery/event/resize')
 			if(i!=children.length-1 || adjust.last || force){
 				get.marginBottom = true //get bottom margin
 			}
-			if(child == adjustingChild && ! force){
+			if((child == adjustingChild && !/table/.test($.curCSS(child,"display"))) && ! force){
 				get.paddingBottom = true;
 				get.paddingTop = true;
 			}
