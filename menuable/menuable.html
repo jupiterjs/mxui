@@ -113,17 +113,7 @@
 					$(this).trigger("activate")
 			});
 			
-			Phui.Menuable.extend("Phui.Menuable.Submenu",
-			{
-				init: function(){
-					return this.element.children("li").each(function(){
-						$(this).find("ul").each(function(){
-							new Phui.Menuable(this)  
-						});
-					})
-				}
-			});
-			$("#menu3").phui_menuable_submenu().find("div").hide()
+			$("#menu3").phui_menuable().find("div").hide()
 			  .bind("show", function(ev){
 				ev.stopPropagation();
 			  	$(this).show();

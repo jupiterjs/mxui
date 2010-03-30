@@ -47,17 +47,7 @@
         </script>
 		<script type='text/javascript'>
 			
-			Phui.Menuable.SelectOpen.extend("Phui.Menuable.SelectOpen.Submenu",
-			{
-				init: function(){
-					return this.element.children("li").each(function(){
-						$(this).find("ul").each(function(){
-							new Phui.Menuable.SelectOpen(this)  
-						});
-					})
-				}
-			});
-			$("#menu3").phui_menuable_select_open_submenu().find("div").hide()
+			$("#menu3").phui_menuable_select_open().find("div").hide()
 			  .bind("show", function(ev){
 			  	ev.stopPropagation();
 			  	$(this).show();
