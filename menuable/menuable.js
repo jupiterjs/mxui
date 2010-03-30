@@ -54,10 +54,7 @@ steal.plugins('jquery/controller','jquery/event/default','jquery/event/livehack'
 		},
 		ifThereIs : function(options){
 			if(options.a.length && (
-				options.triggerDefault ? 
-					//there is something listening ...
-					$.event.find(options.a[0], [options.triggerDefault, "default."+options.triggerDefault]).length > 0 : 
-					true
+				options.triggerDefault ? options.a.respondsTo([options.triggerDefault, "default."+options.triggerDefault]) : true
 				) ){ //and the old can respond to triggerDefault?
 				options.a.one(options.andWaitFor, function(){
 					options.on[options.beforeTriggering ? "trigger" : "triggerDefault"](options.beforeTriggering || options.beforeTriggeringDefault)
@@ -161,11 +158,9 @@ steal.plugins('jquery/controller','jquery/event/default','jquery/event/livehack'
 			el.removeClass(this.options.select)
 		},
 		"default.hide" : function(el, ev){
-			el.hide();
 			el.triggerDefault("hide:after")
 		},
 		"default.show" : function(el, ev){
-			el.show();
 			el.triggerDefault("show:after")
 		}
    });
