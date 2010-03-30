@@ -46,31 +46,38 @@
                 src='../../../steal/steal.js?steal[app]=phui/menuable/selectopen&steal[env]=development'>   
         </script>
 		<script type='text/javascript'>
-			//menu with focus
-			Phui.Menuable.extend("Archer.UI.Menuable",
+			
+			Phui.Menuable.SelectOpen.extend("Phui.Menuable.SelectOpen.Submenu",
 			{
 				init: function(){
-					var self = this;
 					return this.element.children("li").each(function(){
 						$(this).find("ul").each(function(){
-							new self.Class(this)  
+							new Phui.Menuable.SelectOpen(this)  
 						});
 					})
 				}
 			});
-			$("#menu3").archer_ui_menuable().find("div").hide()
-			  .bind("show", function(){
+			$("#menu3").phui_menuable_select_open_submenu().find("div").hide()
+			  .bind("show", function(ev){
+			  	ev.stopPropagation();
 			  	$(this).show();
 				$(this).trigger("show:after")
 
 			})
-			.bind("hide", function(){
+			.bind("hide", function(ev){
+			  	ev.stopPropagation();
 			  	$(this).hide();
 				$(this).trigger("hide:after")
 			});
-			$('#menu3').find("li").click(function(){
-				$(this).trigger("activate")
-			});
+			$('#menu3').find("li")
+				.click(function(ev){
+				  	ev.stopPropagation();
+					$(this).trigger("activate")
+				})
+				.hover(function(ev){
+				  	ev.stopPropagation();
+					$(this).trigger("select")
+				});
 			
 		</script>
 	</body>

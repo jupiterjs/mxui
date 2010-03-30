@@ -13,8 +13,8 @@
             }
         </style>
 	</head>
-	<body>
-	    <h1>Basic Menuable</h1>
+	<body>    
+	<h1>Basic Menuable</h1>
 		<pre>$("#menu1").phui_menuable()</pre>
         <ul id='menu1'>
             <li><a>Option 1</a>
@@ -43,8 +43,8 @@
             
             </li>
         </ul>
-		<h1>Menuable with submenus and no activate</h1>
 		
+		<h1>Submenus</h1>
         <ul id="menu3">
             <li><a>Folder 2</a>
                 <div>
@@ -113,30 +113,30 @@
 					$(this).trigger("activate")
 			});
 			
-			
-			//menu with focus
-			Phui.Menuable.extend("Archer.UI.Menuable",
+			Phui.Menuable.extend("Phui.Menuable.Submenu",
 			{
 				init: function(){
-					var self = this;
 					return this.element.children("li").each(function(){
 						$(this).find("ul").each(function(){
-							new self.Class(this)  
+							new Phui.Menuable(this)  
 						});
 					})
 				}
 			});
-			$("#menu3").archer_ui_menuable().find("div").hide()
-			  .bind("show", function(){
+			$("#menu3").phui_menuable_submenu().find("div").hide()
+			  .bind("show", function(ev){
+				ev.stopPropagation();
 			  	$(this).show();
 				$(this).trigger("show:after")
 
 			})
-			.bind("hide", function(){
+			.bind("hide", function(ev){
+				ev.stopPropagation();
 			  	$(this).hide();
 				$(this).trigger("hide:after")
 			});
-			$('#menu3').find("li").click(function(){
+			$('#menu3').find("li").click(function(ev, el){
+				ev.stopPropagation();
 				$(this).trigger("activate")
 			});
 			
