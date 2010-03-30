@@ -71,6 +71,16 @@
         </script>
 		<script type='text/javascript'>
 			$("#menu1").phui_menuable().find("ul").phui_menuable().hide()
+				.bind("show", function(){
+					$(this).show(function(){
+						$(this).trigger("show:after")
+					});
+				})
+				.bind("hide", function(){
+					$(this).hide(function(){
+						$(this).trigger("hide:after")
+					});
+				});
         	$("#menu1").find("li").click(function(){
 				$(this).trigger("activate")
 			});
@@ -78,16 +88,16 @@
 			
 			//menu with focus
 			$("#menu2").phui_menuable().find("ul").phui_menuable().hide()
-			  .bind("show", function(){
-				$(this).fadeIn(function(){
-					$(this).trigger("show:after")
+				.bind("show", function(){
+					$(this).show(function(){
+						$(this).trigger("show:after")
+					});
+				})
+				.bind("hide", function(){
+					$(this).hide(function(){
+						$(this).trigger("hide:after")
+					});
 				});
-			})
-			.bind("hide", function(){
-				$(this).fadeOut(function(){
-					$(this).trigger("hide:after")
-				});
-			});
         	$("#menu2").find("a").focus(function(){
 				$(this).trigger("select")
 			});
@@ -97,6 +107,20 @@
 			});
 			
 			$("#menu3").phui_menuable().find("ul").phui_menuable().hide()
+				.bind("show", function(ev){
+					console.log("show", ev)
+					ev.stopPropagation();
+					$(this).show(function(){
+						$(this).trigger("show:after")
+					});
+				})
+				.bind("hide", function(ev){
+					console.log("hide", ev)
+					ev.stopPropagation();
+					$(this).hide(function(){
+						$(this).trigger("hide:after")
+					});
+				});
 			$('#menu3').find("li").click(function(ev, el){
 				ev.stopPropagation();
 				$(this).trigger("activate")
