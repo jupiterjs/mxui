@@ -39,23 +39,18 @@ steal.plugins('jquery/controller','jquery/event/default','jquery/event/livehack'
 	},
 	{
 		init: function(){
-			var self = this;
-			var events = ["select", "deselect", "activate", "deactivate"];
-			var types = ["", ":before", ":after"];
-			var eventType;
-			for(var i=0; i<events.length; i++){
-				for(var j=0; j<types.length; j++){
-					eventType = events[i]+types[j];
-					this.bind(eventType, function(ev){
-						ev.stopPropagation();
-					})
-				}
-			}
-			return this.element.children("li").each(function(){
-				$(this).find("ul").each(function(){
-					new self.Class(this)
-				});
+			var self = this, 
+				stopFunc = function(ev){
+					ev.stopPropagation
+				};
+			
+			$.each(["select", "deselect", "activate", "deactivate"], function(i, event){
+				$.each(["", ":before", ":after"], function(j, type){
+					self.bind(event+type, stopFunc);
+				})
 			})
+			
+			return this.element;
 		},
 		ifThereIs : function(options){
 			if(options.a.length && (

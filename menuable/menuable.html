@@ -70,14 +70,14 @@
                 src='../../steal/steal.js?steal[app]=phui/menuable&steal[env]=development'>   
         </script>
 		<script type='text/javascript'>
-			$("#menu1").phui_menuable().find("ul").hide()
+			$("#menu1").phui_menuable().find("ul").phui_menuable().hide()
         	$("#menu1").find("li").click(function(){
 				$(this).trigger("activate")
 			});
 			
 			
 			//menu with focus
-			$("#menu2").phui_menuable().find("ul").hide()
+			$("#menu2").phui_menuable().find("ul").phui_menuable().hide()
 			  .bind("show", function(){
 				$(this).fadeIn(function(){
 					$(this).trigger("show:after")
@@ -96,7 +96,7 @@
 					$(this).trigger("activate")
 			});
 			
-			$("#menu3").phui_menuable().find("ul").hide()
+			$("#menu3").phui_menuable().find("ul").phui_menuable().hide()
 			$('#menu3').find("li").click(function(ev, el){
 				ev.stopPropagation();
 				$(this).trigger("activate")
