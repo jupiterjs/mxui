@@ -41,7 +41,7 @@ steal.plugins('jquery/controller','jquery/event/default','jquery/event/livehack'
 		init: function(){
 			var self = this, 
 				stopFunc = function(ev){
-					ev.stopPropagation
+					ev.stopPropagation()
 				};
 			
 			$.each(["select", "deselect", "activate", "deactivate"], function(i, event){
@@ -52,9 +52,21 @@ steal.plugins('jquery/controller','jquery/event/default','jquery/event/livehack'
 			
 			return this.element;
 		},
+		/**
 		ifThereIs : function(options){
 			if(options.a.length && (
-				options.triggerDefault ? options.a.respondsTo([options.triggerDefault, "default."+options.triggerDefault]) : true
+				options.triggerDefault ? 
+					options.a.respondsTo([options.triggerDefault, "default."+options.triggerDefault]) : 
+					true
+				) ){ //and the old can respond to triggerDefault?
+			}
+		},
+		 */
+		ifThereIs : function(options){
+			if(options.a.length && (
+				options.triggerDefault ? 
+					options.a.respondsTo([options.triggerDefault, "default."+options.triggerDefault]) : 
+					true
 				) ){ //and the old can respond to triggerDefault?
 				options.a.one(options.andWaitFor, function(){
 					options.on[options.beforeTriggering ? "trigger" : "triggerDefault"](options.beforeTriggering || options.beforeTriggeringDefault)
