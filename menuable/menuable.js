@@ -53,14 +53,16 @@ steal.plugins('jquery/controller','jquery/event/default','jquery/event/livehack'
 			return this.element;
 		},
 		ifThereIs : function(options){
-			if(options.a.length && (
-				options.triggerDefault ? options.a.respondsTo([options.triggerDefault, "default."+options.triggerDefault]) : true
-				) ){ //and the old can respond to triggerDefault?
+			if(options.a.length ){ //and the old can respond to triggerDefault?
 				options.a.one(options.andWaitFor, function(){
-					options.on[options.beforeTriggering ? "trigger" : "triggerDefault"](options.beforeTriggering || options.beforeTriggeringDefault)
-				})[options.trigger ? "trigger" : "triggerDefault"](options.trigger || options.triggerDefault, options.withData)
+					options.on.trigger(options.beforeTriggering)
+				})
+				if(! options.a.triggerHandled(options.trigger, options.withData) ){
+					options.ifNothingResponds && options.ifNothingResponds(options.a)
+					options.on.trigger(options.beforeTriggering)
+				}
 			}else{
-				options.on[options.beforeTriggering ? "trigger" : "triggerDefault"](options.beforeTriggering || options.beforeTriggeringDefault)
+				options.on.trigger(options.beforeTriggering)
 			}
 		},
 		/**
@@ -100,9 +102,10 @@ steal.plugins('jquery/controller','jquery/event/default','jquery/event/livehack'
 		"{child_selector} default.activate:before" : function(newActive, ev){
 			this.ifThereIs({
 				a: this.sub(newActive),
-				triggerDefault: "show",
+				trigger: "show",
 				withData: newActive,
 				andWaitFor: "show:after",
+				ifNothingResponds : function(el){ el.show() },
 				beforeTriggering: "activate:after",
 				on: newActive
 			})
@@ -118,8 +121,9 @@ steal.plugins('jquery/controller','jquery/event/default','jquery/event/livehack'
 		"{child_selector} default.deactivate:before" : function(deactiveMenu, ev){
 			this.ifThereIs({
 				a: this.sub(deactiveMenu),
-				triggerDefault: "hide",
+				trigger: "hide",
 				andWaitFor: "hide:after",
+				ifNothingResponds : function(el){ el.hide() },
 				beforeTriggering: "deactivate:after",
 				on: deactiveMenu
 			})
@@ -158,10 +162,10 @@ steal.plugins('jquery/controller','jquery/event/default','jquery/event/livehack'
 			el.removeClass(this.options.select)
 		},
 		"default.hide" : function(el, ev){
-			el.triggerDefault("hide:after")
+			el.trigger("hide:after")
 		},
 		"default.show" : function(el, ev){
-			el.triggerDefault("show:after")
+			el.trigger("show:after")
 		}
    });
 	

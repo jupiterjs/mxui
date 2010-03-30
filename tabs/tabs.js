@@ -1,44 +1,20 @@
-steal.plugins('phui/menu').then(function($){
-	var p =Phui;
-	
-	$.Controller.extend("Phui.Tab",{listensTo: ["default.activate","default.deactivate"]},{
-		"default.activate" : function(el, ev){
-		    if (ev.target != this.element[0]) return;
-			this.element.show();
-			this.element.triggerDefault("activated")
-		},
-		"default.deactivate" : function(el, ev){
-		    if (ev.target != this.element[0]) return;			
-			this.element.hide()
-			this.element.triggerDefault("deactivated")
-		}
-	})
+steal.plugins('phui/menuable').then(function($){
 	//problem with this is it will search and find everything ...
-	p.Menu({
-		child_types: Phui.Tab,
-		tabs_container_class : "",
-		types : []
-	}).extend("Phui.Tabs",{
+	Phui.Menuable.extend("Phui.Tabs",{
 		init : function(){
-			var MyClass = this.Class,
-				selected,
-				options = this.options;
+			this._super.apply(this, arguments);
 			
-			this.element.mixin.apply(this.element, this.options.types).addClass(this.options.class_names).
-					find(this.options.child_selector).
-					addClass(this.options.child_class_names).each(function(){
-						var el = $(this)
-						if(!selected && el.hasClass(options.active)){
-							selected = el;
-						}
-					})
-			this.element.children('ul').addClass(this.options.tabs_container_class)
-			this.element.children("div").each(function(){
-						$(this).mixin(options.child_types);	
-			}).trigger('deactivate')
-			selected = selected || $(this.element.find(this.options.child_selector)[0]);
-			selected.trigger("select")
-			
+			var selected = this.find(this.options.child_selector+"."+this.options.active)
+			selected = selected.length ? selected : this.find(this.options.child_selector+":first")
+			var self = this;
+			//make sure everything is deactivated ...
+			this.find(this.options.child_selector).each(function(){
+				var sub = self.sub($(this))
+				if(! sub.triggerHandled("hide")){
+					$(sub).hide();
+				}
+			})
+			selected.trigger("activate")
 			return this.element;
 		},
 		/**
@@ -48,11 +24,11 @@ steal.plugins('phui/menu').then(function($){
 		sub : function(el){
 			var a = el.find("a[href]"), c
 			if(a.length){
-				c = this.element.find(a.attr('href'))
+				c = $(a.attr('href'))
 				if(c.length)
 					return c;
 			}
-			return this.element.children(':eq('+(el.index()+1)+')')
+			return this.element.nextAll().eq(el.index())
 			
 			
 		},
@@ -63,7 +39,7 @@ steal.plugins('phui/menu').then(function($){
 		
 		}
 	})
-	Phui.Tabs({
+	/*Phui.Tabs({
        class_names: "ui-tabs ui-widget ui-widget-content ui-corner-all",
        child_class_names: "ui-state-default ui-corner-top",
        button_class_names: "ui-state-default ui-corner-all",
@@ -72,5 +48,5 @@ steal.plugins('phui/menu').then(function($){
 	   selected  : "ui-tabs-selected",
 	   types : [Phui.UI.Highlight]
    }).
-   extend("Phui.UI.Tabs",{})
+   extend("Phui.UI.Tabs",{})*/
 })
