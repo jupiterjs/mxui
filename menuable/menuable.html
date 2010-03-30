@@ -13,58 +13,71 @@
             }
         </style>
 	</head>
-	<body>
-	    <h1>Basic Menuable</h1>
+	<body>    
+	<h1>Basic Menuable</h1>
 		<pre>$("#menu1").phui_menuable()</pre>
         <ul id='menu1'>
             <li><a>Option 1</a>
-                <div>
-                	Here is a subMenu :)
-                </div>
+                <ul>
+                	<li>Here is a subMenu :)</li>
+                </ul>
             </li>
             <li><a>Option 2</a>
-                <div>
-                	Here is a subMenu :)
-                </div>
+                <ul>
+                	<li>Here is a subMenu :)</li>
+                </ul>
             
             </li>
         </ul>
 		<h1>Menuable with focus for select and enter key for active</h1>
 		<ul id='menu2'>
             <li><a tabindex='0' href="javascript://">Option 1</a>
-                <div>
-                	Here is a subMenu :)
-                </div>
+                <ul>
+                	<li>Here is a subMenu :)</li>
+                </ul>
             </li>
             <li><a tabindex='0' href="javascript://">Option 2</a>
-                <div>
-                	Here is a subMenu :)
-                </div>
-            
+                <ul>
+                	<li>Here is a subMenu :)</li>
+                </ul>
             </li>
+        </ul>
+		
+		<h1>Submenus</h1>
+        <ul id="menu3">
+            <li><a>Folder 2</a>
+				<ul class='submenu'>
+                    <li><a>Folder Control</a>
+						<ul class='submenu'>
+                        	<li><a>Another</a></li>
+                        	<li><a>Exec</a></li>
+                        	<li><a>Policy</a></li>
+						</ul>
+					</li>
+                    <li><a>Search Policies</a></li>
+                    <li><a>View Policies</a></li>
+				</ul>
+			</li>
+			<li><a>Google</a>
+				<ul class='submenu'>
+                    <li><a>Risk</a></li>
+                    <li><a>Enterprise</a></li>
+                    <li><a>Incident</a></li>
+				</ul>
+			</li>
         </ul>
 		<script type='text/javascript' 
                 src='../../steal/steal.js?steal[app]=phui/menuable&steal[env]=development'>   
         </script>
 		<script type='text/javascript'>
-			$("#menu1").phui_menuable().find("div").hide()
-			  .bind("show", function(){
-				$(this).fadeIn(function(){
-					$(this).trigger("show:after")
-				});
-			})
-			.bind("hide", function(){
-				$(this).fadeOut(function(){
-					$(this).trigger("hide:after")
-				});
-			});
+			$("#menu1").phui_menuable().find("ul").hide()
         	$("#menu1").find("li").click(function(){
 				$(this).trigger("activate")
 			});
 			
 			
 			//menu with focus
-			$("#menu2").phui_menuable().find("div").hide()
+			$("#menu2").phui_menuable().find("ul").hide()
 			  .bind("show", function(){
 				$(this).fadeIn(function(){
 					$(this).trigger("show:after")
@@ -81,6 +94,12 @@
 			$("#menu2").find("a").keypress(function(ev){
 				if(ev.keyCode == 13 || ev.keyCode == 10)
 					$(this).trigger("activate")
+			});
+			
+			$("#menu3").phui_menuable().find("ul").hide()
+			$('#menu3').find("li").click(function(ev, el){
+				ev.stopPropagation();
+				$(this).trigger("activate")
 			});
 			
 		</script>
