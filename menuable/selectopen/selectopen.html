@@ -16,30 +16,24 @@
 	<body>
         <ul id="menu3">
             <li><a>Folder 2</a>
-                <div>
 					<ul class='submenu'>
                         <li><a>Folder Control</a>
-                        	<div>
 							<ul class='submenu'>
 	                        	<li><a>Another</a></li>
 	                        	<li><a>Exec</a></li>
 	                        	<li><a>Policy</a></li>
 							</ul>
-							</div>
 						</li>
                         <li><a>Search Policies</a></li>
                         <li><a>View Policies</a></li>
 					</ul>
-                </div>
 			</li>
 			<li><a>Google</a>
-                <div>
 					<ul class='submenu'>
                         <li><a>Risk</a></li>
                         <li><a>Enterprise</a></li>
                         <li><a>Incident</a></li>
 					</ul>
-                </div>
 			</li>
         </ul>
 		<script type='text/javascript' 
@@ -47,18 +41,7 @@
         </script>
 		<script type='text/javascript'>
 			
-			$("#menu3").phui_menuable_select_open().find("div").hide()
-			  .bind("show", function(ev){
-			  	ev.stopPropagation();
-			  	$(this).show();
-				$(this).trigger("show:after")
-
-			})
-			.bind("hide", function(ev){
-			  	ev.stopPropagation();
-			  	$(this).hide();
-				$(this).trigger("hide:after")
-			});
+			$("#menu3").phui_menuable_select_open().find("ul").hide()
 			$('#menu3').find("li")
 				.click(function(ev){
 				  	ev.stopPropagation();

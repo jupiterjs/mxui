@@ -165,28 +165,13 @@ steal.plugins('jquery/controller','jquery/event/default','jquery/event/livehack'
 		"{child_selector} default.deselect:after" : function(el, ev){
 			el.removeClass(this.options.select)
 		},
-		/**
-		 * Checks if we are the target for the hide, and hides any active submenus.
-		 * This could check that those submenu hides are ok, but doesnt .... yet.
-		 */
 		"default.hide" : function(el, ev){
-			 if(ev.target == this.element[0]){
-				//find and remove active
-				console.log("hiding ",this.element.find("."+this.options.active))
-				this.ifThereIs({
-					a: this.element.find("."+this.options.active),
-					trigger: "deactivate",
-					andWaitFor: "deactivate:after",
-					beforeTriggeringDefault: "hide:before",
-					on: el
-				})
-			 }
-			
+			el.hide();
+			el.triggerDefault("hide:after")
 		},
-		"default.hide:before" : function(el){
-			if (ev.target == this.element[0]) {
-				el.triggerDefault("hide:after")
-			}
+		"default.show" : function(el, ev){
+			el.show();
+			el.triggerDefault("show:after")
 		}
    });
 	

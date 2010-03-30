@@ -4,7 +4,7 @@ steal.apps('phui/menuable').then(function(){
 		"{child_selector} default.activate:before" : function(el, ev){
 			el.trigger("activate:after")
 		},
-		"{child_selector} default.deactivate:before" : function(el, ev ){ //preventDefault pauses,
+		"{child_selector} default.deactivate:before" : function(el, ev ){
 			el.trigger("deactivate:after")
 		},
 		// select shows the submenus
