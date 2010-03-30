@@ -41,16 +41,21 @@
         </script>
 		<script type='text/javascript'>
 			
-			$("#menu3").phui_menuable_select_open().find("ul").hide()
-			$('#menu3').find("li")
-				.click(function(ev){
+			Phui.Menuable.SelectOpen.extend("Phui.Menuable.SelectOpen.Submenu",
+			{
+				"li click": function(el, ev){
 				  	ev.stopPropagation();
-					$(this).trigger("activate")
-				})
-				.hover(function(ev){
-				  	ev.stopPropagation();
-					$(this).trigger("select")
-				});
+					el.trigger("activate")
+				},
+				"li hoverinit": function(el, ev, hover){
+					hover.setDelay(500);
+					ev.stopPropagation();
+				},
+				"li hoverenter": function(el, ev, hover){
+					el.trigger("select")
+				}
+			});
+			$("#menu3").phui_menuable_select_open_submenu().find("ul").hide()
 			
 		</script>
 	</body>

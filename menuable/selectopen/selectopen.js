@@ -1,4 +1,4 @@
-steal.apps('phui/menuable').then(function(){
+steal.apps('phui/menuable', 'jquery/event/hover').then(function(){
 	Phui.Menuable.extend("Phui.Menuable.SelectOpen",
 	{
 		"{child_selector} default.activate:before" : function(el, ev){
