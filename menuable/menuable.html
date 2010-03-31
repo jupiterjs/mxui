@@ -107,16 +107,18 @@
 			});
 			
 			$("#menu3").phui_menuable().find("ul").phui_menuable().hide()
-				.bind("show", function(ev){
-					$(this).show(function(){
-						$(this).trigger("show:before")
-					});
-				})
-				.bind("hide", function(ev){
-					$(this).hide(function(){
-						$(this).trigger("hide:before")
-					});
+			$('#menu3').delegate("ul", "show", function(ev){
+				ev.stopPropagation();
+				$(this).show(function(){
+					$(this).trigger("show:after")
 				});
+			})
+			$('#menu3').delegate("ul", "hide", function(ev){
+				ev.stopPropagation();
+				$(this).hide(function(){
+					$(this).trigger("hide:after")
+				});
+			})
 			$('#menu3').find("li").click(function(ev, el){
 				ev.stopPropagation();
 				$(this).trigger("activate")

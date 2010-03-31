@@ -35,10 +35,11 @@ steal.plugins('jquery/controller','jquery/event/default','jquery/event/livehack'
 			select : "selected",
 			child_selector : ">li"
 		},
-		listensTo : ["default.hide","default.show", "default.hide:before", 
-			"default.hide:after", "default.show:before", "default.show:after"]
+		listensTo : [">default.hide",">default.show", ">default.hide:before", 
+			">default.hide:after", ">default.show:before", ">default.show:after"]
 	},
 	{
+		/**
 		init: function(){
 			var self = this, 
 				stopFunc = function(ev){
@@ -52,18 +53,24 @@ steal.plugins('jquery/controller','jquery/event/default','jquery/event/livehack'
 			})
 			
 			return this.element;
-		},
+		},**/
 		ifThereIs : function(options){
+			var trigger = function(){
+				if(typeof options.beforeTriggering == "string")
+					options.on.trigger(options.beforeTriggering)
+				else
+					options.beforeTriggering()
+			}
 			if(options.a.length ){ //and the old can respond to triggerDefault?
 				options.a.one(options.andWaitFor, function(){
-					options.on.trigger(options.beforeTriggering)
+					trigger()
 				})
 				if(! options.a.triggerHandled(options.trigger, options.withData) ){
 					options.ifNothingResponds && options.ifNothingResponds(options.a)
-					options.on.trigger(options.beforeTriggering)
+					trigger()
 				}
 			}else{
-				options.on.trigger(options.beforeTriggering)
+				trigger()
 			}
 		},
 		/**
@@ -90,8 +97,17 @@ steal.plugins('jquery/controller','jquery/event/default','jquery/event/livehack'
 					a: oldActive,
 					trigger: "deactivate",
 					andWaitFor: "deactivate:after",
-					beforeTriggering: "activate:before",
-					on: el
+					beforeTriggering: function(){
+						self.ifThereIs({
+							a: self.sub(el),
+							trigger: "show",
+							withData: el,
+							andWaitFor: "show:after",
+							ifNothingResponds : function(el){ el.show() },
+							beforeTriggering: "activate:before",
+							on: el
+						})
+					}
 				})
 			}
 			if(el.hasClass(this.options.select))
@@ -100,16 +116,8 @@ steal.plugins('jquery/controller','jquery/event/default','jquery/event/livehack'
 				el.one('select:after',doThis).trigger("select");
 			
 		},
-		"{child_selector} default.activate:before" : function(newActive, ev){
-			this.ifThereIs({
-				a: this.sub(newActive),
-				trigger: "show",
-				withData: newActive,
-				andWaitFor: "show:after",
-				ifNothingResponds : function(el){ el.show() },
-				beforeTriggering: "activate:after",
-				on: newActive
-			})
+		"{child_selector} default.activate:before" : function(el, ev){
+			el.trigger("activate:after")
 		},
 		"{child_selector} default.activate:after" : function(el, ev){
 			el.addClass(this.options.active)
@@ -117,17 +125,17 @@ steal.plugins('jquery/controller','jquery/event/default','jquery/event/livehack'
 			this.element.trigger("change")
 		},
 		"{child_selector} default.deactivate" : function(el, ev ){
-			el.trigger("deactivate:before")
-		},
-		"{child_selector} default.deactivate:before" : function(deactiveMenu, ev){
 			this.ifThereIs({
-				a: this.sub(deactiveMenu),
+				a: this.sub(el),
 				trigger: "hide",
 				andWaitFor: "hide:after",
 				ifNothingResponds : function(el){ el.hide() },
-				beforeTriggering: "deactivate:after",
-				on: deactiveMenu
+				beforeTriggering: "deactivate:before",
+				on: el
 			})
+		},
+		"{child_selector} default.deactivate:before" : function(el, ev){
+			el.trigger("deactivate:after")
 		},
 		"{child_selector} default.deactivate:after" : function(el, ev){
 			el.removeClass(this.options.active)
@@ -152,7 +160,7 @@ steal.plugins('jquery/controller','jquery/event/default','jquery/event/livehack'
 			el.addClass(this.options.select)
 			this.selecting = false;
 		},
-		"{child_selector} default.deselect" : function(el, ev ){ //preventDefault pauses,
+		"{child_selector} default.deselect" : function(el, ev ){
 			el.trigger("deselect:before")
 		},
 		"{child_selector} default.deselect:before" : function(el, ev){
@@ -166,31 +174,27 @@ steal.plugins('jquery/controller','jquery/event/default','jquery/event/livehack'
 		 * Checks if we are the target for the hide, and hides any active submenus.
 		 * This could check that those submenu hides are ok, but doesnt .... yet.
 		 */
-		"default.hide" : function(el, ev){
-			 if(ev.target == this.element[0]){
-				//find and remove active
-				this.ifThereIs({
-					a: this.element.find("."+this.options.active),
-					trigger: "deactivate",
-					andWaitFor: "deactivate:after",
-					beforeTriggering: "hide:before",
-					on: el
-				})
-			 }
-			
+		">default.hide" : function(el, ev){
+			var self = this;
+			this.ifThereIs({
+				a: this.element.find("."+this.options.active),
+				trigger: "deactivate",
+				andWaitFor: "deactivate:after",
+				beforeTriggering: function(){
+					self.ifThereIs({
+						a: self.element.find("."+self.options.select),
+						trigger: "deselect",
+						andWaitFor: "deselect:after",
+						beforeTriggering: "hide:before",
+						on: el
+					})
+				}
+			})
 		},
-		"default.hide:before" : function(el, ev){
-			if (ev.target == this.element[0]) {
-				this.ifThereIs({
-					a: this.element.find("."+this.options.select),
-					trigger: "deselect",
-					andWaitFor: "deselect:after",
-					beforeTriggering: "hide:after",
-					on: el
-				})
-			}
+		">default.hide:before": function(el, ev){
+			el.triggerDefault("hide:after")
 		},
-		"default.show:before": function(el, ev){
+		">default.show:before": function(el, ev){
 			el.triggerDefault("show:after")
 		}
    });
