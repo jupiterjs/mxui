@@ -12,7 +12,7 @@
 			.tabarea {
 				border: solid 1px;
 			}
-			#tabs li{
+			.tabarea li{
 				float: left;
 				padding: 10px;
 				list-style: none;
@@ -20,23 +20,26 @@
 				background-color: black;
 				color: white;
 			}
-			#tabs {
+			.tabarea ul {
 				height: 40px;
 				border-bottom: solid 1px gray;
 				padding: 0px;
 				margin: 0px;
 			}
-			#tabs .active {
+			.tabarea .active {
 				background-color: white;
 				color: black;
+			}
+			.tabarea li.selected {
+				color: red;
 			}
         </style>
 	</head>
 	<body>
 		<h1>Tabs Demo</h1>
-		<h2>Basic Tab</h2>
+		<h2>Phui.Tabable</h2>
 		<div class='tabarea'>
-		    <ul id="tabs">
+		    <ul id="tabable">
 		        <li><a href="#fragment-1"><span>One</span></a></li>
 		        <li><a href="#fragment-2"><span>Two</span></a></li>
 		        <li><a href="#fragment-3"><span>Three</span></a></li>
@@ -55,15 +58,37 @@
 		        Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.
 		    </div>
 		</div>
-		
-		<h2>UI Tab</h2>
-			<div>
-			    <ul id="uitabs">
-			        <li><a><span>One</span></a></li>
-			        <li><a><span>Two</span></a></li>
-			        <li><a><span>Three</span></a></li>
+		<h2>Phui.Tabs</h2>
+		<div class='tabarea'>
+		    <div>
+				<ul id="tabs">
+			        <li tabindex='1'><a><span>One</span></a></li>
+			        <li tabindex='2' class='selected active'><a><span>Two</span></a></li>
+			        <li tabindex='3'><a><span>Three</span></a></li>
 			    </ul>
 			</div>
+		    <div>
+		        <p>First tab is active by default:</p>
+		        <pre><code>$('#example').tabs();</code></pre>
+		    </div>
+		    <div>
+		        Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.
+		        Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.
+		    </div>
+		    <div>
+		        Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.
+		        Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.
+		        Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.
+		    </div>
+		</div>
+		<h2>Phui.UI.Tabs</h2>
+		<div>
+		    <ul id="uitabs">
+		        <li><a href="javascript://"><span>One</span></a></li>
+		        <li><a href="javascript://"><span>Two</span></a></li>
+		        <li><a href="javascript://"><span>Three</span></a></li>
+		    </ul>
+			
 		    <div>
 		        <p>First tab is active by default:</p>
 		        <pre><code>$('#example').tabs();</code></pre>
@@ -85,13 +110,19 @@
                 compress='false'>   
         </script>
 		<script type='text/javascript'>
-			$("#tabs").phui_tabs().find("li").click(function(ev){
+			$("#tabable").phui_tabable().find("li").click(function(ev){
 				ev.preventDefault();
 				ev.stopPropagation();
 				$(this).trigger("activate")
+			}).focus(function(ev){
+				ev.stopPropagation();
+				$(this).trigger("select")
+			}).keypress(function(ev){
+				if(ev.keyCode == 13)
+					$(this).trigger("active")
 			});
-			
-			//$("#uitabs").phui_ui_tabs()
+			$("#tabs").phui_tabs()
+			$("#uitabs").phui_ui_tabs()
 		</script>
 	</body>
 </html>
