@@ -8,31 +8,31 @@
             .error {border: solid 1px red;}
             .error_text { color: red; font-size: 10px;}
             td {padding: 3px;}
-			.selected a{
+			.selected{
             	background-color: #ddffee;
             }
         </style>
 	</head>
 	<body>
         <ul id="menu3">
-            <li><a>Folder 2</a>
+            <li>older 2
 					<ul class='submenu'>
-                        <li><a>Folder Control</a>
+                        <li>Folder Control
 							<ul class='submenu'>
-	                        	<li><a>Another</a></li>
-	                        	<li><a>Exec</a></li>
-	                        	<li><a>Policy</a></li>
+	                        	<li>Another</li>
+	                        	<li>Exec</li>
+	                        	<li>Policy</li>
 							</ul>
 						</li>
-                        <li><a>Search Policies</a></li>
-                        <li><a>View Policies</a></li>
+                        <li>Search Policies</li>
+                        <li>View Policies</li>
 					</ul>
 			</li>
-			<li><a>Google</a>
+			<li>Google
 					<ul class='submenu'>
-                        <li><a>Risk</a></li>
-                        <li><a>Enterprise</a></li>
-                        <li><a>Incident</a></li>
+                        <li>Risk</li>
+                        <li>Enterprise</li>
+                        <li>Incident</li>
 					</ul>
 			</li>
         </ul>
@@ -43,19 +43,21 @@
 			
 			Phui.Menuable.SelectShow.extend("Phui.Menuable.SelectShow.Submenu",
 			{
-				"li click": function(el, ev){
-				  	ev.stopPropagation();
+				sub : function(el){
+					return el.children().eq(0);
+				},
+				">li click": function(el, ev){
 					el.trigger("activate")
 				},
-				"li hoverinit": function(el, ev, hover){
+				">li hoverinit": function(el, ev, hover){
 					hover.setDelay(500);
-					ev.stopPropagation();
 				},
-				"li hoverenter": function(el, ev, hover){
+				">li hoverenter": function(el, ev, hover){
 					el.trigger("select")
 				}
 			});
-			$("#menu3").phui_menuable_select_show_submenu().find("ul").phui_menuable_select_show_submenu().hide()
+			$("#menu3").phui_menuable_select_show_submenu().find("ul")
+					   .phui_menuable_select_show_submenu().hide()
 			
 		</script>
 	</body>
