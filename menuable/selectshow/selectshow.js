@@ -1,7 +1,7 @@
 steal.apps('phui/menuable', 'jquery/event/hover').then(function(){
 	Phui.Menuable.extend("Phui.Menuable.SelectShow",
 	{
-		"{child_selector} default.activate" : function(el, ev){
+		">{child_selector} default.activate" : function(el, ev){
 			if(el.hasClass(this.options.active))
 				return;
 			if(this.activating)
@@ -22,11 +22,11 @@ steal.apps('phui/menuable', 'jquery/event/hover').then(function(){
 			else
 				el.one('select:after',doThis).trigger("select");
 		},
-		"{child_selector} default.deactivate" : function(el, ev ){
+		">{child_selector} default.deactivate" : function(el, ev ){
 			el.trigger("deactivate:before")
 		},
 		// select shows the submenus
-		"{child_selector} default.select" : function(el, ev ){
+		">{child_selector} default.select" : function(el, ev ){
 			if(this.selecting)
 				return;
 			this.selecting = true;
@@ -51,7 +51,7 @@ steal.apps('phui/menuable', 'jquery/event/hover').then(function(){
 			})
 		},
 		// deselect hides the submenus
-		"{child_selector} default.deselect": function(el, ev){
+		">{child_selector} default.deselect": function(el, ev){
 			this.ifThereIs({
 				a: this.sub(el),
 				trigger: "hide",
