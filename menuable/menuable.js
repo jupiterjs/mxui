@@ -33,7 +33,7 @@ steal.plugins('jquery/controller','jquery/event/default','jquery/event/livehack'
 			 * The selected className
 			 */
 			select : "selected",
-			child_selector : ">li"
+			child_selector : "li"
 		},
 		listensTo : [">default.hide",">default.show", ">default.hide:before", 
 			">default.hide:after", ">default.show:before", ">default.show:after"]
@@ -74,7 +74,7 @@ steal.plugins('jquery/controller','jquery/event/default','jquery/event/livehack'
 		calculateSubmenuPosition : function(el, ev){
 			return el;
 		},
-		"{child_selector} default.activate" : function(el, ev){
+		">{child_selector} default.activate" : function(el, ev){
 			if(el.hasClass(this.options.active))
 				return;
 			if(this.activating)
@@ -105,15 +105,15 @@ steal.plugins('jquery/controller','jquery/event/default','jquery/event/livehack'
 				el.one('select:after',doThis).trigger("select");
 			
 		},
-		"{child_selector} default.activate:before" : function(el, ev){
+		">{child_selector} default.activate:before" : function(el, ev){
 			el.trigger("activate:after")
 		},
-		"{child_selector} default.activate:after" : function(el, ev){
+		">{child_selector} default.activate:after" : function(el, ev){
 			el.addClass(this.options.active)
 			this.activating = false;
 			this.element.trigger("change")
 		},
-		"{child_selector} default.deactivate" : function(el, ev ){
+		">{child_selector} default.deactivate" : function(el, ev ){
 			this.ifThereIs({
 				a: this.sub(el),
 				trigger: "hide",
@@ -123,14 +123,14 @@ steal.plugins('jquery/controller','jquery/event/default','jquery/event/livehack'
 				on: el
 			})
 		},
-		"{child_selector} default.deactivate:before" : function(el, ev){
+		">{child_selector} default.deactivate:before" : function(el, ev){
 			el.trigger("deactivate:after")
 		},
-		"{child_selector} default.deactivate:after" : function(el, ev){
+		">{child_selector} default.deactivate:after" : function(el, ev){
 			el.removeClass(this.options.active)
 		},
 		//deselects old if there is one, and calls selected
-		"{child_selector} default.select" : function(el, ev){
+		">{child_selector} default.select" : function(el, ev){
 			if(this.selecting)
 				return;
 			this.selecting = true;
@@ -142,21 +142,21 @@ steal.plugins('jquery/controller','jquery/event/default','jquery/event/livehack'
 				on: el
 			})
 		},
-		"{child_selector} default.select:before" : function(el, ev ){
+		">{child_selector} default.select:before" : function(el, ev ){
 			el.trigger("select:after")
 		},
-		"{child_selector} default.select:after" : function(el, ev){
+		">{child_selector} default.select:after" : function(el, ev){
 			el.addClass(this.options.select)
 			this.selecting = false;
 		},
-		"{child_selector} default.deselect" : function(el, ev ){
+		">{child_selector} default.deselect" : function(el, ev ){
 			el.trigger("deselect:before")
 		},
-		"{child_selector} default.deselect:before" : function(el, ev){
+		">{child_selector} default.deselect:before" : function(el, ev){
 			el.trigger("deselect:after")
 		},
 		//do stuff on deselect
-		"{child_selector} default.deselect:after" : function(el, ev){
+		">{child_selector} default.deselect:after" : function(el, ev){
 			el.removeClass(this.options.select)
 		},
 		/** 
