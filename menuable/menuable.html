@@ -99,26 +99,22 @@
 					});
 				});
         	$("#menu2").find("a").focus(function(){
-				$(this).trigger("select")
+				$(this).closest("li").trigger("select")
 			});
 			$("#menu2").find("a").keypress(function(ev){
 				if(ev.keyCode == 13 || ev.keyCode == 10)
-					$(this).trigger("activate")
+					$(this).closest("li").trigger("activate")
 			});
 			
 			$("#menu3").phui_menuable().find("ul").phui_menuable().hide()
 				.bind("show", function(ev){
-					console.log("show", ev)
-					ev.stopPropagation();
 					$(this).show(function(){
-						$(this).trigger("show:after")
+						$(this).trigger("show:before")
 					});
 				})
 				.bind("hide", function(ev){
-					console.log("hide", ev)
-					ev.stopPropagation();
 					$(this).hide(function(){
-						$(this).trigger("hide:after")
+						$(this).trigger("hide:before")
 					});
 				});
 			$('#menu3').find("li").click(function(ev, el){
