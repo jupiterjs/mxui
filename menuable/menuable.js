@@ -39,21 +39,6 @@ steal.plugins('jquery/controller','jquery/event/default','jquery/event/livehack'
 			">default.hide:after", ">default.show:before", ">default.show:after"]
 	},
 	{
-		/**
-		init: function(){
-			var self = this, 
-				stopFunc = function(ev){
-					ev.stopPropagation()
-				};
-			
-			$.each(["show", "hide"], function(i, event){
-				$.each(["", ":before", ":after"], function(j, type){
-					self.bind(event+type, stopFunc);
-				})
-			})
-			
-			return this.element;
-		},**/
 		ifThereIs : function(options){
 			var trigger = function(){
 				if(typeof options.beforeTriggering == "string")
