@@ -114,11 +114,9 @@
 				ev.stopPropagation();
 				$(this).fadeIn("slow",function(){
 					$(this).trigger("show:after")
-					console.log("shown")
 				});
 			})
 			$('#menu3').delegate("ul", "hide", function(ev){
-				//ev.preventDefault();
 				ev.stopPropagation();
 				$(this).fadeOut("slow",function(){
 					$(this).trigger("hide:after")

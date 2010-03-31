@@ -43,7 +43,7 @@ steal.plugins('jquery/controller','jquery/event/default','jquery/event/livehack'
 			var trigger = function(){
 				if(typeof options.beforeTriggering == "string")
 					options.on.trigger(options.beforeTriggering)
-				else
+				else if(options.beforeTriggering)
 					options.beforeTriggering()
 			}
 			if(options.a.length ){ //and the old can respond to triggerDefault?
@@ -174,7 +174,8 @@ steal.plugins('jquery/controller','jquery/event/default','jquery/event/livehack'
 						a: self.element.find("."+self.options.select),
 						trigger: "deselect",
 						andWaitFor: "deselect:after",
-						beforeTriggering: "hide:before",
+						// if something listened to hide, assume it will call hide:before
+						beforeTriggering: (ev.handled? null: "hide:before"),
 						on: el
 					})
 				}
