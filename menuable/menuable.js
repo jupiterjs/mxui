@@ -47,8 +47,12 @@ steal.plugins('jquery/controller','jquery/event/default','jquery/event/livehack'
 					options.beforeTriggering()
 			}
 			if(options.a.length ){ //and the old can respond to triggerDefault?
-				options.a.one(options.andWaitFor, function(){
-					trigger()
+				options.a.bind(options.andWaitFor, function(ev){
+					if(this == ev.target){
+						$(this).unbind(options.andWaitFor, arguments.callee)
+						trigger()
+					}
+					
 				})
 				if(! options.a.triggerHandled(options.trigger, options.withData) ){
 					options.ifNothingResponds && options.ifNothingResponds(options.a)

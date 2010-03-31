@@ -8,9 +8,12 @@
             .error {border: solid 1px red;}
             .error_text { color: red; font-size: 10px;}
             td {padding: 3px;}
-			.selected a{
+			.selected>a{
             	background-color: #ddffee;
             }
+			.active>a {
+				color: red;
+			}
         </style>
 	</head>
 	<body>    
@@ -109,15 +112,18 @@
 			$("#menu3").phui_menuable().find("ul").phui_menuable().hide()
 			$('#menu3').delegate("ul", "show", function(ev){
 				ev.stopPropagation();
-				$(this).show(function(){
+				$(this).fadeIn("slow",function(){
 					$(this).trigger("show:after")
+					console.log("shown")
 				});
 			})
 			$('#menu3').delegate("ul", "hide", function(ev){
+				//ev.preventDefault();
 				ev.stopPropagation();
-				$(this).hide(function(){
+				$(this).fadeOut("slow",function(){
 					$(this).trigger("hide:after")
 				});
+				
 			})
 			$('#menu3').find("li").click(function(ev, el){
 				ev.stopPropagation();
