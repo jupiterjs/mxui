@@ -60,6 +60,11 @@ steal.apps('phui/menuable', 'jquery/event/hover').then(function(){
 				beforeTriggering: "deselect:after",
 				on: el
 			})
+		},
+		">default.hide" : function(el, ev){
+			if(this.selecting)
+				return;
+			this._super(el, ev);
 		}
 	});
 	
