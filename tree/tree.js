@@ -1,11 +1,11 @@
-steal.plugins('phui/menu').then(function($){
-	Phui.Menu.extend("Phui.Tree",
+steal.plugins('jquery/controller').then(function($){
+	$.Controller.extend("Phui.Tree",
 	{
 		defaults : {
 			lastNode: "last-child",
 			rootNode: "root-node",
-			hasChildren : "has-children"
-			
+			hasChildren : "has-children",
+			child_selector: "li"
 		},
 		listensTo: ["default.show","default.hide","show","hide"]
 	},
