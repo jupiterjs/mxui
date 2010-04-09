@@ -31,15 +31,15 @@ steal.plugins('jquery/controller','jquery/view/ejs','jquery/event/drag','phui/pa
 		},
 		windowresize : function(){
 			var body = this.element.children('.body'),
-                    header = this.element.children(".header");
-            body.hide();
-            header.hide();
-            var footer = this.element.children(".footer").width();
-            body.find('table').width(footer - 20);
-            body.children().eq(0).width(footer);
-            header.width(footer);
-            body.show();
-            header.show();
+					header = this.element.children(".header");
+			body.hide();
+			header.hide();
+			var footer = this.element.children(".footer").width();
+			body.find('table').width(footer - 20);
+			body.children().eq(0).width(footer);
+			header.width(footer);
+			body.show();
+			header.show();
 		},
 		paginate : function(el, ev, data){
 			if(typeof data.offset == "number" && this.options.offset != data.offset){
@@ -143,11 +143,11 @@ steal.plugins('jquery/controller','jquery/view/ejs','jquery/event/drag','phui/pa
 		},
 		resize : function(){
 			this.find("div.innerBody").height(0)
-            if (this.titleSized) {
-                setTimeout(this.callback('sizeTitle'), 1)
-            } else {
-                setTimeout(this.callback('windowresize'), 1)
-            }
+			if (this.titleSized) {
+				setTimeout(this.callback('sizeTitle'), 1)
+			} else {
+				setTimeout(this.callback('windowresize'), 1)
+			}
 		},
 		bodyScroll : function(el, ev){
 			this.element.children(":first").scrollLeft(el.scrollLeft())
