@@ -1,5 +1,5 @@
 steal.plugins('jquery/controller',
-			  'jquery/view/ejs').then(function(){
+			  'jquery/view/ejs').then(function($){
   	
 	
 	
@@ -20,7 +20,7 @@ steal.plugins('jquery/controller',
 	})
 	
 	
-	EJS.Helpers.prototype.hookup = function(){
+	$.View.EJS.Helpers.prototype.hookup = function(){
 		return "data-view-id='"+this._data.dataViewId+"'"
 	}
 
