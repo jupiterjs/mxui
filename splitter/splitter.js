@@ -91,7 +91,7 @@ steal.plugins('jquery/controller','jquery/event/drag/limit','jquery/dom/dimensio
 			if(!this.element.is(":visible"))
 				return;
 			
-			if( !(data && data.force === true)){
+			if( !(data && data.force === true) && ! this.forceNext){
 				var h = this.element.height(), w = this.element.width()
 				if (this.oldHeight == h && this.oldWidth == w) {
 					ev.stopPropagation();
@@ -100,7 +100,7 @@ steal.plugins('jquery/controller','jquery/event/drag/limit','jquery/dom/dimensio
 				this.oldHeight = h;
 				this.oldWidth = w;
 			}
-			
+			this.forceNext = false;
 			this.size(null, null, data && data.keep)
 			
 		},
@@ -135,7 +135,10 @@ steal.plugins('jquery/controller','jquery/event/drag/limit','jquery/dom/dimensio
 				if(next.hasClass('hsplitter'))
 					next.remove()
 			}
-			
+			//what if I am already not visible .. I should note that
+			if(!this.element.is(':visible')){
+				this.forceNext = true;
+			}
 			this.size(this.element.children(":not(.hsplitter):visible").not(target), true )
 		},
 		/**
@@ -173,8 +176,6 @@ steal.plugins('jquery/controller','jquery/event/drag/limit','jquery/dom/dimensio
 					height = heights[i];
 
 				if(animate){
-					//console.log("animating", $c, Math.round(height* increase))
-					
 					$c.animate({outerHeight: Math.round(height* increase)}, "fast",function(){
 						$(this).triggerHandler('resize');
 						if(keep && !keepSized){

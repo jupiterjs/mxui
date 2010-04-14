@@ -54,9 +54,7 @@ steal.plugins('jquery/controller','jquery/event/default','jquery/event/livehack'
 					}
 					
 				})
-				var handled = options.a.triggerHandled(options.trigger, options.withData);
-				console.log(handled,  options.a, options.trigger)
-				if(! handled  ){
+				if(! options.a.triggerHandled(options.trigger, options.withData) ){
 					options.ifNothingResponds && options.ifNothingResponds(options.a)
 					trigger()
 				}

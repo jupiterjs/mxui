@@ -93,7 +93,14 @@ steal.plugins('phui/menuable').then(function($){
 	   },
 	   "{child_selector} click" : function(el, ev){
 	   		ev.preventDefault();
-			el.trigger("activate")	  
+			
+			el.trigger("activate");
+	   },
+	   "{child_selector} activate:after" : function(el, ev){
+	   		var el = this.element;
+			setTimeout(function(){
+				el.parent().triggerHandler("resize")
+			},13)
 	   }
    })
 })
