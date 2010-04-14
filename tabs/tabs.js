@@ -19,7 +19,8 @@ steal.plugins('phui/menuable').then(function($){
 			var self = this;
 			//make sure everything is deactivated ...
 			this.find(this.options.child_selector).each(function(){
-				var sub = self.sub($(this).addClass(self.options.button_class_names))
+				
+				var sub = self.sub($(this).addClass(self.options.child_class_names))
 				sub.mixin.apply(sub, self.options.types);
 				sub.addClass(self.options.tab_class_names);
 				if(!$(this).hasClass(self.options.active) && ! sub.triggerHandled("hide")){
@@ -27,8 +28,8 @@ steal.plugins('phui/menuable').then(function($){
 				}
 			})
 			selected.trigger("activate");
-			this.element.parent().addClass(this.options.tabs_container_class)
-			this.element.addClass(this.options.class_names)
+			this.element.addClass(this.options.tabs_container_class)
+			this.element.parent().addClass(this.options.class_names)
 			return this.element;
 		},
 		/**
@@ -93,7 +94,14 @@ steal.plugins('phui/menuable').then(function($){
 	   },
 	   "{child_selector} click" : function(el, ev){
 	   		ev.preventDefault();
-			el.trigger("activate")	  
+			
+			el.trigger("activate");
+	   },
+	   "{child_selector} activate:after" : function(el, ev){
+	   		var el = this.element;
+			setTimeout(function(){
+				el.parent().triggerHandler("resize")
+			},13)
 	   }
    })
 })

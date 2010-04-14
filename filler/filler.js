@@ -253,14 +253,14 @@ steal.plugins('jquery/controller','jquery/dom/dimensions','jquery/event/resize')
 			}
 			
 		},
-		show : function(el, ev){
+		/*show : function(el, ev){
 			//resize after show ... needs a shown
 			var element = this.parent;
 			setTimeout(function(){
 				element.trigger("resize");
 			},13)
 			//this.element.trigger("resize");
-		},
+		},*/
 		destroy : function(){
 			this.parent.unbind('resize', this.parent_resize)
 			this.parent = null;
