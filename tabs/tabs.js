@@ -28,8 +28,8 @@ steal.plugins('phui/menuable').then(function($){
 				}
 			})
 			selected.trigger("activate");
-			this.element.addClass(this.options.tabs_container_class)
-			this.element.parent().addClass(this.options.class_names)
+			this.element.addClass(this.options.class_names)
+			this.element.parent().addClass(this.options.tabs_container_class)
 			return this.element;
 		},
 		/**
