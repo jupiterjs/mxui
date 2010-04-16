@@ -175,7 +175,7 @@ steal.plugins('jquery/controller','jquery/event/default','jquery/event/livehack'
 						trigger: "deselect",
 						andWaitFor: "deselect:after",
 						// if something listened to hide, assume it will call hide:before
-						beforeTriggering: (ev.handled? null: "hide:before"),
+						beforeTriggering: "hide:before",
 						on: el
 					})
 				}

@@ -197,10 +197,12 @@ steal.plugins('jquery/controller','jquery/view/ejs','jquery/event/drag','phui/pa
 			var width =  ev.vector().minus(el.offsetv()).left();
 			
 			if(width > el.find(":first").outerWidth())
-				$("#column-resizer").width(width)
+				$("#column-resizer").width(width+1)
 		},
 		"th dragend" : function(el, ev, drag){
+			console.log(ev.type)
 			ev.preventDefault();
+			ev.stopImmediatePropagation();
 			var width =  ev.vector().minus(el.offsetv()).left(),
 				attr = el[0].className.match(/([^ ]+)-column-header/)[1],
 				cg;
@@ -210,8 +212,12 @@ steal.plugins('jquery/controller','jquery/view/ejs','jquery/event/drag','phui/pa
 				cg = this.element.find("colgroup:eq("+el.index()+")").outerWidth( el.find(":first").outerWidth() )
 			}
 			this.widths[attr] = cg.width();
-			setTimeout(this.callback('sizeTitle'),1)
 			$("#column-resizer").remove();
+			setTimeout(
+				this.callback('sizeTitle')
+			
+			,1)
+			
 		},
 		th_mousemove : function(el, ev){
 			if(this.isMouseOnRight(el, ev)){

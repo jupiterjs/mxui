@@ -49,12 +49,12 @@ steal.plugins('jquery/controller','jquery/dom/dimensions','jquery/event/resize')
 	/**
 	 * Determines which child margins a parent should include.
 	 */
-	$.curStyles.adjustForMargins  = function(parent){
+	$.curStyles.adjustForMargins  = function(parent, ajuster){
 		//see if there is a value set on the parent
-		//if(parent == document || parent == document.body || parent == document.documentElement) 
+		if(!ajuster || parent == document || parent == document.body || parent == document.documentElement) 
 			return {first: true, last: true};
 		
-		/*var get = {
+		var get = {
 			paddingBottom : true,
 			borderBottomWidth : true,
 			paddingTop: true,
@@ -74,7 +74,7 @@ steal.plugins('jquery/controller','jquery/dom/dimensions','jquery/event/resize')
 		}
 		if(ads.width && ( parseInt(parent.style.width) )){
 			ret.first = ret.last = true;
-		}*/
+		}
 		
 		return ret;
 	}
@@ -84,14 +84,14 @@ steal.plugins('jquery/controller','jquery/dom/dimensions','jquery/event/resize')
 	 * @param {Object} adjustingChild
 	 * @param {Object} force
 	 */
-	$.curStyles.getSpaceUsed = function(adjustingChild, force, cachedParent){
+	$.curStyles.getSpaceUsed = function(adjustingChild, force, cachedParent,adjuster){
 		//if we are the documentElement, there should be no siblings.
 		if(adjustingChild == document.documentElement){
 			return 0;
 		}
 		
 		var parent = cachedParent || adjustingChild.parentNode,
-			adjust = $.curStyles.adjustForMargins(parent),
+			adjust = $.curStyles.adjustForMargins(parent, adjuster),
 			children = $(parent).children().filter(function(){
 				if (matches.test(this.nodeName.toLowerCase()) && this !== adjustingChild)
 					return false;
@@ -225,13 +225,13 @@ steal.plugins('jquery/controller','jquery/dom/dimensions','jquery/event/resize')
 						currentParent = current.parentNode;
 					
 					//get the space around the first element
-					spaceUsed  += $.curStyles.getSpaceUsed(current, null, currentParent);
+					spaceUsed  += $.curStyles.getSpaceUsed(current, null, currentParent, this.options.adjust);
 					//walk up the document until you reach the parent
 					//console.log("immediate", current, spaceUsed)
 					while(currentParent && (currentParent != nakedParent) && (currentParent !== document) ){
 						current = currentParent;
 						currentParent = currentParent.parentNode;
-						spaceUsed += $.curStyles.getSpaceUsed(current, null, currentParent);
+						spaceUsed += $.curStyles.getSpaceUsed(current, null, currentParent, this.options.adjust);
 						//console.log("parent", current, spaceUsed)
 					}
 					this.cachedSpaceUsed = spaceUsed;

@@ -44,8 +44,7 @@ steal.apps('phui/positionable','phui/menuable','jquery/event/hover').then(functi
 			 * If you want the top level menu to have 'types' mixed in.
 			 */
 			apply_types_to_top : false
-		},
-		listensTo : ["default.show","default.hide:before", "default.hide"]
+		}
 	},
 	{
 		init : function(){
@@ -96,7 +95,7 @@ steal.apps('phui/positionable','phui/menuable','jquery/event/hover').then(functi
 		calculateSubmenuPosition : function(el, ev){
 			return el;
 		},
-		"default.hide:before" : function(el, ev){
+		">default.hide:before" : function(el, ev){
 			if (ev.target == this.element[0]) {
 				this.element.hide();
 				el.trigger("hide:after")
@@ -105,7 +104,7 @@ steal.apps('phui/positionable','phui/menuable','jquery/event/hover').then(functi
 		/**
 		 * By default, shows the child element.
 		 */
-		"default.show" : function(el, ev){
+		">default.show" : function(el, ev){
 		   if(ev.target == this.element[0]){
 				this.element.show();
 				this.element.triggerDefault("show:after")
