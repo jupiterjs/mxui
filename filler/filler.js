@@ -243,7 +243,7 @@ steal.plugins('jquery/controller','jquery/dom/dimensions','jquery/event/resize')
 				this.element.height(this.parent.height() - spaceUsed, true)
 				
 				if(this.options.width)
-					this.element.outerWidth(width)
+					this.element.outerWidth(this.parent.width())
 				else if(shrink){
 					this.element.css({width: "", overflow: oldOverflow == "visible" && jQuery.support.containerSizeAdjustments.width ? "hidden"  : oldOverflow})
 				}

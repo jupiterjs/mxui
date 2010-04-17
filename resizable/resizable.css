@@ -2,7 +2,7 @@
 	position: relative;
 }
 .ui-resizable-s {
-				bottom:-5px;
+				bottom:-3px;
 				cursor:s-resize;
 				height:7px;
 				left:0;
@@ -12,16 +12,16 @@
 			.ui-resizable-e {
 				cursor:e-resize;
 				height:100%;
-				right:-5px;
+				right:-3px;
 				top:0;
 				width:7px;
 				
 			}
 			.ui-resizable-se {
-				bottom:1px;
+				bottom:0px;
 				cursor:se-resize;
 				height:12px;
-				right:1px;
+				right:0px;
 				width:12px;
 				background-color: #ddddff;
 				

@@ -36,8 +36,8 @@
         </style>
 	</head>
 	<body>
-		<h1>Tabs Demo</h1>
-		<h2>Phui.Tabable</h2>
+		<h1>Tabs</h1>
+		<!--<h2>Phui.Tabable</h2>
 		<div class='tabarea'>
 		    <ul id="tabable">
 		        <li><a href="#fragment-1"><span>One</span></a></li>
@@ -57,8 +57,8 @@
 		        Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.
 		        Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.
 		    </div>
-		</div>
-		<h2>Phui.Tabs</h2>
+		</div>-->
+
 		<div class='tabarea'>
 		    <div>
 				<ul id="tabs">
@@ -81,7 +81,7 @@
 		        Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.
 		    </div>
 		</div>
-		<h2>Phui.UI.Tabs</h2>
+
 		<div>
 		    <ul id="uitabs">
 		        <li><a href="javascript://"><span>One</span></a></li>
@@ -120,7 +120,7 @@
                 compress='false'>   
         </script>
 		<script type='text/javascript'>
-			$("#tabable").phui_tabable().find("li").click(function(ev){
+			/*$("#tabable").phui_tabable().find("li").click(function(ev){
 				ev.preventDefault();
 				ev.stopPropagation();
 				$(this).trigger("activate")
@@ -130,7 +130,7 @@
 			}).keypress(function(ev){
 				if(ev.keyCode == 13)
 					$(this).trigger("active")
-			});
+			});*/
 			$("#tabs").phui_tabs()
 			$("#uitabs, #uitabs2").phui_ui_tabs()
 		</script>
