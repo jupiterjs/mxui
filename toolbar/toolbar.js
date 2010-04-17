@@ -1,6 +1,6 @@
 steal.apps('phui/menu','jquery/event/default').then(function(){
    Phui.Menu({
-		child_selector : "ul>li"
+		child_selector : "li"
 	}).
     extend("Phui.Toolbar",
     {
@@ -15,13 +15,14 @@ steal.apps('phui/menu','jquery/event/default').then(function(){
        init : function(){
            var menuType = this.options.menu_type;
            //make it look pretty
-           this.element.addClass(this.options.class_names)
-               .children("ul").addClass(this.options.child_class_names)
+           this.element.addClass(this.options.child_class_names)
                .children("li").addClass(this.options.button_class_names).each(function(){
                    //need to keep a reference to each menu
 				   var el = $(this);
 				   el.data("menu-element", el.find(">ul, >.ui-menu").mixin(menuType))
                })
+			this.element.parent().addClass(this.options.tabs_container_class)
+				.addClass(this.options.class_names)
        },
        calculateSubmenuPosition : function(el, ev){
 	   		var offset = el.offset();

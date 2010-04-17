@@ -112,12 +112,14 @@
 			$("#menu3").phui_menuable().find("ul").phui_menuable().hide()
 			$('#menu3').delegate("ul", "show", function(ev){
 				ev.stopPropagation();
+				ev.preventDefault();
 				$(this).fadeIn("slow",function(){
 					$(this).trigger("show:after")
 				});
 			})
 			$('#menu3').delegate("ul", "hide", function(ev){
 				ev.stopPropagation();
+				ev.preventDefault();
 				$(this).fadeOut("slow",function(){
 					$(this).trigger("hide:after")
 				});

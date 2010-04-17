@@ -53,16 +53,23 @@ steal.apps('phui/toolbar').then(function(){
 		}
 	})
 	
-	$.Controller.extend("Phui.FadeInable",{listensTo: ["show","hide"]}, {
-	   show : function(el, ev){
+	$.Controller.extend("Phui.FadeInable",{
+		listensTo: [">show:before",">hide:before"]
+	}, {
+	   ">show:before" : function(el, ev){
 			ev.preventDefault();
-			this.element.css("opacity",0.2).show().animate({opacity: 1.0},"slow")
+			this.element.css("opacity",0.2).show().animate({opacity: 1.0},"slow", function(){
+				el.trigger("show:after")
+			})
 	   },
-       hide : function(el, ev){
+       ">hide:before" : function(el, ev){
 		   var e = this.element;
 		   ev.preventDefault();
-		   this.element.animate({opacity: 0.2},"slow", function(){ e.hide()});
-       }
+		   this.element.animate({opacity: 0.2},"slow", function(){ 
+		   		el.hide()
+		   		el.trigger("hide:after")
+			});
+   		}
 	})
 	
 	
@@ -70,15 +77,18 @@ steal.apps('phui/toolbar').then(function(){
         types: [J.Positionable({my: "left top", at : "right top"}), Phui.Shiftable, J.FadeInable, Phui.Highlight],
 		class_names: "menu",
 		apply_types_to_top : true
-    }).extend("ClickMenu",{listensTo: ["shifted","hide"]},{
+    }).extend("ClickMenu",{
+		init: function(){
+			this.listensTo.push('shifted');
+			this._super(arguments)
+		}
+	},{
 		init : function(){
 			this.element.hide();
 			this._super.apply(this,arguments)
 		},
-		"li deselect" : function(el, ev){
+		"li select:before" : function(el, ev){
 			ev.preventDefault();
-			this.hideOld();
-			
 			$(el).addClass("selected").removeClass("deselected").trigger("shift")
 		},
 		calculateSubmenuPosition : function(el, ev){
@@ -88,12 +98,15 @@ steal.apps('phui/toolbar').then(function(){
 			return off;
 		},
 		"li shifted" : function(el){
-			el.trigger("select");
+			el.trigger("select:after");
 			el.siblings().removeClass("selected").addClass("deselected")
 		},
-		hide : function(){
+		"hide:after" : function(el){
 			this.element.find("li").removeClass("selected").removeClass("deselected")
-		}
+		},
+		">hide:before" : function(el, ev){},
+		">show:before" : function(el, ev){},
+		">hide": function(){} // TODO figure out the right way to make hide appear to be triggered
 	})
 	//({menu_type: ClickMenu})
 	J.Toolbar({menu_type: ClickMenu, child_class_names: "menu"}).extend("Phui.Navigation",{listensTo: ["shifted"]},{
@@ -102,10 +115,8 @@ steal.apps('phui/toolbar').then(function(){
 			this.element.mixin(Phui.Shiftable, Phui.Highlight)
             this.element.children("ul").css("position","relative")
 		},
-		"li deselect" : function(el, ev){
-			//$(el).siblings()
+		"li select:before" : function(el, ev){
 			ev.preventDefault();
-			this.hideOld();//this gets canceled so it doesn't remove the active state ....
 			this.find("."+this.options.active+":first").removeClass(this.options.active);
 			$(el).removeClass("deselected").addClass("selected").trigger("shift");
 		},
@@ -116,7 +127,7 @@ steal.apps('phui/toolbar').then(function(){
 			return off;
 	   },
 	   "li shifted" : function(el, ev){
-			el.trigger("select");
+			el.trigger("select:after");
 			el.siblings().removeClass("selected").addClass("deselected");
 			el.addClass("selected").removeClass("deselected");
 	   }

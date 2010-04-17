@@ -90,9 +90,11 @@ steal.plugins('jquery/controller','jquery/event/default','jquery/event/livehack'
 						self.ifThereIs({
 							a: self.sub(el),
 							trigger: "show",
-							withData: el,
+							withData: self.calculateSubmenuPosition(el, ev),
 							andWaitFor: "show:after",
-							ifNothingResponds : function(el){ el.show() },
+							ifNothingResponds : function(el){ 
+								el.show() 
+							},
 							beforeTriggering: "activate:before",
 							on: el
 						})
@@ -118,7 +120,10 @@ steal.plugins('jquery/controller','jquery/event/default','jquery/event/livehack'
 				a: this.sub(el),
 				trigger: "hide",
 				andWaitFor: "hide:after",
-				ifNothingResponds : function(el){ el.hide() },
+				// TODO trigger hide:before if nothing responds to that, do el.hide(), then remove the empty hide in navigation
+				ifNothingResponds : function(el){ 
+					el.hide() 
+				},
 				beforeTriggering: "deactivate:before",
 				on: el
 			})
@@ -183,6 +188,9 @@ steal.plugins('jquery/controller','jquery/event/default','jquery/event/livehack'
 		},
 		">default.hide:before": function(el, ev){
 			el.triggerDefault("hide:after")
+		},
+		">default.show": function(el, ev){
+			el.trigger("show:before")
 		},
 		">default.show:before": function(el, ev){
 			el.triggerDefault("show:after")
