@@ -1,4 +1,4 @@
-steal.apps('phui/menuable', 'jquery/event/hover').then(function(){
+steal.plugins('phui/menuable', 'jquery/event/hover').then(function(){
 	Phui.Menuable.extend("Phui.Menuable.SelectShow",
 	{
 		">{child_selector} default.activate" : function(el, ev){

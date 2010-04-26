@@ -1,4 +1,4 @@
-steal.apps('jquery','jquery/controller').then(function($){
+steal.plugins('jquery','jquery/controller').then(function($){
     $.Controller.extend("Phui.Positionable",
     {
 		listensTo : ["show",'move'],
