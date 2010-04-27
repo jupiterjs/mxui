@@ -9,6 +9,9 @@ body .grid {
 	text-align: left;
 		overflow: hidden;
 }
+.grid th a {
+	display: block;
+}
  .grid .body  {
 	overflow: hidden;
 	width:100%;
