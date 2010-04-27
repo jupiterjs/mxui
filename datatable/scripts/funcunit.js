@@ -1,8 +1,8 @@
-load('phui/datatable/test/settings.js')
-load('steal/rhino/env.js');
+load('settings.js')
+load('funcunit/funcunit.js')
 
-Envjs('phui/datatable/funcunit.html', 
-	{scriptTypes : {"text/javascript" : true,"text/envjs" : true}, 
-	fireLoad: true, 
-	logLevel: 2
-});
+//Funcunit.redirectOutputTo('myapp/funcunit.log')
+
+Funcunit.runTest('phui/datatable/funcunit.html')
+
+//Funcunit.emailFile('myapp/funcunit.log')

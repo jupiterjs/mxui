@@ -1,4 +1,4 @@
-steal.apps('phui/menu','jquery/event/default').then(function(){
+steal.plugins('phui/menu','jquery/event/default').then(function(){
    Phui.Menu({
 		child_selector : "li"
 	}).
