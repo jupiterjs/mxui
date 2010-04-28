@@ -67,10 +67,7 @@
                     hasChildren : function(){ return true }
                 })
                 
-                Phui.Grid.Tree({indentedColumn: 'name'})
-                  .extend("Resource.Tree");
-                
-                $(".grid").phui_filler().resource_tree({
+                $(".grid").phui_filler().phui_grid_tree({
                     model: Resource,
                     limit: 100,
                     offset: 0,
@@ -79,7 +76,8 @@
                         description: "Description",
                         date: "Date",
                         location: "Location"
-                    },                    
+                    }, 
+                    indentedColumn: 'name',
                     render : {
                         name : function(instance){
                             return instance.name;
