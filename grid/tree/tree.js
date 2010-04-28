@@ -30,7 +30,7 @@ steal.plugins('phui/grid')
                 }
             }
             
-            new Phui.Grid(this.element[0], this.options)
+            this._super(this.element[0], this.options)
         },
         
         ".toggle click" : function(el, ev){
