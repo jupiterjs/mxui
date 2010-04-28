@@ -14,7 +14,6 @@ steal.plugins('jquery/controller','jquery/event/drop','jquery/event/drag/limit',
 		".sortable draginit" : function(el, ev, drag){
 			//drag.ghost(); //move a ghost
 			//el.hide();
-			console.log("init")
 			drag.limit(this.element);
 			
 			var clone = el.clone().addClass("sortable-placeholder").css("visibility","hidden")
@@ -83,7 +82,7 @@ steal.plugins('jquery/controller','jquery/event/drop','jquery/event/drag/limit',
 					}
 			}
 		},
-		"dropend" : function(el, ev, drop, drag){
+		"dropped" : function(el, ev, drop, drag){
 			if(this.element.has(drag.element).length){
 				this.find(".sortable-placeholder").replaceWith(drag.element)
 			}else{

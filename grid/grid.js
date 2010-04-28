@@ -186,7 +186,8 @@ steal.plugins('jquery/controller', 'jquery/view/ejs', 'jquery/event/drag', 'phui
         },
         "th click": function (el, ev)
         {
-            var attr = el[0].className.match(/([^ ]+)-column-header/)[1];
+            
+			var attr = el[0].className.match(/([^ ]+)-column-header/)[1];
             var sort = el.hasClass("sort-asc") ? "desc" : "asc"
             //see if we might already have something with this
             var i = 0;
