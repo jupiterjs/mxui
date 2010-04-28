@@ -1,4 +1,9 @@
-steal.plugins('jquery/controller', 'jquery/view/ejs', 'jquery/event/drag', 'phui/paginator/page', "jquery/dom/dimensions").then(function ($)
+steal.plugins('jquery/controller', 
+			  'jquery/view/ejs', 
+			  'jquery/event/drag', 
+			  'phui/paginator/page', 
+			  "jquery/dom/dimensions",
+			  "phui/filler").then(function ($)
 {
     $.Controller.extend("Phui.Grid", {
         defaults: {
@@ -41,9 +46,9 @@ steal.plugins('jquery/controller', 'jquery/view/ejs', 'jquery/event/drag', 'phui
             body.hide();
             header.hide();
             var footer = this.element.children(".footer").width();
-            body.find('table').width(footer - 20);
-            body.children().eq(0).width(footer);
-            header.width(footer);
+            body.find('table').width(footer > 0 ? footer - 20 : 20);
+            body.children().eq(0).width(footer > 20 ? footer  : 20);
+            header.width(footer > 20 ? footer : 20);
             body.show();
             header.show();
         },
