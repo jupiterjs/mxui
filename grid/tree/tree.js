@@ -21,7 +21,7 @@ steal.plugins('phui/grid')
                     var content = [];
             
                     if (instance.hasChildren()) {
-                        content.push('<span class="toggle ui-icon ui-icon-folder-collapsed" style="float: left; width: ');
+                        content.push('<span class="toggle ui-icon ui-icon-triangle-1-e" style="float: left; width: ');
                         content.push(instance.depth * 20);
                         content.push('px; display: block;height:12px;"></span>');
                     }
