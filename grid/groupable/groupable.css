@@ -1,3 +1,6 @@
+td {
+	position: relative;
+}
 .droparea {
 	background-color: #AAAAAA;
 	padding: 5px;
