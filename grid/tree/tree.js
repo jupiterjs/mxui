@@ -12,6 +12,7 @@ steal.plugins('phui/grid')
     },
     {
         init : function(){
+            this.depth = 0;
             var indentedColumn = this.options.indentedColumn;
             
             if(this.options.render && this.options.render[indentedColumn]){
@@ -21,9 +22,10 @@ steal.plugins('phui/grid')
                     var content = [];
             
                     if (instance.hasChildren()) {
-                        content.push('<span class="toggle ui-icon ui-icon-triangle-1-e" style="float: left; width: ');
+                        content.push('<span class="toggle ui-icon ui-icon-triangle-1-e" style="float: left; margin-left: ');
                         content.push(instance.depth * 20);
-                        content.push('px; display: block;height:12px;"></span>');
+                        content.push('px; display: block;height:12px;">');
+						content.push('</span>');
                     }
                     content.push(oldRender.apply(this, arguments));
                     return content.join("");
@@ -36,14 +38,21 @@ steal.plugins('phui/grid')
         ".toggle click" : function(el, ev){
             var rowEl = el.closest("tr");
             var instance = rowEl.model();
-            this.options.model.findAll({parentId: instance.id}, this.callback('foundChildren', rowEl));
+            this.options.model.findAll({parentId: instance.id}, this.callback('foundChildren', rowEl, el));
         },
         
-        foundChildren : function(rowEl, items){
+        foundChildren : function(rowEl, toggleEl, items){
+			this.depth++;
+			var self = this;
+            $.each(items, function(i, item){
+                if(!item.depth) item.attr("depth", self.depth);
+            })
             rowEl.after("//phui/grid/tree/views/rows.ejs", {
                 options: this.options,
                 items: items
             });
+			
+			toggleEl.removeClass("ui-icon-triangle-1-e").addClass("ui-icon-triangle-1-s");
         }
     })
      
