@@ -10,7 +10,10 @@ steal.plugins('jquery/controller', 'jquery/view/ejs', 'jquery/event/drag', 'phui
             group: [],
             model: null,
             display: {},
-            paginatorType: Phui.Paginator.Page
+            paginatorType: Phui.Paginator.Page,
+			renderer : function(inst, options){
+				return $.View("//phui/grid/views/row",{item: inst, options: options})
+			}
         },
         listensTo: ["paginate"]
 
@@ -74,7 +77,8 @@ steal.plugins('jquery/controller', 'jquery/view/ejs', 'jquery/event/drag', 'phui
         },
         findAll: function ()
         {
-            this.element.children('.body').find("table").html("<tbody><tr><td>Loading ...<td></tr></tbody>")
+            this.element.trigger("updating")
+			this.element.children('.body').find("table").html("<tbody><tr><td>Loading ...<td></tr></tbody>")
             this.options.model.findAll(this.params(), this.callback('found'));
         },
         paginator: function ()
@@ -199,7 +203,7 @@ steal.plugins('jquery/controller', 'jquery/view/ejs', 'jquery/event/drag', 'phui
             this.options.order.unshift(attr + " " + sort)
             this.findAll();
         },
-        "th draginit": function (el, ev, drag)
+        "th dragdown": function (el, ev, drag)
         {
             if (this.isMouseOnRight(el, ev, 2))
             {
@@ -284,7 +288,11 @@ steal.plugins('jquery/controller', 'jquery/view/ejs', 'jquery/event/drag', 'phui
             })
             el.after(html.join(''));
             this.element.trigger('resize');
-        }
+        },
+		update : function(options){
+			$.extend(this.options, options)
+			this.findAll();
+		}
     })
 
 })
