@@ -2,32 +2,30 @@
             "http://www.w3.org/TR/html4/strict.dtd">
 <html lang="en">
 	<head>
-		<title>grid</title>
+		<title>tree</title>
         <style type='text/css'>
             body {font-family: verdana}
             .error {border: solid 1px red;}
             .error_text { color: red; font-size: 10px;}
             td {padding: 3px;}
-
-			body {
-				padding: 0px;
-				margin: 0px;
-			}
-        </style>	
-		<link type="text/css" href="grid.css" rel="stylesheet" />
+        </style>
+        <link type="text/css" href="../../smoothness/jquery-ui-1.7.2.custom.css" rel="stylesheet" />			
+		<link type="text/css" href="../grid.css" rel="stylesheet" />		
 	</head>
 	<body>
 	    <div class='grid'>
 	    	
 	    </div>
 		<script type='text/javascript' 
-                src='../../steal/steal.js'>   
+                src='../../../steal/steal.js'>   
         </script>
 		<script type='text/javascript'>
-			steal.plugins("phui/grid",
+			steal.plugins("phui/grid/tree",
+			                "phui/grid/tree/fixtures",
 							"phui/filler",
 							"jquery/model",
 							"jquery/dom/fixtures").then(function($){
+				
 				$.fixture["-make"](["resources","resource"],Math.round(Math.random()*2000)+1,function(num){
 					return {
 						id		:	num,
@@ -65,14 +63,27 @@
 				            fixture: "-resource" //calculates the fixture path from the url and type.
 				        })
 					}
-				},{})
+				},{
+					hasChildren : function(){ return true }
+				})
 				
+				Phui.Grid.Tree({indentedColumn: 'name'})
+				  .extend("Resource.Tree");
 				
-				$(".grid").phui_filler().phui_grid({
+				$(".grid").phui_filler().resource_tree({
 					model: Resource,
 					limit: 100,
 					offset: 0,
+					columns: {
+            			name: "Name",
+            			description: "Description",
+            			date: "Date",
+            			location: "Location"
+        			},					
 					render : {
+						name : function(instance){
+							return instance.name;
+						}
 					}
 				})
 				
