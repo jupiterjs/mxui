@@ -8,6 +8,21 @@ steal.plugins('jquery/controller','jquery/view/ejs','jquery/event/default').then
 			offset: 0,
 			count: 0
 		},
+		pageData : function(options){
+			var offset = options.offset, 
+				count = options.count, 
+				limit = options.limit, 
+				pageCount = options.pageCount || 10,
+				page= Math.floor(offset / limit),
+				totalPages= Math.floor(count / limit),
+				start= Math.max(
+						 	Math.min( page  - Math.floor(pageCount / 2), 
+									 totalPages - pageCount),
+							0
+							),
+				end			= Math.min(totalPages, start+ pageCount);
+			return {page: page, totalPages: totalPages, start: start, end: end}
+		},
 		listensTo: ["default.paginate"]
 	}, {
 		init : function(){

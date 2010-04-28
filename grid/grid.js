@@ -1,7 +1,7 @@
 steal.plugins('jquery/controller', 
 			  'jquery/view/ejs', 
 			  'jquery/event/drag', 
-			  'phui/paginator/page', 
+			  //'phui/paginator/page', 
 			  "jquery/dom/dimensions",
 			  "phui/filler").then(function ($)
 {
@@ -15,7 +15,7 @@ steal.plugins('jquery/controller',
             group: [],
             model: null,
             display: {},
-            paginatorType: Phui.Paginator.Page,
+            //paginatorType: Phui.Paginator.Page,
 			renderer : function(inst, options){
 				return $.View("//phui/grid/views/row",{item: inst, options: options})
 			}
@@ -36,7 +36,7 @@ steal.plugins('jquery/controller',
 
             this.bind(this.element.children('.body').children().eq(0), "scroll", "bodyScroll")
             this.delegate(this.element.find('.header tr'), "th", "mousemove", "th_mousemove");
-            this.paginator().mixin(this.options.paginatorType);
+            //this.paginator().mixin(this.options.paginatorType);
             this.element.parent().trigger('resize');
         },
         windowresize: function ()
@@ -52,6 +52,12 @@ steal.plugins('jquery/controller',
             body.show();
             header.show();
         },
+		/**
+		 * Listens for page events
+		 * @param {Object} el
+		 * @param {Object} ev
+		 * @param {Object} data
+		 */
         paginate: function (el, ev, data)
         {
             if (typeof data.offset == "number" && this.options.offset != data.offset)
@@ -70,7 +76,7 @@ steal.plugins('jquery/controller',
                 ev.preventDefault()
             }
         },
-        "form.pageinput submit": function (el, ev)
+        ".pageinput form submit": function (el, ev)
         {
             ev.preventDefault();
             var page = parseInt(el.find('input').val(), 10) - 1,
@@ -86,10 +92,10 @@ steal.plugins('jquery/controller',
 			this.element.children('.body').find("table").html("<tbody><tr><td>Loading ...<td></tr></tbody>")
             this.options.model.findAll(this.params(), this.callback('found'));
         },
-        paginator: function ()
+        /*paginator: function ()
         {
             return this.element.children('.footer').find(".gridpages")
-        },
+        },*/
         found: function (items)
         {
             if (!this.options.columns)
