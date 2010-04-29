@@ -1,2 +1,2 @@
-_args = ["install","http://github.com/pinhook/phui","phui"];
+_args = ["install","http://github.com/pinhook/phui/","phui"];
 load("steal/plugin")
