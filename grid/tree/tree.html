@@ -25,18 +25,18 @@
                             "jquery/model",
                             "jquery/dom/fixtures").then(function($){
                 
-                var pause = function(millis) {
+                /*var pause = function(millis) {
                     var date = new Date();
                     var curDate = null;
                     
                     do { curDate = new Date(); } 
                     while(curDate-date < millis);
-                } 
+                }*/ 
                 
                 $.fixture["-make"](["resources","resource"],Math.round(Math.random()*10)+1,function(num){
-                    var resourceId = Math.round(Math.random() * num);
-                    pause(100);
-                    var parentId = Math.round(Math.random() * num);
+                    var resourceId = Math.round(Math.random() * 100);
+                    //pause(100);
+                    var parentId = Math.round(Math.random() * 100);
                     return {
                         id        :    resourceId,
                         parentId  :    parentId,
@@ -60,7 +60,7 @@
                             data: params,
                             success: this.callback(['wrapMany',success]),
                             error: error,
-                            fixture: "-resources" //calculates the fixture path from the url and type.
+                            fixture: "~resources" //calculates the fixture path from the url and type.
                         })
                     },
                     findOne : function(params, success, error){
