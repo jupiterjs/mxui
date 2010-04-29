@@ -7,7 +7,7 @@ steal.plugins('phui/grid','jquery/event/drop','phui/sortable').then(function($){
 		}
 	},{
 		init : function(){
-			this.element.html("//phui/grid/groupable/views/init.ejs",this.options);
+			this.element.html("//phui/grid/groupable/views/init",this.options);
 			this.groups = [];
 			
 			
