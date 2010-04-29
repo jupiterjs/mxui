@@ -21,15 +21,26 @@
         </script>
         <script type='text/javascript'>
             steal.plugins("phui/grid/tree",
-                            "phui/grid/tree/fixtures",
                             "phui/filler",
                             "jquery/model",
                             "jquery/dom/fixtures").then(function($){
                 
+                var pause = function(millis) {
+                    var date = new Date();
+                    var curDate = null;
+                    
+                    do { curDate = new Date(); } 
+                    while(curDate-date < millis);
+                } 
+                
                 $.fixture["-make"](["resources","resource"],Math.round(Math.random()*10)+1,function(num){
+                    var resourceId = Math.round(Math.random() * num);
+                    pause(100);
+                    var parentId = Math.round(Math.random() * num);
                     return {
-                        id        :    num,
-                        name : "Resource "+num,
+                        id        :    resourceId,
+                        parentId  :    parentId,
+                        name : "Resource "+resourceId,
                         description: "Resource "+num+" description. <br/> You might want to read this.",
                         date: new Date(Math.random()*1000*60*60*24*365*30),
                         location: Math.round(Math.random()*2000)+" Pinetree Ln",
