@@ -31,15 +31,15 @@
 		            var resource = resources[resourceId]
 		            if (num < 50) {
 		                return { "name": "root " + num,
-		                    "author": "Justin Meyer",
+		                    "author": "Justin Meyer" + num,
 		                    "parentId": null,
 							childCount: 0
 		                }
 
 		            } else {
-		                resource.childCount =  resource.childCount ? 1 : resource.childCount+ 1
+		                resource.childCount =  resource.childCount ? resource.childCount + 1 : 1
 						return { "name": "This is resource " + num,
-		                    "author": "Justin Meyer",
+		                    "author": "Justin Meyer" + num,
 		                    "parentId": resourceId
 		                }
 		            }
@@ -72,9 +72,8 @@
 					},
                     columns: {
                         name: "Name",
-                        description: "Description",
-                        date: "Date",
-                        location: "Location"
+                        author: "Author",
+						childCount: "Child Count"
                     }, 
                     indentedColumn: 'name',
                     render : {
