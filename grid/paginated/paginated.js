@@ -19,8 +19,13 @@ steal.plugins('phui/grid','phui/paginator/page').then(function($){
 			new this.options.paginatorType(this.element.find(".gridpages")[0],this.options.paginatorOptions);
 		},
 		updated : function(el, ev, params){
-			this.element.children(".footer").find(".pagelisting").html(
+			var footer = this.element.children(".footer")
+			
+			footer.find(".pagelisting").html(
 				this.options.pageListingText(params)
+			)
+			footer.find(".pagenumber").val(
+				Phui.Paginator.pageData(params.params).page+1
 			)
 			//update paginator
 			this.element.find(".gridpages").controller().update(params.params)
