@@ -33,13 +33,14 @@
 		                return { "name": "root " + num,
 		                    "author": "Justin Meyer",
 		                    "parentId": null,
+							childCount: 0
 		                }
 
 		            } else {
 		                resource.childCount =  resource.childCount ? 1 : resource.childCount+ 1
 						return { "name": "This is resource " + num,
 		                    "author": "Justin Meyer",
-		                    "parentId": resourceId,
+		                    "parentId": resourceId
 		                }
 		            }
 		
