@@ -1,9 +1,0 @@
-[ 
- {"id":1, "name": "Resource 1", "description": "Resource 1 description", "date": "01/01/1974", "location": "1 Pinetree Ln"},
- {"id":2, "name": "Resource 2", "description": "Resource 2 description", "date": "02/02/1975", "location": "2 Pinetree Ln"},
- {"id":3, "name": "Resource 3", "description": "Resource 3 description", "date": "03/03/1976", "location": "3 Pinetree Ln"},
- {"id":4, "name": "Resource 4", "description": "Resource 4 description", "date": "04/04/1977", "location": "4 Pinetree Ln"},
- {"id":5, "name": "Resource 5", "description": "Resource 5 description", "date": "05/05/1978", "location": "5 Pinetree Ln"},
- {"id":6, "name": "Resource 6", "description": "Resource 6 description", "date": "06/06/1979", "location": "6 Pinetree Ln"},
- {"id":7, "name": "Resource 7", "description": "Resource 7 description", "date": "07/07/1980", "location": "7 Pinetree Ln"}
-]
