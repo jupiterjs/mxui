@@ -36,7 +36,8 @@
 		                }
 
 		            } else {
-		                return { "name": "This is resource " + num,
+		                resource.childCount =  resource.childCount ? 1 : resource.childCount+ 1
+						return { "name": "This is resource " + num,
 		                    "author": "Justin Meyer",
 		                    "parentId": resourceId,
 		                }
