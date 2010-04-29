@@ -25,7 +25,26 @@
                             "jquery/model",
                             "jquery/dom/fixtures").then(function($){
                 
-                $.Model.extend("Resource",{
+                $.fixture["-make"](["resources", "resource"], 2000, function(num, resources) {
+		
+		            var resourceId = parseInt(Math.random() * num);
+		            var resource = resources[resourceId]
+		            if (num < 50) {
+		                return { "name": "root " + num,
+		                    "author": "Justin Meyer",
+		                    "parentId": null,
+		                }
+
+		            } else {
+		                return { "name": "This is resource " + num,
+		                    "author": "Justin Meyer",
+		                    "parentId": resourceId,
+		                }
+		            }
+		
+		        })
+				
+				$.Model.extend("Resource",{
                     findAll : function(params, success, error){
                         $.ajax({
                             url: '/resource',
@@ -34,7 +53,7 @@
                             data: params,
                             success: this.callback(['wrapMany',success]),
                             error: error,
-                            fixture: '//phui/grid/tree/fixtures/'+ (params.parentId ? params.parentId : 'root') +'.json.get'
+                            fixture: "-resources"
                         })
                     }
                 },{
@@ -46,6 +65,9 @@
                     limit: 100,
                     offset: 0,
                     parentId: 0,
+					params : {
+						parentId: null
+					},
                     columns: {
                         name: "Name",
                         description: "Description",

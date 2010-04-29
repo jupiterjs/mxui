@@ -14,6 +14,7 @@ steal.plugins('phui/grid','phui/paginator/page').then(function($){
 	},
 	{
 		init : function(){
+			$.View("//phui/grid/paginated/views/footer");
 			new this.options.gridType(this.element[0],this.options);
 			this.element.find(".footer").replaceWith("//phui/grid/paginated/views/footer",{});
 			new this.options.paginatorType(this.element.find(".gridpages")[0],this.options.paginatorOptions);
