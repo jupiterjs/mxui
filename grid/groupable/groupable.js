@@ -7,7 +7,7 @@ steal.plugins('phui/grid','jquery/event/drop','phui/sortable').then(function($){
 		}
 	},{
 		init : function(){
-			this.element.html("//phui/grid/groupable/views/init.ejs",this.options);
+			this.element.html("//phui/grid/groupable/views/init",this.options);
 			this.groups = [];
 			
 			
@@ -23,7 +23,7 @@ steal.plugins('phui/grid','jquery/event/drop','phui/sortable').then(function($){
 					//check that we haven't already added
 					return $("<div class='groupDrag'>"+
 					 		  el.text()+
-							"<a href='javascript://' class='remove'>x</a></div>").
+							"<a href='javascript://' class='remove'>&nbsp;</a></div>").
 							addClass(el.parent()[0].className)
 						
 				}
@@ -45,9 +45,9 @@ steal.plugins('phui/grid','jquery/event/drop','phui/sortable').then(function($){
 			if(itemNum==0){
 				for(var i =0; i < numGroups;i++){
 					var group = options.group[i]
-					html.push("<tr>")
+					html.push("<tr class='group-col'>")
 					html.push( new Array(i+1).join("<td></td>") );
-					html.push( "<td>"+group+":",
+					html.push( "<td>"+this.options.columns[group]+":",
 								options.render && options.render[group] ?  options.render[group](item) : item[group],
 								"</td>")
 					html.push( new Array(colsNum-i ).join("<td></td>") );
@@ -58,9 +58,9 @@ steal.plugins('phui/grid','jquery/event/drop','phui/sortable').then(function($){
 				for(var i = 0; i< numGroups ; i++){
 					var group = options.group[i]
 					if(!equal || item[group] !== items[itemNum-1][group]){
-						html.push("<tr>")
+						html.push("<tr class='group-col'>")
 						html.push( new Array(i+1).join("<td></td>") );
-						html.push( "<td>"+group+":",
+						html.push( "<td>"+this.options.columns[group]+":",
 									options.render && options.render[group] ?  options.render[group](item) : item[group],
 									"</td>")
 						html.push( new Array(colsNum - i).join("<td></td>") );

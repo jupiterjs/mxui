@@ -20,7 +20,7 @@ steal.plugins('phui/grid','phui/paginator/page').then(function($){
 			new this.options.paginatorType(this.element.find(".gridpages")[0],this.options.paginatorOptions);
 		},
 		updated : function(el, ev, params){
-			var footer = this.element.children(".footer")
+			var footer = this.element.find(".footer")
 			
 			footer.find(".pagelisting").html(
 				this.options.pageListingText(params)
