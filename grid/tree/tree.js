@@ -20,14 +20,19 @@ steal.plugins('phui/grid')
                 this.options.render[indentedColumn] = function(instance){
                     var content = [];
             
-                    if (instance.hasChildren()) {
-                        content.push('<span class="expand ui-icon ui-icon-triangle-1-e" style="float: left; margin-left: ');
-                        content.push(instance.depth * 20);
-                        content.push('px; display: block;height:12px;">');
-                        content.push('</span>');
-                    }
-                    content.push(oldRender.apply(this, arguments));
-                    return content.join("");
+			         content.push('<span ');
+                     if (instance.childCount) {
+					 	content.push('class="expand ui-icon ui-icon-triangle-1-e" ');
+					 } else {
+						content.push('class="ui-icon ui-icon-document" ');					 	
+					 }
+                     content.push('style="float: left; margin-left: ');
+                     content.push(instance.depth * 20);
+                     content.push('px; display: block;height:13px;">');
+					 content.push('</span>');
+					
+                     content.push(oldRender.apply(this, arguments));
+                     return content.join("");
                 }
             }
             
