@@ -1,4 +1,4 @@
 steal
   .plugins("funcunit/qunit")
-  .apps("paginator")
+  .plugins("paginator")
   .then("tests/basic")

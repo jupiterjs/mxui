@@ -1,6 +1,6 @@
 //we probably have to have this only describing where the tests are
 steal
- .apps("jupiter/menu")  //load your app
+ .plugins("jupiter/menu")  //load your app
  .plugins('steal/test/qunit')  //load qunit
  .then("menu_test")
  

@@ -1,6 +1,6 @@
 //we probably have to have this only describing where the tests are
 steal
- .apps("jupiter/navigation")  //load your app
+ .plugins("jupiter/navigation")  //load your app
  .plugins('steal/test/qunit')  //load qunit
  .then("navigation_test")
  

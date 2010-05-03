@@ -1,6 +1,6 @@
 //we probably have to have this only describing where the tests are
 steal
- .apps("phui/tabs")  //load your app
+ .plugins("phui/tabs")  //load your app
  .plugins('steal/test/qunit')  //load qunit
  .then("tabs_test")
  

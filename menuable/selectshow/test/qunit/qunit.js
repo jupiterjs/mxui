@@ -1,4 +1,4 @@
 steal
   .plugins("funcunit/qunit")
-  .apps("selectopen")
+  .plugins("selectopen")
   .then("tests/basic")

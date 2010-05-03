@@ -1,6 +1,6 @@
 //we probably have to have this only describing where the tests are
 steal
- .apps("jupiter/positionable")  //load your app
+ .plugins("jupiter/positionable")  //load your app
  .plugins('steal/test/qunit')  //load qunit
  .then("positionable_test")
  

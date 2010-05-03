@@ -1,4 +1,4 @@
 steal
   .plugins("funcunit/qunit")
-  .apps("tree")
+  .plugins("tree")
   .then("tests/basic")

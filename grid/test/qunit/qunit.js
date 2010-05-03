@@ -1,4 +1,4 @@
 steal
   .plugins("funcunit/qunit")
-  .apps("grid")
+  .plugins("grid")
   .then("tests/basic")
