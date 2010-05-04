@@ -35,7 +35,7 @@ steal.plugins('phui/grid','jquery/event/drop','phui/sortable').then(function($){
 			//which group are we comparing?
 			var numGroups = options.group ? options.group.length : 0
 			if(numGroups == 0){
-				return $.View("//phui/grid/views/row",{item: item, options: options})
+				return $.View("//phui/grid/views/row",{item: item, options: options, i: itemNum})
 			}
 			//column we are matching ....
 			var group,html = [], colsNum = 0;
@@ -69,7 +69,7 @@ steal.plugins('phui/grid','jquery/event/drop','phui/sortable').then(function($){
 					}
 				}
 			}
-			html.push($.View("//phui/grid/views/row",{item: item, options: options}))
+            html.push($.View("//phui/grid/views/row", { item: item, options: options, i: itemNum }))
 			return html.join('')
 			//is it the same as the previous?
 			//deal with groups
