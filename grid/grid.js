@@ -1,9 +1,9 @@
 steal.plugins('jquery/controller', 
-        'jquery/view/ejs', 
-        'jquery/event/drag', 
-        //'phui/paginator/page', 
-        "jquery/dom/dimensions",
-        "phui/filler").then(function ($)
+			  'jquery/view/ejs', 
+			  'jquery/event/drag', 
+			  //'phui/paginator/page', 
+			  "jquery/dom/dimensions",
+			  "phui/filler").then(function ($)
 {
     $.Controller.extend("Phui.Grid", {
         defaults: {
@@ -16,9 +16,9 @@ steal.plugins('jquery/controller',
             model: null,
             display: {},
             //paginatorType: Phui.Paginator.Page,
-      renderer : function(inst, options, i){
-        return $.View("//phui/grid/views/row",{ item: inst, options: options, i: i })
-      }
+			renderer : function(inst, options, i){
+				return $.View("//phui/grid/views/row",{ item: inst, options: options, i: i })
+			}
         },
         listensTo: ["paginate"]
 
@@ -52,12 +52,12 @@ steal.plugins('jquery/controller',
             body.show();
             header.show();
         },
-    /**
-     * Listens for page events
-     * @param {Object} el
-     * @param {Object} ev
-     * @param {Object} data
-     */
+		/**
+		 * Listens for page events
+		 * @param {Object} el
+		 * @param {Object} ev
+		 * @param {Object} data
+		 */
         paginate: function (el, ev, data)
         {
             if (typeof data.offset == "number" && this.options.offset != data.offset)
@@ -80,7 +80,7 @@ steal.plugins('jquery/controller',
         {
             ev.preventDefault();
             var page = parseInt(el.find('input').val(), 10) - 1,
-        offset = page * this.options.limit;
+				offset = page * this.options.limit;
 
             this.element.trigger("paginate", {
                 offset: offset
@@ -89,7 +89,7 @@ steal.plugins('jquery/controller',
         findAll: function ()
         {
             this.element.trigger("updating")
-      this.element.children('.body').find("table").html("<tbody><tr><td>Loading ...<td></tr></tbody>")
+			this.element.children('.body').find("table").html("<tbody><tr><td>Loading ...<td></tr></tbody>")
             this.options.model.findAll(this.params(), this.callback('found'));
         },
         /*paginator: function ()
@@ -126,8 +126,8 @@ steal.plugins('jquery/controller',
             tbody.find("tr.spacing").children("th").each(function ()
             {
                 var $td = $(this),
-          $spacer = $td.children().eq(0),
-          width = $spacer.outerWidth(), height = $spacer.outerHeight();
+					$spacer = $td.children().eq(0),
+					width = $spacer.outerWidth(), height = $spacer.outerHeight();
                 $td.css({ padding: 0, margin: 0 })
                 $spacer.outerWidth(width + 2).css("float", "none").html("").height(1)
             })
@@ -146,9 +146,9 @@ steal.plugins('jquery/controller',
         sizeTitle: function ()
         {
             var body = this.element.children('.body'),
-        first = body.find("tbody").find("tr:first").children(),
-        header = this.element.children('.header'),
-        title = this.element.children('.header').find("th");
+				first = body.find("tbody").find("tr:first").children(),
+				header = this.element.children('.header'),
+				title = this.element.children('.header').find("th");
 
 
             for (var i = 0; i < title.length; i++)
@@ -199,7 +199,7 @@ steal.plugins('jquery/controller',
         "th click": function (el, ev)
         {
             
-      var attr = el[0].className.match(/([^ ]+)-column-header/)[1];
+			var attr = el[0].className.match(/([^ ]+)-column-header/)[1];
             var sort = el.hasClass("sort-asc") ? "desc" : "asc"
             //see if we might already have something with this
             var i = 0;
@@ -226,7 +226,7 @@ steal.plugins('jquery/controller',
                 resize.height(this.element.children(".body").outerHeight() + el.outerHeight()).outerWidth(el.outerWidth());
                 resize.css(offset)
                 ev.preventDefault();
-        //prevent others from dragging
+				//prevent others from dragging
             } else
             {
                 drag.cancel();
@@ -234,7 +234,7 @@ steal.plugins('jquery/controller',
         },
         "th dragmove": function (el, ev, drag)
         {
-      ev.preventDefault();
+			ev.preventDefault();
             var width = ev.vector().minus(el.offsetv()).left();
 
             if (width > el.find("span:first").outerWidth())
@@ -244,8 +244,8 @@ steal.plugins('jquery/controller',
         {
             ev.preventDefault();
             var width = ev.vector().minus(el.offsetv()).left(),
-        attr = el[0].className.match(/([^ ]+)-column-header/)[1],
-        cg;
+				attr = el[0].className.match(/([^ ]+)-column-header/)[1],
+				cg;
             if (width > el.find("span:first").outerWidth())
                 cg = this.element.find("colgroup:eq(" + el.index() + ")").outerWidth(width)
             else
@@ -284,7 +284,7 @@ steal.plugins('jquery/controller',
         },
         replace: function(el, message){
             var html = this._renderMessages([message]);
-            el.replace(html.join(''));
+            el.replaceWith(html.join(''));
             this.element.trigger('resize');
         },
         insert: function (el, messages)
@@ -293,25 +293,21 @@ steal.plugins('jquery/controller',
             el.after(html.join(''));
             this.element.trigger('resize');
         },
-        _renderMessages: function (messages) {
-            var html = [], options = this.options;
-            $.each(messages, function (id, message) {
-                html.push("<tr class='message " + message.identity() + "'" + jQuery.View.EJS.Scanner.to_text(message) + ">")
-                $.each(options.columns, function (name, title) {
-                    var text = options.render && options.render[name] ? options.render[name](message) : message[name];
-                    if (!text || text == "") {
-                        text = "&nbsp;";
-                    }
-
-                    html.push("<td>" + text + "</td>");
-                })
+        _renderMessages: function (items) {
+            var html = [], i, item;
+            var options = $.extend(true, {}, this.options, {
+                renderPartial: true
             })
+            for(i =0; i < items.length; i++){
+	            item = items[i]
+	            html.push(this.options.renderer(item, options, i, items))
+            }
             return html;
         },
-    update : function(options){
-      $.extend(this.options, options)
-      this.findAll();
-    }
+		update : function(options){
+			$.extend(this.options, options)
+			this.findAll();
+		}
     })
 
 })

@@ -1,4 +1,4 @@
-<tr <%= item%> class='<%= i==0 ? "first-row" : ""%>'>
+<tr <%= item%> class='<%= i==0 && !options.renderPartial ? "first-row" : ""%>'>
 	
 <%$.each(this.options.group, function(i, group){%>
 	<td> </td>
