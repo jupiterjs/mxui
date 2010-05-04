@@ -14,7 +14,7 @@ steal.plugins('jquery/controller','jquery/view/ejs','jquery/event/default').then
 				limit = options.limit, 
 				pageCount = options.pageCount || 10,
 				page= Math.floor(offset / limit),
-				totalPages= Math.floor(count / limit),
+				totalPages= Math.ceil(count / limit),
 				start= Math.max(
 						 	Math.min( page  - Math.floor(pageCount / 2), 
 									 totalPages - pageCount),

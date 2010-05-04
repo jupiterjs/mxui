@@ -26,12 +26,11 @@ steal.plugins('phui/grid')
 					 } else {
 						content.push('class="ui-icon ui-icon-document" ');					 	
 					 }
-                     content.push('style="float: left; margin-left: ');
-                     content.push(instance.depth * 20);
-                     content.push('px; display: block;height:13px;">');
-					 content.push('</span>');
-					
-                     content.push(oldRender.apply(this, arguments));
+                     content.push('style="float: left; margin-left: ',
+					 				instance.depth * 20,
+									'px; display: block;height:13px;">',
+									'</span>',
+									oldRender.apply(this, arguments));
                      return content.join("");
                 }
             }
