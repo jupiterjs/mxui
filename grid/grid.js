@@ -14,6 +14,7 @@ steal.plugins('jquery/controller',
             order: [],
             group: [],
             model: null,
+			hoverClass: "hover", 
             display: {},
             //paginatorType: Phui.Paginator.Page,
 			renderer : function(inst, options, i){
@@ -307,7 +308,13 @@ steal.plugins('jquery/controller',
 		update : function(options){
 			$.extend(this.options, options)
 			this.findAll();
-		}
+		},
+        "tr mouseenter": function(el, ev){
+            el.addClass(this.options.hoverClass);
+        },
+        "tr mouseleave": function (el, ev) {
+            el.removeClass(this.options.hoverClass);
+        }
     })
 
 })
