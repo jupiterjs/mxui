@@ -14,6 +14,7 @@ steal.plugins('jquery/controller',
             order: [],
             group: [],
             model: null,
+			hoverClass: "hover", 
             display: {},
             //paginatorType: Phui.Paginator.Page,
 			renderer : function(inst, options, i){
@@ -196,26 +197,24 @@ steal.plugins('jquery/controller',
         {
             el.removeClass("hover")
         },
-        "th click": function (el, ev)
-        {
-            
-			var attr = el[0].className.match(/([^ ]+)-column-header/)[1];
-            var sort = el.hasClass("sort-asc") ? "desc" : "asc"
-            //see if we might already have something with this
-            var i = 0;
-            while (i < this.options.order.length)
-            {
-                if (this.options.order[i].indexOf(attr + " ") == 0)
-                {
-                    this.options.order.splice(i, 1)
-                } else
-                {
-                    i++;
-                }
-            }
-            this.options.order.unshift(attr + " " + sort)
-            this.findAll();
-        },
+	     "th click": function (el, ev) {
+	
+	          var attr = el[0].className.match(/([^ ]+)-column-header/)[1];
+	          var sort = el.hasClass("sort-asc") ? "desc" : "asc"
+	          //see if we might already have something with this
+	          var i = 0;
+	          while (i < this.options.order.length) {
+	              if (this.options.order[i].indexOf(attr + " ") == 0) {
+	                  this.options.order.splice(i, 1)
+	              } else {
+	                  i++;
+	              }
+	          }
+	          if (!el.hasClass("sort-desc")) { // otherwise reset this column's search
+	              this.options.order.unshift(attr + " " + sort)
+	          }
+	          this.findAll();
+	     },
         "th dragdown": function (el, ev, drag)
         {
             if (this.isMouseOnRight(el, ev, 2))
@@ -307,7 +306,13 @@ steal.plugins('jquery/controller',
 		update : function(options){
 			$.extend(this.options, options)
 			this.findAll();
-		}
+		},
+        "tr mouseenter": function(el, ev){
+            el.addClass(this.options.hoverClass);
+        },
+        "tr mouseleave": function (el, ev) {
+            el.removeClass(this.options.hoverClass);
+        }
     })
 
 })
