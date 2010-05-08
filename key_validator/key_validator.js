@@ -1,35 +1,44 @@
-steal.plugins('jquery/controller').then(function(){
+steal.plugins('jquery/controller','phui/keycode').then(function(){
+	//get the start selection / cursor
+	$.fn.selectionStart = function(){
+		var el = this[0];
+		if (el.createTextRange) {
+				var r = document.selection.createRange().duplicate()
+				r.moveEnd('character', el.value.length)
+				if (r.text == '') return el.value.length
+				return el.value.lastIndexOf(r.text)
+		} else return el.selectionStart 
+	}
+	$.fn.selectionEnd = function(){
+		var el = this[0];
+		if (el.createTextRange) {
+			var r = document.selection.createRange().duplicate()
+			r.moveStart('character', -el.value.length)
+			return r.text.length 
+		} else return el.selectionEnd 
+	}
+	
+	/**
+	 * Only allows what matches the regexp.
+	 */
 	$.Controller.extend("Phui.KeyValidator",{
 		defaults : function(){
 			regExp : /.*/
 		}
 	},{
 		"keypress" : function(el, ev){
-			console.log(ev.charCode+" "+ev.keyCode)
-			return;
-			var code = ev.keyCode ? ev.keyCode : ev.charCode,
-				navigationKeyCodes = [8,46,37,39];
-				
-			
-			// if it's backspace, delete don't validate
-			if(ev.keyCode == 8 || ev.keyCode == 46 && !ev.charCode && String.fromCharCode(46) != '.') {
-				this.element.trigger("change"); 
-			    return true;
+			var key = $.keyname(ev)
+			if(key.length > 1){ //it is a special, non printable character
+				return;
 			}
-			// if it's left/right don't validate also
-			if(ev.keyCode == 37 || ev.keyCode == 39 ) {
-				return true;
+			var current = this.element.val(),
+				before = current.substr(0,this.element.selectionStart()),
+				end = current.substr(this.element.selectionEnd()),
+				newVal = before+key+end
+
+			if(!this.options.regExp.test(newVal)){
+				ev.preventDefault();
 			}
-				
-			
-			// if it's a number or dot try to validate the next value
-			if(code >= 48 && code <= 57 || String.fromCharCode(code) == '.')
-			    nextValue = el.val() + String.fromCharCode(code); 
-            if(!this.isNumeric(nextValue)) ev.preventDefault();
-			this.element.trigger("change");
-		},
-		"keyup" : function(el, ev){
-			console.log(ev.charCode+" "+ev.keyCode)
 		}
 	})
 })
