@@ -42,6 +42,20 @@ steal.plugins('jquery/controller', 'jquery/view/ejs', 'phui/positionable').then(
 			}).trigger("move", this.element);
 			
 			dropdown.hide();
+			
+			dropdown.delegate("li", "click", function(ev) {
+				alert($(this).model().value)
+			})
+			
+			dropdown.delegate("li", "mouseenter", function(ev) {
+				$(this).css("color","white");
+				$(this).css("background-color","blue");
+			})
+			
+			dropdown.delegate("li", "mouseleave", function(ev) {
+				$(this).css("color","");
+				$(this).css("background-color","");
+			})						
         },
         
         /*
@@ -70,13 +84,13 @@ steal.plugins('jquery/controller', 'jquery/view/ejs', 'phui/positionable').then(
         },
         
         "input focusout": function(el, ev){
-            $(".phui_combobox_dropdown").hide();            
+            //$(".phui_combobox_dropdown").hide();            
         },		
         
         destroy : function() {
             this.number = null;
             this.rawElement = null;
-			//TODO: unbind dropdown handlers 
+			$(".phui_combobox_dropdown li").undelegate();
         }
         
         
