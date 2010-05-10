@@ -26,17 +26,18 @@
                             "jquery/model",
                             "jquery/dom/fixtures").then(function($){
                 
-                $.fixture["-make"](["documents", "document"], 20, function(num, document) {
+                $.fixture["-make"](["documents", "document"], 50, function(num, document) {
                     
 					    var documentId = parseInt(Math.random() * num);
 		                var document = document[documentId]
                         var experiment = parseInt(Math.random() * 10);
-			            if (num < 50) {
+			            if (num < 3) {
 							return {
 								"value": "document_" + num,
 								"text": "Document" + num,
 								"type": experiment > 6 ? "file" : "folder",								
 								"disabled": experiment > 9 ? true : false,
+								"depth": 0,
 		                        "parentId": null,
 							    childCount: 0								
 							}
@@ -47,6 +48,7 @@
 								"text": "Document" + num,
 								"type": experiment > 6 ? "file" : "folder",
 								"disabled": experiment > 9 ? true : false,
+								"depth": document.depth + 1,
 		                        "parentId": documentId
 		                    }
 						}
@@ -74,9 +76,16 @@
                     render : {
                         text : function(instance){
 							var html = [];
-							html.push("<span style=\"float:left; margin-left:\"");
-							if(instance.childCount) html.push("")
-							html.push("display: block;height:13px;\">" + instance.text + "</span>");
+							html.push("<span ");
+							html.push(" style=\"float:left; margin-left:");
+							if(instance.depth) html.push(instance.depth * 20 + "px;"); 
+							html.push("display: block;height:13px;\" ");
+						    if(instance.type == "folder") html.push(" class=\"ui-icon ui-icon-folder-open\" ");
+							if(instance.type == "file") html.push(" class=\"ui-icon ui-icon-document\"> ");							
+							html.push("</span>");
+							
+							html.push("<span>" + instance.text + "</span>")
+							
                             return html.join("");
                         }
                     }
