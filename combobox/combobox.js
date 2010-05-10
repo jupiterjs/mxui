@@ -34,6 +34,8 @@ steal.plugins('jquery/controller', 'jquery/view/ejs', 'phui/positionable').then(
             }));
             dropdown.addClass("phui_combobox_dropdown");
 			dropdown.css("width", this.element.css("width"));
+			
+			// set maxHeight
 			dropdown.css("height", this.options.maxHeight);
 
 			dropdown.phui_positionable({
@@ -55,8 +57,17 @@ steal.plugins('jquery/controller', 'jquery/view/ejs', 'phui/positionable').then(
 			dropdown.delegate("li", "mouseleave", function(ev) {
 				$(this).css("color","");
 				$(this).css("background-color","");
-			})						
+			})
+			
+			this.buildLookupTable(instances);
         },
+		
+		/*
+		 * 
+		 */
+		buildLookupTable : function(instances) {
+		
+		},
         
         /*
          * 1) Lookup the lookup table
