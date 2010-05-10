@@ -1,0 +1,91 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
+            "http://www.w3.org/TR/html4/strict.dtd">
+<html lang="en">
+    <head>
+        <title>combobox</title>
+        <style type='text/css'>
+            body {font-family: verdana}
+            .error {border: solid 1px red;}
+            .error_text { color: red; font-size: 10px;}
+            td {padding: 3px;}
+        </style>
+        <link type="text/css" href="../smoothness/jquery-ui-1.7.2.custom.css" rel="stylesheet" />		
+        <link type="text/css" href="combobox.css" rel="stylesheet" />
+    </head>
+    <body>
+
+        <div id="combobox_demo"></div>
+		<div><h1>Some html that dropdown draws over.</h1></div>
+		<div><button type="button">Dummy</button></div>
+
+        <script type='text/javascript' 
+                src='../../steal/steal.js'>   
+        </script>
+        <script type='text/javascript'>
+            steal.plugins("phui/combobox",
+                            "jquery/model",
+                            "jquery/dom/fixtures").then(function($){
+                
+                $.fixture["-make"](["documents", "document"], 20, function(num, document) {
+                    
+					    var documentId = parseInt(Math.random() * num);
+		                var document = document[documentId]
+                        var experiment = parseInt(Math.random() * 10);
+			            if (num < 50) {
+							return {
+								"value": "document_" + num,
+								"text": "Document" + num,
+								"type": experiment > 6 ? "file" : "folder",								
+								"disabled": experiment > 9 ? true : false,
+		                        "parentId": null,
+							    childCount: 0								
+							}
+						} else {
+		                    document.childCount =  document.childCount ? document.childCount + 1 : 1
+						    return { 
+                                "value": "document_" + num,
+								"text": "Document" + num,
+								"type": experiment > 6 ? "file" : "folder",
+								"disabled": experiment > 9 ? true : false,
+		                        "parentId": documentId
+		                    }
+						}
+                })
+                
+                $.Model.extend("Document",{
+                    findAll : function(params, success, error){
+                        $.ajax({
+                            url: '/document',
+                            type: 'get',
+                            dataType: 'json',
+                            data: params,
+                            success: this.callback(['wrapMany',success]),
+                            error: error,
+                            fixture: "-documents"
+                        })
+                    }
+                },{});
+                
+                $("#combobox_demo").phui_combobox({
+                    model: Document,
+                    icon : "icon",
+                    value : "value",
+                    text : "text", 
+                    render : {
+                        text : function(instance){
+							var html = [];
+							html.push("<span style=\"float:left; margin-left:\"");
+							if(instance.childCount) html.push("")
+							html.push("display: block;height:13px;\"></span>");
+                            return html.join("");
+                        }
+                    }
+                });
+                
+            });
+            
+            steal.start();
+            
+        </script>
+    </body>
+</html>

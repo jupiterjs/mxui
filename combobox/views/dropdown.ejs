@@ -1,0 +1,8 @@
+<ul>
+    <%for(var i =0; i < instances.length; i++){%>
+    	<%var item = instances[i] %>
+    	<li <%= item%>>
+	        <%= options.render && options.text && options.render[options.text] ?  options.render[options.text](item) : item[options.text] %>
+	    </li>
+    <%}%>
+</ul>
