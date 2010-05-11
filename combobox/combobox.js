@@ -33,8 +33,7 @@ steal.plugins('jquery/controller',
         },
 		
 		drawDropdown : function(instances) {
-			this.dropdown.trigger("draw", instances);
-			this.dropdown.trigger("show");			
+			this.dropdown.trigger("draw", instances);			
 		},		
         
         "input keypress": function(el, ev){
@@ -49,6 +48,8 @@ steal.plugins('jquery/controller',
             
             if ($.trim(newVal) === "") {
                 this.options.model.findAll(this.options.params || {}, this.callback("drawDropdown"));
+				//TODO: fix synchronization draw/hide
+				this.dropdown.trigger("show");
                 return;
             }
             
