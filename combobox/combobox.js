@@ -39,39 +39,6 @@ steal.plugins('jquery/controller',
 			this.dropdown.trigger("show");			
 		},		
         
-        /*
-         */
-        /*buildLookupStructure: function(instances){
-            for (var i = 0; i < instances.length; i++) {
-                var firstChar = instances[i].text.substr(0, 1);
-                if (!this.lookupStructure[firstChar]) 
-                    this.lookupStructure[firstChar] = [];
-                this.lookupStructure[firstChar].push(instances[i]);
-            }
-        },*/
-        
-        /*
-         */
-        /*lookup: function(query){
-            var results = [];
-            var firstChar = query.substr(0, 1);
-            
-            for (var k in this.lookupStructure) {
-                if (k == firstChar) {
-                    for (var j = 0; j < this.lookupStructure[k].length; j++) {
-                        results.push(this.lookupStructure[k][j])
-                    }
-                }
-            }
-            
-            for (var i = 0; i < results.length; i++) {
-                if (results[i].text.indexOf(query) == -1) 
-                    results.splice(i)
-            }
-            
-            return results;
-        },*/
-        
         "input keypress": function(el, ev){
             var key = $.keyname(ev)
             /*if(key.length > 1){ //it is a special, non printable character
