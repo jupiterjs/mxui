@@ -35,6 +35,22 @@ steal.plugins('jquery/controller').then(function($){
 		".spinner-button keypress" : function(el, ev){
 			if(ev.keyCode == 13 && /enabled/.test(el[0].className))
 				this.element.trigger( el.hasClass("up") ? "increment" : "decrement" );
-		}
+		},
+				".up mouseenter" : function(el, ev) {
+			el.css("background-image", "up-hover.png");
+		},
+		".up mouseenter" : function(el, ev) {
+            el.addClass("upHover");			
+		},
+		".down mouseenter" : function(el, ev) {
+            el.addClass("downHover");			
+		},
+		".up mouseleave" : function(el, ev) {
+            el.removeClass("upHover");			
+		},
+		".down mouseleave" : function(el, ev) {
+            el.removeClass("downHover");			
+		}						
+
 	})
 })
