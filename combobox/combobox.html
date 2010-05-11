@@ -34,23 +34,25 @@
 			            if (num < 3) {
 							return {
 								"value": "document_" + num,
-								"text": "Document" + num,
-								"type": experiment > 6 ? "file" : "folder",								
+							    "text": experiment > 6 ? "file" + num : "dir" + num,
+								"type": experiment > 6 ? "file" : "folder",
 								"disabled": experiment > 9 ? true : false,
 								"depth": 0,
 		                        "parentId": null,
-							    childCount: 0								
+								children: []
 							}
 						} else {
-		                    document.childCount =  document.childCount ? document.childCount + 1 : 1
-						    return { 
+						    var child =  { 
                                 "value": "document_" + num,
-								"text": "Document" + num,
+								"text": experiment > 6 ? "file" + num : "dir" + num,
 								"type": experiment > 6 ? "file" : "folder",
 								"disabled": experiment > 9 ? true : false,
 								"depth": document.depth + 1,
-		                        "parentId": documentId
+		                        "parentId": documentId,
+								children: []
 		                    }
+		                    document.children.push(child);
+							return child;
 						}
                 })
                 
