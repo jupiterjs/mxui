@@ -19,6 +19,8 @@ $.Controller.extend("Phui.Combobox.DropdownController", {
             options: this.options
         });
 		
+		this.element.trigger("hide");		
+		
         this.element.css("width", this.combobox.css("width"));
         this.element.css("height", this.options.maxHeight);
         

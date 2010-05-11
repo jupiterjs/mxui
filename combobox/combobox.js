@@ -1,9 +1,11 @@
 steal.plugins('jquery/controller',
-              'jquery/view/ejs',
+              'jquery/model',
+			  'jquery/view/ejs',
 			  'phui/positionable',
 			  'phui/key_validator')
-			  .controllers('dropdown')
-			  .then(function(){
+		.models('lookup')
+		.controllers('dropdown')
+		.then(function(){
 
     $.Controller.extend("Phui.Combobox", {
         defaults: {
@@ -11,10 +13,6 @@ steal.plugins('jquery/controller',
         }
     }, {
         /*
-         * 1) this.number = this.Class.counter;
-         * 2) this.Class.counter++;
-         * 2) wrap input with combobox icons (right down arrow)
-         * 3) this.options.model.findAll(this.options.params || {}, this.callback("found")
          */
         init: function(){
             this.lookupStructure = {};
@@ -23,44 +21,38 @@ steal.plugins('jquery/controller',
         },
         
         /*
-         * 1) Create dropdown (div) element
-         * 2) Render dropdown (use options.render and <%= instance %>)
-         * 3) Set position: absolute, position near input (this.element)
-         * 4) Set maxHeight
-         * 4) Hide dropdown
-         * 5) Create lookup table
          */
         found: function(instances){
             this.dropdown = $("<div></div>");
             document.body.appendChild( this.dropdown[0] );
 			this.dropdown.phui_combobox_dropdown( this.element, this.options );
+			//TODO: fix synchronization draw/hide
 			this.dropdown.trigger("draw", instances);			
-			this.dropdown.trigger("hide");
-            this.buildLookupStructure(instances);
+			
+            //this.buildLookupStructure(instances);
+			this.lookup = new Lookup({});
+			this.lookup.build(instances);
         },
 		
 		drawDropdown : function(instances) {
-			this.dropdown.trigger("draw", instances);			
+			this.dropdown.trigger("draw", instances);
+			this.dropdown.trigger("show");			
 		},		
         
         /*
-         * iterate through instances, use text first char as key and instance as value
-         * for the lookup structure
          */
-        buildLookupStructure: function(instances){
+        /*buildLookupStructure: function(instances){
             for (var i = 0; i < instances.length; i++) {
                 var firstChar = instances[i].text.substr(0, 1);
                 if (!this.lookupStructure[firstChar]) 
                     this.lookupStructure[firstChar] = [];
                 this.lookupStructure[firstChar].push(instances[i]);
             }
-        },
+        },*/
         
         /*
-         * 1) Lookup the lookup table
-         * 2) this.val(<looked up text>)
          */
-        lookup: function(query){
+        /*lookup: function(query){
             var results = [];
             var firstChar = query.substr(0, 1);
             
@@ -78,7 +70,7 @@ steal.plugins('jquery/controller',
             }
             
             return results;
-        },
+        },*/
         
         "input keypress": function(el, ev){
             var key = $.keyname(ev)
@@ -95,7 +87,7 @@ steal.plugins('jquery/controller',
                 return;
             }
             
-            var instances = this.lookup(newVal);
+            var instances = this.lookup.query(newVal);
 			this.dropdown.trigger("draw", instances);
 			this.dropdown.trigger("show");
         },
@@ -105,7 +97,9 @@ steal.plugins('jquery/controller',
          * else return dropdown.val()
          */
         val: function(text){
-        
+			if(!text)
+                return this.find("input").val();
+		    this.find("input").val(text);
         },
         
         ".toggle click": function(el, ev){
@@ -118,13 +112,10 @@ steal.plugins('jquery/controller',
         },
         
         destroy: function(){
-            this.lookupStructure = null;
+            //this.lookupStructure = null;
 			this.dropdown.remove();
 			this.dropdown = null;
         }
-        
-        
-        
         
     });
     
