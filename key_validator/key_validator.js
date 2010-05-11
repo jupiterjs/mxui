@@ -23,7 +23,8 @@ steal.plugins('jquery/controller','phui/keycode').then(function(){
 	 */
 	$.Controller.extend("Phui.KeyValidator",{
 		defaults : function(){
-			regExp : /.*/
+			//can be a regexp or a function
+			test : /.*/
 		}
 	},{
 		"keypress" : function(el, ev){
@@ -36,7 +37,7 @@ steal.plugins('jquery/controller','phui/keycode').then(function(){
 				end = current.substr(this.element.selectionEnd()),
 				newVal = before+key+end
 
-			if(!this.options.regExp.test(newVal)){
+			if(!( (typeof this.options.test) == 'object' ? this.options.test.test(newVal) :  this.options.test(newVal))){
 				ev.preventDefault();
 			}
 		}

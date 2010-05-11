@@ -1,0 +1,18 @@
+.phui_spinner {
+	width: 20px;
+	height: 40px;
+}
+.spinner-button {
+	float: left;
+	width: 20px;
+	height: 20px;	
+	background-color: gray;
+	outline: none;
+}
+.phui_spinner .enabledUp {
+	background-color: green;
+}
+.phui_spinner .enabledDown {
+	background-color: red;
+}
+
