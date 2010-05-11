@@ -1,0 +1,45 @@
+.phui_combobox {
+    background-color: #cccccc;
+	border: 1px solid #aaaaaa;
+	width: 320px;
+	height: 32px;
+}
+
+.phui_combobox input {
+	float: left;
+	width: 290px;
+	margin: 5px 0px 5px 5px!important;
+}
+
+.phui_combobox .toggle {
+	float: left;
+	margin-top: 5px;
+	width: 15px;
+	cursor: pointer;
+}
+
+.phui_combobox_dropdown {
+	padding: 0px;
+	border: 1px solid WindowFrame;
+	background-color: Window;
+	overflow: auto;
+}
+
+.phui_combobox_dropdown ul {
+	width: 100%;
+	list-style-position: outside;
+	list-style: none;
+	padding: 0;
+	margin: 0;	
+}
+
+.phui_combobox_dropdown li {
+	margin: 0px;
+	padding: 2px 0px;
+	cursor: pointer;
+	display: block;
+	width: 100%;
+	font: menu;
+	font-size: 12px;
+	overflow: hidden;	
+}
