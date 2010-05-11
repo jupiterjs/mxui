@@ -15,7 +15,6 @@ steal.plugins('jquery/controller',
         /*
          */
         init: function(){
-            this.lookupStructure = {};
             this.element.html( this.view("//phui/combobox/views/init.ejs") );
             this.options.model.findAll(this.options.params || {}, this.callback("found"));
         },
@@ -29,7 +28,6 @@ steal.plugins('jquery/controller',
 			//TODO: fix synchronization draw/hide
 			this.dropdown.trigger("draw", instances);			
 			
-            //this.buildLookupStructure(instances);
 			this.lookup = new Lookup({});
 			this.lookup.build(instances);
         },
@@ -60,8 +58,6 @@ steal.plugins('jquery/controller',
         },
         
         /*
-         * dropdown.val(text) if(text)
-         * else return dropdown.val()
          */
         val: function(text){
 			if(!text)
@@ -79,7 +75,6 @@ steal.plugins('jquery/controller',
         },
         
         destroy: function(){
-            //this.lookupStructure = null;
 			this.dropdown.remove();
 			this.dropdown = null;
         }
