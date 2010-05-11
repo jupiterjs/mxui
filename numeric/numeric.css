@@ -1,0 +1,40 @@
+.wrapper {
+	border: 1px solid #cccccc;
+	padding: 5px;
+	width: 320px;
+	height: 35px;
+	background-color: #cccccc;
+}
+
+.wrapper input {
+	float: left;
+	width: 290px;
+	margin: 4px;
+	padding: 4px;
+}
+
+
+
+
+.phui_spinner {
+	width: 10px;
+	height: 20px;
+	display: inline-block;
+	padding-top: 5px;
+}
+.spinner-button {
+	float: left;
+	width: 10px;
+	height: 10px;	
+	
+	outline: none;
+}
+.phui_spinner .enabledUp {
+	background: url(up.png) no-repeat center right;	
+	cursor: pointer;
+}
+.phui_spinner .enabledDown {
+	background: url(down.png) no-repeat center right;;	
+	cursor: pointer;
+}
+

@@ -1,0 +1,34 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
+            "http://www.w3.org/TR/html4/strict.dtd">
+<html lang="en">
+	<head>
+		<title>numeric</title>
+        <style type='text/css'>
+            body {font-family: verdana}
+            .error {border: solid 1px red;}
+            .error_text { color: red; font-size: 10px;}
+            td {padding: 3px;}
+        </style>
+		<link type="text/css" href="numeric.css" rel="stylesheet" />		
+	</head>
+	<body>
+		<div class='wrapper'>
+			<input id="numeric1"/>
+		</div>
+		<div class='wrapper'>
+			<input id="numeric2"/>
+		</div>
+		<script type='text/javascript' 
+                src='../../steal/steal.js?steal[app]=phui/numeric&steal[env]=development'>   
+        </script>
+		<script type="text/javascript">
+			$(function(){
+				$("#numeric1").phui_numeric_input({increment:1});
+				$("#numeric2").phui_numeric_input({value:2, 
+														increment: 0.1, 
+														allowNegatives: false});
+														
+			})
+		</script>
+	</body>
+</html>
