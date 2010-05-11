@@ -120,8 +120,10 @@ steal.plugins('jquery/controller', 'jquery/view/ejs', 'phui/positionable',
                 end = current.substr(el.selectionEnd()),
                 newVal = before+key+end;    
             
+			if(key === "backspace") newVal = before.substr(0, before.length-2);
+			
 			if ($.trim(newVal) === "") {
-				this.options.model.findAll(this.options.params || {}, this.callback("found"));
+				this.options.model.findAll(this.options.params || {}, this.callback("drawDropdown", $(".phui_combobox_dropdown") )) ;
 				return;
 			}
 			
