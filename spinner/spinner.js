@@ -8,7 +8,7 @@ steal.plugins('jquery/controller').then(function($){
         init: function(){
             this.element.html('<div class="spinner-button up "></div><div class="spinner-button down"></div>');
             this.upEnabled(this.options.enableUp);
-            this.downEnabled(this.options.enableDown)
+            this.downEnabled(this.options.enableDown);			
         },
         upEnabled: function(enable){
             return this.enabled("Up", enable)
@@ -31,7 +31,12 @@ steal.plugins('jquery/controller').then(function($){
         ".spinner-button click": function(el){
             if (/enabled/.test(el[0].className)) 
                 this.element.trigger(el.hasClass("up") ? "increment" : "decrement");
-        },
+        },	
+       ".spinner-button dblclick": function(el){
+	   	    if ($.browser.msie && /enabled/.test(el[0].className)) {
+				this.element.trigger(el.hasClass("up") ? "increment" : "decrement");
+			}			
+	   	},		
         ".spinner-button keypress": function(el, ev){
             if (ev.keyCode == 13 && /enabled/.test(el[0].className)) 
                 this.element.trigger(el.hasClass("up") ? "increment" : "decrement");
@@ -40,6 +45,7 @@ steal.plugins('jquery/controller').then(function($){
             if (/enabled/.test(el[0].className)) 
                 el.addClass("upHover");
         },
+		
         ".down mouseenter": function(el, ev){
             if (/enabled/.test(el[0].className)) 
                 el.addClass("downHover");
