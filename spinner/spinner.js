@@ -29,14 +29,20 @@ steal.plugins('jquery/controller').then(function($){
             }
         },
         ".spinner-button click": function(el){
-            if (/enabled/.test(el[0].className)) 
-                this.element.trigger(el.hasClass("up") ? "increment" : "decrement");
+            this._changeSpinnerState(el);
         },	
-       ".spinner-button dblclick": function(el){
-	   	    if ($.browser.msie && /enabled/.test(el[0].className)) {
-				this.element.trigger(el.hasClass("up") ? "increment" : "decrement");
-			}			
+		/*
+		 * Internet Explorer interprets two fast clicks in a row as one single-click, 
+		 * followed by one double-click, while the other browsers interpret it as 
+		 * two single-clicks and a double-click.
+		 */
+        ".spinner-button dblclick": function(el){
+            if($.browser.msie) this._changeSpinnerState(el);
 	   	},		
+		_changeSpinnerState : function(el) {
+            if (/enabled/.test(el[0].className)) 
+                this.element.trigger(el.hasClass("up") ? "increment" : "decrement");			
+		},
         ".spinner-button keypress": function(el, ev){
             if (ev.keyCode == 13 && /enabled/.test(el[0].className)) 
                 this.element.trigger(el.hasClass("up") ? "increment" : "decrement");
