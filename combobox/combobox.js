@@ -25,6 +25,7 @@ steal.plugins('jquery/controller',
             this.dropdown = $("<div></div>");
             document.body.appendChild( this.dropdown[0] );
 			this.dropdown.phui_combobox_dropdown( this.element, this.options );
+			
 			//TODO: fix synchronization draw/hide
 			this.dropdown.trigger("draw", instances);			
 			

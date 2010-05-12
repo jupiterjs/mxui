@@ -1,0 +1,4 @@
+<li <%= item %>>
+    <%= options.render && options.text && options.render[options.text] ?  options.render[options.text](item) : item[options.text] %>
+</li>
+

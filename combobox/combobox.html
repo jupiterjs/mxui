@@ -27,16 +27,16 @@
                             "jquery/model",
                             "jquery/dom/fixtures").then(function($){
                 
-                $.fixture["-make"](["documents", "document"], 50, function(num, document) {
+                $.fixture["-make"](["documents", "document"], 15, function(num, document) {
                     
 					    var documentId = parseInt(Math.random() * num);
 		                var document = document[documentId]
                         var experiment = parseInt(Math.random() * 10);
-			            if (num < 3) {
+			            if (num < 5) {
 							return {
 								"value": "document_" + num,
-							    "text": experiment > 6 ? "file" + num : "dir" + num,
-								"type": experiment > 6 ? "file" : "folder",
+							    "text": "dir" + num,
+								"type": "folder",
 								"disabled": experiment > 9 ? true : false,
 								"depth": 0,
 		                        "parentId": null,
@@ -56,6 +56,22 @@
 							return child;
 						}
                 })
+				
+				// modify fixture to return oly the root items
+				var oldFixture = $.fixture["-documents"]; 
+			    $.fixture["-documents"] = function(settings){
+					var retArr = [];
+				    var items = oldFixture(settings)[0].data;
+					for(var i=0;i<items.length;i++) {
+						var parentId = items[i].parentId;
+						if(!parentId && parentId != 0) retArr.push(items[i])
+					}
+					
+					return [{
+					    "count": retArr.length,
+				    	"data" : retArr
+				    }]
+			    }				
                 
                 $.Model.extend("Document",{
                     findAll : function(params, success, error){
@@ -69,11 +85,16 @@
                             fixture: "-documents"
                         })
                     }
-                },{});
+                },
+				{
+					setChildren : function(values) {
+						return this.Class.wrapMany(values);
+					}
+				});
                 
                 $("#combobox_demo").phui_combobox({
                     model: Document,
-                    value : "value",
+                    value : "value", // maybe instance.id ?
                     text : "text", 
                     render : {
                         text : function(instance){

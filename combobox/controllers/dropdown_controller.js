@@ -13,13 +13,8 @@ $.Controller.extend("Phui.Combobox.DropdownController", {
 		args.shift();
 		args.shift();
 		var instances  = args;
-		
-        this.element.html("//phui/combobox/views/dropdown/init.ejs", {
-            instances: instances,
-            options: this.options
-        });
-		
-		this.element.trigger("hide");		
+
+		this._drawInstances(instances);
 		
         this.element.css("width", this.combobox.css("width"));
         this.element.css("height", this.options.maxHeight);
@@ -28,7 +23,27 @@ $.Controller.extend("Phui.Combobox.DropdownController", {
             my: 'left top',
             at: 'left bottom'
         }).trigger("move", this.combobox);		
+		
+		this.element.trigger("hide");		
 	},
+	
+	_drawInstances : function(instances) {
+	    for(var i=0;i<instances.length;i++) {
+	        var item = instances[i];
+
+	        this.element.append("//phui/combobox/views/dropdown/row.ejs", {
+	            item: item,
+	            options: this.options
+	        });
+
+	        if(item.children.length) {
+	            for(var j=0;j<item.children.length;j++) {
+	                this._drawInstances(item.children);
+	            }
+	        }
+	       
+	    }
+	},	
 	
 	"li click" : function(el, ev) {
         this.combobox.find("input").val( el.model().text );
