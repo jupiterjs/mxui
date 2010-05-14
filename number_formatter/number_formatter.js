@@ -258,7 +258,8 @@ var Hashtable=(function(){var w="undefined",f="function",k="string",j="equals",t
 		//while (numberString.indexOf(group) > -1) 
 		//	numberString = numberString.replace(group, '');
 		//var number = new Number(numberString.replace(dec, ".").replace(neg, "-"));
-		var number = new Number(numberString);
+		var number = new BigNumber(numberString);
+		//var number = new Number(numberString);
 		
 		return jQuery._formatNumber(number, options, suffix, prefix, negativeInFront);
 	};
@@ -294,13 +295,14 @@ var Hashtable=(function(){var w="undefined",f="function",k="string",j="equals",t
 			var decimalFormat = options.format.substring(options.format.lastIndexOf(".") + 1);
 			
 			// round or truncate number as needed
-			if (options.round == true)
-				number = new Number(number.toFixed(decimalFormat.length));
-			else {
+			if (options.round == true) {
+			    //number = new Number(number.toFixed(decimalFormat.length));
+			} else {
 				var numStr = number.toString();
 				numStr = numStr.substring(0, numStr.lastIndexOf('.') + decimalFormat.length + 1);
-				number = new Number(numStr);
-			}
+				number = new BigNumber(numStr);
+				//number = new Number(numStr);
+			} 
 			
 			var decimalValue = number % 1;
 			var decimalString = new String(decimalValue.toFixed(decimalFormat.length));
@@ -435,11 +437,12 @@ var Hashtable=(function(){var w="undefined",f="function",k="string",j="equals",t
 			if (valid.indexOf(numberString.charAt(i))>-1)
 				validText = validText + numberString.charAt(i);
 		}
-		var number = new Number(validText);
-		if (hasPercent) {
+		var number = new BigNumber(validText);
+		//var number = new Number(validText);
+		/*if (hasPercent) {
 			number = number / 100;
 			number = number.toFixed(validText.length-1);
-		}
+		}*/
 
 		return number;
 	};
