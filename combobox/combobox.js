@@ -30,7 +30,7 @@ steal.plugins('jquery/controller',
 			this.dropdown.trigger("draw", instances);			
 			
 			this.lookup = new Lookup({});
-			this.lookup.build(instances);
+			this.lookup.build(instances, this.options.maxLookupDepth);
         },
 		
 		drawDropdown : function(instances) {
