@@ -2,35 +2,27 @@ $.Model.extend("Lookup",
 {
 },
 {
-	build : function(instances) {
+	build : function(instances, depth) {
         this._lookup = {};
-        for (var i = 0; i < instances.length; i++) {
-            var firstChar = instances[i].text.substr(0, 1);
-            if (!this._lookup[firstChar]) 
-                this._lookup[firstChar] = [];
-            this._lookup[firstChar].push(instances[i]);
-        }		
+		this.maxLookupDepth = depth;
+		this._buildLookup(instances);
 	},
-	
+    _buildLookup : function(instances) {
+        for(var i=0;i<instances.length;i++) {
+            var item = instances[i];
+            var depth = Math.min( item.text.length, this.maxLookupDepth );
+            for(var j=1;j<=depth;j++) {
+                var text = item.text.substr(0,j);
+                if(!this._lookup[text]) this._lookup[text] = [];
+                this._lookup[text].push(item);
+            }   
+            if(item.children.length) this._buildLookup(item.children);
+        }
+    },	
 	query : function(text) {
-        var results = [];
-        var firstChar = text.substr(0, 1);
-        
-        for (var k in this._lookup) {
-            if (k == firstChar) {
-                for (var j = 0; j < this._lookup[k].length; j++) {
-                    results.push(this._lookup[k][j])
-                }
-            }
-        }
-        
-        for (var i = 0; i < results.length; i++) {
-            if (results[i].text.indexOf(text) == -1) 
-                results.splice(i)
-        }
-        return results;		
+		var results = this._lookup[text] ? this._lookup[text] : []; 
+		return results;		
 	},
-	
 	destroy : function() {
 		this._lookup = null;
 	}

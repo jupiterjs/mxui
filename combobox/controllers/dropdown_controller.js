@@ -13,7 +13,8 @@ $.Controller.extend("Phui.Combobox.DropdownController", {
 		args.shift();
 		args.shift();
 		var instances  = args;
-
+		
+		this.element.html("");
 		this._drawInstances(instances);
 		
         this.element.css("width", this.combobox.css("width"));
