@@ -2,7 +2,7 @@ steal.plugins('jquery/controller').then(function($){
     $.Controller.extend("Phui.Spinner", {
         defaults: {
             enableUp: true,
-            enableDown: true,
+            enableDown: true
         }
     }, {
         init: function(){
