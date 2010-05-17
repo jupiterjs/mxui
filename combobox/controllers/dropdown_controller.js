@@ -22,7 +22,8 @@ $.Controller.extend("Phui.Combobox.DropdownController", {
         
         this.element.phui_positionable({
             my: 'left top',
-            at: 'left bottom'
+            at: 'left bottom',
+			collision: 'none none'
         }).trigger("move", this.combobox);		
 		
 		this.element.trigger("hide");		

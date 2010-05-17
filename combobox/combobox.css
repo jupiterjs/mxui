@@ -35,9 +35,10 @@
 
 .phui_combobox_dropdown li {
 	margin: 0px;
-	padding: 2px 0px;
+	padding: 3px 0px;
 	cursor: pointer;
 	display: block;
+	border-bottom: 1px solid #cccccc;
 	width: 100%;
 	font: menu;
 	font-size: 12px;
