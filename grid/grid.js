@@ -47,11 +47,14 @@ steal.plugins('jquery/controller',
             body.hide();
             header.hide();
             var footer = this.element.children(".footer").width();
-            body.find('table').width(footer > 0 ? footer - 20 : 20);
+            var table = body.find('table').width(footer > 0 ? footer - 20 : 20);
             body.children().eq(0).width(footer > 20 ? footer  : 20);
             header.width(footer > 20 ? footer : 20);
             body.show();
             header.show();
+			if(table.height() < body.height()){
+				table.width(footer > 0 ? footer  : 20)
+			}
         },
 		/**
 		 * Listens for page events
