@@ -6,7 +6,6 @@ $.Controller.extend("Phui.Combobox.DropdownController", {
 		this.combobox = combobox;
 		this.options = options;
 	},
-	
 	draw : function() {
 		//TODO: simplify this code
 		var args = $.makeArray(arguments);
@@ -28,7 +27,6 @@ $.Controller.extend("Phui.Combobox.DropdownController", {
 		
 		this.element.trigger("hide");		
 	},
-	
 	_drawInstances : function(instances) {
 	    for(var i=0;i<instances.length;i++) {
 	        var item = instances[i];
@@ -45,27 +43,28 @@ $.Controller.extend("Phui.Combobox.DropdownController", {
 	        }
 	       
 	    }
+	},
+	mousedown : function(el, ev) {
+		this.keepFocus = this.combobox.controller().hasFocus;
 	},	
-	
+	mouseleave : function(el, ev) {
+		this.combobox.find("input").focus();		
+	},
 	"li click" : function(el, ev) {
         this.combobox.find("input").val( el.model().text );
 	    this.element.hide();		
 	},
-	
 	"li mouseenter" : function(el, ev) {
         el.css("color", "white");
         el.css("background-color", "blue");		
 	},
-	
 	"li mouseleave" : function(el, ev) {
         el.css("color", "");
         el.css("background-color", "");		
 	},
-	
 	hide : function(el, ev) {
 		this.element.slideUp("fast");
 	},
-	
 	show : function(el, ev) {
 		this.element.slideDown("fast");		
 	}
