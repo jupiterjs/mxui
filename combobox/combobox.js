@@ -54,8 +54,10 @@ steal.plugins('jquery/controller',
 			this.dropdown.trigger("show");
         },
 		/*
-		 * In chrome(2.0.172) when we click on the scrollbar, the input field will loose focus. And now if you click outside, then the dropdown won't close(as the input has already lost focus when you clicked on the srollbar)
-         * In Firefox(3.5), IE(8), opera(9.64), safari() when we click on the scrollbar the input field will not loose focus. Hence when you click outside (after clicking on the srollbar) the dropdown will close. This is the expected behaviour.
+		 * In chrome(2.0.172) when we click on the scrollbar, the input field will loose focus. And now if you click outside,
+		 * then the dropdown won't close(as the input has already lost focus when you clicked on the srollbar)
+         * In Firefox(3.5), IE(8), opera(9.64), safari() when we click on the scrollbar the input field will not loose focus.
+         * Hence when you click outside (after clicking on the srollbar) the dropdown will close. This is the expected behaviour.
          * So In chrome once the scrollbar is clicked, and then if I click outside the dropdown won't close.
          * http://stackoverflow.com/questions/1345473/google-chrome-focus-issue-with-the-scrollbar 
 		 */
