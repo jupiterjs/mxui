@@ -1,8 +1,7 @@
 steal.plugins('jquery/controller',
               'jquery/model',
 			  'jquery/view/ejs', 
-			  'phui/positionable', 
-			  'phui/key_validator')
+			  'phui/positionable')
 	 .models('lookup')
 	 .controllers('dropdown').then(function(){
 
@@ -29,21 +28,9 @@ steal.plugins('jquery/controller',
         drawDropdown: function(instances){
             this.dropdown.controller().draw(instances);
         },
-        "input keypress": function(el, ev){
-            var key = $.keyname(ev)
-            /*if(key.length > 1){ //it is a special, non printable character
-             return;
-             }*/
-            var current = el.val(),
-			    before = current.substr(0, el.selectionStart()),
-				end = current.substr(el.selectionEnd()),
-				newVal = before + key + end;
-            
-            if (key === "backspace") 
-                newVal = before.substr(0, before.length - 2);
-            
+        "input keyup": function(el, ev){				
+			var newVal = el.val();
             if ($.trim(newVal) === "") newVal = "*"; 
-			
             var instances = this.lookup.query(newVal);			
             this.dropdown.controller().draw(instances);
             this.dropdown.controller().show();
