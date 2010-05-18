@@ -18,6 +18,11 @@
 		<div><h1>Some html that dropdown draws over.</h1></div>
 		<div><button type="button">Dummy</button></div>
 		<div id="log"></div>
+		<div class="commands">
+            <input id="someValue" />
+			<button id="setValue">Set Value</button>
+			<button id="getValue">Get Value</button>
+		</div>
 
         <script type='text/javascript' 
                 src='../../steal/steal.js'>   
@@ -34,20 +39,18 @@
                         var experiment = parseInt(Math.random() * 10);
 			            if (num < 5) {
 							return {
-								"value": "document_" + num,
 							    "text": "dir" + num,
 								"type": "folder",
-								"disabled": experiment > 9 ? true : false,
+								"disabled": experiment > 6 ? true : false,
 								"depth": 0,
 		                        "parentId": null,
 								children: []
 							}
 						} else {
 						    var child =  { 
-                                "value": "document_" + num,
 								"text": experiment > 6 ? "file" + num : "dir" + num,
 								"type": experiment > 6 ? "file" : "folder",
-								"disabled": experiment > 9 ? true : false,
+								"disabled": experiment > 6 ? true : false,
 								"depth": document.depth + 1,
 		                        "parentId": documentId,
 								children: []
@@ -94,7 +97,6 @@
                 
                 $("#combobox_demo").phui_combobox({
                     model: Document,
-                    value : "value", // maybe instance.id ?
                     text : "text", 
 					maxLookupDepth: 7,
                     render : {
@@ -107,15 +109,28 @@
 						    if(instance.type == "folder") html.push(" class=\"ui-icon ui-icon-folder-open\"> ");
 							if(instance.type == "file") html.push(" class=\"ui-icon ui-icon-document\"> ");							
 							html.push("</span>");
-							
-							html.push("<span>" + instance.text + "</span>")
+					
+							html.push("<span ");
+							if(instance.disabled) html.push("style=\"color:#CCCCCC;\" ");
+							html.push(">" + instance.text + "</span>")
 							
                             return html.join("");
                         }
                     }
                 });
+				
+				
+				$("#getValue").bind("click", function(ev){
+					var value = $("#combobox_demo").controller().val();
+					$("#log").html("<span>" + value.text + "</span>");
+				})		
+				
+				$("#setValue").bind("click", function(ev){
+					$("#combobox_demo").controller().val("1");
+				})							
                 
             });
+			
             
             steal.start();
             

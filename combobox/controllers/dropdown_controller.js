@@ -6,28 +6,20 @@ $.Controller.extend("Phui.Combobox.DropdownController", {
 		this.combobox = combobox;
 		this.options = options;
 	},
-	draw : function() {
-		//TODO: simplify this code
-		var args = $.makeArray(arguments);
-		args.shift();
-		args.shift();
-		var instances  = args;
-		
+	draw : function(instances) {		
 		this.element.html("");
-		this._drawInstances(instances);
-		
-        this.element.css("width", this.combobox.css("width"));
-        this.element.css("height", this.options.maxHeight);
-        
+		this._draw(instances);
+		        
         this.element.phui_positionable({
             my: 'left top',
             at: 'left bottom',
 			collision: 'none none'
         }).trigger("move", this.combobox);		
 		
-		this.element.trigger("hide");		
+        this.element.css("width", this.combobox.css("width"));
+        this.element.css("height", this.options.maxHeight);
 	},
-	_drawInstances : function(instances) {
+	_draw : function(instances) {
 	    for(var i=0;i<instances.length;i++) {
 	        var item = instances[i];
 
@@ -38,7 +30,7 @@ $.Controller.extend("Phui.Combobox.DropdownController", {
 
 	        if(item.children.length) {
 	            for(var j=0;j<item.children.length;j++) {
-	                this._drawInstances(item.children);
+	                this._draw(item.children);
 	            }
 	        }
 	       
@@ -52,6 +44,7 @@ $.Controller.extend("Phui.Combobox.DropdownController", {
 	},
 	"li click" : function(el, ev) {
         this.combobox.find("input").val( el.model().text );
+		//this.combobox.controller().val( el.model().identity() );
 	    this.element.hide();		
 	},
 	"li mouseenter" : function(el, ev) {
@@ -62,10 +55,10 @@ $.Controller.extend("Phui.Combobox.DropdownController", {
         el.css("color", "");
         el.css("background-color", "");		
 	},
-	hide : function(el, ev) {
+	hide : function() {
 		this.element.slideUp("fast");
 	},
-	show : function(el, ev) {
+	show : function() {
 		this.element.slideDown("fast");		
 	}
 })

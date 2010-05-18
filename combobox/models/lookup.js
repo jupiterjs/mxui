@@ -22,8 +22,5 @@ $.Model.extend("Lookup",
 	query : function(text) {
 		var results = this._lookup[text] ? this._lookup[text] : []; 
 		return results;		
-	},
-	destroy : function() {
-		this._lookup = null;
 	}
 })
