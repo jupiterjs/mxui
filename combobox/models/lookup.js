@@ -4,6 +4,7 @@ $.Model.extend("Lookup",
 {
 	build : function(instances, depth) {
         this._lookup = {};
+		this.instances = instances;
 		this.maxLookupDepth = depth;
 		this._buildLookup(instances);
 	},
@@ -20,6 +21,7 @@ $.Model.extend("Lookup",
         }
     },	
 	query : function(text) {
+		if(text == "*") return this.instances;
 		var results = this._lookup[text] ? this._lookup[text] : []; 
 		return results;		
 	}

@@ -42,13 +42,9 @@ steal.plugins('jquery/controller',
             if (key === "backspace") 
                 newVal = before.substr(0, before.length - 2);
             
-            if ($.trim(newVal) === "") {
-                this.options.model.findAll(this.options.params || {}, this.callback("drawDropdown"));
-                this.dropdown.controller().show();
-                return;
-            }
-            
-            var instances = this.lookup.query(newVal);
+            if ($.trim(newVal) === "") newVal = "*"; 
+			
+            var instances = this.lookup.query(newVal);			
             this.dropdown.controller().draw(instances);
             this.dropdown.controller().show();
         },
