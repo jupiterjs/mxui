@@ -51,12 +51,15 @@ $.Controller.extend("Phui.Combobox.DropdownController", {
 		this.combobox.find("input").focus();
 		this.find("li").removeClass(this.options.hoverClassName);					
 	},
+	select: function(item) {
+		var el = this.find("li.item_" + item.value + ":first");
+		this.find("li").removeClass( this.options.selectedClassName );
+		el.addClass( this.options.selectedClassName );		
+	},
 	"li click" : function(el, ev) {
 		var item = el.model();
         if (item) {
 			this.combobox.controller().val(item.value);
-			this.find("li").removeClass( this.options.selectedClassName );
-			el.addClass( this.options.selectedClassName );
 			this.element.hide();
 		}
 	},

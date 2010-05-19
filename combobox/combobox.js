@@ -26,18 +26,14 @@ steal.plugins('jquery/controller',
      
             // pre-populate with items case they exist
             if (this.options.items) {
-				if (this.options.autocompleteEnabled) {
-					this.lookup = new Lookup({});
-					this.lookup.build(this.options.items, this.options.showNested);
-				}
+				this.lookup = new Lookup({});
+				this.lookup.build( this.options.items, this.options.showNested, this.options.autocompleteEnabled );
                 this.dropdown.controller().draw( this.options.items, this.options.showNested );
             }
         },
         found: function(items){
-			if (this.options.autocompleteEnabled) {
-				this.lookup = new Lookup({});
-				this.lookup.build(items, this.options.showNested);
-			}
+			this.lookup = new Lookup({});
+			this.lookup.build( items, this.options.showNested, this.options.autocompleteEnabled );
 
             this.dropdown.controller().draw(items, this.options.showNested);
             this.dropdown.controller().show();			
@@ -98,9 +94,10 @@ steal.plugins('jquery/controller',
             if(!value) 
 			    return this.currentValue;
 			var item = this.lookup.getByValue(value);
-			if (item) {
+			if (item && item.enabled) {
 				this.currentValue = item.value;
 				this.find("input").val(item.text);
+				this.dropdown.controller().select(item);
                 this.element.trigger("change", this.currentValue);				
 			}
          },
