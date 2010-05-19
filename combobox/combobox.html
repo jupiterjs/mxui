@@ -17,7 +17,7 @@
         <div id="combobox_demo"></div>
 		<div><h1>Some html that dropdown draws over.</h1></div>
 		<div><button type="button">Dummy</button></div>
-		<div id="log"></div>
+		<label>Log:</label><div id="log"></div>
 		<div class="commands">
             <input id="someValue" />
 			<button id="setValue">Set Value</button>
@@ -35,106 +35,6 @@
                             "jquery/model",
                             "jquery/dom/fixtures").then(function($){
                 
-                /*$.fixture["-make"](["documents", "document"], 15, function(num, document) {
-                    
-					    var documentId = parseInt(Math.random() * num);
-		                var document = document[documentId]
-                        var experiment = parseInt(Math.random() * 10);
-			            if (num < 5) {
-							return {
-							    "text": "dir" + num,
-								"type": "folder",
-								"disabled": experiment > 6 ? true : false,
-								"depth": 0,
-		                        "parentId": null,
-								children: []
-							}
-						} else {
-						    var child =  { 
-								"text": experiment > 6 ? "file" + num : "dir" + num,
-								"type": experiment > 6 ? "file" : "folder",
-								"disabled": experiment > 6 ? true : false,
-								"depth": document.depth + 1,
-		                        "parentId": documentId,
-								children: []
-		                    }
-		                    document.children.push(child);
-							return child;
-						}
-                })
-				
-				// modify fixture to return oly the root items
-				var oldFixture = $.fixture["-documents"]; 
-			    $.fixture["-documents"] = function(settings){
-					var retArr = [];
-				    var items = oldFixture(settings)[0].data;
-					for(var i=0;i<items.length;i++) {
-						var parentId = items[i].parentId;
-						if(!parentId && parentId != 0) retArr.push(items[i])
-					}
-					
-					return [{
-					    "count": retArr.length,
-				    	"data" : retArr
-				    }]
-			    }				
-                
-                $.Model.extend("Document",{
-                    findAll : function(params, success, error){
-                        $.ajax({
-                            url: '/document',
-                            type: 'get',
-                            dataType: 'json',
-                            data: params,
-                            success: this.callback(['wrapMany',success]),
-                            error: error,
-                            fixture: "-documents"
-                        })
-                    }
-                },
-				{
-					setChildren : function(values) {
-						return this.Class.wrapMany(values);
-					}
-				});
-                
-                $("#combobox_demo").phui_combobox({
-                    model: Document,
-                    text : "text", 
-					maxLookupDepth: 7,
-                    render : {
-                        text : function(instance){
-							var html = [];
-							html.push("<span ");
-							html.push(" style=\"float:left; margin-left:");
-							if(instance.depth) html.push(instance.depth * 20 + "px;"); 
-							html.push("display: block;height:13px;\" ");
-						    if(instance.type == "folder") html.push(" class=\"ui-icon ui-icon-folder-open\"> ");
-							if(instance.type == "file") html.push(" class=\"ui-icon ui-icon-document\"> ");							
-							html.push("</span>");
-					
-							html.push("<span ");
-							if(instance.disabled) html.push("style=\"color:#CCCCCC;\" ");
-							html.push(">" + instance.text + "</span>")
-							
-                            return html.join("");
-                        }
-                    }
-                });
-				
-				
-				$("#getValue").bind("click", function(ev){
-					var value = $("#combobox_demo").controller().val();
-					$("#log").html("<span>" + value.text + "</span>");
-				})		
-				
-				$("#setValue").bind("click", function(ev){
-					$("#combobox_demo").controller().val("1");
-				})*/
-				
-				
-				
-				
 				
 				$.fixture["-make"](["items", "item"], 40, function(num, item) {
                     
@@ -221,6 +121,7 @@
                     model: Item
                  });		
 				 
+				// get/set API demo
 				$("#getValue").bind("click", function(ev){
 					var value = $("#combobox_demo").controller().val();
 					$("#log").html("<span>" + value + "</span>");
@@ -229,6 +130,8 @@
 					var value = $("input#someValue").val();
 					$("#combobox_demo").controller().val(value);
 				})
+				
+				// query API demo
 				$("#query").bind("click", function(ev){
 					var text = $("input#someValue").val();
 					var values = $("#combobox_demo").controller().query(text);
@@ -239,6 +142,8 @@
 						}
 					}
 				});
+				
+				// enable/disable API demo
 				$("#enable").click( function(ev){
 				    var value = $("#someValue").val();
 				    $("#combobox_demo").controller().enable(value);
@@ -246,7 +151,17 @@
 				$("#disable").click( function(ev){
 				    var value = $("#someValue").val();
 				    $("#combobox_demo").controller().disable(value);
-				});								 													 					
+				});	
+				
+				// event API for when a value is selected demo
+				$("#combobox_demo").bind("change", function(ev, value){
+					$("#log").html("<div>" + value + "</div>")
+				})		
+				
+				// event API for when the dropdown is opened
+				$("#combobox_demo").bind("open", function(ev){
+					$("#log").html("<div>Combobox Opened.</div>")
+				}) 													 					
                 
             });
 			

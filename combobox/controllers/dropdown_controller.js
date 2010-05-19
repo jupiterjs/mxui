@@ -69,6 +69,7 @@ $.Controller.extend("Phui.Combobox.DropdownController", {
 	},
 	show : function() {
 		this.element.slideDown("fast");
-		this.style();				
+		this.style();		
+		this.combobox.trigger("open");		
 	}
 })

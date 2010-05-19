@@ -91,6 +91,7 @@ steal.plugins('jquery/controller',
 			if (item) {
 				this.currentValue = item.value;
 				this.find("input").val(item.text);
+                this.element.trigger("change", this.currentValue);				
 			}
          },
 		query : function(text) {
