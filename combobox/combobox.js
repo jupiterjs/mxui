@@ -26,14 +26,18 @@ steal.plugins('jquery/controller',
      
             // pre-populate with items case they exist
             if (this.options.items) {
-                this.lookup = new Lookup({});
-                this.lookup.build( this.options.items, this.options.showNested );
+				if (this.options.autocompleteEnabled) {
+					this.lookup = new Lookup({});
+					this.lookup.build(this.options.items, this.options.showNested);
+				}
                 this.dropdown.controller().draw( this.options.items, this.options.showNested );
             }
         },
         found: function(items){
-            this.lookup = new Lookup({});
-            this.lookup.build(items, this.options.showNested);
+			if (this.options.autocompleteEnabled) {
+				this.lookup = new Lookup({});
+				this.lookup.build(items, this.options.showNested);
+			}
 
             this.dropdown.controller().draw(items, this.options.showNested);
             this.dropdown.controller().show();			
@@ -44,15 +48,17 @@ steal.plugins('jquery/controller',
             this.dropdown.controller().draw(items, this.options.showNested);
         },
         "input keyup": function(el, ev){
-			var showNested = false;				
-			var newVal = el.val();
-            if ($.trim(newVal) === "") {
-				newVal = "*";
-				showNested = this.options.showNested;
-			} 
-            var items = this.lookup.query(newVal);			
-            this.dropdown.controller().draw(items, showNested);
-            this.dropdown.controller().show();
+			if (this.options.autocompleteEnabled) {
+				var showNested = false;
+				var newVal = el.val();
+				if ($.trim(newVal) === "") {
+					newVal = "*";
+					showNested = this.options.showNested;
+				}
+				var items = this.lookup.query(newVal);
+				this.dropdown.controller().draw(items, showNested);
+				this.dropdown.controller().show();
+			}
         },
         /*
          * In chrome(2.0.172) when we click on the scrollbar, the input field will loose focus. And now if you click outside,

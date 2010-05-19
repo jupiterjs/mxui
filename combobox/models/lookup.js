@@ -18,7 +18,7 @@ $.Model.extend("Lookup",
             }   
 			// also keeps item indexed by value for use in combobox.controller().val()
 			this._lookup["item_"+item.value] = item;
-            if( item.children.length && showNested ) this._buildLookup(item.children);
+            if( item.children.length && showNested ) this._buildLookup(item.children, showNested);
         }
     },	
 	query : function(text) {
