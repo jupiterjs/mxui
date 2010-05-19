@@ -52,3 +52,7 @@
 .phui_combobox_dropdown .hover span {
 	color: white !important;
 }
+
+.phui_combobox_dropdown span.disabled {
+	color: #bbbbbb;
+}

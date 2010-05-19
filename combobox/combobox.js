@@ -26,19 +26,8 @@ steal.plugins('jquery/controller',
                 this.lookup.build(this.options.items);
                 this.dropdown.controller().draw(this.options.items);
             }
-						
-			//this.options.model.findAll(this.options.params || {}, this.callback("found"));
         },
         found: function(items/*instances*/){
-            /*this.dropdown = $("<div/>").phui_combobox_dropdown(this.element, this.options);
-            document.body.appendChild(this.dropdown[0]);
-            
-            this.dropdown.controller().draw(instances);
-            this.dropdown.controller().hide();			
-            
-            this.lookup = new Lookup({});
-            this.lookup.build(instances, this.options.maxLookupDepth);*/
-
             this.lookup = new Lookup({});
             this.lookup.build(items);
 
@@ -75,9 +64,9 @@ steal.plugins('jquery/controller',
             } 
         },
         focusout: function(el, ev){
-            if (!$.browser.mozilla) {
-                this.hasFocus = false;
-                var keepFocus = this.dropdown.controller().keepFocus;
+            this.hasFocus = false;
+            var keepFocus = this.dropdown.controller().keepFocus;		
+			if (!$.browser.mozilla) {
                 if (!keepFocus) {
                     this.dropdown.controller().hide();
                 }
@@ -87,7 +76,8 @@ steal.plugins('jquery/controller',
                 }
             }
             else {
-                this.dropdown.controller().hide();
+                if (!keepFocus) 
+				    this.dropdown.controller().hide();
             }
         },
         val: function(text){
@@ -95,14 +85,6 @@ steal.plugins('jquery/controller',
             return this.find("input").val();
             this.find("input").val(text);
          },
-        /*val: function(identity){
-            if (!identity) 
-                return this.currentValue;
-            
-            var el = this.dropdown.find(identity);
-            this.currentValue = el.model();
-            this.find("input").val(this.currentValue.text);
-        },*/
         ".toggle click": function(el, ev){
             this.find("input").trigger("focus");
             this.dropdown.is(":visible") ? this.dropdown.controller().hide() : this.dropdown.controller().show();

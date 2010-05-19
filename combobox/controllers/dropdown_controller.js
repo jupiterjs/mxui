@@ -48,16 +48,12 @@ $.Controller.extend("Phui.Combobox.DropdownController", {
         if (item) {
 			this.combobox.find("input").val(item.text);
 			this.element.hide();
-		}		
+		}
 	},
 	"li mouseenter" : function(el, ev) {
-        /*el.css("color", "white");
-        el.css("background-color", "blue");*/
 		el.addClass(this.options.hoverClassName);	
 	},
 	"li mouseleave" : function(el, ev) {
-        /*el.css("color", "");
-        el.css("background-color", "");*/
 		el.removeClass(this.options.hoverClassName);				
 	},
 	hide : function() {

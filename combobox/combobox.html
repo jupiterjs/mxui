@@ -204,14 +204,15 @@
 				}
 				 
 				$("#combobox_demo").phui_combobox({
-                    items: items,
+                    //items: items,
                     textTemplate: "//phui/combobox/views/default_text_template.ejs",
                     textStyle: "color:blue;font-style:italic;",
-                    loadOnDemand: false,
+                    loadOnDemand: true,
                     showHierarchy: true,
                     maxHeight: "300px",
                     hoverClassName: "hover",
                     selectedClassName: "selected",
+					disabledClassName: "disabled",
                     model: Item
                  });							
                 
