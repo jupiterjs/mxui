@@ -47,7 +47,7 @@ steal.plugins('jquery/controller',
 			var newVal = el.val();
             if ($.trim(newVal) === "") newVal = "*"; 
             var items = this.lookup.query(newVal);			
-            this.dropdown.controller().draw(items);
+            this.dropdown.controller().draw(items, true);
             this.dropdown.controller().show();
         },
         /*
