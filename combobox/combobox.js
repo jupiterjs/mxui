@@ -1,9 +1,10 @@
 steal.plugins('jquery/controller',
-              'jquery/model',
+              'jquery/model/list',
 			  'jquery/view/ejs', 
 			  'phui/positionable')
 	 .models('lookup')
 	 .controllers('dropdown').then(function(){
+	 	
 
     $.Controller.extend("Phui.Combobox", {
         defaults: {
@@ -12,12 +13,15 @@ steal.plugins('jquery/controller',
     }, {
     
         init: function(){
+			this.currentValue = "-1";
+			
 			// draw input box
             this.element.html(this.view("//phui/combobox/views/init.ejs"));
             
             // create dropdown and append it to body
             this.dropdown = $("<div/>").phui_combobox_dropdown( this.element, this.options );
-            document.body.appendChild(this.dropdown[0]);			
+            document.body.appendChild(this.dropdown[0]);	
+			this.dropdown.controller().style();		
 			this.dropdown.controller().hide();
      
             // pre-populate with items case they exist
@@ -27,7 +31,7 @@ steal.plugins('jquery/controller',
                 this.dropdown.controller().draw(this.options.items);
             }
         },
-        found: function(items/*instances*/){
+        found: function(items){
             this.lookup = new Lookup({});
             this.lookup.build(items);
 
@@ -80,10 +84,14 @@ steal.plugins('jquery/controller',
 				    this.dropdown.controller().hide();
             }
         },
-        val: function(text){
-            if(!text)
-            return this.find("input").val();
-            this.find("input").val(text);
+        val: function(value){
+            if(!value) 
+			    return this.currentValue;
+			var item = this.lookup.getByValue(value);
+			if (item) {
+				this.currentValue = item.value;
+				this.find("input").val(item.text);
+			}
          },
         ".toggle click": function(el, ev){
             this.find("input").trigger("focus");
@@ -94,6 +102,7 @@ steal.plugins('jquery/controller',
             this.dropdown = null;
             this.lookup._lookup = null;
             this.lookup = null;
+			this._super();
         }
         
     });

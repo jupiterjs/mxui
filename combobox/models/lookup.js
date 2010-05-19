@@ -16,6 +16,8 @@ $.Model.extend("Lookup",
                 if(!this._lookup[text]) this._lookup[text] = [];
                 this._lookup[text].push(item);
             }   
+			// also keeps item indexed by value for use in combobox.controller().val()
+			this._lookup["item_"+item.value] = item;
             if(item.children.length) this._buildLookup(item.children);
         }
     },	
@@ -23,5 +25,8 @@ $.Model.extend("Lookup",
 		if(text == "*") return this.items;
 		var results = this._lookup[text] ? this._lookup[text] : []; 
 		return results;		
+	},
+	getByValue : function(value) {
+		return this._lookup["item_"+value] ? this._lookup["item_"+value] : null;  
 	}
 })
