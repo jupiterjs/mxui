@@ -2,12 +2,12 @@ $.Model.extend("Lookup",
 {
 },
 {
-	build : function(items) {
+	build : function(items, showNested) {
         this._lookup = {};
 		this.items = items;
-		this._buildLookup(items);
+		this._buildLookup(items, showNested);
 	},
-    _buildLookup : function(items) {
+    _buildLookup : function(items, showNested) {
         for(var i=0;i<items.length;i++) {
             var item = items[i];
             var depth = item.text.length;
@@ -18,7 +18,7 @@ $.Model.extend("Lookup",
             }   
 			// also keeps item indexed by value for use in combobox.controller().val()
 			this._lookup["item_"+item.value] = item;
-            if(item.children.length) this._buildLookup(item.children);
+            if( item.children.length && showNested ) this._buildLookup(item.children);
         }
     },	
 	query : function(text) {

@@ -27,28 +27,28 @@ steal.plugins('jquery/controller',
             // pre-populate with items case they exist
             if (this.options.items) {
                 this.lookup = new Lookup({});
-                this.lookup.build(this.options.items);
-                this.dropdown.controller().draw(this.options.items, true);
+                this.lookup.build( this.options.items, this.options.showNested );
+                this.dropdown.controller().draw( this.options.items, this.options.showNested );
             }
         },
         found: function(items){
             this.lookup = new Lookup({});
-            this.lookup.build(items);
+            this.lookup.build(items, this.options.showNested);
 
-            this.dropdown.controller().draw(items, true);
+            this.dropdown.controller().draw(items, this.options.showNested);
             this.dropdown.controller().show();			
 
             this.itemsAlreadyLoaded = true;
         },
         drawDropdown: function(items){
-            this.dropdown.controller().draw(items, true);
+            this.dropdown.controller().draw(items, this.options.showNested);
         },
         "input keyup": function(el, ev){
 			var showNested = false;				
 			var newVal = el.val();
             if ($.trim(newVal) === "") {
 				newVal = "*";
-				showNested = true;
+				showNested = this.options.showNested;
 			} 
             var items = this.lookup.query(newVal);			
             this.dropdown.controller().draw(items, showNested);
@@ -108,13 +108,13 @@ steal.plugins('jquery/controller',
 		    var item = this.lookup.getByValue(value);
 		    item.attr("enabled", true);
 		    var items = this.lookup.query("*");	
-		    this.dropdown.controller().draw(items, true)
+		    this.dropdown.controller().draw( items, this.options.showNested );
 		},
 		disable : function(value) {
 	        var item = this.lookup.getByValue(value);
 	        item.attr("enabled", false);
 		    var items = this.lookup.query("*");	
-		    this.dropdown.controller().draw(items, true)
+		    this.dropdown.controller().draw( items, this.options.showNested );
 		},		 
         ".toggle click": function(el, ev){
             this.find("input").trigger("focus");
