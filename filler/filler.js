@@ -262,8 +262,8 @@ steal.plugins('jquery/controller','jquery/dom/dimensions','jquery/event/resize')
 			//this.element.trigger("resize");
 		},*/
 		destroy : function(){
-			this.parent.unbind('resize', this.parent_resize)
 			this.parent = null;
+			this._super()
 		}
 	})
 })
