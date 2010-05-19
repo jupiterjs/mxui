@@ -93,17 +93,23 @@ steal.plugins('jquery/controller',
 				this.find("input").val(item.text);
 			}
          },
-        ".toggle click": function(el, ev){
-            this.find("input").trigger("focus");
-            this.dropdown.is(":visible") ? this.dropdown.controller().hide() : this.dropdown.controller().show();
-        },
-        destroy: function(){
-            this.dropdown.remove();
-            this.dropdown = null;
-            this.lookup._lookup = null;
-            this.lookup = null;
-			this._super();
-        }
+		 query : function(text) {
+		 	var items = this.lookup.query(text);
+			return $.map(items, function(item){
+				return item.value;
+			})
+		 },
+         ".toggle click": function(el, ev){
+             this.find("input").trigger("focus");
+             this.dropdown.is(":visible") ? this.dropdown.controller().hide() : this.dropdown.controller().show();
+         },
+         destroy: function(){
+             this.dropdown.remove();
+             this.dropdown = null;
+             this.lookup._lookup = null;
+             this.lookup = null;
+			 this._super();
+         }
         
     });
     

@@ -22,6 +22,7 @@
             <input id="someValue" />
 			<button id="setValue">Set Value</button>
 			<button id="getValue">Get Value</button>
+			<button id="query">Query</button>
 		</div>
 
         <script type='text/javascript' 
@@ -222,11 +223,20 @@
 					var value = $("#combobox_demo").controller().val();
 					$("#log").html("<span>" + value + "</span>");
 				})		
-				
 				$("#setValue").bind("click", function(ev){
 					var value = $("input#someValue").val();
 					$("#combobox_demo").controller().val(value);
-				})				 					
+				})
+				$("#query").bind("click", function(ev){
+					var text = $("input#someValue").val();
+					var values = $("#combobox_demo").controller().query(text);
+					if (values.length) {
+						$("#log").html("");
+						for (var i = 0; i < values.length; i++) {
+							$("#log").append("<div>" + values[i] + "</div>");
+						}
+					}
+				})				 													 					
                 
             });
 			
