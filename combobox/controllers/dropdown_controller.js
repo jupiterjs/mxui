@@ -6,9 +6,9 @@ $.Controller.extend("Phui.Combobox.DropdownController", {
 		this.combobox = combobox;
 		this.options = options;
 	},
-	draw : function(instances) {		
+	draw : function(items) {		
 		this.element.html("");
-		this._draw(instances);
+		this._draw(items);
 		        
         this.element.phui_positionable({
             my: 'left top',
@@ -19,9 +19,9 @@ $.Controller.extend("Phui.Combobox.DropdownController", {
         this.element.css("width", this.combobox.css("width"));
         this.element.css("height", this.options.maxHeight);
 	},
-	_draw : function(instances) {
-	    for(var i=0;i<instances.length;i++) {
-	        var item = instances[i];
+	_draw : function(items) {
+	    for(var i=0;i<items.length;i++) {
+	        var item = items[i];
 
 	        this.element.append("//phui/combobox/views/dropdown/row.ejs", {
 	            item: item,
@@ -40,20 +40,25 @@ $.Controller.extend("Phui.Combobox.DropdownController", {
 		this.keepFocus = this.combobox.controller().hasFocus;
 	},	
 	mouseleave : function(el, ev) {
-		this.combobox.find("input").focus();		
+		this.combobox.find("input").focus();
+		this.find("li").removeClass(this.options.hoverClassName);					
 	},
 	"li click" : function(el, ev) {
-        this.combobox.find("input").val( el.model().text );
-		//this.combobox.controller().val( el.model().identity() );
-	    this.element.hide();		
+		var item = el.model();
+        if (item) {
+			this.combobox.find("input").val(item.text);
+			this.element.hide();
+		}		
 	},
 	"li mouseenter" : function(el, ev) {
-        el.css("color", "white");
-        el.css("background-color", "blue");		
+        /*el.css("color", "white");
+        el.css("background-color", "blue");*/
+		el.addClass(this.options.hoverClassName);	
 	},
 	"li mouseleave" : function(el, ev) {
-        el.css("color", "");
-        el.css("background-color", "");		
+        /*el.css("color", "");
+        el.css("background-color", "");*/
+		el.removeClass(this.options.hoverClassName);				
 	},
 	hide : function() {
 		this.element.slideUp("fast");

@@ -32,7 +32,7 @@
                             "jquery/model",
                             "jquery/dom/fixtures").then(function($){
                 
-                $.fixture["-make"](["documents", "document"], 15, function(num, document) {
+                /*$.fixture["-make"](["documents", "document"], 15, function(num, document) {
                     
 					    var documentId = parseInt(Math.random() * num);
 		                var document = document[documentId]
@@ -127,7 +127,93 @@
 				
 				$("#setValue").bind("click", function(ev){
 					$("#combobox_demo").controller().val("1");
-				})							
+				})*/
+				
+				
+				
+				
+				
+				$.fixture["-make"](["items", "item"], 15, function(num, item) {
+                    
+					    var itemId = parseInt(Math.random() * num);
+		                var item = item[itemId]
+                        var experiment = parseInt(Math.random() * 10);
+			            if (num < 5) {
+							return {
+							    "text": "dir" + num,
+								"type": "folder",
+								"enabled": experiment > 3 ? true : false,
+								"depth": 0,
+		                        "parentId": null,
+								children: []
+							}
+						} else {
+						    var child =  { 
+								"text": experiment > 6 ? "file" + num : "dir" + num,
+								"type": experiment > 6 ? "file" : "folder",
+								"enabled": experiment > 3 ? true : false,
+								"depth": item.depth + 1,
+		                        "parentId": itemId,
+								children: []
+		                    }
+		                    item.children.push(child);
+							return child;
+						}
+                })			
+				
+				// modify fixture to return only the root items
+				var oldFixture = $.fixture["-items"]; 
+			    $.fixture["-items"] = function(settings){
+					var retArr = [];
+				    var items = oldFixture(settings)[0].data;
+					for(var i=0;i<items.length;i++) {
+						var parentId = items[i].parentId;
+						if(!parentId && parentId != 0) retArr.push(items[i])
+					}
+					
+					return [{
+					    "count": retArr.length,
+				    	"data" : retArr
+				    }]
+			    } 
+				
+                $.Model.extend("Item",{
+                    findAll : function(params, success, error){
+                        $.ajax({
+                            url: '/item',
+                            type: 'get',
+                            dataType: 'json',
+                            data: params,
+                            success: this.callback(['wrapMany',success]),
+                            error: error,
+                            fixture: "-items"
+                        })
+                    }
+                },
+				{
+					setChildren : function(values) {
+						return this.Class.wrapMany(values);
+					}
+				});									
+				
+				// create items to pre-populate combo
+				var items = [];
+				var rawItems = $.fixture["-items"]({data:{}})[0].data;
+				for(var i=0;i<rawItems.length;i++) {
+					items.push( new Item(rawItems[i]) );
+				}
+				 
+				$("#combobox_demo").phui_combobox({
+                    items: items,
+                    textTemplate: "//phui/combobox/views/default_text_template.ejs",
+                    textStyle: "color:blue;font-style:italic;",
+                    loadOnDemand: false,
+                    showHierarchy: true,
+                    maxHeight: "300px",
+                    hoverClassName: "hover",
+                    selectedClassName: "selected",
+                    model: Item
+                 });							
                 
             });
 			

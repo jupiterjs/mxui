@@ -12,18 +12,40 @@ steal.plugins('jquery/controller',
     }, {
     
         init: function(){
+			// draw input box
             this.element.html(this.view("//phui/combobox/views/init.ejs"));
-            this.options.model.findAll(this.options.params || {}, this.callback("found"));
+            
+            // create dropdown and append it to body
+            this.dropdown = $("<div/>").phui_combobox_dropdown( this.element, this.options );
+            document.body.appendChild(this.dropdown[0]);			
+			this.dropdown.controller().hide();
+     
+            // pre-populate with items case they exist
+            if (this.options.items) {
+                this.lookup = new Lookup({});
+                this.lookup.build(this.options.items);
+                this.dropdown.controller().draw(this.options.items);
+            }
+						
+			//this.options.model.findAll(this.options.params || {}, this.callback("found"));
         },
-        found: function(instances){
-            this.dropdown = $("<div/>").phui_combobox_dropdown(this.element, this.options);
+        found: function(items/*instances*/){
+            /*this.dropdown = $("<div/>").phui_combobox_dropdown(this.element, this.options);
             document.body.appendChild(this.dropdown[0]);
             
             this.dropdown.controller().draw(instances);
             this.dropdown.controller().hide();			
             
             this.lookup = new Lookup({});
-            this.lookup.build(instances, this.options.maxLookupDepth);
+            this.lookup.build(instances, this.options.maxLookupDepth);*/
+
+            this.lookup = new Lookup({});
+            this.lookup.build(items);
+
+            this.dropdown.controller().draw(items);
+            this.dropdown.controller().show();			
+
+            this.itemsAlreadyLoaded = true;
         },
         drawDropdown: function(instances){
             this.dropdown.controller().draw(instances);
@@ -31,8 +53,8 @@ steal.plugins('jquery/controller',
         "input keyup": function(el, ev){				
 			var newVal = el.val();
             if ($.trim(newVal) === "") newVal = "*"; 
-            var instances = this.lookup.query(newVal);			
-            this.dropdown.controller().draw(instances);
+            var items = this.lookup.query(newVal);			
+            this.dropdown.controller().draw(items);
             this.dropdown.controller().show();
         },
         /*
@@ -44,7 +66,13 @@ steal.plugins('jquery/controller',
          * http://stackoverflow.com/questions/1345473/google-chrome-focus-issue-with-the-scrollbar
          */
         focusin: function(el, ev){
+            // trick to make dropdown close when combobox looses focus			
             this.hasFocus = true;
+			
+            // load items on demand
+            if (this.options.loadOnDemand && !this.itemsAlreadyLoaded) {
+				this.options.model.findAll(this.options.params || {}, this.callback("found"));								
+            } 
         },
         focusout: function(el, ev){
             if (!$.browser.mozilla) {

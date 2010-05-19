@@ -2,16 +2,15 @@ $.Model.extend("Lookup",
 {
 },
 {
-	build : function(instances, depth) {
+	build : function(items) {
         this._lookup = {};
-		this.instances = instances;
-		this.maxLookupDepth = depth;
-		this._buildLookup(instances);
+		this.items = items;
+		this._buildLookup(items);
 	},
-    _buildLookup : function(instances) {
-        for(var i=0;i<instances.length;i++) {
-            var item = instances[i];
-            var depth = Math.min( item.text.length, this.maxLookupDepth );
+    _buildLookup : function(items) {
+        for(var i=0;i<items.length;i++) {
+            var item = items[i];
+            var depth = item.text.length;
             for(var j=1;j<=depth;j++) {
                 var text = item.text.substr(0,j);
                 if(!this._lookup[text]) this._lookup[text] = [];
@@ -21,7 +20,7 @@ $.Model.extend("Lookup",
         }
     },	
 	query : function(text) {
-		if(text == "*") return this.instances;
+		if(text == "*") return this.items;
 		var results = this._lookup[text] ? this._lookup[text] : []; 
 		return results;		
 	}

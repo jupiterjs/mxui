@@ -44,3 +44,11 @@
 	font-size: 12px;
 	overflow: hidden;	
 }
+
+.phui_combobox_dropdown .hover {
+	background-color: orange;
+}
+
+.phui_combobox_dropdown .hover span {
+	color: white !important;
+}

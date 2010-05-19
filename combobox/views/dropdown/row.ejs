@@ -1,4 +1,4 @@
-<li <%= item %>>
-    <%= options.render && options.text && options.render[options.text] ?  options.render[options.text](item) : item[options.text] %>
+<li <%if (item.enabled) { %><%= item %><% } %>>
+    <span style="float:left;margin-left:<%= item.depth*20 %>px">&nbsp;</span>
+    <%= view( options.textTemplate, {item: item, style: options.textStyle} ) %> 
 </li>
-
