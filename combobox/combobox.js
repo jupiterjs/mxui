@@ -28,26 +28,30 @@ steal.plugins('jquery/controller',
             if (this.options.items) {
                 this.lookup = new Lookup({});
                 this.lookup.build(this.options.items);
-                this.dropdown.controller().draw(this.options.items);
+                this.dropdown.controller().draw(this.options.items, true);
             }
         },
         found: function(items){
             this.lookup = new Lookup({});
             this.lookup.build(items);
 
-            this.dropdown.controller().draw(items);
+            this.dropdown.controller().draw(items, true);
             this.dropdown.controller().show();			
 
             this.itemsAlreadyLoaded = true;
         },
-        drawDropdown: function(instances){
-            this.dropdown.controller().draw(instances);
-        },
-        "input keyup": function(el, ev){				
-			var newVal = el.val();
-            if ($.trim(newVal) === "") newVal = "*"; 
-            var items = this.lookup.query(newVal);			
+        drawDropdown: function(items){
             this.dropdown.controller().draw(items, true);
+        },
+        "input keyup": function(el, ev){
+			var showNested = false;				
+			var newVal = el.val();
+            if ($.trim(newVal) === "") {
+				newVal = "*";
+				showNested = true;
+			} 
+            var items = this.lookup.query(newVal);			
+            this.dropdown.controller().draw(items, showNested);
             this.dropdown.controller().show();
         },
         /*
@@ -104,13 +108,13 @@ steal.plugins('jquery/controller',
 		    var item = this.lookup.getByValue(value);
 		    item.attr("enabled", true);
 		    var items = this.lookup.query("*");	
-		    this.dropdown.controller().draw(items)
+		    this.dropdown.controller().draw(items, true)
 		},
 		disable : function(value) {
 	        var item = this.lookup.getByValue(value);
 	        item.attr("enabled", false);
 		    var items = this.lookup.query("*");	
-		    this.dropdown.controller().draw(items)
+		    this.dropdown.controller().draw(items, true)
 		},		 
         ".toggle click": function(el, ev){
             this.find("input").trigger("focus");

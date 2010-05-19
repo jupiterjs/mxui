@@ -15,9 +15,9 @@ $.Controller.extend("Phui.Combobox.DropdownController", {
 			});
 		}
 	},
-	draw : function(items, isQuery) {		
+	draw : function(items, showNested) {		
 		this.element.html("");
-		this._draw(items, isQuery);
+		this._draw(items, showNested);
 		        
         this.element.phui_positionable({
             my: 'left top',
@@ -27,7 +27,7 @@ $.Controller.extend("Phui.Combobox.DropdownController", {
 		
 		//this.style();		
 	},
-	_draw : function(items, isQuery) {
+	_draw : function(items, showNested) {
 	    for(var i=0;i<items.length;i++) {
 	        var item = items[i];
 
@@ -36,9 +36,9 @@ $.Controller.extend("Phui.Combobox.DropdownController", {
 	            options: this.options
 	        });
 
-	        if(item.children.length && !isQuery) {
+	        if(item.children.length && showNested) {
 	            for(var j=0;j<item.children.length;j++) {
-	                this._draw(item.children);
+	                this._draw(item.children, showNested);
 	            }
 	        }
 	       
