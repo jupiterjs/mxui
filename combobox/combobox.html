@@ -23,6 +23,8 @@
 			<button id="setValue">Set Value</button>
 			<button id="getValue">Get Value</button>
 			<button id="query">Query</button>
+			<button id="enable">Enable</button>
+			<button id="disable">Disable</button>						
 		</div>
 
         <script type='text/javascript' 
@@ -207,7 +209,7 @@
 				}
 				 
 				$("#combobox_demo").phui_combobox({
-                    //items: items,
+                    /*items: items,*/
                     textTemplate: "//phui/combobox/views/default_text_template.ejs",
                     textStyle: "color:blue;font-style:italic;",
                     loadOnDemand: true,
@@ -236,7 +238,15 @@
 							$("#log").append("<div>" + values[i] + "</div>");
 						}
 					}
-				})				 													 					
+				});
+				$("#enable").click( function(ev){
+				    var value = $("#someValue").val();
+				    $("#combobox_demo").controller().enable(value);
+				});
+				$("#disable").click( function(ev){
+				    var value = $("#someValue").val();
+				    $("#combobox_demo").controller().disable(value);
+				});								 													 					
                 
             });
 			

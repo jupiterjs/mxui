@@ -93,23 +93,35 @@ steal.plugins('jquery/controller',
 				this.find("input").val(item.text);
 			}
          },
-		 query : function(text) {
+		query : function(text) {
 		 	var items = this.lookup.query(text);
 			return $.map(items, function(item){
 				return item.value;
 			})
 		 },
-         ".toggle click": function(el, ev){
-             this.find("input").trigger("focus");
-             this.dropdown.is(":visible") ? this.dropdown.controller().hide() : this.dropdown.controller().show();
-         },
-         destroy: function(){
-             this.dropdown.remove();
-             this.dropdown = null;
-             this.lookup._lookup = null;
-             this.lookup = null;
-			 this._super();
-         }
+		enable : function(value) {
+		    var item = this.lookup.getByValue(value);
+		    item.attr("enabled", true);
+		    var items = this.lookup.query("*");	
+		    this.dropdown.controller().draw(items)
+		},
+		disable : function(value) {
+	        var item = this.lookup.getByValue(value);
+	        item.attr("enabled", false);
+		    var items = this.lookup.query("*");	
+		    this.dropdown.controller().draw(items)
+		},		 
+        ".toggle click": function(el, ev){
+            this.find("input").trigger("focus");
+            this.dropdown.is(":visible") ? this.dropdown.controller().hide() : this.dropdown.controller().show();
+        },
+        destroy: function(){
+            this.dropdown.remove();
+            this.dropdown = null;
+            this.lookup._lookup = null;
+            this.lookup = null;
+            this._super();
+        }
         
     });
     
