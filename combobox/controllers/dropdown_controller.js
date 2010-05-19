@@ -55,6 +55,8 @@ $.Controller.extend("Phui.Combobox.DropdownController", {
 		var item = el.model();
         if (item) {
 			this.combobox.controller().val(item.value);
+			this.find("li").removeClass( this.options.selectedClassName );
+			el.addClass( this.options.selectedClassName );
 			this.element.hide();
 		}
 	},

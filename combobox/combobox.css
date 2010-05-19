@@ -45,6 +45,16 @@
 	overflow: hidden;	
 }
 
+.phui_combobox_dropdown .selected {
+	background-color: #FFDE58;
+}
+
+.phui_combobox_dropdown .selected span {
+	font-weight: bold !important;
+	font-style: normal !important;
+	color: black !important;
+}
+
 .phui_combobox_dropdown .hover {
 	background-color: orange;
 }
