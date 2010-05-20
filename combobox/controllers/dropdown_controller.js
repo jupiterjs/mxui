@@ -1,5 +1,4 @@
 $.Controller.extend("Phui.Combobox.DropdownController", {
-	listensTo : ["show", "hide", "draw"]
 }, 
 {
 	init : function(el, combobox, options) {
@@ -23,9 +22,7 @@ $.Controller.extend("Phui.Combobox.DropdownController", {
             my: 'left top',
             at: 'left bottom',
 			collision: 'none none'
-        }).trigger("move", this.combobox);
-		
-		//this.style();		
+        }).trigger("move", this.combobox);		
 	},
 	_draw : function(items, showNested) {
 	    for(var i=0;i<items.length;i++) {
@@ -41,7 +38,6 @@ $.Controller.extend("Phui.Combobox.DropdownController", {
 	                this._draw(item.children, showNested);
 	            }
 	        }
-	       
 	    }
 	},
 	mousedown : function(el, ev) {

@@ -17,7 +17,8 @@
         <div id="combobox_demo"></div>
 		<div><h1>Some html that dropdown draws over.</h1></div>
 		<div><button type="button">Dummy</button></div>
-		<label>Log:</label><div id="log"></div>
+		<span class="log"><label>Log (Set Value, Query, Change, Open):</label><div id="log"></div></span>
+		<span class="log"><label>Log (Get Value):</label><div id="log2"></div></span>		
 		<div class="commands">
             <input id="someValue" />
 			<button id="setValue">Set Value</button>
@@ -35,11 +36,29 @@
                             "jquery/model",
                             "jquery/dom/fixtures").then(function($){
                 
+				/*var isAlreadyAChild = function(items, childId) {
+					for(var i=0;i<items.length;i++) {
+						var item = items[i];
+                        var children = item.children;
+					    if(children && children.length) {
+     						for(var j=0;j<children.length;j++) {
+								var c = children[j];
+							    if(c.id == childId) return true;
+								if(c.children && c.children.length)
+								    return isAlreadyAChild(c.children, childId);
+						    }
+					    }
+					}
+					return false;
+				};*/
 				
-				$.fixture["-make"](["items", "item"], 40, function(num, item) {
+				$.fixture["-make"](["items", "item"], 40, function(num, items) {
                     
 					    var itemId = parseInt(Math.random() * num);
-		                var item = item[itemId]
+						/*while( isAlreadyAChild(items, itemId) ) {
+							itemId = parseInt(Math.random() * num);
+						}*/
+		                var item = items[itemId]
                         var experiment = parseInt(Math.random() * 10);
 			            if (num < 5) {
 							return {
@@ -109,11 +128,11 @@
 				}
 				 
 				$("#combobox_demo").phui_combobox({
-                    /*items: items,*/
+                    items: items,
                     textTemplate: "//phui/combobox/views/default_text_template.ejs",
                     textStyle: "color:blue;font-style:italic;",
 					autocompleteEnabled: true,
-                    loadOnDemand: true,
+                    loadOnDemand: false,
                     showNested: true,
                     maxHeight: "300px",
                     hoverClassName: "hover",
@@ -125,7 +144,7 @@
 				// get/set API demo
 				$("#getValue").bind("click", function(ev){
 					var value = $("#combobox_demo").controller().val();
-					$("#log").html("<span>" + value + "</span>");
+					$("#log2").html("<span>" + value + "</span>");
 				})		
 				$("#setValue").bind("click", function(ev){
 					var value = $("input#someValue").val();
@@ -156,12 +175,12 @@
 				
 				// event API for when a value is selected demo
 				$("#combobox_demo").bind("change", function(ev, value){
-					$("#log").html("<div>" + value + "</div>")
+					$("#log").html("<div>" + value + "</div>");
 				})		
 				
 				// event API for when the dropdown is opened
 				$("#combobox_demo").bind("open", function(ev){
-					$("#log").html("<div>Combobox Opened.</div>")
+					$("#log").html("<div>Combobox Opened.</div>");
 				}) 													 					
                 
             });

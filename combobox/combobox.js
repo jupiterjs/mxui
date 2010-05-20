@@ -1,5 +1,5 @@
 steal.plugins('jquery/controller',
-              'jquery/model/list',
+              'jquery/model',
 			  'jquery/view/ejs', 
 			  'phui/positionable')
 	 .models('lookup')
@@ -8,7 +8,10 @@ steal.plugins('jquery/controller',
 
     $.Controller.extend("Phui.Combobox", {
         defaults: {
-            maxHeight: "300px"
+            maxHeight: "300px",
+			autocompleteEnabled: true,
+            loadOnDemand: true,
+            showNested: true			
         }
     }, {
     
@@ -97,7 +100,13 @@ steal.plugins('jquery/controller',
 			if (item && item.enabled) {
 				this.currentValue = item.value;
 				this.find("input").val(item.text);
+				
+				// after selecting draw all items and mark item as selected
+				// (in case we came from an autocomplete lookup)
+		        var items = this.lookup.query("*");	
+		        this.dropdown.controller().draw( items, this.options.showNested );				
 				this.dropdown.controller().select(item);
+				
                 this.element.trigger("change", this.currentValue);				
 			}
          },
