@@ -34,7 +34,10 @@ steal.plugins('jquery/controller','phui/keycode').then(function(){
 			}
 			
 			// allow copy/paste			
-			if (ev.ctrlKey && key.toLowerCase() == "v") return;			
+			if (ev.ctrlKey && 
+					(key.toLowerCase() == "v" ||
+					 key.toLowerCase() == "c" ||
+					 key.toLowerCase() == "x")) return;			
 						
 			var current = this.element.val(),
 				before = current.substr(0,this.element.selectionStart()),
