@@ -126,23 +126,8 @@
 				for(var i=0;i<rawItems.length;i++) {
 					items.push( new Item(rawItems[i]) );
 				}*/
-				
-				var items = ["Archive", "Delete" , "None"];
 				 
-				$("#combobox_demo").phui_combobox({
-                    items: items,
-                    //textTemplate: "//phui/combobox/views/default_text_template.ejs",
-					textTemplate: "//phui/combobox/views/demo.ejs",
-                    textStyle: "color:blue;font-style:italic;",
-					autocompleteEnabled: true,
-                    loadOnDemand: false,
-                    showNested: false,
-                    maxHeight: null,
-                    hoverClassName: "hover",
-                    selectedClassName: "selected",
-					disabledClassName: "disabled",
-                    model: Item
-                 });		
+				$("#combobox_demo").phui_combobox({items: ["Archive", "Delete" , "None"]});		
 				 
 				// get/set API demo
 				$("#getValue").bind("click", function(ev){

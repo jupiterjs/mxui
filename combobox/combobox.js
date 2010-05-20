@@ -8,10 +8,16 @@ steal.plugins('jquery/controller',
 
     $.Controller.extend("Phui.Combobox", {
         defaults: {
-            maxHeight: "300px",
+            //textTemplate: "//phui/combobox/views/default_text_template.ejs",
+			textTemplate: "//phui/combobox/views/demo.ejs",
+            textStyle: "color:blue;font-style:italic;",
 			autocompleteEnabled: true,
-            loadOnDemand: true,
-            showNested: true			
+            loadOnDemand: false,
+            showNested: false,
+            maxHeight: null,
+            hoverClassName: "hover",
+            selectedClassName: "selected",
+			disabledClassName: "disabled"					
         }
     }, {
     
