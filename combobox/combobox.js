@@ -2,7 +2,7 @@ steal.plugins('jquery/controller',
               'jquery/model',
 			  'jquery/view/ejs', 
 			  'phui/positionable')
-	 .models('lookup')
+	 .models('lookup','item')
 	 .controllers('dropdown').then(function(){
 	 	
 
@@ -29,9 +29,18 @@ steal.plugins('jquery/controller',
      
             // pre-populate with items case they exist
             if (this.options.items) {
+				// create model instances from items
+				var instances = [];
+				for(var i=0;i<this.options.items.length;i++) {
+					var item = this.options.items[i];
+					instances.push( new Combobox.Models.Item(item) );
+				} 
+			
 				this.lookup = new Lookup({});
-				this.lookup.build( this.options.items, this.options.showNested, this.options.autocompleteEnabled );
-                this.dropdown.controller().draw( this.options.items, this.options.showNested );
+				//this.lookup.build( this.options.items, this.options.showNested, this.options.autocompleteEnabled );
+				this.lookup.build( instances, this.options.showNested, this.options.autocompleteEnabled );
+                //this.dropdown.controller().draw( this.options.items, this.options.showNested );
+				this.dropdown.controller().draw( instances, this.options.showNested );				
             }
         },
         found: function(items){
@@ -73,7 +82,8 @@ steal.plugins('jquery/controller',
 			
             // load items on demand
             if (this.options.loadOnDemand && !this.itemsAlreadyLoaded) {
-				this.options.model.findAll(this.options.params || {}, this.callback("found"));								
+				this.options.model.findAll(this.options.params || {}, this.callback("found"));
+												
             } 
         },
         focusout: function(el, ev){

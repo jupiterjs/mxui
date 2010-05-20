@@ -121,20 +121,27 @@
 				});									
 				
 				// create items to pre-populate combo
-				var items = [];
+				/*var items = [];
 				var rawItems = $.fixture["-items"]({data:{}})[0].data;
 				for(var i=0;i<rawItems.length;i++) {
 					items.push( new Item(rawItems[i]) );
-				}
+				}*/
+				
+				var items = [
+				                {"id": 1, "value": 1, "text": "archive", "enabled": true, "depth": 0, "children": []},
+								{"id": 2, "value": 2, "text": "delete", "enabled": true, "depth": 0, "children": []},
+								{"id": 3, "value": 3, "text": "none", "enabled": true, "depth": 0, "children": []},																 
+				            ];
 				 
 				$("#combobox_demo").phui_combobox({
                     items: items,
-                    textTemplate: "//phui/combobox/views/default_text_template.ejs",
+                    //textTemplate: "//phui/combobox/views/default_text_template.ejs",
+					textTemplate: "//phui/combobox/views/demo.ejs",
                     textStyle: "color:blue;font-style:italic;",
 					autocompleteEnabled: true,
                     loadOnDemand: false,
-                    showNested: true,
-                    maxHeight: "300px",
+                    showNested: false,
+                    maxHeight: null,
                     hoverClassName: "hover",
                     selectedClassName: "selected",
 					disabledClassName: "disabled",
