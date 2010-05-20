@@ -26,16 +26,20 @@ steal.plugins('jquery/controller','phui/keycode').then(function(){
 			//can be a regexp or a function
 			test : /.*/
 		}
-	},{
+	},{	
 		"keypress" : function(el, ev){
 			var key = $.keyname(ev)
 			if(key.length > 1){ //it is a special, non printable character
 				return;
 			}
+			
+			// allow copy/paste			
+			if (ev.ctrlKey && key.toLowerCase() == "v") return;			
+						
 			var current = this.element.val(),
 				before = current.substr(0,this.element.selectionStart()),
 				end = current.substr(this.element.selectionEnd()),
-				newVal = before+key+end
+				newVal = before+key+end 
 
 			if(!( (typeof this.options.test) == 'object' ? this.options.test.test(newVal) :  this.options.test(newVal))){
 				ev.preventDefault();
