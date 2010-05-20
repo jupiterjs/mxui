@@ -33,6 +33,14 @@ steal.plugins('jquery/controller',
 				var instances = [];
 				for(var i=0;i<this.options.items.length;i++) {
 					var item = this.options.items[i];
+                    if( typeof(item) == "string" ) {
+						item = {"text": item};
+						item["id"] = i + 1;
+						item["value"] = i + 1;
+						item["enabled"] = true;
+						item["depth"] = 0;
+						item["children"] = [];
+					}
 					instances.push( new Combobox.Models.Item(item) );
 				} 
 			
