@@ -4,16 +4,31 @@ steal.plugins('phui/combobox').then(function(){
     },
 	{
         init: function(){
-			this.combobox = $("<div/>").phui_combobox( {items: this.options.options} );
-			this.element.after(this.combobox);
-			this.element.val( this.combobox.controller().val() );
-			this.element.hide();
-			
-			this.bind(this.combobox , "change", "selected");
-		},
-		
-		"selected" : function(el, ev, value) {
-			this.element.val(value);
+			if(this.element[0].nodeName == "SELECT"){
+				var id = this.element.attr("id"), 
+					className = this.element.attr("class"),
+					name = this.element.attr("name");
+					
+				var input = $("<input type='text' />")
+							.attr("id", id)
+							.attr("name", name)
+							.attr("className", className)
+							
+				var options = [], option, $option;
+				this.element.find("option").each(function(){
+					$option = $(this);
+					option = {
+						value: $option.attr("value"),
+						text: $option.html()
+					}
+					if($option.attr("selected"))
+						option.selected = true;
+					options.push(option)
+				})
+				this.element.after(input);
+				this.element.remove();
+				input.phui_combobox(options);
+			}
 		}
 	});
 

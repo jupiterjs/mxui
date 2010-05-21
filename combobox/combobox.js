@@ -36,8 +36,9 @@ steal.plugins('jquery/controller',
 			this.element.css({height:"", width:""});	
             
 			// append hidden input to help with form data submit
-			var oldId = this.oldElement.attr("id");
-			$("<input/>").attr("name", oldId)
+			var oldName = this.oldElement.attr("name")
+			this.oldElement.removeAttr("name");
+			$("<input/>").attr("name", oldName)
 			    		 .appendTo(this.element)
 						 .hide();
 			

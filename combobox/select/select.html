@@ -13,17 +13,18 @@
         <link type="text/css" href="../combobox.css" rel="stylesheet" />		
 	</head>
 	<body>
-        <input id='expirationBehavior' type='text' />
+        <select id='expirationBehavior' name='forum[expirationBehavior]'>
+			<option value='0' selected='true'>archive</option>
+			<option value='1'>delete</option>
+			<option value='2'>none</option>
+		</select>
 		<script type='text/javascript' 
                 src='../../../steal/steal.js?phui/combobox/select,development'>   
         </script>
         <script type='text/javascript'>
             steal.plugins("phui/combobox/select").then(function($){
  
-			    $("#expirationBehavior").phui_combobox_select({
-					options: [{value: 1, text: "archive", selected: true}, 
-					          {value: 2, text: "delete"},
-							  {value: 3, text: "none"}] });		
+			    $("#expirationBehavior").phui_combobox_select();		
 	            
 			});
             steal.start();
