@@ -139,7 +139,7 @@ steal.plugins('jquery/controller',
 			}
         },
         val: function(value){
-            if(value === "undefined") 
+            if(!value && value != 0) 
 			    return this.currentValue;
 			var item = this.lookup.getByValue(value);
 			if (item && item.enabled) {
