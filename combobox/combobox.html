@@ -14,7 +14,7 @@
     </head>
     <body>
 
-        <div id="combobox_demo"></div>
+        <input id="combobox_demo"/>
 		
 		<div><h1>Some html that dropdown draws over.</h1></div>
 		<div><button type="button">Dummy</button></div>
@@ -130,29 +130,32 @@
 					items.push( new Item(rawItems[i]) );
 				}*/
 				 
-				//$("#combobox_demo").phui_combobox({items: ["Archive", "Delete" , "None"]});		
 				$("#combobox_demo").phui_combobox({
+					items: [{value: 1, text: "archive", selected: true}, 
+					          {value: 2, text: "delete"},
+							  {value: 3, text: "none"}] });			
+				/*$("#combobox_demo").phui_combobox({
 					maxHeight: "320px",
 					loadOnDemand: true,
 					showNested: true,
 					textTemplate: "//phui/combobox/views/default_text_template.ejs",					
 					model: Item
-				});
+				});*/
 				 
 				// get/set API demo
 				$("#getValue").bind("click", function(ev){
-					var value = $("#expirationBehavior").controller().val();
+					var value = $("#combobox_demo").controller().val();
 					$("#log2").html("<span>" + value + "</span>");
 				})		
 				$("#setValue").bind("click", function(ev){
 					var value = $("input#someValue").val();
-					$("#expirationBehavior").controller().val(value);
+					$("#combobox_demo").controller().val(value);
 				})
 				
 				// query API demo
 				$("#query").bind("click", function(ev){
 					var text = $("input#someValue").val();
-					var values = $("#expirationBehavior").controller().query(text);
+					var values = $("#combobox_demo").controller().query(text);
 					if (values.length) {
 						$("#log").html("");
 						for (var i = 0; i < values.length; i++) {

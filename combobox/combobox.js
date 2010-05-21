@@ -1,7 +1,8 @@
 steal.plugins('jquery/controller',
               'jquery/model',
 			  'jquery/view/ejs', 
-			  'phui/positionable')
+			  'phui/positionable',
+			  'phui/wrapper')
 	 .models('lookup','item')
 	 .controllers('dropdown').then(function(){
 	 	
@@ -20,13 +21,27 @@ steal.plugins('jquery/controller',
 			disabledClassName: "disabled"					
         }
     }, {
-    
+		setup : function(el, options) {
+    		var div = $('<div/>');
+    		this.oldElement = $(el).replaceWith(div);
+			div.attr("id", this.oldElement.attr("id"));
+			div.html(this.oldElement);
+		    this._super(div, options);	
+		},
         init: function(){
 			this.currentValue = "-1";
 			
 			// draw input box
-            this.element.html(this.view("//phui/combobox/views/init.ejs"));			
+            this.element.append(this.view("//phui/combobox/views/arrow.ejs"));		
+			this.element.css({height:"", width:""});	
             
+			// append hidden input to help with form data submit
+			var oldId = this.oldElement.attr("id");
+			$("<input/>").attr("name", oldId)
+			    		 .appendTo(this.element)
+						 .hide();
+			
+			
             // create dropdown and append it to body
             this.dropdown = $("<div/>").phui_combobox_dropdown( this.element, this.options ).hide();
             document.body.appendChild(this.dropdown[0]);	
@@ -136,6 +151,9 @@ steal.plugins('jquery/controller',
 		        this.dropdown.controller().draw( items, this.options.showNested );				
 				this.dropdown.controller().select(item);
 				
+				// bind values to the hidden input
+				this.find("input[name='" + this.oldElement.attr("id") + "']").val(this.currentValue);
+				
                 this.element.trigger("change", this.currentValue);				
 			}
          },
@@ -166,7 +184,10 @@ steal.plugins('jquery/controller',
             this.dropdown = null;
             this.lookup._lookup = null;
             this.lookup = null;
-            this._super();
+   			var me = this.element; //save a reference
+   			this._super()  //unbind everything
+   			me.replaceWith(this.oldElement); //replace with old
+   			this.oldElement = null;  //make sure we can't touch old			
         }
         
     });
