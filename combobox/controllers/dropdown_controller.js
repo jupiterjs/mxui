@@ -4,6 +4,7 @@ $.Controller.extend("Phui.Combobox.DropdownController", {
 	init : function(el, combobox, options) {
 		this.combobox = combobox;
 		this.options = options;
+		this.hasFocus = false;		
 	},
 	style : function() {
         this.element.css("width", this.combobox.css("width"));
@@ -40,10 +41,14 @@ $.Controller.extend("Phui.Combobox.DropdownController", {
 	        }
 	    }
 	},
-	mousedown : function(el, ev) {
-		this.keepFocus = this.combobox.controller().hasFocus;
+	mouseenter : function(el, ev) {
+        // trick to make dropdown close when combobox looses focus			
+		this.hasFocus = true;
 	},	
 	mouseleave : function(el, ev) {
+        // trick to make dropdown close when combobox looses focus			
+		this.hasFocus = false;
+		
 		this.combobox.find("input").focus();
 		this.find("li").removeClass(this.options.hoverClassName);					
 	},

@@ -127,7 +127,13 @@
 					items.push( new Item(rawItems[i]) );
 				}*/
 				 
-				$("#combobox_demo").phui_combobox({items: ["Archive", "Delete" , "None"]});		
+				//$("#combobox_demo").phui_combobox({items: ["Archive", "Delete" , "None"]});		
+				$("#combobox_demo").phui_combobox({
+					maxHeight: "320px",
+					loadOnDemand: true,
+					showNested: true,
+					model: Item
+				});
 				 
 				// get/set API demo
 				$("#getValue").bind("click", function(ev){

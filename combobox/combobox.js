@@ -28,10 +28,10 @@ steal.plugins('jquery/controller',
             this.element.html(this.view("//phui/combobox/views/init.ejs"));
             
             // create dropdown and append it to body
-            this.dropdown = $("<div/>").phui_combobox_dropdown( this.element, this.options );
+            this.dropdown = $("<div/>").phui_combobox_dropdown( this.element, this.options ).hide();
             document.body.appendChild(this.dropdown[0]);	
 			this.dropdown.controller().style();		
-			this.dropdown.controller().hide();
+			//this.dropdown.controller().hide();
      
             // pre-populate with items case they exist
             if (this.options.items) {
@@ -39,7 +39,7 @@ steal.plugins('jquery/controller',
 				var instances = [];
 				for(var i=0;i<this.options.items.length;i++) {
 					var item = this.options.items[i];
-                    if( typeof(item) == "string" ) {
+                    if( typeof item === "string" ) {
 						item = {"text": item};
 						item["id"] = i + 1;
 						item["value"] = i + 1;
@@ -83,16 +83,14 @@ steal.plugins('jquery/controller',
 			}
         },
         /*
-         * In chrome(2.0.172) when we click on the scrollbar, the input field will loose focus. And now if you click outside,
-         * then the dropdown won't close(as the input has already lost focus when you clicked on the srollbar)
-         * In Firefox(3.5), IE(8), opera(9.64), safari() when we click on the scrollbar the input field will not loose focus.
-         * Hence when you click outside (after clicking on the srollbar) the dropdown will close. This is the expected behaviour.
-         * So In chrome once the scrollbar is clicked, and then if I click outside the dropdown won't close.
-         * http://stackoverflow.com/questions/1345473/google-chrome-focus-issue-with-the-scrollbar
+		 * Bug: input looses focus on scroll bar click in IE, Chrome and Safari
+		 * Fix inspired in:
+		 * http://stackoverflow.com/questions/2284541/form-input-loses-focus-on-scroll-bar-click-in-ie
          */
         focusin: function(el, ev){
             // trick to make dropdown close when combobox looses focus			
-            this.hasFocus = true;
+            if(this.closeDropdownOnBlurTimeout) 
+			    clearTimeout(this.closeDropdownOnBlurTimeout);
 			
             // load items on demand
             if (this.options.loadOnDemand && !this.itemsAlreadyLoaded) {
@@ -101,21 +99,15 @@ steal.plugins('jquery/controller',
             } 
         },
         focusout: function(el, ev){
-            this.hasFocus = false;
-            var keepFocus = this.dropdown.controller().keepFocus;		
-			if (!$.browser.mozilla) {
-                if (!keepFocus) {
-                    this.dropdown.controller().hide();
-                }
-                else {
-                    this.dropdown.controller().keepFocus = false;
-                    this.element.focus();
-                }
-            }
-            else {
-                if (!keepFocus) 
-				    this.dropdown.controller().hide();
-            }
+            // trick to make dropdown close when combobox looses focus				
+			var self = this;
+			if (this.dropdown.controller().hasFocus) {
+				this.closeDropdownOnBlurTimeout = setTimeout(function(){
+					self.element.trigger("focusin");
+				}, 1);
+			} else {
+				this.dropdown.controller().hide();				
+			}
         },
         val: function(value){
             if(!value) 
