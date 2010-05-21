@@ -15,10 +15,13 @@
     <body>
 
         <div id="combobox_demo"></div>
+		
 		<div><h1>Some html that dropdown draws over.</h1></div>
 		<div><button type="button">Dummy</button></div>
+		
 		<span class="log"><label>Log (Set Value, Query, Change, Open):</label><div id="log"></div></span>
-		<span class="log"><label>Log (Get Value):</label><div id="log2"></div></span>		
+		<span class="log"><label>Log (Get Value):</label><div id="log2"></div></span>
+				
 		<div class="commands">
             <input id="someValue" />
 			<button id="setValue">Set Value</button>
@@ -132,23 +135,24 @@
 					maxHeight: "320px",
 					loadOnDemand: true,
 					showNested: true,
+					textTemplate: "//phui/combobox/views/default_text_template.ejs",					
 					model: Item
 				});
 				 
 				// get/set API demo
 				$("#getValue").bind("click", function(ev){
-					var value = $("#combobox_demo").controller().val();
+					var value = $("#expirationBehavior").controller().val();
 					$("#log2").html("<span>" + value + "</span>");
 				})		
 				$("#setValue").bind("click", function(ev){
 					var value = $("input#someValue").val();
-					$("#combobox_demo").controller().val(value);
+					$("#expirationBehavior").controller().val(value);
 				})
 				
 				// query API demo
 				$("#query").bind("click", function(ev){
 					var text = $("input#someValue").val();
-					var values = $("#combobox_demo").controller().query(text);
+					var values = $("#expirationBehavior").controller().query(text);
 					if (values.length) {
 						$("#log").html("");
 						for (var i = 0; i < values.length; i++) {

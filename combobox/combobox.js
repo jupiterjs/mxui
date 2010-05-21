@@ -25,7 +25,7 @@ steal.plugins('jquery/controller',
 			this.currentValue = "-1";
 			
 			// draw input box
-            this.element.html(this.view("//phui/combobox/views/init.ejs"));
+            this.element.html(this.view("//phui/combobox/views/init.ejs"));			
             
             // create dropdown and append it to body
             this.dropdown = $("<div/>").phui_combobox_dropdown( this.element, this.options ).hide();
@@ -36,10 +36,11 @@ steal.plugins('jquery/controller',
             // pre-populate with items case they exist
             if (this.options.items) {
 				// create model instances from items
-				var instances = [];
+				var selectedItem, instances = [];
 				for(var i=0;i<this.options.items.length;i++) {
 					var item = this.options.items[i];
-                    if( typeof item === "string" ) {
+                    
+					if( typeof item === "string" ) {
 						item = {"text": item};
 						item["id"] = i + 1;
 						item["value"] = i + 1;
@@ -47,14 +48,25 @@ steal.plugins('jquery/controller',
 						item["depth"] = 0;
 						item["children"] = [];
 					}
+					
+					// add reasonable default attributes
+					if( typeof item === "object" ) {
+						if(!item.id) item.id = item.value;
+						if(!item.enabled) item.enabled = true;
+						if(!item.depth) item.depth = 0;
+						if(!item.children) item.children = [];						
+					}
+					
+					// pick inital combobox value
+					if(item.selected) selectedItem = item;
+					
 					instances.push( new Combobox.Models.Item(item) );
 				} 
 			
 				this.lookup = new Lookup({});
-				//this.lookup.build( this.options.items, this.options.showNested, this.options.autocompleteEnabled );
 				this.lookup.build( instances, this.options.showNested, this.options.autocompleteEnabled );
-                //this.dropdown.controller().draw( this.options.items, this.options.showNested );
 				this.dropdown.controller().draw( instances, this.options.showNested );				
+				this.val( selectedItem.value );
             }
         },
         found: function(items){
@@ -83,6 +95,7 @@ steal.plugins('jquery/controller',
 			}
         },
         /*
+         * Trick to make dropdown close when combobox looses focus
 		 * Bug: input looses focus on scroll bar click in IE, Chrome and Safari
 		 * Fix inspired in:
 		 * http://stackoverflow.com/questions/2284541/form-input-loses-focus-on-scroll-bar-click-in-ie
