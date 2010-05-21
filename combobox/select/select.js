@@ -27,7 +27,9 @@ steal.plugins('phui/combobox').then(function(){
 				})
 				this.element.after(input);
 				this.element.remove();
-				input.phui_combobox(options);
+				input.phui_combobox({
+					items: options
+				});
 			}
 		}
 	});

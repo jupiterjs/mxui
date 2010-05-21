@@ -36,9 +36,9 @@ steal.plugins('jquery/controller',
 			this.element.css({height:"", width:""});	
             
 			// append hidden input to help with form data submit
-			var oldName = this.oldElement.attr("name")
+			this.oldElementName = this.oldElement.attr("name")
 			this.oldElement.removeAttr("name");
-			$("<input/>").attr("name", oldName)
+			$("<input/>").attr("name", this.oldElementName)
 			    		 .appendTo(this.element)
 						 .hide();
 			
@@ -139,7 +139,7 @@ steal.plugins('jquery/controller',
 			}
         },
         val: function(value){
-            if(!value) 
+            if(value === "undefined") 
 			    return this.currentValue;
 			var item = this.lookup.getByValue(value);
 			if (item && item.enabled) {
@@ -153,7 +153,7 @@ steal.plugins('jquery/controller',
 				this.dropdown.controller().select(item);
 				
 				// bind values to the hidden input
-				this.find("input[name='" + this.oldElement.attr("id") + "']").val(this.currentValue);
+				this.find("input[name='" + this.oldElementName + "']").val(this.currentValue);
 				
                 this.element.trigger("change", this.currentValue);				
 			}
@@ -185,6 +185,7 @@ steal.plugins('jquery/controller',
             this.dropdown = null;
             this.lookup._lookup = null;
             this.lookup = null;
+			this.oldElementName = null;			
    			var me = this.element; //save a reference
    			this._super()  //unbind everything
    			me.replaceWith(this.oldElement); //replace with old
