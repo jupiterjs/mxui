@@ -2,7 +2,8 @@ steal.plugins('jquery/controller',
               'jquery/model',
 			  'jquery/view/ejs', 
 			  'phui/positionable',
-			  'phui/wrapper')
+			  'phui/wrapper',
+			  'phui/selectable')
 	 .models('lookup','item')
 	 .controllers('dropdown').then(function(){
 	 	
@@ -18,7 +19,7 @@ steal.plugins('jquery/controller',
             maxHeight: null,
             hoverClassName: "hover",
             selectedClassName: "selected",
-			disabledClassName: "disabled"					
+			disabledClassName: "disabled"
         }
     }, {
 		setup : function(el, options) {
@@ -97,6 +98,11 @@ steal.plugins('jquery/controller',
             this.dropdown.controller().draw(items, this.options.showNested);
         },
         "input keyup": function(el, ev){
+			var key = $.keyname(ev)
+			if(key == "down")
+				return this.dropdown.find("li:first").trigger("select");
+			if(key == "up")
+				return this.dropdown.find("li:last").trigger("select");
 			if (this.options.autocompleteEnabled) {
 				var showNested = false;
 				var newVal = el.val();
@@ -140,7 +146,7 @@ steal.plugins('jquery/controller',
 					self.element.trigger("focusin");
 				}, 1);
 			} else {
-				this.dropdown.controller().hide();				
+				//this.dropdown.controller().hide();				
 			}
         },
         val: function(value){

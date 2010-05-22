@@ -1,10 +1,8 @@
 $.Controller.extend("Phui.Combobox.DropdownController", {
-}, 
-{
 	init : function(el, combobox, options) {
 		this.combobox = combobox;
 		this.options = options;
-		this.hasFocus = false;		
+		this.hasFocus = false;
 	},
 	style : function() {
         this.element.css("width", this.combobox.css("width"));
@@ -18,12 +16,11 @@ $.Controller.extend("Phui.Combobox.DropdownController", {
 	draw : function(items, showNested) {		
 		this.element.html("");
 		this._draw(items, showNested);
-		        
         this.element.phui_positionable({
             my: 'left top',
             at: 'left bottom',
 			collision: 'none none'
-        }).trigger("move", this.combobox);		
+        }).trigger("move", this.combobox);
 	},
 	_draw : function(items, showNested) {
 	    for(var i=0;i<items.length;i++) {
@@ -57,7 +54,7 @@ $.Controller.extend("Phui.Combobox.DropdownController", {
 		this.find("li").removeClass( this.options.selectedClassName );
 		el.addClass( this.options.selectedClassName );		
 	},
-	"li click" : function(el, ev) {
+	"li activate" : function(el, ev) {
 		var item = el.model();
         if (item) {
 			this.combobox.controller().val(item.value);
@@ -74,8 +71,11 @@ $.Controller.extend("Phui.Combobox.DropdownController", {
 		this.element.slideUp("fast");
 	},
 	show : function() {
-		this.element.slideDown("fast");
-		this.style();		
+		var self = this;
+		this.element.slideDown("fast", function(){
+			self.element.phui_selectable();
+		});
+		this.style();
 		this.combobox.trigger("open");		
 	}
 })
