@@ -1,0 +1,32 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
+            "http://www.w3.org/TR/html4/strict.dtd">
+<html lang="en">
+	<head>
+		<title>selectable</title>
+        <style type='text/css'>
+            li{
+            	list-style:none;
+				width:50px;
+            }
+			li.selected{
+				background-color: #DFB946;
+				border:1px solid black;
+			}
+        </style>
+	</head>
+	<body>
+        <ul id='menu'>
+            <li>one</li>
+            <li>two</li>
+            <li>three</li>
+        </ul>
+		<script type='text/javascript' 
+                src='../../steal/steal.js?phui/selectable,development'>   
+        </script>
+		<script type='text/javascript'>
+			$(function(){
+				$('#menu').phui_selectable()
+			})
+        </script>
+	</body>
+</html>

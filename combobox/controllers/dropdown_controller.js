@@ -29,7 +29,7 @@ $.Controller.extend("Phui.Combobox.DropdownController", {
 	    for(var i=0;i<items.length;i++) {
 	        var item = items[i];
 
-	        this.element.append("//phui/combobox/views/dropdown/row.ejs", {
+	        this.element.append("//phui/combobox/views/dropdown/row", {
 	            item: item,
 	            options: this.options
 	        });

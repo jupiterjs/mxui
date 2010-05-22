@@ -9,8 +9,8 @@ steal.plugins('jquery/controller',
 
     $.Controller.extend("Phui.Combobox", {
         defaults: {
-            //textTemplate: "//phui/combobox/views/default_text_template.ejs",
-			textTemplate: "//phui/combobox/views/demo.ejs",
+            //textTemplate: "//phui/combobox/views/default_text_template",
+			textTemplate: "//phui/combobox/views/demo",
             textStyle: "color:blue;font-style:italic;",
 			autocompleteEnabled: true,
             loadOnDemand: false,
@@ -32,7 +32,7 @@ steal.plugins('jquery/controller',
 			this.currentValue = "-1";
 			
 			// draw input box
-            this.element.append(this.view("//phui/combobox/views/arrow.ejs"));		
+            this.element.append(this.view("//phui/combobox/views/arrow"));		
 			this.element.css({height:"", width:""});	
             
 			// append hidden input to help with form data submit
@@ -90,7 +90,6 @@ steal.plugins('jquery/controller',
 			this.lookup.build( items, this.options.showNested, this.options.autocompleteEnabled );
 
             this.dropdown.controller().draw(items, this.options.showNested);
-            this.dropdown.controller().show();			
 
             this.itemsAlreadyLoaded = true;
         },
@@ -107,9 +106,15 @@ steal.plugins('jquery/controller',
 				}
 				var items = this.lookup.query(newVal);
 				this.dropdown.controller().draw(items, showNested);
-				this.dropdown.controller().show();
 			}
         },
+		"input focusin": function(el, ev){
+			// select all text
+		    el[0].focus();
+		    el[0].select();
+            if(!this.dropdown.is(":visible").length)
+				this.dropdown.controller().show();
+		},
         /*
          * Trick to make dropdown close when combobox looses focus
 		 * Bug: input looses focus on scroll bar click in IE, Chrome and Safari
@@ -178,7 +183,6 @@ steal.plugins('jquery/controller',
 		},		 
         ".toggle click": function(el, ev){
             this.find("input").trigger("focus");
-            this.dropdown.is(":visible") ? this.dropdown.controller().hide() : this.dropdown.controller().show();
         },
         destroy: function(){
             this.dropdown.remove();
