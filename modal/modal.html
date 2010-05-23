@@ -3,35 +3,61 @@
 <html lang="en">
 	<head>
 		<title>modal</title>
+        <link type="text/css" href="../smoothness/jquery-ui-1.7.2.custom.css" rel="stylesheet" />		
         <style type='text/css'>
             body {font-family: verdana}
             .error {border: solid 1px red;}
             .error_text { color: red; font-size: 10px;}
             td {padding: 3px;}
-			#modal {
-				width: 300px;
-				height: 200px;
-				border: solid 1px black;
-				background-color: #eeeeff;
-			}
+			.ui-dialog {font-size: 0.8em; width: 480px;}
+			.ui-dialog .ui-dialog-buttonpane {text-align: center;}
+			.ui-dialog .ui-dialog-buttonpane button {float: none}
+			.ui-widget-shadow {opacity: .70;filter:Alpha(Opacity=70); margin: -20px;}
         </style>
 	</head>
 	<body>
 	    <h1>Modal</h1>
-		<div id='modal'>
-	    	<h3>Some Modal</h3>
-			<p>Here is some text. Blah blah blah. I am watching SNL with Jennifer Lopez.
-				She still has it.  But, I am not sure SNL does.
-			</p>
-	    </div>
-		<a href="#" id='show'>show as modal</a>
-		<script type='text/javascript' 
-                src='../../steal/steal.js?steal[app]=phui/modal&steal[env]=development'>   
+		<div><a href="#" class="basic action">Click here to see basic modal in action!</a></div>
+		<div><a href="#" class="yesno action">Click here to see yes/no modal in action!</a></div>
+		<div id="modal" style="display:none;"></div>
+        <script type='text/javascript' 
+                src='../../steal/steal.js'>   
         </script>
-		<script type='text/javascript'>
-			$("#show").click(function(){
-				$("#modal").phui_modal().trigger('show');
-			})
+        <script type='text/javascript'>
+            steal.plugins("jquery/controller/view",
+						  "jquery/view/ejs",
+						  "phui/block",
+                          "phui/modal").then(function($){
+								
+				$('.action').css('cursor','pointer');
+				$('.basic').bind('click',function(){
+					//$('#modal').remove().appendTo(document.documentElement);
+	    			$('#modal').phui_modal({
+						title: 'Information',
+						message: 'You must click Cancel to remove the modal!'
+					});
+				    $('#modal').trigger('show');
+					$(this).toggleClass('ui-state-default')
+			    });
+				$('.yesno').bind('click',function(){
+					//$('#modal').remove().appendTo(document.documentElement);
+					var yes = function(){alert('Your changes are safe!');};
+					var no = function(){alert('All your data is lost!');};				
+	    			$('#modal').phui_modal_buttons({
+						title: 'Warning!',
+						message: 'Wait! You haven\'t saved your changes yet! Save changes?',
+						buttons: {
+							'Yes': yes,
+							'No': no
+						}
+					});
+				    $('#modal').trigger('show');
+					$(this).toggleClass('ui-state-default')
+			    });
+			
+		});
+		
+	    steal.start();	
 		</script>
 	</body>
 </html>
