@@ -19,7 +19,8 @@ steal.plugins('jquery/controller',
             //paginatorType: Phui.Paginator.Page,
 			renderer : function(inst, options, i){
 				return $.View("//phui/grid/views/row",{ item: inst, options: options, i: i })
-			}
+			},
+			noItems : "No Items Found."
         },
         listensTo: ["paginate"]
 
@@ -102,7 +103,15 @@ steal.plugins('jquery/controller',
         },*/
         found: function (items)
         {
-            if (!this.options.columns)
+            if(!items.length){
+				
+				this.element.children('.header').hide();
+				this.find('.innerBody').html(this.options.noItems).trigger('resize')
+				return;
+			}
+			
+			
+			if (!this.options.columns)
             {
                 var columns = (this.options.columns = {})
                 $.each(this.options.model.attributes, function (name, type)
