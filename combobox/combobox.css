@@ -34,7 +34,7 @@
 }
 
 .phui_combobox_dropdown li {
-	margin: 0px;
+	margin: 1px;
 	padding: 3px 0px;
 	cursor: pointer;
 	display: block;
@@ -45,21 +45,21 @@
 	overflow: hidden;
 }
 
-.phui_combobox_dropdown .selected {
+.phui_combobox_dropdown .activated {
 	background-color: #FFDE58;
 }
 
-.phui_combobox_dropdown .selected span {
+.phui_combobox_dropdown .activated span {
 	font-weight: bold !important;
 	font-style: normal !important;
 	color: black !important;
 }
 
-.phui_combobox_dropdown .hover {
+.phui_combobox_dropdown .selected {
 	background-color: orange;
 }
 
-.phui_combobox_dropdown .hover span {
+.phui_combobox_dropdown .selected span {
 	color: white !important;
 }
 

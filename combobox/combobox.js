@@ -17,8 +17,8 @@ steal.plugins('jquery/controller',
             loadOnDemand: false,
             showNested: false,
             maxHeight: null,
-            hoverClassName: "hover",
             selectedClassName: "selected",
+            activatedClassName: "activated",
 			disabledClassName: "disabled"
         }
     }, {
@@ -43,12 +43,10 @@ steal.plugins('jquery/controller',
 			    		 .appendTo(this.element)
 						 .hide();
 			
-			
             // create dropdown and append it to body
             this.dropdown = $("<div/>").phui_combobox_dropdown( this.element, this.options ).hide();
             document.body.appendChild(this.dropdown[0]);	
 			this.dropdown.controller().style();		
-			//this.dropdown.controller().hide();
      
             // pre-populate with items case they exist
             if (this.options.items) {
@@ -99,10 +97,22 @@ steal.plugins('jquery/controller',
         },
         "input keyup": function(el, ev){
 			var key = $.keyname(ev)
-			if(key == "down")
-				return this.dropdown.find("li:first").trigger("select");
-			if(key == "up")
-				return this.dropdown.find("li:last").trigger("select");
+			
+			// if down key is clicked, navigate to first item
+			if (key == "down") {
+				this.dropdown.controller().hasFocus = true;
+				this.dropdown.find("li:first").trigger("select");
+				return;
+			}
+			
+			// if up key is clicked, navigate to last item			
+			if (key == "up") {
+				this.dropdown.controller().hasFocus = true;
+				this.dropdown.find("li:last").trigger("select");
+				return;
+			}
+			
+			// do autocomplete lookup
 			if (this.options.autocompleteEnabled) {
 				var showNested = false;
 				var newVal = el.val();
@@ -118,7 +128,7 @@ steal.plugins('jquery/controller',
 			// select all text
 		    el[0].focus();
 		    el[0].select();
-            if(!this.dropdown.is(":visible").length)
+            if(!this.dropdown.is(":visible"))
 				this.dropdown.controller().show();
 		},
         /*
@@ -146,7 +156,7 @@ steal.plugins('jquery/controller',
 					self.element.trigger("focusin");
 				}, 1);
 			} else {
-				//this.dropdown.controller().hide();				
+				this.dropdown.controller().hide();				
 			}
         },
         val: function(value){
@@ -161,7 +171,7 @@ steal.plugins('jquery/controller',
 				// (in case we came from an autocomplete lookup)
 		        var items = this.lookup.query("*");	
 		        this.dropdown.controller().draw( items, this.options.showNested );				
-				this.dropdown.controller().select(item);
+				this.dropdown.controller().val(item);
 				
 				// bind values to the hidden input
 				this.find("input[name='" + this.oldElementName + "']").val(this.currentValue);

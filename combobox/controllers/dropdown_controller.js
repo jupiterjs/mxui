@@ -12,21 +12,28 @@ $.Controller.extend("Phui.Combobox.DropdownController", {
 				"overflow": "auto"
 			});
 		}
+		this.find("li").css("width", this.element.width() - 2);
 	},
 	draw : function(items, showNested) {		
-		this.element.html("");
+		this.element.html("<ul/>");
 		this._draw(items, showNested);
+		
+		this.find("ul").phui_selectable();
+		
+		this.style();		
+
         this.element.phui_positionable({
             my: 'left top',
             at: 'left bottom',
 			collision: 'none none'
         }).trigger("move", this.combobox);
+		
 	},
 	_draw : function(items, showNested) {
 	    for(var i=0;i<items.length;i++) {
 	        var item = items[i];
 
-	        this.element.append("//phui/combobox/views/dropdown/row", {
+	        this.find("ul").append("//phui/combobox/views/dropdown/row", {
 	            item: item,
 	            options: this.options
 	        });
@@ -49,33 +56,42 @@ $.Controller.extend("Phui.Combobox.DropdownController", {
 		this.combobox.find("input").focus();
 		this.find("li").removeClass(this.options.hoverClassName);					
 	},
-	select: function(item) {
-		var el = this.find("li.item_" + item.value + ":first");
-		this.find("li").removeClass( this.options.selectedClassName );
-		el.addClass( this.options.selectedClassName );		
+	val: function(item) {
+		var el = this.find("li.combobox_models_item_" + item.value + ":first");
+		/*this.find("li").removeClass( this.options.selectedClassName );
+		el.addClass( this.options.selectedClassName );*/		
+		//el.trigger("activate");
 	},
 	"li activate" : function(el, ev) {
 		var item = el.model();
         if (item) {
+			// set combobox new value
 			this.combobox.controller().val(item.value);
+			
+			// highlight activated item
+            this.find("li").removeClass( this.options.activatedClassName );			
+		    el.addClass( this.options.activatedClassName );
+			
+			// then hide dropdown			
 			this.element.hide();
 		}
 	},
-	"li mouseenter" : function(el, ev) {
+	"li select" : function(el, ev) {
+		// highlight selected item		
+		this.find("li").removeClass( this.options.selectedClassName );
+		el.addClass( this.options.selectedClassName );
+	},
+	/*"li mouseenter" : function(el, ev) {
 		el.addClass(this.options.hoverClassName);	
 	},
 	"li mouseleave" : function(el, ev) {
 		el.removeClass(this.options.hoverClassName);				
-	},
+	},*/
 	hide : function() {
 		this.element.slideUp("fast");
 	},
 	show : function() {
-		var self = this;
-		this.element.slideDown("fast", function(){
-			self.element.phui_selectable();
-		});
-		this.style();
+		this.element.slideDown("fast");		
 		this.combobox.trigger("open");		
 	}
 })
