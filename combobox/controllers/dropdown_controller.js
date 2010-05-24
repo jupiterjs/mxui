@@ -18,7 +18,11 @@ $.Controller.extend("Phui.Combobox.DropdownController", {
 		this.element.html("<ul/>");
 		this._draw(items, showNested);
 		
-		this.find("ul").phui_selectable();
+		// add up/down key navigation
+		this.find("ul").phui_selectable({
+            selectedClassName: "selected",
+            activatedClassName: "activated"			
+		});
 		
 		this.style();		
 
@@ -76,17 +80,6 @@ $.Controller.extend("Phui.Combobox.DropdownController", {
 			this.element.hide();
 		}
 	},
-	"li select" : function(el, ev) {
-		// highlight selected item		
-		this.find("li").removeClass( this.options.selectedClassName );
-		el.addClass( this.options.selectedClassName );
-	},
-	/*"li mouseenter" : function(el, ev) {
-		el.addClass(this.options.hoverClassName);	
-	},
-	"li mouseleave" : function(el, ev) {
-		el.removeClass(this.options.hoverClassName);				
-	},*/
 	hide : function() {
 		this.element.slideUp("fast");
 	},

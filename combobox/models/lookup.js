@@ -1,4 +1,4 @@
-$.Model.extend("Lookup",
+$.Model.extend("Combobox.Models.Lookup",
 {
 },
 {

@@ -78,14 +78,14 @@ steal.plugins('jquery/controller',
 					instances.push( new Combobox.Models.Item(item) );
 				} 
 			
-				this.lookup = new Lookup({});
+				this.lookup = new Combobox.Models.Lookup({});
 				this.lookup.build( instances, this.options.showNested, this.options.autocompleteEnabled );
 				this.dropdown.controller().draw( instances, this.options.showNested );				
 				this.val( selectedItem.value );
             }
         },
         found: function(items){
-			this.lookup = new Lookup({});
+			this.lookup = new Combobox.Models.Lookup({});
 			this.lookup.build( items, this.options.showNested, this.options.autocompleteEnabled );
 
             this.dropdown.controller().draw(items, this.options.showNested);

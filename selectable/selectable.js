@@ -1,6 +1,12 @@
 steal.plugins('jquery/controller', 'phui/keycode')
      .then(function(){
 	 	$.Controller.extend('Phui.Selectable',{
+			defaults : {
+				selectedClassName : "selected",
+				activatedClassName : "activated"
+			}
+		},
+		{
 			init: function(){
 				this.element.find('li').each(function(){
 					$(this).attr('tabindex', 0)
@@ -14,25 +20,25 @@ steal.plugins('jquery/controller', 'phui/keycode')
 				el.trigger("activate")
 			},
 			"li focusin": function(el, ev){
-				el.addClass('selected')
+				el.addClass( this.options.selectedClassName )
 			},
 			"li activate": function(el, ev){
-				var activated = this.element.find('.activated')
+				var activated = this.element.find( '.' + this.options.activatedClassName )
 				if(activated.length)
 					activated.trigger('deactivate');
-				el.addClass('activated')
+				el.addClass( this.options.activatedClassName );
 			},
 			"li deactivate": function(el, ev){
-				el.removeClass('activated')
+				el.removeClass( this.options.activatedClassName );
 			},
 			"li select": function(el, ev){
-				var selected = this.element.find('.selected')
+				var selected = this.element.find( '.' + this.options.selectedClassName )
 				if(selected.length)
 					selected.trigger('deselect');
 				el[0].focus();
 			},
 			"li deselect": function(el, ev){
-				el.removeClass('selected')
+				el.removeClass( this.options.selectedClassName )
 			},
 			"li keydown": function(el, ev){
 				var key = $.keyname(ev)
