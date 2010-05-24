@@ -31,6 +31,7 @@ steal.plugins('jquery/controller',
 		},
         init: function(){
 			this.currentValue = "-1";
+			this.hasFocus = false;
 			
 			// draw input box
             this.element.append(this.view("//phui/combobox/views/arrow"));		
@@ -164,13 +165,18 @@ steal.plugins('jquery/controller',
 				this.dropdown.controller().hide();				
 			}
         },
+		mouseleave : function(el, ev) {
+			if (this.dropdown.is(":visible")) {
+				this.find("input:visible").focus();
+			}		
+		},		
         val: function(value){
             if(!value && value != 0) 
 			    return this.currentValue;
 			var item = this.lookup.getByValue(value);
 			if (item && item.enabled) {
 				this.currentValue = item.value;
-				this.find("input").val(item.text);
+				this.find("input:visible").val(item.text);
 				
 				// after selecting draw all items and mark item as selected
 				// (in case we came from an autocomplete lookup)
@@ -203,7 +209,7 @@ steal.plugins('jquery/controller',
 		    this.dropdown.controller().draw( items, this.options.showNested );
 		},		 
         ".toggle click": function(el, ev){
-            this.find("input").trigger("focus");
+            this.find("input:visible").trigger("focus");
         },
         destroy: function(){
             this.dropdown.remove();
