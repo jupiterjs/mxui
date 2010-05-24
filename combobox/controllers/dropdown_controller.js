@@ -49,17 +49,6 @@ $.Controller.extend("Phui.Combobox.DropdownController", {
 	        }
 	    }
 	},
-	mouseenter : function(el, ev) {
-        // trick to make dropdown close when combobox looses focus			
-		this.hasFocus = true;
-	},	
-	mouseleave : function(el, ev) {
-        // trick to make dropdown close when combobox looses focus			
-		this.hasFocus = false;
-		
-		this.combobox.find("input").focus();
-		//this.find("li").removeClass(this.options.hoverClassName);					
-	},
 	keyup : function(el, ev) {
 		var key = $.keyname(ev);
 				
@@ -82,12 +71,37 @@ $.Controller.extend("Phui.Combobox.DropdownController", {
 			
 			// highlight activated item
             this.find("li").removeClass( this.options.activatedClassName );			
-		    el.addClass( this.options.activatedClassName );
+		    el.addClass( this.options.activatedClassName );			
 			
 			// then hide dropdown			
 			this.element.hide();
+			
+            // trick to make dropdown close when combobox looses focus			
+		    this.hasFocus = false;			
 		}
 	},
+	mouseenter : function(el, ev) {
+        // trick to make dropdown close when combobox looses focus			
+		this.hasFocus = true;		
+	},	
+	mouseleave : function(el, ev) {
+        // trick to make dropdown close when combobox looses focus			
+		this.hasFocus = false;
+								
+		this.combobox.find("input:visible").focus();
+		
+		// .focus() does not trigger focus on input in IE so we must
+		// trigger focusout on this.element explicitely.
+		if($.browser.msie) this.element.trigger("focusout");		
+	},
+	focusin : function(el, ev) {
+        // trick to make dropdown close when combobox looses focus				
+		this.hasFocus = true;
+	},
+	focusout : function(el, ev) {
+        // trick to make dropdown close when combobox looses focus				
+		this.hasFocus = false;
+	},		
 	hide : function() {
 		this.element.slideUp("fast");
 	},

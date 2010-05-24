@@ -132,7 +132,7 @@ steal.plugins('jquery/controller',
         },
 		"input focusin": function(el, ev){
 			// select all text
-		    el[0].focus();
+		    //el[0].focus();
 		    el[0].select();
             if(!this.dropdown.is(":visible"))
 				this.dropdown.controller().show();
@@ -168,6 +168,10 @@ steal.plugins('jquery/controller',
 		mouseleave : function(el, ev) {
 			if (this.dropdown.is(":visible")) {
 				this.find("input:visible").focus();
+				
+				// .focus() does not trigger focus on input in IE so we must
+				// trigger focusout on this.dropdown explicitely.
+				if($.browser.msie) this.dropdown.trigger("focusout");
 			}		
 		},		
         val: function(value){
@@ -210,6 +214,13 @@ steal.plugins('jquery/controller',
 		},		 
         ".toggle click": function(el, ev){
             this.find("input:visible").trigger("focus");
+			
+			// .focus() does not trigger focus on input in IE so we must
+			// show/hide dropdown explicitely.
+			if ($.browser.msie) {
+				this.dropdown.is(":visible") ? 
+				    this.dropdown.controller().hide() : this.dropdown.controller().show();				
+			}			
         },
         destroy: function(){
             this.dropdown.remove();
