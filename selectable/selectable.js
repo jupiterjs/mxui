@@ -23,7 +23,7 @@ steal.plugins('jquery/controller', 'phui/keycode')
 				el.addClass( this.options.selectedClassName )
 			},
 			"li activate": function(el, ev){
-				var activated = this.element.find( '.' + this.options.activatedClassName )
+				var activated = this.element.find( '.' + this.options.activatedClassName );
 				if(activated.length)
 					activated.trigger('deactivate');
 				el.addClass( this.options.activatedClassName );
@@ -32,13 +32,13 @@ steal.plugins('jquery/controller', 'phui/keycode')
 				el.removeClass( this.options.activatedClassName );
 			},
 			"li select": function(el, ev){
-				var selected = this.element.find( '.' + this.options.selectedClassName )
+				var selected = this.element.find( '.' + this.options.selectedClassName );
 				if(selected.length)
 					selected.trigger('deselect');
 				el[0].focus();
 			},
 			"li deselect": function(el, ev){
-				el.removeClass( this.options.selectedClassName )
+				el.removeClass( this.options.selectedClassName );
 			},
 			"li keydown": function(el, ev){
 				var key = $.keyname(ev)

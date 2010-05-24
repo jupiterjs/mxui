@@ -98,6 +98,11 @@ steal.plugins('jquery/controller',
         "input keyup": function(el, ev){
 			var key = $.keyname(ev)
 			
+			// close dropdown on escape
+			if (key == "escape") {
+				this.dropdown.controller().hide();				
+			}
+			
 			// if down key is clicked, navigate to first item
 			if (key == "down") {
 				this.dropdown.controller().hasFocus = true;

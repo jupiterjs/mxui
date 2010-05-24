@@ -58,7 +58,15 @@ $.Controller.extend("Phui.Combobox.DropdownController", {
 		this.hasFocus = false;
 		
 		this.combobox.find("input").focus();
-		this.find("li").removeClass(this.options.hoverClassName);					
+		//this.find("li").removeClass(this.options.hoverClassName);					
+	},
+	keyup : function(el, ev) {
+		var key = $.keyname(ev);
+				
+		// close dropdown on escape
+		if (key == "escape") {
+			this.hide();				
+		}		
 	},
 	val: function(item) {
 		var el = this.find("li.combobox_models_item_" + item.value + ":first");
