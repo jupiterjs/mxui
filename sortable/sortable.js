@@ -82,7 +82,7 @@ steal.plugins('jquery/controller','jquery/event/drop','jquery/event/drag/limit',
 					}
 			}
 		},
-		"dropped" : function(el, ev, drop, drag){
+		"dropon" : function(el, ev, drop, drag){
 			if(this.element.has(drag.element).length){
 				this.find(".sortable-placeholder").replaceWith(drag.element)
 			}else{

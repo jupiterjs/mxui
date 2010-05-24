@@ -44,15 +44,20 @@ steal.plugins('jquery/controller',
         windowresize: function ()
         {
             var body = this.element.children('.body'),
-                    header = this.element.children(".header");
+                    header = this.element.children(".header"),
+					hideHead = header.is(':visible');
             body.hide();
-            header.hide();
+            if (hideHead) {
+				header.hide();
+			}
             var footer = this.element.children(".footer").width();
             var table = body.find('table').width(footer > 0 ? footer - 20 : 20);
             body.children().eq(0).width(footer > 20 ? footer  : 20);
             header.width(footer > 20 ? footer : 20);
             body.show();
-            header.show();
+            if (hideHead) {
+				header.show();
+			}
 			if(table.height() < body.height()){
 				table.width(footer > 0 ? footer  : 20)
 			}
@@ -103,10 +108,13 @@ steal.plugins('jquery/controller',
         },*/
         found: function (items)
         {
-            if(!items.length){
+            this.options.count = items.count;
+			if(!items.length){
 				
 				this.element.children('.header').hide();
+				 this.element.trigger("updated", { params: this.params(), items: items })
 				this.find('.innerBody').html(this.options.noItems).trigger('resize')
+				
 				return;
 			}
 			
@@ -120,9 +128,6 @@ steal.plugins('jquery/controller',
                         columns[name] = $.String.capitalize(name)
                 })
             }
-            this.options.count = items.count;
-
-
             var body = this.element.children('.body')
 
             //draw column with set widths

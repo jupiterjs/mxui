@@ -97,7 +97,7 @@ steal.plugins('jquery/controller','jquery/dom/dimensions','jquery/event/resize')
 					return false;
 				var get = {"position": true, "display": true};
 				$.curStyles(this, get);
-				return get.position !== "absolute" && 
+				return get.position !== "absolute" && get.position !== "fixed" &&
 					   get.display !== "none" && !jQuery.expr.filters.hidden(this)
 			}),
 			spaceUsed = 0,

@@ -9,9 +9,9 @@ steal.plugins('jquery/controller','jquery/view/ejs','jquery/event/default').then
 			count: 0
 		},
 		pageData : function(options){
-			var offset = options.offset, 
-				count = options.count, 
-				limit = options.limit, 
+			var offset = options.offset || 0, 
+				count = options.count || 0, 
+				limit = options.limit || 0, 
 				pageCount = options.pageCount || 10,
 				page= Math.floor(offset / limit),
 				totalPages= Math.ceil(count / limit),
