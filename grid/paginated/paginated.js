@@ -50,3 +50,4 @@ steal.plugins('phui/grid','phui/paginator/page').then(function($){
         }
 	})
 })
+.views("//phui/grid/paginated/views/footer.ejs");

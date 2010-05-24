@@ -319,3 +319,9 @@ steal.plugins('jquery/controller',
     })
 
 })
+.views("//phui/grid/views/body.ejs",
+       "//phui/grid/views/columns.ejs",
+       "//phui/grid/views/header.ejs",
+       "//phui/grid/views/init.ejs",
+       "//phui/grid/views/row.ejs"
+       )

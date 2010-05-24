@@ -124,3 +124,4 @@ steal.plugins('phui/grid','jquery/event/drop','phui/sortable').then(function($){
 	})
 
 })
+.views("//phui/grid/groupable/views/init.ejs");

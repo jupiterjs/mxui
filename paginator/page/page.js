@@ -41,3 +41,4 @@ steal.plugins('phui/paginator').then(function($){
 		
 	})
 })
+.views("//phui/paginator/page/views/init.ejs");

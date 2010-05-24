@@ -79,3 +79,4 @@ steal.plugins('jquery/controller','jquery/view/ejs','jquery/event/default').then
 		}
 	})
 })
+.views("//phui/paginator/views/init.ejs");
