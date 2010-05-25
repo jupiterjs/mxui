@@ -37,10 +37,25 @@ $.Controller.extend("Phui.Combobox.DropdownController", {
 	    for(var i=0;i<items.length;i++) {
 	        var item = items[i];
 
-	        this.find("ul").append("//phui/combobox/views/dropdown/row", {
+	        /*this.find("ul").append("//phui/combobox/views/dropdown/row", {
 	            item: item,
 	            options: this.options
-	        });
+	        });*/
+            /*var rowTemplate = "<li $item >";
+			rowTemplate += "<span style='float:left;margin-left:$marginLeftpx'>&nbsp;</span>";
+			rowTemplate += this.options.textTemplate.replace("$itemText", item.text);
+			rowTemplate += "</li>";
+			
+			if(item.enabled) {
+				rowTemplate.replace("$item", "item " + item.identity());
+				this.find("ul").append(rowTemplate);
+				this.find("." + item.identity()).css( this.options.textStyle)
+			} else {
+				rowTemplate.replace("$item", "");
+				this.find("ul").append(rowTemplate);
+				this.find("." + item.identity()).css( this.options.textStyle)				
+			}*/
+			
 
 	        if(item.children.length && showNested) {
 	            for(var j=0;j<item.children.length;j++) {

@@ -11,7 +11,8 @@ steal.plugins('jquery/controller',
     $.Controller.extend("Phui.Combobox", {
         defaults: {
             //textTemplate: "//phui/combobox/views/default_text_template",
-			textTemplate: "//phui/combobox/views/demo",
+			//textTemplate: "//phui/combobox/views/demo",
+			textTemplate: "",
             textStyle: "color:blue;font-style:italic;",
 			autocompleteEnabled: true,
             loadOnDemand: false,
@@ -34,7 +35,9 @@ steal.plugins('jquery/controller',
 			this.hasFocus = false;
 			
 			// draw input box
-            this.element.append(this.view("//phui/combobox/views/arrow"));		
+            //this.element.append(this.view("//phui/combobox/views/arrow"));
+			var arrowHtml = "<div class='toggle ui-icon ui-icon-triangle-1-s'>&nbsp;</div>";
+			this.element.append(arrowHtml);		
 			this.element.css({height:"", width:""});	
             
 			// append hidden input to help with form data submit
