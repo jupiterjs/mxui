@@ -12,7 +12,13 @@ steal.plugins('jquery/controller',
         defaults: {
             //textTemplate: "//phui/combobox/views/default_text_template",
 			//textTemplate: "//phui/combobox/views/demo",
-			textTemplate: "",
+			render: {
+				"itemText" : function(item) {
+				    var html = [];
+					html.push("<span class='text'>" + item.text + "</span>");
+					return html;
+				}
+			},
             textStyle: "color:blue;font-style:italic;",
 			autocompleteEnabled: true,
             loadOnDemand: false,
