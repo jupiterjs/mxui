@@ -44,12 +44,15 @@ $.Controller.extend("Phui.Combobox.DropdownController", {
 			
 			var rowTemplate = [];
 			rowTemplate.push("<li class='item " + item.identity());
-			item.enabled ? rowTemplate.push("' >") : rowTemplate.push(" disabled' >"); 
+			item.enabled ? rowTemplate.push("' >") : rowTemplate.push(this.options.disabledClassName + "' >"); 
 			rowTemplate.push("<span style='float:left;margin-left:" + item.depth*20 + "'>&nbsp;</span>");
 			rowTemplate.push( this.options.render["itemText"](item) );
 			rowTemplate.push("</li>");
 			
 			this.find("ul").append( rowTemplate.join(" ") );
+			// attach model to element
+			item.hookup( this.find("." + item.identity())[0] );
+			// apply custom style to item style 
 			this.find("." + item.identity() + " .text").css( this.options.textStyle );
 
 	        if(item.children.length && showNested) {
@@ -74,22 +77,25 @@ $.Controller.extend("Phui.Combobox.DropdownController", {
 		//el.trigger("activate");
 	},
 	"li activate" : function(el, ev) {
-		var item = el.model();
-        if (item) {
-			// set combobox new value
-			this.combobox.controller().val(item.value);
-			
-			// highlight activated item
-            this.find("li").removeClass( this.options.activatedClassName );			
-		    el.addClass( this.options.activatedClassName );			
-			
-			// then hide dropdown			
-			this.element.hide();
-			
-            // trick to make dropdown close when combobox looses focus			
-		    this.hasFocus = false;			
+		if (!el.hasClass(this.options.disabledClassName)) {
+			var item = el.model();
+			if (item) {
+				// set combobox new value
+				this.combobox.controller().val(item.value);
+				
+				// highlight activated item
+				this.find("li").removeClass(this.options.activatedClassName);
+				el.addClass(this.options.activatedClassName);
+				
+				// then hide dropdown			
+				this.element.hide();
+				
+				// trick to make dropdown close when combobox looses focus			
+				this.hasFocus = false;
+			}
 		}
 	},
+	
 	mouseenter : function(el, ev) {
         // trick to make dropdown close when combobox looses focus			
 		this.hasFocus = true;		

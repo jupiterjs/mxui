@@ -10,8 +10,6 @@ steal.plugins('jquery/controller',
 
     $.Controller.extend("Phui.Combobox", {
         defaults: {
-            //textTemplate: "//phui/combobox/views/default_text_template",
-			//textTemplate: "//phui/combobox/views/demo",
 			render: {
 				"itemText" : function(item) {
 				    var html = [];

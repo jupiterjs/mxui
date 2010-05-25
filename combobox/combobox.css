@@ -63,6 +63,6 @@
 	color: white !important;
 }
 
-.phui_combobox_dropdown span.disabled {
+.phui_combobox_dropdown .disabled .text {
 	color: #bbbbbb;
 }
