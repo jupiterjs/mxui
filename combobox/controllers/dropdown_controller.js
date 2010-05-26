@@ -18,15 +18,14 @@ $.Controller.extend("Phui.Combobox.DropdownController", {
 		// draw the dropdown
 		this.element.html( this._draw(modelList, showNested) );
 		
-		var dropdown = this.element;
+		// apply custom style to item and
+	    // hookup the models to the elements
 		for(var i=0;i<modelList.length;i++) {
 			var item = modelList[i];
 		    
-			// apply custom style to item
 			var el = this.find("." + item.identity());
 			el.find(".text").css(this.options.textStyle);
-
-		    // hookup the models to the elements			
+			
 			if (el[0]) {
 				item.hookup(el[0]);
 			}			
@@ -40,6 +39,7 @@ $.Controller.extend("Phui.Combobox.DropdownController", {
 		
 		this.style();		
 
+		// position the dropdown bellow the combobox input
         this.element.phui_positionable({
             my: 'left top',
             at: 'left bottom',

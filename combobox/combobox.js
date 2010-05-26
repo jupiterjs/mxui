@@ -100,12 +100,15 @@ steal.plugins('jquery/controller',
             }
         },
         found: function(items){
+			// this is where we store the loaded data in the controller			
 			this.modelList = new $.Model.List(items);
 			
+		    // TODO: cleanup these comments once the new autosuggest
+			// implementation is working consistently						
 			/*this.lookup = new Combobox.Models.Lookup({});
 			this.lookup.build( items, this.options.showNested, this.options.autocompleteEnabled );*/
 
-            //this.dropdown.controller().draw(items, this.options.showNested);
+			// render the dropdown
 			this.dropdown.controller().draw(this.modelList, this.options.showNested);
 
             this.itemsAlreadyLoaded = true;
@@ -135,8 +138,10 @@ steal.plugins('jquery/controller',
 				return;
 			}
 			
+		    // TODO: cleanup these comments once the new autosuggest
+			// implementation is working consistently			
 			// do autocomplete lookup
-			if (this.options.autocompleteEnabled) {
+			/*if (this.options.autocompleteEnabled) {
 				var showNested = false;
 				var newVal = el.val();
 				if ($.trim(newVal) === "") {
@@ -145,7 +150,7 @@ steal.plugins('jquery/controller',
 				}
 				var items = this.lookup.query(newVal);
 				this.dropdown.controller().draw(items, showNested);
-			}
+			}*/
         },
 		"input focusin": function(el, ev){
 			// select all text
@@ -167,7 +172,6 @@ steal.plugins('jquery/controller',
 			
             // load items on demand
             if (this.options.loadOnDemand && !this.itemsAlreadyLoaded) {
-				//this.options.model.findAll(this.options.params || {}, this.callback("found"));
 				Combobox.Models.Item.url = this.options.url;
                 Combobox.Models.Item.findAll(this.options.params || {}, this.callback("found"));												
             } 
@@ -195,15 +199,14 @@ steal.plugins('jquery/controller',
         val: function(value){
             if(!value && value != 0) 
 			    return this.currentValue;
-			//var item = this.lookup.getByValue(value);
+				
 			var item = this.modelList.match("value", value)[0];
 			if (item && item.enabled) {
 				this.currentValue = item.value;
 				this.find("input:visible").val(item.text);
 				
 				// after selecting draw all items and mark item as selected
-				// (in case we came from an autocomplete lookup)
-		        //var items = this.lookup.query("*");	
+				// (in case we came from an autocomplete lookup)	
 		        this.dropdown.controller().draw( this.modelList, this.options.showNested );				
 				this.dropdown.controller().val(item);
 				
