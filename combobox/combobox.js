@@ -42,9 +42,8 @@ steal.plugins('jquery/controller',
 			// append hidden input to help with form data submit
 			this.oldElementName = this.oldElement.attr("name")
 			this.oldElement.removeAttr("name");
-			$("<input/>").attr("name", this.oldElementName)
-			    		 .appendTo(this.element)
-						 .hide();
+			$("<input type='hidden' />").attr("name", this.oldElementName)
+			    		 .appendTo(this.element);
 			
             // create dropdown and append it to body
             this.dropdown = $("<div/>").phui_combobox_dropdown( this.element, this.options ).hide();

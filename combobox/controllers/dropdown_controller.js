@@ -42,28 +42,51 @@ $.Controller.extend("Phui.Combobox.DropdownController", {
 	},
 	_draw : function(list, showNested) {
 		var html = [],
-		    previousLevel = 0;
+		    nextLevel;
 		for (var i = list.length-1; i >= 0; i--) {
-			var item = list[i];
-			if (item.level > previousLevel) {
+			var item = list[i], nextItem = list[i-1];
+			nextLevel = nextItem ? nextItem.level : null;
+			if (item.level < nextLevel) {
 				html.push("<ul>");
-				html.push( this._drawLI(item) )
+				html.push( this._drawItemHtml(item) );
+				html.push( this.openLI(item) );
 			}
-			if (item.level < previousLevel) {
+			if (nextLevel == null || item.level > nextLevel) {
 				html.push("</ul>");
-				html.push( this._drawLI(item) );
+				html.push( this._closeLI() );
+				html.push( this._drawItemHtml(item) );
+				html.push( this._openLI(item) );		
+				html.push( this._closeLI() );										
 			}
-			if (item.level == previousLevel) {
-				html.push( this._drawLI(item) )
+			if (item.level == nextLevel) {
+				html.push( this._closeLI() );							
+				html.push( this._drawItemHtml(item) );
+				html.push( this._openLI(item) );
 			}
-			
-			previousLevel = item.level;
 		}
+		
 		var ul = $("<ul/>");
 		ul.html( html.reverse().join(" ") );
 		return ul;
 	},
-	_drawLI : function(item) {
+	_openLI : function(item) {
+			var html = [];
+			html.push("<li class='item " + item.identity());
+			item.enabled ? html.push("' >") : html.push(this.options.disabledClassName + "' >");
+			return html.join(" ");					
+	},
+	_closeLI : function() {
+			var html = [];		
+			html.push("</li>");		
+			return html.join(" ");		
+	},
+	_drawItemHtml : function(item) {
+			var html = []; 
+			html.push("<span style='float:left;margin-left:" + item.level*20 + "px'>&nbsp;</span>");
+			html.push( this.options.render["itemText"](item) );		
+			return html.join(" ");		
+	},
+	/*_drawLI : function(item) {
 			var rowTemplate = [];
 			rowTemplate.push("<li class='item " + item.identity());
 			item.enabled ? rowTemplate.push("' >") : rowTemplate.push(this.options.disabledClassName + "' >"); 
@@ -71,7 +94,7 @@ $.Controller.extend("Phui.Combobox.DropdownController", {
 			rowTemplate.push( this.options.render["itemText"](item) );
 			rowTemplate.push("</li>");		
 			return rowTemplate.join(" ");
-	},
+	},*/
 	keyup : function(el, ev) {
 		var key = $.keyname(ev);
 				
