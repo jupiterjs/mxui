@@ -49,7 +49,7 @@ $.Controller.extend("Phui.Combobox.DropdownController", {
 	},
 	_draw : function(list, showNested) {
 		var html = [],
-		    previousLevel = -1;
+		    previousLevel = 0;
 		for (var i = list.length-1; i >= 0; i--) {
 			var item = list[i];
 			if (item.level > previousLevel) {
@@ -63,9 +63,12 @@ $.Controller.extend("Phui.Combobox.DropdownController", {
 			if (item.level == previousLevel) {
 				html.push( this._drawLI(item) )
 			}
+			
 			previousLevel = item.level;
 		}
-		return html.join(" ");
+		var ul = $("<ul/>");
+		ul.html( html.reverse().join(" ") );
+		return ul;
 	},
 	_drawLI : function(item) {
 			var rowTemplate = [];
