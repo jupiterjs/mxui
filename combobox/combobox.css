@@ -34,7 +34,7 @@
 }
 
 .phui_combobox_dropdown li {
-	margin: 0px !important;
+	margin: 1px;
 	padding: 3px 0px;
 	cursor: pointer;
 	display: block;

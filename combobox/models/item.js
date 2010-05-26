@@ -14,7 +14,8 @@ $.Model.extend("Combobox.Models.Item",
     }, 
 	wrapMany : function(instances) {
          var level = 0, result = [];
-		 this._flatten(instances.data, null, level, result);
+		 instances = instances.data ? instances.data : instances; 
+		 this._flatten(instances, null, level, result);
 		 return this._super(result);
 	},
 	_flatten : function(instances, parent, level, result) {

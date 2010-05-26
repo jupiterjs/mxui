@@ -1,12 +1,11 @@
 steal.plugins('jquery/controller',
               'jquery/model/list',
 			  'phui/positionable',
-			  'phui/wrapper',
 			  'phui/selectable')
 	 .models('lookup','item')
 	 .controllers('dropdown').then(function(){
 	 	
-
+		
     $.Controller.extend("Phui.Combobox", {
         defaults: {
 			render: {
@@ -17,8 +16,6 @@ steal.plugins('jquery/controller',
 				}
 			},
             textStyle: "color:blue;font-style:italic;",
-			autocompleteEnabled: true,
-            loadOnDemand: false,
             showNested: false,
             maxHeight: null,
             selectedClassName: "selected",
@@ -71,7 +68,7 @@ steal.plugins('jquery/controller',
 					}
 					
 					// add reasonable default attributes
-					if( typeof item === "object" ) {
+					if( typeof item === "object") {
 						if(!item.id) item.id = item.value;
 						if(!item.enabled) item.enabled = true;
 						if(!item.depth) item.depth = 0;
@@ -83,15 +80,11 @@ steal.plugins('jquery/controller',
 					
 					// wrap input data item within a combobox.models.item instance so we 
 					// can leverage model helper functions in the code later 
-					instances.push( new Combobox.Models.Item(item) );
+					instances.push(item);
 				} 
-			
-			    // TODO: cleanup these comments once the new autosuggest 
-				// implementation is working consistently
-				//this.lookup = new Combobox.Models.Lookup({});
-				//this.lookup.build( instances, this.options.showNested, this.options.autocompleteEnabled );
 				
 				// this is where we store the loaded data in the controller
+				instances =  Combobox.Models.Item.wrapMany(instances);
 				this.modelList = new $.Model.List(instances);
 				
 				// render the dropdown and set an initial value for combobox
@@ -99,23 +92,9 @@ steal.plugins('jquery/controller',
 				this.val( selectedItem.value );
             }
         },
-        found: function(items){
-			// this is where we store the loaded data in the controller			
-			this.modelList = new $.Model.List(items);
-			
-		    // TODO: cleanup these comments once the new autosuggest
-			// implementation is working consistently						
-			/*this.lookup = new Combobox.Models.Lookup({});
-			this.lookup.build( items, this.options.showNested, this.options.autocompleteEnabled );*/
-
-			// render the dropdown
-			this.dropdown.controller().draw(this.modelList, this.options.showNested);
-
-            this.itemsAlreadyLoaded = true;
-        },
-        drawDropdown: function(items){
+        /*drawDropdown: function(items){
             this.dropdown.controller().draw(items, this.options.showNested);
-        },
+        },*/
         "input keyup": function(el, ev){
 			var key = $.keyname(ev)
 			
@@ -137,20 +116,6 @@ steal.plugins('jquery/controller',
 				this.dropdown.find("li:last").trigger("select");
 				return;
 			}
-			
-		    // TODO: cleanup these comments once the new autosuggest
-			// implementation is working consistently			
-			// do autocomplete lookup
-			/*if (this.options.autocompleteEnabled) {
-				var showNested = false;
-				var newVal = el.val();
-				if ($.trim(newVal) === "") {
-					newVal = "*";
-					showNested = this.options.showNested;
-				}
-				var items = this.lookup.query(newVal);
-				this.dropdown.controller().draw(items, showNested);
-			}*/
         },
 		"input focusin": function(el, ev){
 			// select all text
@@ -169,12 +134,6 @@ steal.plugins('jquery/controller',
             // trick to make dropdown close when combobox looses focus			
             if(this.closeDropdownOnBlurTimeout) 
 			    clearTimeout(this.closeDropdownOnBlurTimeout);
-			
-            // load items on demand
-            if (this.options.loadOnDemand && !this.itemsAlreadyLoaded) {
-				Combobox.Models.Item.url = this.options.url;
-                Combobox.Models.Item.findAll(this.options.params || {}, this.callback("found"));												
-            } 
         },
         focusout: function(el, ev){
             // trick to make dropdown close when combobox looses focus				
@@ -247,8 +206,6 @@ steal.plugins('jquery/controller',
         destroy: function(){
             this.dropdown.remove();
             this.dropdown = null;
-            this.lookup._lookup = null;
-            this.lookup = null;
 			this.modelList = null;
 			this.oldElementName = null;			
    			var me = this.element; //save a reference

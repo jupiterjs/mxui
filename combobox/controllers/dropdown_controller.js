@@ -12,11 +12,12 @@ $.Controller.extend("Phui.Combobox.DropdownController", {
 				"overflow": "auto"
 			});
 		}		
-		//this.find("li").css("width", this.element.width() - 2);
+		this.find("li").css("width", this.element.width() - 2);
 	},
 	draw : function(modelList, showNested) {
 		// draw the dropdown
-		this.element.html( this._draw(modelList, showNested) );
+		var html = this._draw(modelList, showNested);
+		this.element.html(html);
 		
 		// apply custom style to item and
 	    // hookup the models to the elements
@@ -37,19 +38,18 @@ $.Controller.extend("Phui.Combobox.DropdownController", {
             activatedClassName: "activated"			
 		});
 		
-		this.style();		
-
+		this.style();			
+		
 		// position the dropdown bellow the combobox input
         this.element.phui_positionable({
             my: 'left top',
             at: 'left bottom',
 			collision: 'none none'
-        }).trigger("move", this.combobox);		
-		    
+        }).trigger("move", this.combobox);			
 	},
 	_draw : function(list, showNested) {
 		var html = [],
-		    previousLevel = list[0].level;
+		    previousLevel = -1;
 		for (var i = list.length-1; i >= 0; i--) {
 			var item = list[i];
 			if (item.level > previousLevel) {
