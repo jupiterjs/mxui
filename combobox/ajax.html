@@ -20,21 +20,18 @@
         <script type='text/javascript'>
             steal.plugins("phui/combobox/ajax", "jquery/dom/fixtures").then(function($){
 				
+				
+			    // fixtures that simulate nested data sent by the server
 				$.fixture["-make"](["items", "item"], 40, function(num, items) {
                     
 					    var itemId = parseInt(Math.random() * num);
-						/*while( isAlreadyAChild(items, itemId) ) {
-							itemId = parseInt(Math.random() * num);
-						}*/
 		                var item = items[itemId]
                         var experiment = parseInt(Math.random() * 10);
 			            if (num < 5) {
 							return {
 								"value": num,
 							    "text": "dir" + num,
-								"type": "folder",
 								"enabled": experiment > 3 ? true : false,
-								//"depth": 0,
 		                        "parentId": null,
 								children: []
 							}
@@ -42,9 +39,7 @@
 						    var child =  { 
 							    "value": num,
 								"text": experiment > 6 ? "file" + num : "dir" + num,
-								"type": experiment > 6 ? "file" : "folder",
 								"enabled": experiment > 3 ? true : false,
-								//"depth": item.depth + 1,
 		                        "parentId": itemId,
 								children: []
 		                    }

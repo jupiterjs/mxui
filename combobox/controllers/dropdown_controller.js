@@ -38,14 +38,7 @@ $.Controller.extend("Phui.Combobox.DropdownController", {
             activatedClassName: "activated"			
 		});
 		
-		this.style();			
-		
-		// position the dropdown bellow the combobox input
-        this.element.phui_positionable({
-            my: 'left top',
-            at: 'left bottom',
-			collision: 'none none'
-        }).trigger("move", this.combobox);			
+		this.style();				
 	},
 	_draw : function(list, showNested) {
 		var html = [],
@@ -139,7 +132,15 @@ $.Controller.extend("Phui.Combobox.DropdownController", {
 		this.element.slideUp("fast");
 	},
 	show : function() {
-		this.element.slideDown("fast");		
+		this.element.slideDown("fast");	
+		
+		// position the dropdown bellow the combobox input
+        this.element.phui_positionable({
+            my: 'left top',
+            at: 'left bottom',
+			collision: 'none none'
+        }).trigger("move", this.combobox);		
+					
 		this.combobox.trigger("open");		
 	}
 })

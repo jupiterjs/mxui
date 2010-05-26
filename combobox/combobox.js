@@ -92,9 +92,6 @@ steal.plugins('jquery/controller',
 				this.val( selectedItem.value );
             }
         },
-        /*drawDropdown: function(items){
-            this.dropdown.controller().draw(items, this.options.showNested);
-        },*/
         "input keyup": function(el, ev){
 			var key = $.keyname(ev)
 			
@@ -117,6 +114,7 @@ steal.plugins('jquery/controller',
 				return;
 			}
 			
+			// autosuggest
 		    var matches = this.modelList.grep(function(item){
 				return item.text.indexOf( el.val() ) > -1;
 			});
