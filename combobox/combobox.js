@@ -81,12 +81,20 @@ steal.plugins('jquery/controller',
 					// pick inital combobox value
 					if(item.selected) selectedItem = item;
 					
+					// wrap input data item within a combobox.models.item instance so we 
+					// can leverage model helper functions in the code later 
 					instances.push( new Combobox.Models.Item(item) );
 				} 
 			
+			    // TODO: cleanup these comments once the new autosuggest 
+				// implementation is working consistently
 				//this.lookup = new Combobox.Models.Lookup({});
 				//this.lookup.build( instances, this.options.showNested, this.options.autocompleteEnabled );
+				
+				// this is where we store the loaded data in the controller
 				this.modelList = new $.Model.List(instances);
+				
+				// render the dropdown and set an initial value for combobox
 				this.dropdown.controller().draw( this.modelList, this.options.showNested );				
 				this.val( selectedItem.value );
             }
