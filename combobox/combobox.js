@@ -116,6 +116,11 @@ steal.plugins('jquery/controller',
 				this.dropdown.find("li:last").trigger("select");
 				return;
 			}
+			
+		    var matches = this.modelList.grep(function(item){
+				return item.text.indexOf( el.val() ) > -1;
+			});
+			this.dropdown.controller().draw( matches, this.options.showNested );			
         },
 		"input focusin": function(el, ev){
 			// select all text
