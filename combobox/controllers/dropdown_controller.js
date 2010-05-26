@@ -140,6 +140,8 @@ $.Controller.extend("Phui.Combobox.DropdownController", {
             at: 'left bottom',
 			collision: 'none none'
         }).trigger("move", this.combobox);		
+		
+		this.style();			
 					
 		this.combobox.trigger("open");		
 	}
