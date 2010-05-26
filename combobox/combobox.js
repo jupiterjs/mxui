@@ -1,6 +1,5 @@
 steal.plugins('jquery/controller',
-              'jquery/model',
-			  'jquery/view/ejs', 
+              'jquery/model/list',
 			  'phui/positionable',
 			  'phui/wrapper',
 			  'phui/selectable')
@@ -39,7 +38,6 @@ steal.plugins('jquery/controller',
 			this.hasFocus = false;
 			
 			// draw input box
-            //this.element.append(this.view("//phui/combobox/views/arrow"));
 			var arrowHtml = "<div class='toggle ui-icon ui-icon-triangle-1-s'>&nbsp;</div>";
 			this.element.append(arrowHtml);		
 			this.element.css({height:"", width:""});	
@@ -86,17 +84,21 @@ steal.plugins('jquery/controller',
 					instances.push( new Combobox.Models.Item(item) );
 				} 
 			
-				this.lookup = new Combobox.Models.Lookup({});
-				this.lookup.build( instances, this.options.showNested, this.options.autocompleteEnabled );
-				this.dropdown.controller().draw( instances, this.options.showNested );				
+				//this.lookup = new Combobox.Models.Lookup({});
+				//this.lookup.build( instances, this.options.showNested, this.options.autocompleteEnabled );
+				this.modelList = new $.Model.List(instances);
+				this.dropdown.controller().draw( this.modelList, this.options.showNested );				
 				this.val( selectedItem.value );
             }
         },
         found: function(items){
-			this.lookup = new Combobox.Models.Lookup({});
-			this.lookup.build( items, this.options.showNested, this.options.autocompleteEnabled );
+			this.modelList = new $.Model.List(items);
+			
+			/*this.lookup = new Combobox.Models.Lookup({});
+			this.lookup.build( items, this.options.showNested, this.options.autocompleteEnabled );*/
 
-            this.dropdown.controller().draw(items, this.options.showNested);
+            //this.dropdown.controller().draw(items, this.options.showNested);
+			this.dropdown.controller().draw(this.modelList, this.options.showNested);
 
             this.itemsAlreadyLoaded = true;
         },
@@ -157,8 +159,9 @@ steal.plugins('jquery/controller',
 			
             // load items on demand
             if (this.options.loadOnDemand && !this.itemsAlreadyLoaded) {
-				this.options.model.findAll(this.options.params || {}, this.callback("found"));
-												
+				//this.options.model.findAll(this.options.params || {}, this.callback("found"));
+				Combobox.Models.Item.url = this.options.url;
+                Combobox.Models.Item.findAll(this.options.params || {}, this.callback("found"));												
             } 
         },
         focusout: function(el, ev){
@@ -184,15 +187,16 @@ steal.plugins('jquery/controller',
         val: function(value){
             if(!value && value != 0) 
 			    return this.currentValue;
-			var item = this.lookup.getByValue(value);
+			//var item = this.lookup.getByValue(value);
+			var item = this.modelList.match("value", value)[0];
 			if (item && item.enabled) {
 				this.currentValue = item.value;
 				this.find("input:visible").val(item.text);
 				
 				// after selecting draw all items and mark item as selected
 				// (in case we came from an autocomplete lookup)
-		        var items = this.lookup.query("*");	
-		        this.dropdown.controller().draw( items, this.options.showNested );				
+		        //var items = this.lookup.query("*");	
+		        this.dropdown.controller().draw( this.modelList, this.options.showNested );				
 				this.dropdown.controller().val(item);
 				
 				// bind values to the hidden input
@@ -234,6 +238,7 @@ steal.plugins('jquery/controller',
             this.dropdown = null;
             this.lookup._lookup = null;
             this.lookup = null;
+			this.modelList = null;
 			this.oldElementName = null;			
    			var me = this.element; //save a reference
    			this._super()  //unbind everything

@@ -69,7 +69,7 @@
 							    "text": "dir" + num,
 								"type": "folder",
 								"enabled": experiment > 3 ? true : false,
-								"depth": 0,
+								//"depth": 0,
 		                        "parentId": null,
 								children: []
 							}
@@ -79,7 +79,7 @@
 								"text": experiment > 6 ? "file" + num : "dir" + num,
 								"type": experiment > 6 ? "file" : "folder",
 								"enabled": experiment > 3 ? true : false,
-								"depth": item.depth + 1,
+								//"depth": item.depth + 1,
 		                        "parentId": itemId,
 								children: []
 		                    }
@@ -130,17 +130,16 @@
 					items.push( new Item(rawItems[i]) );
 				}*/
 				 
-				$("#combobox_demo").phui_combobox({
-					items: [{value: 1, text: "archive", selected: true}, 
-					          {value: 2, text: "delete"},
-							  {value: 3, text: "none"}] });			
 				/*$("#combobox_demo").phui_combobox({
+					items: [{value: 1, text: "archive", selected: true}, 
+					        {value: 2, text: "delete"},
+							{value: 3, text: "none"}] });*/			
+				$("#combobox_demo").phui_combobox({
 					maxHeight: "320px",
 					loadOnDemand: true,
-					showNested: true,
-					textTemplate: "//phui/combobox/views/default_text_template.ejs",					
-					model: Item
-				});*/
+					showNested: true,					
+					url: "/Archer/Service/DiscussionForumServiceJS.svc/GetForumsForCommunity"
+				});
 				 
 				// get/set API demo
 				$("#getValue").bind("click", function(ev){

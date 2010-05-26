@@ -11,15 +11,29 @@ $.Controller.extend("Phui.Combobox.DropdownController", {
 				"height": this.options.maxHeight,
 				"overflow": "auto"
 			});
-		}
-		this.find("li").css("width", this.element.width() - 2);
+		}		
+		//this.find("li").css("width", this.element.width() - 2);
 	},
-	draw : function(items, showNested) {		
-		this.element.html("<ul/>");
-		this._draw(items, showNested);
+	draw : function(modelList, showNested) {
+		// draw the dropdown
+		this.element.html( this._draw(modelList, showNested) );
+		
+		var dropdown = this.element;
+		for(var i=0;i<modelList.length;i++) {
+			var item = modelList[i];
+		    
+			// apply custom style to item
+			var el = this.find("." + item.identity());
+			el.find(".text").css(this.options.textStyle);
+
+		    // hookup the models to the elements			
+			if (el[0]) {
+				item.hookup(el[0]);
+			}			
+		}
 		
 		// add up/down key navigation
-		this.find("ul").phui_selectable({
+		this.element.children("ul").phui_selectable({
             selectedClassName: "selected",
             activatedClassName: "activated"			
 		});
@@ -30,37 +44,37 @@ $.Controller.extend("Phui.Combobox.DropdownController", {
             my: 'left top',
             at: 'left bottom',
 			collision: 'none none'
-        }).trigger("move", this.combobox);
-		
+        }).trigger("move", this.combobox);		
+		    
 	},
-	_draw : function(items, showNested) {
-	    for(var i=0;i<items.length;i++) {
-	        var item = items[i];
-
-	        /*this.find("ul").append("//phui/combobox/views/dropdown/row", {
-	            item: item,
-	            options: this.options
-	        });*/
-			
+	_draw : function(list, showNested) {
+		var html = [],
+		    previousLevel = list[0].level;
+		for (var i = list.length-1; i >= 0; i--) {
+			var item = list[i];
+			if (item.level > previousLevel) {
+				html.push("<ul>");
+				html.push( this._drawLI(item) )
+			}
+			if (item.level < previousLevel) {
+				html.push("</ul>");
+				html.push( this._drawLI(item) );
+			}
+			if (item.level == previousLevel) {
+				html.push( this._drawLI(item) )
+			}
+			previousLevel = item.level;
+		}
+		return html.join(" ");
+	},
+	_drawLI : function(item) {
 			var rowTemplate = [];
 			rowTemplate.push("<li class='item " + item.identity());
 			item.enabled ? rowTemplate.push("' >") : rowTemplate.push(this.options.disabledClassName + "' >"); 
-			rowTemplate.push("<span style='float:left;margin-left:" + item.depth*20 + "'>&nbsp;</span>");
+			rowTemplate.push("<span style='float:left;margin-left:" + item.level*20 + "px'>&nbsp;</span>");
 			rowTemplate.push( this.options.render["itemText"](item) );
-			rowTemplate.push("</li>");
-			
-			this.find("ul").append( rowTemplate.join(" ") );
-			// attach model to element
-			item.hookup( this.find("." + item.identity())[0] );
-			// apply custom style to item style 
-			this.find("." + item.identity() + " .text").css( this.options.textStyle );
-
-	        if(item.children.length && showNested) {
-	            for(var j=0;j<item.children.length;j++) {
-	                this._draw(item.children, showNested);
-	            }
-	        }
-	    }
+			rowTemplate.push("</li>");		
+			return rowTemplate.join(" ");
 	},
 	keyup : function(el, ev) {
 		var key = $.keyname(ev);
@@ -84,8 +98,8 @@ $.Controller.extend("Phui.Combobox.DropdownController", {
 				this.combobox.controller().val(item.value);
 				
 				// highlight activated item
-				this.find("li").removeClass(this.options.activatedClassName);
-				el.addClass(this.options.activatedClassName);
+				/*this.find("li").removeClass(this.options.activatedClassName);
+				el.addClass(this.options.activatedClassName);*/
 				
 				// then hide dropdown			
 				this.element.hide();
