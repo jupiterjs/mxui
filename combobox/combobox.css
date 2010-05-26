@@ -1,20 +1,29 @@
 .phui_combobox {
-    background-color: #cccccc;
-	border: 1px solid #aaaaaa;
-	width: 320px;
-	height: 32px;
+	width: 310px;
+	background:none repeat scroll 0 0 #FFFFFF;
+	border:1px solid #888888;
+	height:20px;
+	padding:0 0 0 2px;
+	line-height:20px;
+	vertical-align:top;
 }
 
 .phui_combobox input {
+	background:none repeat scroll 0 0 transparent;
+	border:0 none;
+	height:14px;
+	margin-top:2px;
+	outline:0 none;
+	vertical-align:top;
+	width:100%;
 	float: left;
 	width: 290px;
-	margin: 5px 0px 5px 5px!important;
 }
 
 .phui_combobox .toggle {
+	background:url("images/dropdown.png") center no-repeat;
+	width:17px;
 	float: left;
-	margin-top: 5px;
-	width: 15px;
 	cursor: pointer;
 }
 

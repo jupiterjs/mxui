@@ -35,7 +35,7 @@ steal.plugins('jquery/controller',
 			this.hasFocus = false;
 			
 			// draw input box
-			var arrowHtml = "<div class='toggle ui-icon ui-icon-triangle-1-s'>&nbsp;</div>";
+			var arrowHtml = "<div class='toggle'>&nbsp;</div>";
 			this.element.append(arrowHtml);		
 			this.element.css({height:"", width:""});	
             
