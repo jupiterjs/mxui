@@ -197,7 +197,7 @@ steal.plugins('jquery/controller',
 		    this.dropdown.controller().draw( items, this.options.showNested );
 		},		 
         ".toggle click": function(el, ev){
-            this.find("input[type=text]").trigger("focus");
+            this.find("input[type=text]")[0].focus();
 			
 			// .focus() does not trigger focus on input in IE so we must
 			// show/hide dropdown explicitely.
