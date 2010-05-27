@@ -151,7 +151,7 @@ steal.plugins('jquery/controller',
         },
 		mouseleave : function(el, ev) {
 			if (this.dropdown.is(":visible")) {
-				this.find("input:visible").focus();
+				this.find("input[type=text]").focus();
 				
 				// .focus() does not trigger focus on input in IE so we must
 				// trigger focusout on this.dropdown explicitely.
@@ -165,7 +165,7 @@ steal.plugins('jquery/controller',
 			var item = this.modelList.match("value", value)[0];
 			if (item && item.enabled) {
 				this.currentValue = item.value;
-				this.find("input:visible").val(item.text);
+				this.find("input[type=text]").val(item.text);
 				
 				// after selecting draw all items and mark item as selected
 				// (in case we came from an autocomplete lookup)	
@@ -197,7 +197,7 @@ steal.plugins('jquery/controller',
 		    this.dropdown.controller().draw( items, this.options.showNested );
 		},		 
         ".toggle click": function(el, ev){
-            this.find("input:visible").trigger("focus");
+            this.find("input[type=text]").trigger("focus");
 			
 			// .focus() does not trigger focus on input in IE so we must
 			// show/hide dropdown explicitely.
