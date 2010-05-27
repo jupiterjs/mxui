@@ -51,23 +51,32 @@ $.Controller.extend("Phui.Combobox.DropdownController", {
 				html.push( this._drawItemHtml(item) );
 				html.push( this.openLI(item) );
 			}
-			if (nextLevel == null || item.level > nextLevel) {
+			if (item.level > nextLevel) {
+				html.push( this._closeLI() );										
 				html.push("</ul>");
 				html.push( this._closeLI() );
 				html.push( this._drawItemHtml(item) );
 				html.push( this._openLI(item) );		
-				html.push( this._closeLI() );										
 			}
 			if (item.level == nextLevel) {
 				html.push( this._closeLI() );							
 				html.push( this._drawItemHtml(item) );
 				html.push( this._openLI(item) );
 			}
+
+            // close tags when we are at the end of the list			
+			if( nextLevel == null) {
+				for(var j=0;j<item.level;j++) {
+    				html.push("</ul>");								
+	    			html.push( this._closeLI() );	
+				}						
+				html.push( this._closeLI() );
+				html.push( this._drawItemHtml(item) );
+				html.push( this._openLI(item) );				
+			}
 		}
-		
-		var ul = $("<ul/>");
-		ul.html( html.reverse().join(" ") );
-		return ul;
+	
+		return "<ul>" + html.reverse().join(" ") + "</ul>";
 	},
 	_openLI : function(item) {
 			var html = [];
