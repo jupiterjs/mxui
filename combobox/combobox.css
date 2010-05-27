@@ -16,14 +16,16 @@
 	outline:0 none;
 	vertical-align:top;
 	width:100%;
-	float: left;
-	width: 290px;
+}
+
+.phui_combobox .container {
+	margin-right:17px;
 }
 
 .phui_combobox .toggle {
 	background:url("images/dropdown.png") center no-repeat;
 	width:17px;
-	float: left;
+	float: right;
 	cursor: pointer;
 }
 

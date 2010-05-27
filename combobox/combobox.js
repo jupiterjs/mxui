@@ -31,12 +31,13 @@ steal.plugins('jquery/controller',
 		    this._super(div, options);	
 		},
         init: function(){
+			this.element.find("input").wrap("<div class='container' />")
 			this.currentValue = "-1";
 			this.hasFocus = false;
 			
 			// draw input box
 			var arrowHtml = "<div class='toggle'>&nbsp;</div>";
-			this.element.append(arrowHtml);		
+			this.element.prepend(arrowHtml);		
 			this.element.css({height:"", width:""});	
             
 			// append hidden input to help with form data submit
@@ -87,7 +88,7 @@ steal.plugins('jquery/controller',
 				this.modelList = new $.Model.List(instances);
 				
 				// render the dropdown and set an initial value for combobox
-				this.dropdown.controller().draw( this.modelList, this.options.showNested );				
+				//this.dropdown.controller().draw( this.modelList, this.options.showNested );				
 				this.val( selectedItem.value );
             }
         },

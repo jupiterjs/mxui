@@ -3,11 +3,12 @@ steal.plugins('phui/combobox').then(function(){
     $.Controller.extend("Phui.Combobox.Select", {
     },
 	{
-        init: function(){
-			if(this.element[0].nodeName == "SELECT"){
-				var id = this.element.attr("id"), 
-					className = this.element.attr("class"),
-					name = this.element.attr("name");
+        setup: function(el, options){
+			if(el.nodeName == "SELECT"){
+				el = $(el);
+				var id = el.attr("id"), 
+					className = el.attr("class"),
+					name = el.attr("name");
 					
 				var input = $("<input type='text' />")
 							.attr("id", id)
@@ -15,7 +16,7 @@ steal.plugins('phui/combobox').then(function(){
 							.attr("className", className)
 							
 				var options = [], option, $option;
-				this.element.find("option").each(function(){
+				el.find("option").each(function(){
 					$option = $(this);
 					option = {
 						value: $option.attr("value"),
@@ -25,11 +26,12 @@ steal.plugins('phui/combobox').then(function(){
 						option.selected = true;
 					options.push(option)
 				})
-				this.element.after(input);
-				this.element.remove();
+				el.after(input);
+				el.remove();
 				input.phui_combobox({
 					items: options
 				});
+		    	this._super(input[0], options);	
 			}
 		}
 	});
