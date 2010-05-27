@@ -2,7 +2,7 @@ steal.plugins('jquery/controller',
               'jquery/model/list',
 			  'phui/positionable',
 			  'phui/selectable')
-	 .models('lookup','item')
+	 .models('item')
 	 .controllers('dropdown').then(function(){
 	 	
 		
@@ -121,11 +121,17 @@ steal.plugins('jquery/controller',
 			this.dropdown.controller().draw( matches, this.options.showNested );			
         },
 		"input focusin": function(el, ev){
+			this._focusInputAndShowDropdown(el);
+		},
+		"input click" : function(el, ev) {
+		    this._focusInputAndShowDropdown(el);	
+		},
+		_focusInputAndShowDropdown : function(el) {
 			// select all text
-		    //el[0].focus();
+		    el[0].focus();
 		    el[0].select();
             if(!this.dropdown.is(":visible"))
-				this.dropdown.controller().show();
+				this.dropdown.controller().show();			
 		},
         /*
          * Trick to make dropdown close when combobox looses focus
@@ -151,11 +157,9 @@ steal.plugins('jquery/controller',
         },
 		mouseleave : function(el, ev) {
 			if (this.dropdown.is(":visible")) {
+				this.dropdown.find(".selected").focus();
+				this.dropdown.controller().hasFocus = false;
 				this.find("input[type=text]").focus();
-				
-				// .focus() does not trigger focus on input in IE so we must
-				// trigger focusout on this.dropdown explicitely.
-				if($.browser.msie) this.dropdown.trigger("focusout");
 			}
 		},		
         val: function(value){
@@ -197,8 +201,16 @@ steal.plugins('jquery/controller',
 		    this.dropdown.controller().draw( items, this.options.showNested );
 		},		 
         ".toggle click": function(el, ev){
-            this.find("input[type=text]")[0].focus();
+            this._focusInputAndShowDropdown( this.find("input[type=text]") );
         },
+		/*
+		 * Internet Explorer interprets two fast clicks in a row as one single-click, 
+		 * followed by one double-click, while the other browsers interpret it as 
+		 * two single-clicks and a double-click.
+		 */
+        ".toggle dblclick": function(el){
+            if($.browser.msie) this._focusInputAndShowDropdown( this.find("input[type=text]") );
+	   	},			
         destroy: function(){
             this.dropdown.remove();
             this.dropdown = null;

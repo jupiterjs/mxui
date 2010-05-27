@@ -95,15 +95,6 @@ $.Controller.extend("Phui.Combobox.DropdownController", {
 			html.push( this.options.render["itemText"](item) );		
 			return html.join(" ");		
 	},
-	/*_drawLI : function(item) {
-			var rowTemplate = [];
-			rowTemplate.push("<li class='item " + item.identity());
-			item.enabled ? rowTemplate.push("' >") : rowTemplate.push(this.options.disabledClassName + "' >"); 
-			rowTemplate.push("<span style='float:left;margin-left:" + item.level*20 + "px'>&nbsp;</span>");
-			rowTemplate.push( this.options.render["itemText"](item) );
-			rowTemplate.push("</li>");		
-			return rowTemplate.join(" ");
-	},*/
 	keyup : function(el, ev) {
 		var key = $.keyname(ev);
 				
@@ -145,12 +136,7 @@ $.Controller.extend("Phui.Combobox.DropdownController", {
 	mouseleave : function(el, ev) {
         // trick to make dropdown close when combobox looses focus			
 		this.hasFocus = false;
-								
-		this.combobox.find("input:visible").focus();
-		
-		// .focus() does not trigger focus on input in IE so we must
-		// trigger focusout on this.element explicitely.
-		if($.browser.msie) this.element.trigger("focusout");		
+		this.combobox.find("input[type=text]").focus();	
 	},
 	focusin : function(el, ev) {
         // trick to make dropdown close when combobox looses focus				

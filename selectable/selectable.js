@@ -20,6 +20,7 @@ steal.plugins('jquery/controller', 'phui/keycode')
 				el.trigger("activate")
 			},
 			"li focusin": function(el, ev){
+				//if(this.focusinOnSelect) clearTimeout(this.focusinOnSelect);
 				el.addClass( this.options.selectedClassName )
 			},
 			"li activate": function(el, ev){
@@ -36,11 +37,10 @@ steal.plugins('jquery/controller', 'phui/keycode')
 				if (selected.length) {
 					selected.trigger('deselect');
 				}
-				//el[0].focus();
 				if ($.browser.msie) {
 					el.trigger("focusin");
 				}
-				el.focus();
+				el.focus();			
 			},
 			"li deselect": function(el, ev){
 				el.removeClass( this.options.selectedClassName );
