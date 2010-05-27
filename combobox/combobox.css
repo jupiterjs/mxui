@@ -1,20 +1,32 @@
 .phui_combobox {
-    background-color: #cccccc;
-	border: 1px solid #aaaaaa;
-	width: 320px;
-	height: 32px;
+	width: 310px;
+	background:none repeat scroll 0 0 #FFFFFF;
+	border:1px solid #888888;
+	height:20px;
+	padding:0 0 0 2px;
+	line-height:20px;
+	vertical-align:top;
 }
 
 .phui_combobox input {
-	float: left;
-	width: 290px;
-	margin: 5px 0px 5px 5px!important;
+	background:none repeat scroll 0 0 transparent;
+	border:0 none;
+	height:14px;
+	margin-top:2px;
+	outline:0 none;
+	vertical-align:top;
+	width:100%;
+	padding:0;
+}
+
+.phui_combobox .container {
+	margin-right:17px;
 }
 
 .phui_combobox .toggle {
-	float: left;
-	margin-top: 5px;
-	width: 15px;
+	background:url("images/dropdown.png") center no-repeat;
+	width:17px;
+	float: right;
 	cursor: pointer;
 }
 
@@ -63,6 +75,6 @@
 	color: white !important;
 }
 
-.phui_combobox_dropdown span.disabled {
+.phui_combobox_dropdown .disabled .text {
 	color: #bbbbbb;
 }

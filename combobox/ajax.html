@@ -1,0 +1,77 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
+            "http://www.w3.org/TR/html4/strict.dtd">
+<html lang="en">
+	<head>
+		<title>ajax</title>
+        <style type='text/css'>
+            body {font-family: verdana}
+            .error {border: solid 1px red;}
+            .error_text { color: red; font-size: 10px;}
+            td {padding: 3px;}
+        </style>
+        <link type="text/css" href="../smoothness/jquery-ui-1.7.2.custom.css" rel="stylesheet" />		
+        <link type="text/css" href="combobox.css" rel="stylesheet" />			
+	</head>
+	<body>
+        <input id="demo" />
+		<script type='text/javascript' 
+                src='../../steal/steal.js?phui/combobox/select,development'>   
+        </script>
+        <script type='text/javascript'>
+            steal.plugins("phui/combobox/ajax", "jquery/dom/fixtures").then(function($){
+				
+				
+			    // fixtures that simulate nested data sent by the server
+				$.fixture["-make"](["items", "item"], 40, function(num, items) {
+                    
+					    var itemId = parseInt(Math.random() * num);
+		                var item = items[itemId]
+                        var experiment = parseInt(Math.random() * 10);
+			            if (num < 5) {
+							return {
+								"value": num,
+							    "text": "dir" + num,
+								"enabled": experiment > 3 ? true : false,
+		                        "parentId": null,
+								children: []
+							}
+						} else {
+						    var child =  { 
+							    "value": num,
+								"text": experiment > 6 ? "file" + num : "dir" + num,
+								"enabled": experiment > 3 ? true : false,
+		                        "parentId": itemId,
+								children: []
+		                    }
+		                    item.children.push(child);
+							return child;
+						}
+                })			
+				
+				// modify fixture to return only the root items
+				var oldFixture = $.fixture["-items"]; 
+			    $.fixture["-items"] = function(settings){
+					var retArr = [];
+				    var items = oldFixture(settings)[0].data;
+					for(var i=0;i<items.length;i++) {
+						var parentId = items[i].parentId;
+						if(!parentId && parentId != 0) retArr.push(items[i])
+					}
+					
+					return [{
+					    "count": retArr.length,
+				    	"data" : retArr
+				    }]
+			    } 				
+ 
+				$("#combobox_demo").phui_combobox_ajax({
+					maxHeight: "320px",			
+					url: "/Archer/Service/DiscussionForumServiceJS.svc/GetForumsForCommunity"
+				});		
+	            
+			});
+            steal.start();
+            
+        </script>	
+	</body>
+</html>

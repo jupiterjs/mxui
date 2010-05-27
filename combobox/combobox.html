@@ -8,8 +8,7 @@
             .error {border: solid 1px red;}
             .error_text { color: red; font-size: 10px;}
             td {padding: 3px;}
-        </style>
-        <link type="text/css" href="../smoothness/jquery-ui-1.7.2.custom.css" rel="stylesheet" />		
+        </style>	
         <link type="text/css" href="combobox.css" rel="stylesheet" />
     </head>
     <body>
@@ -36,111 +35,14 @@
         </script>
         <script type='text/javascript'>
             steal.plugins("phui/combobox",
-                            "jquery/model",
-                            "jquery/dom/fixtures").then(function($){
-                
-				/*var isAlreadyAChild = function(items, childId) {
-					for(var i=0;i<items.length;i++) {
-						var item = items[i];
-                        var children = item.children;
-					    if(children && children.length) {
-     						for(var j=0;j<children.length;j++) {
-								var c = children[j];
-							    if(c.id == childId) return true;
-								if(c.children && c.children.length)
-								    return isAlreadyAChild(c.children, childId);
-						    }
-					    }
-					}
-					return false;
-				};*/
-				
-				$.fixture["-make"](["items", "item"], 40, function(num, items) {
-                    
-					    var itemId = parseInt(Math.random() * num);
-						/*while( isAlreadyAChild(items, itemId) ) {
-							itemId = parseInt(Math.random() * num);
-						}*/
-		                var item = items[itemId]
-                        var experiment = parseInt(Math.random() * 10);
-			            if (num < 5) {
-							return {
-								"value": num,
-							    "text": "dir" + num,
-								"type": "folder",
-								"enabled": experiment > 3 ? true : false,
-								"depth": 0,
-		                        "parentId": null,
-								children: []
-							}
-						} else {
-						    var child =  { 
-							    "value": num,
-								"text": experiment > 6 ? "file" + num : "dir" + num,
-								"type": experiment > 6 ? "file" : "folder",
-								"enabled": experiment > 3 ? true : false,
-								"depth": item.depth + 1,
-		                        "parentId": itemId,
-								children: []
-		                    }
-		                    item.children.push(child);
-							return child;
-						}
-                })			
-				
-				// modify fixture to return only the root items
-				var oldFixture = $.fixture["-items"]; 
-			    $.fixture["-items"] = function(settings){
-					var retArr = [];
-				    var items = oldFixture(settings)[0].data;
-					for(var i=0;i<items.length;i++) {
-						var parentId = items[i].parentId;
-						if(!parentId && parentId != 0) retArr.push(items[i])
-					}
-					
-					return [{
-					    "count": retArr.length,
-				    	"data" : retArr
-				    }]
-			    } 
-				
-                $.Model.extend("Item",{
-                    findAll : function(params, success, error){
-                        $.ajax({
-                            url: '/item',
-                            type: 'get',
-                            dataType: 'json',
-                            data: params,
-                            success: this.callback(['wrapMany',success]),
-                            error: error,
-                            fixture: "-items"
-                        })
-                    }
-                },
-				{
-					setChildren : function(values) {
-						return this.Class.wrapMany(values);
-					}
-				});									
-				
-				// create items to pre-populate combo
-				/*var items = [];
-				var rawItems = $.fixture["-items"]({data:{}})[0].data;
-				for(var i=0;i<rawItems.length;i++) {
-					items.push( new Item(rawItems[i]) );
-				}*/
+                            "jquery/model").then(function($){
+								
 				 
 				$("#combobox_demo").phui_combobox({
 					items: [{value: 1, text: "archive", selected: true}, 
-					          {value: 2, text: "delete"},
-							  {value: 3, text: "none"}] });			
-				/*$("#combobox_demo").phui_combobox({
-					maxHeight: "320px",
-					loadOnDemand: true,
-					showNested: true,
-					textTemplate: "//phui/combobox/views/default_text_template.ejs",					
-					model: Item
-				});*/
+					        {value: 2, text: "delete"},
+							{value: 3, text: "none"}] });			
+
 				 
 				// get/set API demo
 				$("#getValue").bind("click", function(ev){

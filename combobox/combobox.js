@@ -1,20 +1,21 @@
 steal.plugins('jquery/controller',
-              'jquery/model',
-			  'jquery/view/ejs', 
+              'jquery/model/list',
 			  'phui/positionable',
-			  'phui/wrapper',
 			  'phui/selectable')
-	 .models('lookup','item')
+	 .models('item')
 	 .controllers('dropdown').then(function(){
 	 	
-
+		
     $.Controller.extend("Phui.Combobox", {
         defaults: {
-            //textTemplate: "//phui/combobox/views/default_text_template",
-			textTemplate: "//phui/combobox/views/demo",
+			render: {
+				"itemText" : function(item) {
+				    var html = [];
+					html.push("<span class='text'>" + item.text + "</span>");
+					return html;
+				}
+			},
             textStyle: "color:blue;font-style:italic;",
-			autocompleteEnabled: true,
-            loadOnDemand: false,
             showNested: false,
             maxHeight: null,
             selectedClassName: "selected",
@@ -30,19 +31,20 @@ steal.plugins('jquery/controller',
 		    this._super(div, options);	
 		},
         init: function(){
+			this.element.find("input").wrap("<div class='container' />")
 			this.currentValue = "-1";
 			this.hasFocus = false;
 			
 			// draw input box
-            this.element.append(this.view("//phui/combobox/views/arrow"));		
+			var arrowHtml = "<div class='toggle'>&nbsp;</div>";
+			this.element.prepend(arrowHtml);		
 			this.element.css({height:"", width:""});	
             
 			// append hidden input to help with form data submit
 			this.oldElementName = this.oldElement.attr("name")
 			this.oldElement.removeAttr("name");
-			$("<input/>").attr("name", this.oldElementName)
-			    		 .appendTo(this.element)
-						 .hide();
+			$("<input type='hidden' />").attr("name", this.oldElementName)
+			    		 .appendTo(this.element);
 			
             // create dropdown and append it to body
             this.dropdown = $("<div/>").phui_combobox_dropdown( this.element, this.options ).hide();
@@ -66,7 +68,7 @@ steal.plugins('jquery/controller',
 					}
 					
 					// add reasonable default attributes
-					if( typeof item === "object" ) {
+					if( typeof item === "object") {
 						if(!item.id) item.id = item.value;
 						if(!item.enabled) item.enabled = true;
 						if(!item.depth) item.depth = 0;
@@ -76,25 +78,19 @@ steal.plugins('jquery/controller',
 					// pick inital combobox value
 					if(item.selected) selectedItem = item;
 					
-					instances.push( new Combobox.Models.Item(item) );
+					// wrap input data item within a combobox.models.item instance so we 
+					// can leverage model helper functions in the code later 
+					instances.push(item);
 				} 
-			
-				this.lookup = new Combobox.Models.Lookup({});
-				this.lookup.build( instances, this.options.showNested, this.options.autocompleteEnabled );
-				this.dropdown.controller().draw( instances, this.options.showNested );				
+				
+				// this is where we store the loaded data in the controller
+				instances =  Combobox.Models.Item.wrapMany(instances);
+				this.modelList = new $.Model.List(instances);
+				
+				// render the dropdown and set an initial value for combobox
+				//this.dropdown.controller().draw( this.modelList, this.options.showNested );				
 				this.val( selectedItem.value );
             }
-        },
-        found: function(items){
-			this.lookup = new Combobox.Models.Lookup({});
-			this.lookup.build( items, this.options.showNested, this.options.autocompleteEnabled );
-
-            this.dropdown.controller().draw(items, this.options.showNested);
-
-            this.itemsAlreadyLoaded = true;
-        },
-        drawDropdown: function(items){
-            this.dropdown.controller().draw(items, this.options.showNested);
         },
         "input keyup": function(el, ev){
 			var key = $.keyname(ev)
@@ -118,24 +114,24 @@ steal.plugins('jquery/controller',
 				return;
 			}
 			
-			// do autocomplete lookup
-			if (this.options.autocompleteEnabled) {
-				var showNested = false;
-				var newVal = el.val();
-				if ($.trim(newVal) === "") {
-					newVal = "*";
-					showNested = this.options.showNested;
-				}
-				var items = this.lookup.query(newVal);
-				this.dropdown.controller().draw(items, showNested);
-			}
+			// autosuggest
+		    var matches = this.modelList.grep(function(item){
+				return item.text.indexOf( el.val() ) > -1;
+			});
+			this.dropdown.controller().draw( matches, this.options.showNested );			
         },
 		"input focusin": function(el, ev){
+			this._focusInputAndShowDropdown(el);
+		},
+		"input click" : function(el, ev) {
+		    this._focusInputAndShowDropdown(el);	
+		},
+		_focusInputAndShowDropdown : function(el) {
 			// select all text
 		    el[0].focus();
 		    el[0].select();
             if(!this.dropdown.is(":visible"))
-				this.dropdown.controller().show();
+				this.dropdown.controller().show();			
 		},
         /*
          * Trick to make dropdown close when combobox looses focus
@@ -147,12 +143,6 @@ steal.plugins('jquery/controller',
             // trick to make dropdown close when combobox looses focus			
             if(this.closeDropdownOnBlurTimeout) 
 			    clearTimeout(this.closeDropdownOnBlurTimeout);
-			
-            // load items on demand
-            if (this.options.loadOnDemand && !this.itemsAlreadyLoaded) {
-				this.options.model.findAll(this.options.params || {}, this.callback("found"));
-												
-            } 
         },
         focusout: function(el, ev){
             // trick to make dropdown close when combobox looses focus				
@@ -167,21 +157,21 @@ steal.plugins('jquery/controller',
         },
 		mouseleave : function(el, ev) {
 			if (this.dropdown.is(":visible")) {
-				this.find("input:visible").focus();
-			}		
+				this.find("input[type=text]").focus();
+			}
 		},		
         val: function(value){
             if(!value && value != 0) 
 			    return this.currentValue;
-			var item = this.lookup.getByValue(value);
+				
+			var item = this.modelList.match("value", value)[0];
 			if (item && item.enabled) {
 				this.currentValue = item.value;
-				this.find("input:visible").val(item.text);
+				this.find("input[type=text]").val(item.text);
 				
 				// after selecting draw all items and mark item as selected
-				// (in case we came from an autocomplete lookup)
-		        var items = this.lookup.query("*");	
-		        this.dropdown.controller().draw( items, this.options.showNested );				
+				// (in case we came from an autocomplete lookup)	
+		        this.dropdown.controller().draw( this.modelList, this.options.showNested );				
 				this.dropdown.controller().val(item);
 				
 				// bind values to the hidden input
@@ -209,13 +199,20 @@ steal.plugins('jquery/controller',
 		    this.dropdown.controller().draw( items, this.options.showNested );
 		},		 
         ".toggle click": function(el, ev){
-            this.find("input:visible").trigger("focus");
+            this._focusInputAndShowDropdown( this.find("input[type=text]") );
         },
+		/*
+		 * Internet Explorer interprets two fast clicks in a row as one single-click, 
+		 * followed by one double-click, while the other browsers interpret it as 
+		 * two single-clicks and a double-click.
+		 */
+        ".toggle dblclick": function(el){
+            if($.browser.msie) this._focusInputAndShowDropdown( this.find("input[type=text]") );
+	   	},			
         destroy: function(){
             this.dropdown.remove();
             this.dropdown = null;
-            this.lookup._lookup = null;
-            this.lookup = null;
+			this.modelList = null;
 			this.oldElementName = null;			
    			var me = this.element; //save a reference
    			this._super()  //unbind everything
