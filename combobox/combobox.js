@@ -157,8 +157,6 @@ steal.plugins('jquery/controller',
         },
 		mouseleave : function(el, ev) {
 			if (this.dropdown.is(":visible")) {
-				this.dropdown.find(".selected").focus();
-				this.dropdown.controller().hasFocus = false;
 				this.find("input[type=text]").focus();
 			}
 		},		
