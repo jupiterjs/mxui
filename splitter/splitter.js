@@ -35,13 +35,16 @@ steal.plugins('jquery/controller','jquery/event/drag/limit','jquery/dom/dimensio
 			}
 			//space guys accordingly	
 		},
-		".hsplitter mouseenter" : function(el){
-			el.addClass(this.options.hover)
-		},
-		".hsplitter mouseleave" : function(el){
-			if(!this.dragging)
-				el.removeClass(this.options.hover)
-		},
+        mouseover : function(el, ev){
+            if(ev.target.parentNode === this.element[0] && el.hasClass('.hsplitter') ){
+                $(ev.target).addClass(this.options.hover)
+            }
+        },
+        mouseover : function(el, ev){
+            if(ev.target.parentNode === this.element[0] && el.hasClass('.hsplitter') ){
+                $(ev.target).removeClass(this.options.hover)
+            }
+        },
 		".hsplitter draginit" : function(el, ev, drag){
 			drag.limit(this.element)
 			drag.vertical()
@@ -169,7 +172,12 @@ steal.plugins('jquery/controller','jquery/event/drag/limit','jquery/dom/dimensio
 				sum += height;
 			}
 			var increase = total / sum, keepSized = false;
-			if(increase > 0.99 && increase < 1.01) return;
+			if (increase > 0.99 && increase < 1.01) {
+				els.each(function(){
+					$(this).triggerHandler('resize')
+				});
+				return;
+			}
 			//go through and resize
 			for(var i =0; i < els.length; i++){
 				var $c = $(els[i]), 
