@@ -156,7 +156,7 @@ steal.plugins('jquery/controller',
 				// .focus() does not trigger focus on input in IE so we must
 				// trigger focusout on this.dropdown explicitely.
 				if($.browser.msie) this.dropdown.trigger("focusout");
-			}		
+			}
 		},		
         val: function(value){
             if(!value && value != 0) 
@@ -198,13 +198,6 @@ steal.plugins('jquery/controller',
 		},		 
         ".toggle click": function(el, ev){
             this.find("input[type=text]")[0].focus();
-			
-			// .focus() does not trigger focus on input in IE so we must
-			// show/hide dropdown explicitely.
-			if ($.browser.msie) {
-				this.dropdown.is(":visible") ? 
-				    this.dropdown.controller().hide() : this.dropdown.controller().show();				
-			}			
         },
         destroy: function(){
             this.dropdown.remove();
