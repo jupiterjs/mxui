@@ -78,7 +78,7 @@ steal.plugins('jquery/controller','jquery/dom/dimensions','jquery/event/resize')
 		
 		return ret;
 	}
-	var matches = /script|td/
+	var matches = /script|td/;
 	/**
 	 * Gets the space used by siblings of the 'adjustingChild'
 	 * @param {Object} adjustingChild
