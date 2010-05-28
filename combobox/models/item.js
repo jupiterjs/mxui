@@ -12,22 +12,23 @@ $.Model.extend("Combobox.Models.Item",
             fixture: "-items"
         })
     }, 
-	wrapMany : function(instances) {
+	/*wrapMany : function(instances) {
          var level = 0, result = [];
 		 instances = instances.data ? instances.data : instances; 
 		 this._flatten(instances, null, level, result);
 		 return this._super(result);
-	},
-	_flatten : function(instances, parent, level, result) {
+	},*/
+	/*flatten : function(instances, parent, level, result) {
 		for(var i=0;i<instances.length;i++) {
 			var instance = instances[i];
-			if(instance.children.length) this._flatten(instance.children, instance, level + 1, result);
+			if(instance.children && instance.children.length)
+			   this.flatten(instance.children, instance, level + 1, result);
 			instance.level =  level;
 			instance.parentId = parent ? parent.value : -1;
 			instance.children = null;
 			result.push(instance);
 		}		
-	}
+	}*/
 },
 {
 })

@@ -8,27 +8,27 @@
             .error {border: solid 1px red;}
             .error_text { color: red; font-size: 10px;}
             td {padding: 3px;}
-        </style>	
+        </style>    
         <link type="text/css" href="combobox.css" rel="stylesheet" />
     </head>
     <body>
 
         <input id="combobox_demo" type="text" name="myname" />
-		
-		<div><h1>Some html that dropdown draws over.</h1></div>
-		<div><button type="button">Dummy</button></div>
-		
-		<span class="log"><label>Log (Set Value, Query, Change, Open):</label><div id="log"></div></span>
-		<span class="log"><label>Log (Get Value):</label><div id="log2"></div></span>
-				
-		<div class="commands">
+        
+        <div><h1>Some html that dropdown draws over.</h1></div>
+        <div><button type="button">Dummy</button></div>
+        
+        <span class="log"><label>Log (Set Value, Query, Change, Open):</label><div id="log"></div></span>
+        <span class="log"><label>Log (Get Value):</label><div id="log2"></div></span>
+                
+        <div class="commands">
             <input id="someValue" />
-			<button id="setValue">Set Value</button>
-			<button id="getValue">Get Value</button>
-			<button id="query">Query</button>
-			<button id="enable">Enable</button>
-			<button id="disable">Disable</button>						
-		</div>
+            <button id="setValue">Set Value</button>
+            <button id="getValue">Get Value</button>
+            <button id="query">Query</button>
+            <button id="enable">Enable</button>
+            <button id="disable">Disable</button>                        
+        </div>
 
         <script type='text/javascript' 
                 src='../../steal/steal.js'>   
@@ -36,58 +36,70 @@
         <script type='text/javascript'>
             steal.plugins("phui/combobox",
                             "jquery/model").then(function($){
-								
-				 
-				$("#combobox_demo").phui_combobox({
-					items: [{value: 1, text: "archive", selected: true}, 
-					        {value: 2, text: "delete"},
-							{value: 3, text: "none"}] });			
+                                
+                 
+                $("#combobox_demo").phui_combobox({
+                    items: [{value: 1, text: "archive", selected: true}, 
+                            {value: 2, text: "delete"},
+                            {value: 3, text: "none"}] });
 
-				 
-				// get/set API demo
-				$("#getValue").bind("click", function(ev){
-					var value = $("#combobox_demo").controller().val();
-					$("#log2").html("<span>" + value + "</span>");
-				})		
-				$("#setValue").bind("click", function(ev){
-					var value = $("input#someValue").val();
-					$("#combobox_demo").controller().val(value);
-				})
-				
-				// query API demo
-				$("#query").bind("click", function(ev){
-					var text = $("input#someValue").val();
-					var values = $("#combobox_demo").controller().query(text);
-					if (values.length) {
-						$("#log").html("");
-						for (var i = 0; i < values.length; i++) {
-							$("#log").append("<div>" + values[i] + "</div>");
-						}
-					}
-				});
-				
-				// enable/disable API demo
-				$("#enable").click( function(ev){
-				    var value = $("#someValue").val();
-				    $("#combobox_demo").controller().enable(value);
-				});
-				$("#disable").click( function(ev){
-				    var value = $("#someValue").val();
-				    $("#combobox_demo").controller().disable(value);
-				});	
-				
-				// event API for when a value is selected demo
-				$("#combobox_demo").bind("change", function(ev, value){
-					$("#log").html("<div>" + value + "</div>");
-				})		
-				
-				// event API for when the dropdown is opened
-				$("#combobox_demo").bind("open", function(ev){
-					$("#log").html("<div>Combobox Opened.</div>");
-				}) 													 					
+                // Nested example
+                /*$("#combobox_demo").phui_combobox({
+                    items: [{ value: "1", text: "hola", enabled: "true", 
+                                children: [  { value: "5", text: "chicago", enabled: "true", children: [] },
+                                              { value: "6", text: "kansas", enabled: "true", 
+                                              children: [ { value: "7", text: "losangeles", enabled: "true", children: [] } ] } ] },
+                            { value: "2", text: "mundo", enabled: "true", children: [] },
+                            { value: "3", text: "nuevo", enabled: "true", 
+                                children: [ { value: "8", text: "sanfrancisco", enabled: "true", children: [] } ] },
+                            { value: "4", text: "viva", enabled: "true", children: [] }] });*/                            
+                            
+                                        
+                 
+                // get/set API demo
+                $("#getValue").bind("click", function(ev){
+                    var value = $("#combobox_demo").controller().val();
+                    $("#log2").html("<span>" + value + "</span>");
+                })        
+                $("#setValue").bind("click", function(ev){
+                    var value = $("input#someValue").val();
+                    $("#combobox_demo").controller().val(value);
+                })
+                
+                // query API demo
+                $("#query").bind("click", function(ev){
+                    var text = $("input#someValue").val();
+                    var values = $("#combobox_demo").controller().query(text);
+                    if (values.length) {
+                        $("#log").html("");
+                        for (var i = 0; i < values.length; i++) {
+                            $("#log").append("<div>" + values[i] + "</div>");
+                        }
+                    }
+                });
+                
+                // enable/disable API demo
+                $("#enable").click( function(ev){
+                    var value = $("#someValue").val();
+                    $("#combobox_demo").controller().enable(value);
+                });
+                $("#disable").click( function(ev){
+                    var value = $("#someValue").val();
+                    $("#combobox_demo").controller().disable(value);
+                });    
+                
+                // event API for when a value is selected demo
+                $("#combobox_demo").bind("change", function(ev, value){
+                    $("#log").html("<div>" + value + "</div>");
+                })        
+                
+                // event API for when the dropdown is opened
+                $("#combobox_demo").bind("open", function(ev){
+                    $("#log").html("<div>Combobox Opened.</div>");
+                })                                                                          
                 
             });
-			
+            
             
             steal.start();
             
