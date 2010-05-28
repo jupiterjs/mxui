@@ -59,15 +59,15 @@ $.Controller.extend("Phui.Combobox.DropdownController", {
             for(var i=0; i<diff; i++){
                 endStr += "</ul></li>"
             }
-            return this._openLI(item)+this._drawItemHtml(item)+
+            return "<li>"+this._drawItemHtml(item)+
 			       "</li>" + endStr
         }
         if(nextLevel == currentLevel) {
-             return this._openLI(item)+this._drawItemHtml(item)+"</li>"+
+             return "<li>"+this._drawItemHtml(item)+"</li>"+
                 this._makeEl(list.splice(1), nextLevel, initialLevel)
         }
         if(nextLevel > currentLevel){
-            return this._openLI(item)+this._drawItemHtml(item)+"<ul>"+
+            return "<li>"+this._drawItemHtml(item)+"<ul>"+
                 this._makeEl(list.splice(1), nextLevel, initialLevel)
         }
         if(nextLevel < currentLevel){
@@ -76,17 +76,17 @@ $.Controller.extend("Phui.Combobox.DropdownController", {
             for(var i=0; i<diff; i++){
                 endStr += "</ul></li>"
             }
-            return this._openLI(item)+this._drawItemHtml(item)+"</li>"+endStr+
+            return "<li>"+this._drawItemHtml(item)+"</li>"+endStr+
                 this._makeEl(list.splice(1), nextLevel, initialLevel)
 
         }
     },       
-    _openLI : function(item) {
+    /*_openLI : function(item) {
             var html = [];
             html.push("<li class='item " + item.identity());
             item.enabled ? html.push("' >") : html.push(this.options.disabledClassName + "' >");
             return html.join(" ");                    
-    },
+    },*/
     _drawItemHtml : function(item) {
             var html = []; 
             html.push("<span style='float:left;margin-left:" + item.level*20 + "px'>&nbsp;</span>");
@@ -107,7 +107,7 @@ $.Controller.extend("Phui.Combobox.DropdownController", {
         el.addClass( this.options.selectedClassName );*/        
         //el.trigger("activate");
     },
-    "li activate" : function(el, ev) {
+    ".selectable activate" : function(el, ev) {
         if (!el.hasClass(this.options.disabledClassName)) {
             var item = el.model();
             if (item) {

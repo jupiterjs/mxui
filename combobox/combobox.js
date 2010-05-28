@@ -11,8 +11,11 @@ steal.plugins('jquery/controller',
             render: {
                 "itemText" : function(item) {
                     var html = [];
-                    html.push("<span class='text'>" + item.text + "</span>");
-                    return html;
+					html.push("<span class='item " + item.identity());
+                    html.push(" text selectable");
+				    item.enabled ? html.push("' >") : html.push(this.options.disabledClassName + "' >"); 
+					html.push(item.text + "</span>");
+                    return html.join(" ");
                 }
             },
             textStyle: "color:blue;font-style:italic;",
@@ -122,14 +125,16 @@ steal.plugins('jquery/controller',
             // if down key is clicked, navigate to first item
             if (key == "down") {
                 this.dropdown.controller().hasFocus = true;
-                this.dropdown.find("li:first").trigger("select");
+				var firstTabIndex = this.dropdown.find("ul:first").controller().firstTabIndex;
+				this.dropdown.find(".selectable[tabindex=" + firstTabIndex + "]").trigger("select");
                 return;
             }
             
             // if up key is clicked, navigate to last item            
             if (key == "up") {
                 this.dropdown.controller().hasFocus = true;
-                this.dropdown.find("li:last").trigger("select");
+				var lastTabIndex = this.dropdown.find("ul:first").controller().lastTabIndex;
+				this.dropdown.find(".selectable[tabindex=" + lastTabIndex + "]").trigger("select");				
                 return;
             }
             
@@ -137,7 +142,8 @@ steal.plugins('jquery/controller',
             var matches = this.modelList.grep(function(item){
                 return item.text.indexOf( el.val() ) > -1;
             });
-            this.dropdown.controller().draw( matches, this.options.showNested );            
+            this.dropdown.controller().draw( new $.Model.List(matches), this.options.showNested );
+			this.dropdown.controller().show();
         },
         "input focusin": function(el, ev){
             this._focusInputAndShowDropdown(el);

@@ -46,11 +46,11 @@
 }
 
 .phui_combobox_dropdown li {
-	margin: 1px;
-	padding: 3px 0px;
-	cursor: pointer;
-	display: block;
-	border-bottom: 1px solid #cccccc;
+	/*margin: 1px;*/
+	/*padding: 3px 0px;*/
+	/*cursor: pointer;*/
+	/*display: block;*/
+	/*border-bottom: 1px solid #cccccc;*/
 	width: 100%;
 	font: menu;
 	font-size: 12px;
@@ -77,4 +77,12 @@
 
 .phui_combobox_dropdown .disabled .text {
 	color: #bbbbbb;
+}
+
+.phui_combobox_dropdown .selectable {
+	display: block;
+	width: 100%;
+	padding: 3px 0;
+	border-bottom: 1px solid #cccccc;
+    cursor: pointer;		
 }
