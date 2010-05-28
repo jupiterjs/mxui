@@ -11,10 +11,7 @@ steal.plugins('jquery/controller',
             render: {
                 "itemText" : function(item) {
                     var html = [];
-					html.push("<span class='item " + item.identity());
-                    html.push(" text selectable");
-				    item.enabled ? html.push("' >") : html.push(this.options.disabledClassName + "' >"); 
-					html.push(item.text + "</span>");
+                    html.push("<span class='text'>" +  item.text + "</span>");
                     return html.join(" ");
                 }
             },
@@ -53,54 +50,61 @@ steal.plugins('jquery/controller',
             this.dropdown = $("<div/>").phui_combobox_dropdown( this.element, this.options ).hide();
             document.body.appendChild(this.dropdown[0]);    
             this.dropdown.controller().style();        
-     
+            
             // pre-populate with items case they exist
-            if (this.options.items) {
+            if (this.options.items) this.loadData(this.options.items);      
+        },
+        loadData : function(items) {
+            // flatten input data structure (which may be nested)
+            var flattenEls = this.flattenEls(items, 0);
+            
+            // create model instances from items
+            var selectedItem, instances = [];
+            for (var i = 0; i < flattenEls.length; i++) {
+                var item = flattenEls[i];
                 
-                // flatten input data structure (which may be nested)
-                var flattenEls = this._flattenEls(this.options.items, 0);
+                if (typeof item === "string") {
+                    item = {
+                        "text": item
+                    };
+                    item["id"] = i;
+                    item["value"] = i;
+                    item["enabled"] = true;
+                    item["level"] = 0;
+                    item["children"] = [];
+                }
                 
-                // create model instances from items
-                var selectedItem, instances = [];
-                for(var i=0;i<flattenEls.length;i++) {
-                    var item = flattenEls[i];
-                    
-                    if( typeof item === "string" ) {
-                        item = {"text": item};
-                        item["id"] = i;
-                        item["value"] = i;
-                        item["enabled"] = true;
-                        item["level"] = 0;
-                        item["children"] = [];
-                    }
-                    
-                    // add reasonable default attributes
-                    if( typeof item === "object") {
-                        if(item.id === undefined) item.id = item.value;
-                        if(item.enabled === undefined) item.enabled = true;
-                        // _flattenEls adds level
-                        //if(item.level === undefined) item.level = 0;
-                        if(item.children === undefined) item.children = [];
-                    }
-                    
-                    // pick inital combobox value
-                    if(item.selected) selectedItem = item;
-                    
-                    // wrap input data item within a combobox.models.item instance so we 
-                    // can leverage model helper functions in the code later 
-                    instances.push(item);
-                } 
+                // add reasonable default attributes
+                if (typeof item === "object") {
+                    if (item.id === undefined) 
+                        item.id = item.value;
+                    if (item.enabled === undefined) 
+                        item.enabled = true;
+                    // _flattenEls adds level
+                    //if(item.level === undefined) item.level = 0;
+                    if (item.children === undefined) 
+                        item.children = [];
+                }
+                
+                // pick inital combobox value
+                if (item.selected) 
+                    selectedItem = item;
+                
+                // wrap input data item within a combobox.models.item instance so we 
+                // can leverage model helper functions in the code later 
+                instances.push(item);
                 
                 // this is where we store the loaded data in the controller
-                instances =  Combobox.Models.Item.wrapMany(instances);
+                instances = Combobox.Models.Item.wrapMany(instances);
                 this.modelList = new $.Model.List(instances);
                 
                 // render the dropdown and set an initial value for combobox
-                this.dropdown.controller().draw( this.modelList, this.options.showNested );                
-                if(selectedItem) this.val( selectedItem.value );
+                this.dropdown.controller().draw(this.modelList, this.options.showNested);
+                if (selectedItem) 
+                    this.val(selectedItem.value);
             }
         },
-        _flattenEls : function(list, currentLevel, items){
+        flattenEls : function(list, currentLevel, items){
                 items = items || [];
                 currentLevel = currentLevel || 0;
                 if(!list.length) return items;
@@ -110,8 +114,8 @@ steal.plugins('jquery/controller',
                 item.level = currentLevel;
                 items.push(item)
                 if(children)
-                   this._flattenEls(children, currentLevel+1, items);
-                this._flattenEls(list.splice(1), currentLevel, items);
+                   this.flattenEls(children, currentLevel+1, items);
+                this.flattenEls(list.splice(1), currentLevel, items);
                 return items;
         },
         "input keyup": function(el, ev){
@@ -125,25 +129,27 @@ steal.plugins('jquery/controller',
             // if down key is clicked, navigate to first item
             if (key == "down") {
                 this.dropdown.controller().hasFocus = true;
-				var firstTabIndex = this.dropdown.find("ul:first").controller().firstTabIndex;
-				this.dropdown.find(".selectable[tabindex=" + firstTabIndex + "]").trigger("select");
+                var firstTabIndex = this.dropdown.find("ul:first").controller().firstTabIndex;
+                this.dropdown.find(".selectable[tabindex=" + firstTabIndex + "]").trigger("select");
                 return;
             }
             
             // if up key is clicked, navigate to last item            
             if (key == "up") {
                 this.dropdown.controller().hasFocus = true;
-				var lastTabIndex = this.dropdown.find("ul:first").controller().lastTabIndex;
-				this.dropdown.find(".selectable[tabindex=" + lastTabIndex + "]").trigger("select");				
+                var lastTabIndex = this.dropdown.find("ul:first").controller().lastTabIndex;
+                this.dropdown.find(".selectable[tabindex=" + lastTabIndex + "]").trigger("select");                
                 return;
             }
             
-            // autosuggest
+            this.autocomplete( el.val() );
+        },
+        autocomplete : function(val) {
             var matches = this.modelList.grep(function(item){
-                return item.text.indexOf( el.val() ) > -1;
+                return item.text.indexOf(val) > -1;
             });
             this.dropdown.controller().draw( new $.Model.List(matches), this.options.showNested );
-			this.dropdown.controller().show();
+            this.dropdown.controller().show();            
         },
         "input focusin": function(el, ev){
             this._focusInputAndShowDropdown(el);
@@ -193,35 +199,48 @@ steal.plugins('jquery/controller',
             if (item && item.enabled) {
                 this.currentValue = item.value;
                 this.find("input[type=text]").val(item.text);
+				
+				// higlight the activated item
+				this.modelList.each(function(i, item){
+					item.attr("activated", false)
+				})
+				item.attr("activated", true);					
                 
                 // after selecting draw all items and mark item as selected
-                // (in case we came from an autocomplete lookup)     				
+                // (in case we came from an autocomplete lookup)                     
                 this.dropdown.controller().draw( this.modelList, this.options.showNested );                
                 this.dropdown.controller().val(item);
                 
                 // bind values to the hidden input
-                this.find("input[name='" + this.oldElementName + "']").val(this.currentValue);
+                this.find("input[name='" + this.oldElementName + "']").val(this.currentValue);			
                 
                 this.element.trigger("change", this.currentValue);                
             }
          },
         query : function(text) {
-             var items = this.lookup.query(text);
-            return $.map(items, function(item){
-                return item.value;
-            })
+            var matches = this.modelList.grep(function(item){
+                return item.text.indexOf(text) > -1;
+            });
+			var results = [];
+			for(var i=0;i<matches.length;i++) {
+				results.push(matches[i].value)
+			}
+			return results;
          },
         enable : function(value) {
-            var item = this.lookup.getByValue(value);
-            item.attr("enabled", true);
-            var items = this.lookup.query("*");    
-            this.dropdown.controller().draw( items, this.options.showNested );
+            var item = this.modelList.match("value", value)[0];
+            if (item) {
+                item.attr("enabled", true);
+                this.dropdown.controller().draw(this.modelList, this.options.showNested);
+            }
         },
         disable : function(value) {
-            var item = this.lookup.getByValue(value);
-            item.attr("enabled", false);
-            var items = this.lookup.query("*");    
-            this.dropdown.controller().draw( items, this.options.showNested );
+            var item = this.modelList.match("value", value)[0];
+            if (item) {
+                item.attr("enabled", false);
+				item.attr("activated", false);				
+                this.dropdown.controller().draw(this.modelList, this.options.showNested);
+            }
         },         
         ".toggle click": function(el, ev){
             this._focusInputAndShowDropdown( this.find("input[type=text]") );

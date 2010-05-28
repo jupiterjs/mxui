@@ -28,7 +28,6 @@ steal.plugins('jquery/controller', 'phui/keycode')
 				el.trigger("activate")
 			},
 			".{selectableClassName} focusin": function(el, ev){
-				//if(this.focusinOnSelect) clearTimeout(this.focusinOnSelect);
 				el.addClass( this.options.selectedClassName )
 			},
 			".{selectableClassName} activate": function(el, ev){
@@ -63,28 +62,34 @@ steal.plugins('jquery/controller', 'phui/keycode')
 					el.trigger("activate")
 			},
 			focusNext: function(el){
-				var last = this.element.find('.' + this.options.selectableClassName +
+				var last = this.element.find('.' +
+				               this.options.selectableClassName +
 				               '[tabindex=' + this.lastTabIndex + ']'), 
-					first = this.element.find('.' + this.options.selectableClassName +
+					first = this.element.find('.' +
+					           this.options.selectableClassName +
 					           '[tabindex=' + this.firstTabIndex + ']')
 				if(el[0] == last[0])
 					return first.trigger("select");
 				
 				var nextTabIndex = parseInt( el.attr("tabindex") ) + 1;
-				var nextEl = this.element.find('.' + this.options.selectableClassName +
+				var nextEl = this.element.find('.' +
+				               this.options.selectableClassName +
 					           '[tabindex=' + nextTabIndex + ']')					
 				nextEl.trigger("select")
 			},
 			focusPrev: function(el){
-				var last = this.element.find('.' + this.options.selectableClassName +
+				var last = this.element.find('.' +
+				               this.options.selectableClassName +
 				               '[tabindex=' + this.lastTabIndex + ']'), 
-					first = this.element.find('.' + this.options.selectableClassName +
+					first = this.element.find('.' + 
+					           this.options.selectableClassName +
 					           '[tabindex=' + this.firstTabIndex + ']')
 				if(el[0] == first[0])
 					return last.trigger("select");
 					
 				var prevTabIndex = parseInt( el.attr("tabindex") ) - 1;
-				var prevEl = this.element.find('.' + this.options.selectableClassName +
+				var prevEl = this.element.find('.' +
+				               this.options.selectableClassName +
 					           '[tabindex=' + prevTabIndex + ']')					
 				prevEl.trigger("select")					
 			}

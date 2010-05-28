@@ -13,6 +13,19 @@ $.Controller.extend("Phui.Combobox.DropdownController", {
             });
         }        
         this.find("li").css("width", this.element.width() - 2);
+		
+        // apply custom style to item and
+		var self = this;
+		this.find(".item").each(function(i, el){
+			el = $(el);
+	        el.find(".text").css(self.options.textStyle);
+			
+			if (el.model().attr("activated")) {
+				el.addClass(self.options.activatedClassName);
+			} else {
+				el.removeClass(self.options.activatedClassName);
+			}		   								
+		})			
     },
     draw : function(modelList, showNested) {
         // draw the dropdown
@@ -26,14 +39,11 @@ $.Controller.extend("Phui.Combobox.DropdownController", {
 		}
         this.element.html(html);
         
-        // apply custom style to item and
         // hookup the models to the elements
         for(var i=0;i<modelList.length;i++) {
             var item = modelList[i];
             
             var el = this.find("." + item.identity());
-            el.find(".text").css(this.options.textStyle);
-            
             if (el[0]) {
                 item.hookup(el[0]);
             }            
@@ -81,16 +91,14 @@ $.Controller.extend("Phui.Combobox.DropdownController", {
 
         }
     },       
-    /*_openLI : function(item) {
-            var html = [];
-            html.push("<li class='item " + item.identity());
-            item.enabled ? html.push("' >") : html.push(this.options.disabledClassName + "' >");
-            return html.join(" ");                    
-    },*/
     _drawItemHtml : function(item) {
-            var html = []; 
+            var html = [];
+		    html.push("<span class='item " + item.identity()); 
+            html.push(" selectable ");
+		    item.enabled ? html.push("' >") : html.push(this.options.disabledClassName + "' >"); 			
             html.push("<span style='float:left;margin-left:" + item.level*20 + "px'>&nbsp;</span>");
-            html.push( this.options.render["itemText"](item) );        
+            html.push( this.options.render["itemText"](item) ); 
+			html.push("</span>");       
             return html.join(" ");        
     },
     keyup : function(el, ev) {
@@ -114,17 +122,15 @@ $.Controller.extend("Phui.Combobox.DropdownController", {
                 // set combobox new value
                 this.combobox.controller().val(item.value);
                 
-                // highlight activated item
-                /*this.find("li").removeClass(this.options.activatedClassName);
-                el.addClass(this.options.activatedClassName);*/
-                
                 // then hide dropdown            
                 this.element.hide();
                 
                 // trick to make dropdown close when combobox looses focus            
                 this.hasFocus = false;
             }
-        }
+        } else {
+			el.removeClass( this.options.activatedClassName );
+		}
     },
     
     mouseenter : function(el, ev) {
@@ -149,7 +155,7 @@ $.Controller.extend("Phui.Combobox.DropdownController", {
             collision: 'none none'
         }).trigger("move", this.combobox);        
         
-        this.style();            
+        this.style();         
                     
         this.combobox.trigger("open");        
     }

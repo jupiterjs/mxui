@@ -8,14 +8,13 @@
             .error {border: solid 1px red;}
             .error_text { color: red; font-size: 10px;}
             td {padding: 3px;}
-        </style>
-        <link type="text/css" href="../smoothness/jquery-ui-1.7.2.custom.css" rel="stylesheet" />		
+        </style>	
         <link type="text/css" href="combobox.css" rel="stylesheet" />			
 	</head>
 	<body>
-        <input id="demo" />
-		<script type='text/javascript' 
-                src='../../steal/steal.js?phui/combobox/select,development'>   
+        <input id="demo" name="demo" />
+        <script type='text/javascript' 
+                src='../../steal/steal.js'>   
         </script>
         <script type='text/javascript'>
             steal.plugins("phui/combobox/ajax", "jquery/dom/fixtures").then(function($){
@@ -64,10 +63,10 @@
 				    }]
 			    } 				
  
-				$("#combobox_demo").phui_combobox_ajax({
-					maxHeight: "320px",			
+				$("#demo").phui_combobox_ajax({
+					maxHeight: "320px",
 					url: "/Archer/Service/DiscussionForumServiceJS.svc/GetForumsForCommunity"
-				});		
+				});
 	            
 			});
             steal.start();

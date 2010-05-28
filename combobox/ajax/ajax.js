@@ -2,27 +2,52 @@ steal.plugins('phui/combobox')
     .then("//phui/combobox/models/item")
     .then(function($){
 
-    $.Controller.extend("Phui.Combobox.Ajax", {
-        defaults: {
-			autocompleteEnabled: false,
-            loadOnDemand: false
-        }				
+    Phui.Combobox.extend("Phui.Combobox.Autosuggest",{
     },
-	{
-        init: function(){
-	
-		},
-		focusin : function(el, ev) {
-            // load items on demand
-            if (this.options.loadOnDemand && !this.itemsAlreadyLoaded) {
-				Combobox.Models.Item.url = this.options.url;
-                Combobox.Models.Item.findAll(this.options.params || {}, this.callback("found"));												
-            } 			
-		},
-		found : function(el, ev) {
-			// this is where we store the loaded data in the controller			
-			this.modelList = new $.Model.List(items);			
-		}
-	});
-	
+    {
+        autocomplete : function(val) {
+            this.find(".phui_combobox_ajax").trigger("autocomplete", [val, this]);
+        }
+    });
+
+
+    $.Controller.extend("Phui.Combobox.Ajax", {
+        listensTo : ["autocomplete"]
+    },
+    {
+        setup : function(el, options) {
+            if (el.nodeName == "INPUT") {
+                var el = $(el);
+                var id = el.attr("id"),
+                    className = el.attr("class"),
+                    name = el.attr("name");
+                
+                var input = $("<input type='text' />")
+                    .attr("id", id)
+                    .attr("name", name)
+                    .attr("className", className);
+                
+                el.after(input);
+                el.remove();
+                input.phui_combobox_autosuggest(options);
+                this._super(input[0], options);
+            }
+        },
+        autocomplete : function(el, ev, val, combobox) {
+             $.ajax({
+                url: this.options.url,
+                type: 'get',
+                dataType: 'json',
+                data: {"val": val},
+                success: this.callback('showData', combobox),
+                //error: error,
+                fixture: "-items"
+            })    
+        }, 
+        showData : function(combobox, matches) {
+            matches = matches.data ? matches.data : matches;
+            combobox.loadData(matches);
+        }        
+    });
+    
 });
