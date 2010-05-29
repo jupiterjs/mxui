@@ -12,7 +12,6 @@ $.Controller.extend("Phui.Combobox.DropdownController", {
                 "overflow": "auto"
             });
         }        
-        this.find("li").css("width", this.element.width() - 2);
 		
         // apply custom style to item and
 		var self = this;

@@ -94,7 +94,8 @@ steal.plugins('jquery/controller',
                 // wrap input data item within a combobox.models.item instance so we 
                 // can leverage model helper functions in the code later 
                 instances.push(item);
-                
+            }
+			
                 // this is where we store the loaded data in the controller
                 instances = Combobox.Models.Item.wrapMany(instances);
                 this.modelList = new $.Model.List(instances);
@@ -102,8 +103,7 @@ steal.plugins('jquery/controller',
                 // render the dropdown and set an initial value for combobox
                 this.dropdown.controller().draw(this.modelList, this.options.showNested);
                 if (selectedItem) 
-                    this.val(selectedItem.value);
-            }
+                    this.val(selectedItem.value);			
         },
         flattenEls : function(list, currentLevel, items){
                 items = items || [];
