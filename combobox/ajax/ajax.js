@@ -37,8 +37,13 @@ steal.plugins('phui/combobox')
             }
         },
         comboboxFocusInput : function(el, ev, combobox) {
-            if( this.options.loadOnDemand && !this.dataAlreadyLoaded ) {
+            if( this.options.loadOnDemand && !this.dataAlreadyLoaded && !this.timeout) {
                 this.loadDataFromServer(combobox);
+				this.timeout = true;
+				var self = true;
+				setTimeout(function(){
+					self.timeout = false;
+				}, 100);
             }
         },
         loadDataFromServer : function(combobox) {
