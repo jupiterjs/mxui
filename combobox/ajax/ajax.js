@@ -9,7 +9,12 @@ steal.plugins('phui/combobox')
             this.find(".phui_combobox_ajax").trigger("comboboxFocusInput", this);
         },
         autocomplete : function(val) {
-            this.find(".phui_combobox_ajax").trigger("autocomplete", [this, val]);
+            if (this.options.loadOnDemand) {
+                this._super(val);
+            }
+            else {
+                this.find(".phui_combobox_ajax").trigger("autocomplete", [this, val]);
+            }
         }
     });
 
@@ -42,29 +47,29 @@ steal.plugins('phui/combobox')
         comboboxFocusInput : function(el, ev, combobox) {
             if( this.options.loadOnDemand && !this.dataAlreadyLoaded && !this.timeout) {
                 this.loadDataFromServer(combobox);
-				this.timeout = true;
-				var self = this;
-				setTimeout(function(){
-					self.timeout = false;
-				}, 100);
+                this.timeout = true;
+                var self = this;
+                setTimeout(function(){
+                    self.timeout = false;
+                }, 100);
             }
         },
-		autocomplete : function(el, ev, combobox, val) {
+        autocomplete : function(el, ev, combobox, val) {
             if (this.options.autocompleteEnabled && !this.timeout) {
                 this.loadDataFromServer(combobox, val);
-				this.timeout = true;
-				var self = this;
-				setTimeout(function(){
-					self.timeout = false;
-				}, 100);
-			}
-		},
+                this.timeout = true;
+                var self = this;
+                setTimeout(function(){
+                    self.timeout = false;
+                }, 100);
+            }
+        },
         loadDataFromServer : function(combobox, params) {
              $.ajax({
                 url: this.options.url,
                 type: 'get',
                 dataType: 'json',
-                data: params || "null",
+                data: params || 'findAll',
                 success: this.callback('showData', combobox),
                 //error: error,
                 fixture: "-items"

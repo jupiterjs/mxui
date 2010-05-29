@@ -1,86 +1,120 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
             "http://www.w3.org/TR/html4/strict.dtd">
 <html lang="en">
-	<head>
-		<title>ajax</title>
+    <head>
+        <title>ajax</title>
         <style type='text/css'>
             body {font-family: verdana}
             .error {border: solid 1px red;}
             .error_text { color: red; font-size: 10px;}
             td {padding: 3px;}
-        </style>	
-        <link type="text/css" href="combobox.css" rel="stylesheet" />			
-	</head>
-	<body>
+        </style>    
+        <link type="text/css" href="combobox.css" rel="stylesheet" />            
+    </head>
+    <body>
         <input id="demo" name="demo" />
         <script type='text/javascript' 
                 src='../../steal/steal.js'>   
         </script>
         <script type='text/javascript'>
             steal.plugins("phui/combobox/ajax", "jquery/dom/fixtures").then(function($){
-				
-				
-			    // fixtures that simulate nested data sent by the server
-				$.fixture["-make"](["items", "item"], 40, function(num, items) {
+                
+                
+                // fixtures that simulate nested data sent by the server
+                $.fixture["-make"](["items", "item"], 40, function(num, items) {
                     
-					    var itemId = parseInt(Math.random() * num);
-		                var item = items[itemId]
+                        var itemId = parseInt(Math.random() * num);
+                        var item = items[itemId]
                         var experiment = parseInt(Math.random() * 10);
-			            if (num < 5) {
-							return {
-								"value": num,
-							    "text": "dir" + num,
-								"enabled": experiment > 3 ? true : false,
-		                        "parentId": null,
-								children: []
-							}
-						} else {
-						    var child =  { 
-							    "value": num,
-								"text": experiment > 6 ? "file" + num : "dir" + num,
-								"enabled": experiment > 3 ? true : false,
-		                        "parentId": itemId,
-								children: []
-		                    }
-		                    item.children.push(child);
-							return child;
-						}
-                })			
-				
-				// modify fixture to return only the root items
-				var oldFixture = $.fixture["-items"]; 
-			    $.fixture["-items"] = function(settings){
+                        if (num < 5) {
+                            return {
+                                "value": num,
+                                "text": "dir" + num,
+                                "enabled": experiment > 3 ? true : false,
+                                "parentId": null,
+                                children: []
+                            }
+                        } else {
+                            var child =  { 
+                                "value": num,
+                                "text": experiment > 6 ? "file" + num : "dir" + num,
+                                "enabled": experiment > 3 ? true : false,
+                                "parentId": itemId,
+                                children: []
+                            }
+                            item.children.push(child);
+                            return child;
+                        }
+                })
+                
+                // modify fixture to return only data filtered
+                // by value in combobox input (autocomplete)
+                var oldFixture1 = $.fixture["-items"]; 
+                $.fixture["-items"] = function(settings){
 					
-					if(settings.data == "null") {
-						return [{
-					        "count": 0,
-				    	    "data" : []
-				        }]
+                    var items = oldFixture1(settings)[0].data;
+					
+					// make a clone of the data so that changes
+					// in the to the data in combobox don't get 
+					// reflected in the fixtures
+					var clonedItems = [];					
+                    for (var i = 0; i < items.length; i++) {
+                        clonedItems.push( $.extend(true, {}, items[i]) );
+					}					
+					
+					if(settings.data == "findAll") {
+	                    return [{
+	                        "count": clonedItems.length,
+	                        "data" : clonedItems
+	                    }]						
 					}
-					
-					var retArr = [];
-				    var items = oldFixture(settings)[0].data;
-					for(var i=0;i<items.length;i++) {
-						var parentId = items[i].parentId;
-						if(!parentId && parentId != 0) retArr.push(items[i])
-					}
-					
-					return [{
-					    "count": retArr.length,
-				    	"data" : retArr
-				    }]
-			    } 				
+
+                    var retArr = [];
+
+                    for(var i=0;i<clonedItems.length;i++) {
+                        if( clonedItems[i].text.indexOf(settings.data) > -1) {
+							retArr.push( clonedItems[i] );
+                        }
+                    }
+                    
+                    return [{
+                        "count": retArr.length,
+                        "data" : retArr
+                    }]
+                }
+                
+                // modify fixture to return only the root items
+                /*var oldFixture2 = $.fixture["-items"]; 
+                $.fixture["-items"] = function(settings){
+                    
+                    var retArr = [];
+                    var items = oldFixture2(settings)[0].data;
+                    for(var i=0;i<items.length;i++) {
+                        var parentId = items[i].parentId;
+                        if (!parentId && parentId != 0) {
+							// make a clone of the data so that changes
+							// in the to the data in combobox don't get 
+							// reflected in the fixtures
+                            retArr.push( $.extend(true, {}, items[i]) );
+                        }
+                    }
+                    
+                    return [{
+                        "count": retArr.length,
+                        "data" : retArr
+                    }]
+                }*/
  
-				$("#demo").phui_combobox_ajax({
-					maxHeight: "320px",
-					autocompleteEnabled: true,
-					loadOnDemand: false,
-					url: "/Archer/Service/DiscussionForumServiceJS.svc/GetForumsForCommunity"
-				});
-	            
-			});
+                $("#demo").phui_combobox_ajax({
+                    maxHeight: "320px",
+                    autocompleteEnabled: false,
+                    loadOnDemand: true,
+                    url: "/Archer/Service/DiscussionForumServiceJS.svc/GetForumsForCommunity"
+                });
+                
+            });
             steal.start();
             
-        </script>	
-	</body>
+        </script>    
+    </body>
 </html>
