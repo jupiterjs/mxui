@@ -18,6 +18,7 @@ steal.plugins('jquery/controller',
             textStyle: "color:blue;font-style:italic;",
             showNested: false,
             maxHeight: null,
+            filterEnabled : true,
             selectedClassName: "selected",
             activatedClassName: "activated",
             disabledClassName: "disabled"
@@ -145,11 +146,13 @@ steal.plugins('jquery/controller',
             this.autocomplete( el.val() );
         },
         autocomplete : function(val) {
-            var matches = this.modelList.grep(function(item){
-                return item.text.indexOf(val) > -1;
-            });
-            this.dropdown.controller().draw( new $.Model.List(matches), this.options.showNested );
-            this.dropdown.controller().show();            
+            if (this.options.filterEnabled) {
+                var matches = this.modelList.grep(function(item){
+                    return item.text.indexOf(val) > -1;
+                });
+                this.dropdown.controller().draw(new $.Model.List(matches), this.options.showNested);
+                this.dropdown.controller().show();
+            }            
         },
         "input focusin": function(el, ev){
             this.focusInputAndShowDropdown(el);
@@ -199,12 +202,12 @@ steal.plugins('jquery/controller',
             if (item && item.enabled) {
                 this.currentValue = item.value;
                 this.find("input[type=text]").val(item.text);
-				
-				// higlight the activated item
-				this.modelList.each(function(i, item){
-					item.attr("activated", false)
-				})
-				item.attr("activated", true);					
+                
+                // higlight the activated item
+                this.modelList.each(function(i, item){
+                    item.attr("activated", false)
+                })
+                item.attr("activated", true);                    
                 
                 // after selecting draw all items and mark item as selected
                 // (in case we came from an autocomplete lookup)                     
@@ -212,7 +215,7 @@ steal.plugins('jquery/controller',
                 this.dropdown.controller().val(item);
                 
                 // bind values to the hidden input
-                this.find("input[name='" + this.oldElementName + "']").val(this.currentValue);			
+                this.find("input[name='" + this.oldElementName + "']").val(this.currentValue);            
                 
                 this.element.trigger("change", this.currentValue);                
             }
@@ -221,11 +224,11 @@ steal.plugins('jquery/controller',
             var matches = this.modelList.grep(function(item){
                 return item.text.indexOf(text) > -1;
             });
-			var results = [];
-			for(var i=0;i<matches.length;i++) {
-				results.push(matches[i].value)
-			}
-			return results;
+            var results = [];
+            for(var i=0;i<matches.length;i++) {
+                results.push(matches[i].value)
+            }
+            return results;
          },
         enable : function(value) {
             var item = this.modelList.match("value", value)[0];
@@ -238,7 +241,7 @@ steal.plugins('jquery/controller',
             var item = this.modelList.match("value", value)[0];
             if (item) {
                 item.attr("enabled", false);
-				item.attr("activated", false);				
+                item.attr("activated", false);                
                 this.dropdown.controller().draw(this.modelList, this.options.showNested);
             }
         },         
