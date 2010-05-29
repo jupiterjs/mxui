@@ -45,37 +45,49 @@
                             item.children.push(child);
                             return child;
                         }
-                })
+                });
+                
+                
+                var match = function(list, results, target) {
+                    results = results || [];
+                    for(var i=0;i<list.length;i++) {
+                        var item = list[i];
+                        if(item.children && item.children.length) match(item.children, results, target);
+                        if (item.text.indexOf(target) > -1) {
+                            delete item.children;
+                            results.push(item);
+                            return results;
+                        }
+                    }
+                    return results;
+                }
                 
                 // modify fixture to return only data filtered
                 // by value in combobox input (autocomplete)
                 var oldFixture1 = $.fixture["-items"]; 
                 $.fixture["-items"] = function(settings){
-					
+                    
                     var items = oldFixture1(settings)[0].data;
-					
-					// make a clone of the data so that changes
-					// in the to the data in combobox don't get 
-					// reflected in the fixtures
-					var clonedItems = [];					
+                    
+                    // make a clone of the data so that changes
+                    // in the to the data in combobox don't get 
+                    // reflected in the fixtures
+                    var clonedItems = [];                    
                     for (var i = 0; i < items.length; i++) {
-                        clonedItems.push( $.extend(true, {}, items[i]) );
-					}					
-					
-					if(settings.data == "findAll") {
-	                    return [{
-	                        "count": clonedItems.length,
-	                        "data" : clonedItems
-	                    }]						
-					}
-
-                    var retArr = [];
-
-                    for(var i=0;i<clonedItems.length;i++) {
-                        if( clonedItems[i].text.indexOf(settings.data) > -1) {
-							retArr.push( clonedItems[i] );
+                        var parentId = items[i].parentId;
+                        if (!parentId && parentId != 0) {
+                            clonedItems.push($.extend(true, {}, items[i]));
                         }
                     }
+                    
+                    if(settings.data == "findAll") {
+                        return [{
+                            "count": clonedItems.length,
+                            "data" : clonedItems
+                        }]                        
+                    }
+   
+                    var retArr = match(clonedItems, [], settings.data);
                     
                     return [{
                         "count": retArr.length,
@@ -83,27 +95,6 @@
                     }]
                 }
                 
-                // modify fixture to return only the root items
-                /*var oldFixture2 = $.fixture["-items"]; 
-                $.fixture["-items"] = function(settings){
-                    
-                    var retArr = [];
-                    var items = oldFixture2(settings)[0].data;
-                    for(var i=0;i<items.length;i++) {
-                        var parentId = items[i].parentId;
-                        if (!parentId && parentId != 0) {
-							// make a clone of the data so that changes
-							// in the to the data in combobox don't get 
-							// reflected in the fixtures
-                            retArr.push( $.extend(true, {}, items[i]) );
-                        }
-                    }
-                    
-                    return [{
-                        "count": retArr.length,
-                        "data" : retArr
-                    }]
-                }*/
  
                 $("#demo").phui_combobox_ajax({
                     maxHeight: "320px",
