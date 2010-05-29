@@ -208,11 +208,8 @@ steal.plugins('jquery/controller',
                     item.attr("activated", false)
                 })
                 item.attr("activated", true);                    
-                
-                // after selecting draw all items and mark item as selected
-                // (in case we came from an autocomplete lookup)                     
+                                     
                 this.dropdown.controller().draw( this.modelList, this.options.showNested );                
-                this.dropdown.controller().val(item);
                 
                 // bind values to the hidden input
                 this.find("input[name='" + this.oldElementName + "']").val(this.currentValue);            
