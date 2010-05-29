@@ -74,11 +74,11 @@ $.Controller.extend("Phui.Combobox.DropdownController", {
         }
         if(nextLevel == currentLevel) {
              return "<li>"+this._drawItemHtml(item)+"</li>"+
-                this._makeEl(list.splice(1), nextLevel, initialLevel)
+                this._makeEl(list.slice(1), nextLevel, initialLevel)
         }
         if(nextLevel > currentLevel){
             return "<li>"+this._drawItemHtml(item)+"<ul>"+
-                this._makeEl(list.splice(1), nextLevel, initialLevel)
+                this._makeEl(list.slice(1), nextLevel, initialLevel)
         }
         if(nextLevel < currentLevel){
             var diff = currentLevel - nextLevel
@@ -87,7 +87,7 @@ $.Controller.extend("Phui.Combobox.DropdownController", {
                 endStr += "</ul></li>"
             }
             return "<li>"+this._drawItemHtml(item)+"</li>"+endStr+
-                this._makeEl(list.splice(1), nextLevel, initialLevel)
+                this._makeEl(list.slice(1), nextLevel, initialLevel)
 
         }
     },       

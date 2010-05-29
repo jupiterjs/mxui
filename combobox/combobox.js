@@ -106,18 +106,19 @@ steal.plugins('jquery/controller',
                 this.val(selectedItem.value);
         },
         flattenEls : function(list, currentLevel, items){
-                items = items || [];
-                currentLevel = currentLevel || 0;
-                if(!list.length) return items;
-                var item = list[0]
-                var children = item.children;
-                delete item.children;
-                item.level = currentLevel;
-                items.push(item)
-                if(children)
-                   this.flattenEls(children, currentLevel+1, items);
-                this.flattenEls(list.splice(1), currentLevel, items);
-                return items;
+            items = items || [];
+            currentLevel = currentLevel || 0;
+            if(!list.length) return items;
+            var item = list[0];
+            var children = item.children;
+            delete item.children;
+            item.level = currentLevel;
+            items.push(item)
+            if (children) {
+                this.flattenEls(children, currentLevel + 1, items);
+            }
+            this.flattenEls(list.slice(1), currentLevel, items);
+            return items;
         },
         "input keyup": function(el, ev){
             var key = $.keyname(ev)
