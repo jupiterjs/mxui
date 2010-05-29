@@ -54,7 +54,7 @@ steal.plugins('phui/toolbar').then(function(){
 	})
 	
 	$.Controller.extend("Phui.FadeInable",{
-		listensTo: [">show:before",">hide:before"]
+		listensTo: ["show:before","hide:before"]
 	}, {
 	   ">show:before" : function(el, ev){
 			ev.preventDefault();
