@@ -15,7 +15,7 @@ steal.plugins('jquery/controller',
                     return html.join(" ");
                 }
             },
-            textStyle: "color:blue;font-style:italic;",
+            textStyle: {'color':'blue','font-style':'italic'},
             showNested: false,
             maxHeight: null,
             filterEnabled : true,

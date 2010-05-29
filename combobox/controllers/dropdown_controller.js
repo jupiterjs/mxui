@@ -18,7 +18,8 @@ $.Controller.extend("Phui.Combobox.DropdownController", {
 		var self = this;
 		this.find(".item").each(function(i, el){
 			el = $(el);
-	        el.find(".text").css(self.options.textStyle);
+			if(el.model().enabled)
+	            el.find(".text").css(self.options.textStyle);
 			
 			if (el.model().attr("activated")) {
 				el.addClass(self.options.activatedClassName);
@@ -108,12 +109,6 @@ $.Controller.extend("Phui.Combobox.DropdownController", {
         if (key == "escape") {
             this.hide();                
         }        
-    },
-    val: function(item) {
-        var el = this.find("li.combobox_models_item_" + item.value + ":first");
-        /*this.find("li").removeClass( this.options.selectedClassName );
-        el.addClass( this.options.selectedClassName );*/        
-        //el.trigger("activate");
     },
     ".selectable activate" : function(el, ev) {
         if (!el.hasClass(this.options.disabledClassName)) {
