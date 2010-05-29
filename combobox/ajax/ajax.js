@@ -1,18 +1,21 @@
 steal.plugins('phui/combobox')
-    .then("//phui/combobox/models/item")
     .then(function($){
 
     Phui.Combobox.extend("Phui.Combobox.Autosuggest",{
     },
     {
-        autocomplete : function(val) {
-            this.find(".phui_combobox_ajax").trigger("autocomplete", [val, this]);
+        focusInputAndShowDropdown : function(el) {
+            this._super(el);
+            this.find(".phui_combobox_ajax").trigger("comboboxFocusInput", this);
         }
     });
 
 
     $.Controller.extend("Phui.Combobox.Ajax", {
-        listensTo : ["autocomplete"]
+        defaults : {
+            loadOnDemand : true
+        },
+        listensTo : ["comboboxFocusInput"]
     },
     {
         setup : function(el, options) {
@@ -33,20 +36,26 @@ steal.plugins('phui/combobox')
                 this._super(input[0], options);
             }
         },
-        autocomplete : function(el, ev, val, combobox) {
+        comboboxFocusInput : function(el, ev, combobox) {
+            if( this.options.loadOnDemand && !this.dataAlreadyLoaded ) {
+                this.loadDataFromServer(combobox);
+            }
+        },
+        loadDataFromServer : function(combobox) {
              $.ajax({
                 url: this.options.url,
                 type: 'get',
                 dataType: 'json',
-                data: {"val": val},
+                data: {},
                 success: this.callback('showData', combobox),
                 //error: error,
                 fixture: "-items"
-            })    
-        }, 
-        showData : function(combobox, matches) {
-            matches = matches.data ? matches.data : matches;
-            combobox.loadData(matches);
+            })                
+        },
+        showData : function(combobox, data) {
+            data = data.data ? data.data : data;
+            combobox.loadData(data);
+            this.dataAlreadyLoaded = true;
         }        
     });
     

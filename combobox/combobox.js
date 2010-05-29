@@ -152,12 +152,12 @@ steal.plugins('jquery/controller',
             this.dropdown.controller().show();            
         },
         "input focusin": function(el, ev){
-            this._focusInputAndShowDropdown(el);
+            this.focusInputAndShowDropdown(el);
         },
         "input click" : function(el, ev) {
-            this._focusInputAndShowDropdown(el);    
+            this.focusInputAndShowDropdown(el);    
         },
-        _focusInputAndShowDropdown : function(el) {
+        focusInputAndShowDropdown : function(el) {
             // select all text
             el[0].focus();
             el[0].select();
@@ -243,7 +243,7 @@ steal.plugins('jquery/controller',
             }
         },         
         ".toggle click": function(el, ev){
-            this._focusInputAndShowDropdown( this.find("input[type=text]") );
+            this.focusInputAndShowDropdown( this.find("input[type=text]") );
         },
         /*
          * Internet Explorer interprets two fast clicks in a row as one single-click, 
@@ -251,7 +251,7 @@ steal.plugins('jquery/controller',
          * two single-clicks and a double-click.
          */
         ".toggle dblclick": function(el){
-            if($.browser.msie) this._focusInputAndShowDropdown( this.find("input[type=text]") );
+            if($.browser.msie) this.focusInputAndShowDropdown( this.find("input[type=text]") );
            },            
         destroy: function(){
             this.dropdown.remove();
