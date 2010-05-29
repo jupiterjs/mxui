@@ -7,6 +7,9 @@ steal.plugins('phui/combobox')
         focusInputAndShowDropdown : function(el) {
             this._super(el);
             this.find(".phui_combobox_ajax").trigger("comboboxFocusInput", this);
+        },
+        autocomplete : function(val) {
+            this.find(".phui_combobox_ajax").trigger("autocomplete", [this, val]);
         }
     });
 
@@ -15,7 +18,7 @@ steal.plugins('phui/combobox')
         defaults : {
             loadOnDemand : true
         },
-        listensTo : ["comboboxFocusInput"]
+        listensTo : ["comboboxFocusInput", "autocomplete"]
     },
     {
         setup : function(el, options) {
@@ -40,18 +43,28 @@ steal.plugins('phui/combobox')
             if( this.options.loadOnDemand && !this.dataAlreadyLoaded && !this.timeout) {
                 this.loadDataFromServer(combobox);
 				this.timeout = true;
-				var self = true;
+				var self = this;
 				setTimeout(function(){
 					self.timeout = false;
 				}, 100);
             }
         },
-        loadDataFromServer : function(combobox) {
+		autocomplete : function(el, ev, combobox, val) {
+            if (this.options.autocompleteEnabled && !this.timeout) {
+                this.loadDataFromServer(combobox, val);
+				this.timeout = true;
+				var self = this;
+				setTimeout(function(){
+					self.timeout = false;
+				}, 100);
+			}
+		},
+        loadDataFromServer : function(combobox, params) {
              $.ajax({
                 url: this.options.url,
                 type: 'get',
                 dataType: 'json',
-                data: {},
+                data: params || "null",
                 success: this.callback('showData', combobox),
                 //error: error,
                 fixture: "-items"
