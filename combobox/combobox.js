@@ -9,7 +9,7 @@ steal.plugins('jquery/controller',
     $.Controller.extend("Phui.Combobox", {
         defaults: {
             render: {
-                "itemText" : function(item) {
+                "itemTemplate" : function(item) {
                     var html = [];
                     html.push("<span class='text'>" +  item.text + "</span>");
                     return html.join(" ");
@@ -147,7 +147,8 @@ steal.plugins('jquery/controller',
             this.autocomplete( el.val() );
         },
         autocomplete : function(val) {
-            if (this.options.filterEnabled) {
+			// does autocomplete if it's enabled and item has a text attribute
+            if (this.options.filterEnabled && this.modelList[0].text) {
                 var matches = this.modelList.grep(function(item){
                     return item.text.indexOf(val) > -1;
                 });

@@ -97,7 +97,7 @@ $.Controller.extend("Phui.Combobox.DropdownController", {
             html.push(" selectable ");
 		    item.enabled ? html.push("' >") : html.push(this.options.disabledClassName + "' >"); 			
             html.push("<span style='float:left;margin-left:" + item.level*20 + "px'>&nbsp;</span>");
-            html.push( this.options.render["itemText"](item) ); 
+            html.push( this.options.render["itemTemplate"](item) ); 
 			html.push("</span>");       
             return html.join(" ");        
     },
