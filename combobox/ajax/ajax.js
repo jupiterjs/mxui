@@ -45,14 +45,18 @@ steal.plugins('phui/combobox')
             }
         },
         comboboxFocusInput : function(el, ev, combobox) {
-            if( this.options.loadOnDemand && !this.dataAlreadyLoaded && !this.timeout) {
+            /*if( this.options.loadOnDemand && !this.dataAlreadyLoaded && !this.timeout) {
                 this.loadDataFromServer(combobox);
                 this.timeout = true;
                 var self = this;
                 setTimeout(function(){
                     self.timeout = false;
                 }, 100);
-            }
+            }*/
+			if (this.options.loadOnDemand && !this.dataAlreadyLoaded && !this.notFirstFocus) {
+				this.loadDataFromServer(combobox);
+				this.notFirstFocus = true;
+			}			
         },
         autocomplete : function(el, ev, combobox, val) {
             if (this.options.autocompleteEnabled && !this.timeout) {

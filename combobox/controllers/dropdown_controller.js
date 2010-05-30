@@ -134,28 +134,28 @@ $.Controller.extend("Phui.Combobox.DropdownController",
         // trick to make dropdown close when combobox looses focus            
         this.hasFocus = true;
     },    
-	"li mouseleave" : function(el, ev) {
-		// we don't want mouseleave events on elements
-		// inside dropdown to make dropdown.hasFocus = false
-		ev.stopPropagation();
-	},
+    "li mouseleave" : function(el, ev) {
+        // we don't want mouseleave events on elements
+        // inside dropdown to make dropdown.hasFocus = false
+        ev.stopPropagation();
+    },
     mouseleave : function(el, ev) {
-		// trick to make dropdown close when combobox looses focus  
-		this.hasFocus = false;
-		this.combobox.find("input[type=text]").focus();                        
+        // trick to make dropdown close when combobox looses focus  
+        this.hasFocus = false;
+        this.combobox.find("input[type=text]").focus();                        
     }, 
     hide : function() {
         this.element.slideUp("fast");
-		
-		// trick to make dropdown close when combobox looses focus  
-		this.hasFocus = false;		
+        
+        // trick to make dropdown close when combobox looses focus  
+        this.hasFocus = false;        
     },
     show : function() {
         this.element.slideDown("fast");    
-		
-		// trick to make dropdown close when combobox looses focus  
-		this.hasFocus = true;        
-		
+        
+        // trick to make dropdown close when combobox looses focus  
+        this.hasFocus = true;        
+        
         // position the dropdown bellow the combobox input
         this.element.phui_positionable({
             my: 'left top',
