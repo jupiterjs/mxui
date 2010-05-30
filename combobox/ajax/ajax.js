@@ -1,7 +1,7 @@
 steal.plugins('phui/combobox')
     .then(function($){
 
-    Phui.Combobox.extend("Phui.Combobox.Autosuggest",{
+    Phui.Combobox.extend("Phui.Combobox.Wrapper",{
     },
     {
         focusInputAndShowDropdown : function(el) {
@@ -40,7 +40,7 @@ steal.plugins('phui/combobox')
                 
                 el.after(input);
                 el.remove();
-                input.phui_combobox_autosuggest(options);
+                input.phui_combobox_wrapper(options);
                 this._super(input[0], options);
             }
         },
@@ -71,7 +71,7 @@ steal.plugins('phui/combobox')
                 dataType: 'json',
                 data: params || 'findAll',
                 success: this.callback('showData', combobox),
-                //error: error,
+                error: this.callback('loadDataFromServerError'),
                 fixture: "-items"
             })                
         },
@@ -79,7 +79,10 @@ steal.plugins('phui/combobox')
             data = data.data ? data.data : data;
             combobox.loadData(data);
             this.dataAlreadyLoaded = true;
-        }        
+        },
+        loadDataFromServerError : function() {
+            alert("There was an errror getting data from the server.");
+        }
     });
     
 });

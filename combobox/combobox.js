@@ -1,4 +1,5 @@
 steal.plugins('jquery/controller',
+              'jquery/event/hover',
               'jquery/model/list',
               'phui/positionable',
               'phui/selectable')
@@ -117,7 +118,7 @@ steal.plugins('jquery/controller',
             if (children) {
                 this.flattenEls(children, currentLevel + 1, items);
             }
-            this.flattenEls(list.slice(1), currentLevel, items);
+            this.flattenEls(list.splice(1, list.length-1), currentLevel, items);
             return items;
         },
         "input keyup": function(el, ev){
@@ -125,7 +126,8 @@ steal.plugins('jquery/controller',
             
             // close dropdown on escape
             if (key == "escape") {
-                this.dropdown.controller().hide();                
+                this.dropdown.controller().hide();   
+				return false;             
             }
             
             // if down key is clicked, navigate to first item
@@ -245,6 +247,8 @@ steal.plugins('jquery/controller',
             }
         },         
         ".toggle click": function(el, ev){
+			this.dropdown.is(":visible") ? this.dropdown.controller().hide() :
+			                                   this.dropdown.controller().show();  
             this.focusInputAndShowDropdown( this.find("input[type=text]") );
         },
         /*
@@ -253,7 +257,11 @@ steal.plugins('jquery/controller',
          * two single-clicks and a double-click.
          */
         ".toggle dblclick": function(el){
-            if($.browser.msie) this.focusInputAndShowDropdown( this.find("input[type=text]") );
+            if ($.browser.msie) {
+				this.dropdown.is(":visible") ? this.dropdown.controller().hide() :
+				                                   this.dropdown.controller().show(); 
+	            this.focusInputAndShowDropdown( this.find("input[type=text]") );
+			}
            },            
         destroy: function(){
             this.dropdown.remove();

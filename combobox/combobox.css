@@ -1,5 +1,5 @@
 .phui_combobox,
-.phui_combobox_autosuggest {
+.phui_combobox_wrapper {
 	width: 310px;
 	background:none repeat scroll 0 0 #FFFFFF;
 	border:1px solid #888888;
@@ -10,7 +10,7 @@
 }
 
 .phui_combobox input,
-.phui_combobox_autosuggest input {
+.phui_combobox_wrapper input {
 	background:none repeat scroll 0 0 transparent;
 	border:0 none;
 	height:14px;
@@ -22,12 +22,12 @@
 }
 
 .phui_combobox .container,
-.phui_combobox_autosuggest .container {
+.phui_combobox_wrapper .container {
 	margin-right:17px;
 }
 
 .phui_combobox .toggle,
-.phui_combobox_autosuggest .toggle {
+.phui_combobox_wrapper .toggle {
 	background:url("images/dropdown.png") center no-repeat;
 	width:17px;
 	float: right;

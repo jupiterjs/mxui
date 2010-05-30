@@ -1,8 +1,11 @@
-$.Controller.extend("Phui.Combobox.DropdownController", {
+$.Controller.extend("Phui.Combobox.DropdownController", 
+{
+},
+{
     init : function(el, combobox, options) {
         this.combobox = combobox;
         this.options = options;
-        this.hasFocus = false;    
+        this.hasFocus = false;  
     },
     style : function() {
         this.element.css("width", this.combobox.css("width"));
@@ -12,31 +15,31 @@ $.Controller.extend("Phui.Combobox.DropdownController", {
                 "overflow": "auto"
             });
         }        
-		
+        
         // apply custom style to item and
-		var self = this;
-		this.find(".item").each(function(i, el){
-			el = $(el);
-			if(el.model().enabled)
-	            el.find(".text").css(self.options.textStyle);
-			
-			if (el.model().attr("activated")) {
-				el.addClass(self.options.activatedClassName);
-			} else {
-				el.removeClass(self.options.activatedClassName);
-			}		   								
-		})			
+        var self = this;
+        this.find(".item").each(function(i, el){
+            el = $(el);
+            if(el.model().enabled)
+                el.find(".text").css(self.options.textStyle);
+            
+            if (el.model().attr("activated")) {
+                el.addClass(self.options.activatedClassName);
+            } else {
+                el.removeClass(self.options.activatedClassName);
+            }                                           
+        })            
     },
     draw : function(modelList, showNested) {
         // draw the dropdown
-		var listToDraw = $.extend(true, {}, modelList); 
+        var listToDraw = $.extend(true, {}, modelList); 
         var html = this._makeEl(listToDraw, 0);
-		listToDraw = null;
-		// if starts with <li> wrap under <ul>
-		// so selectable as something to attach to
-		if( html.indexOf("<li") === 0 ) {
-			html = "<ul>" + html + "</ul>";
-		}
+        listToDraw = null;
+        // if starts with <li> wrap under <ul>
+        // so selectable as something to attach to
+        if( html.indexOf("<li") === 0 ) {
+            html = "<ul>" + html + "</ul>";
+        }
         this.element.html(html);
         
         // hookup the models to the elements
@@ -70,15 +73,15 @@ $.Controller.extend("Phui.Combobox.DropdownController", {
                 endStr += "</ul></li>"
             }
             return "<li>"+this._drawItemHtml(item)+
-			       "</li>" + endStr
+                   "</li>" + endStr
         }
         if(nextLevel == currentLevel) {
              return "<li>"+this._drawItemHtml(item)+"</li>"+
-                this._makeEl(list.slice(1), nextLevel, initialLevel)
+                this._makeEl(list.splice(1, list.length-1), nextLevel, initialLevel)
         }
         if(nextLevel > currentLevel){
             return "<li>"+this._drawItemHtml(item)+"<ul>"+
-                this._makeEl(list.slice(1), nextLevel, initialLevel)
+                this._makeEl(list.splice(1, list.length-1), nextLevel, initialLevel)
         }
         if(nextLevel < currentLevel){
             var diff = currentLevel - nextLevel
@@ -87,18 +90,18 @@ $.Controller.extend("Phui.Combobox.DropdownController", {
                 endStr += "</ul></li>"
             }
             return "<li>"+this._drawItemHtml(item)+"</li>"+endStr+
-                this._makeEl(list.slice(1), nextLevel, initialLevel)
+                this._makeEl(list.splice(1, list.length-1), nextLevel, initialLevel)
 
         }
     },       
     _drawItemHtml : function(item) {
             var html = [];
-		    html.push("<span class='item " + item.identity()); 
+            html.push("<span class='item " + item.identity()); 
             html.push(" selectable ");
-		    item.enabled ? html.push("' >") : html.push(this.options.disabledClassName + "' >"); 			
+            item.enabled ? html.push("' >") : html.push(this.options.disabledClassName + "' >");             
             html.push("<span style='float:left;margin-left:" + item.level*20 + "px'>&nbsp;</span>");
             html.push( this.options.render["itemTemplate"](item) ); 
-			html.push("</span>");       
+            html.push("</span>");       
             return html.join(" ");        
     },
     keyup : function(el, ev) {
@@ -106,7 +109,7 @@ $.Controller.extend("Phui.Combobox.DropdownController", {
                 
         // close dropdown on escape
         if (key == "escape") {
-            this.hide();                
+            this.hide();     
         }        
     },
     ".selectable activate" : function(el, ev) {
@@ -123,25 +126,36 @@ $.Controller.extend("Phui.Combobox.DropdownController", {
                 this.hasFocus = false;
             }
         } else {
-			el.removeClass( this.options.activatedClassName );
-		}
+            el.removeClass( this.options.activatedClassName );
+        }
     },
     
     mouseenter : function(el, ev) {
         // trick to make dropdown close when combobox looses focus            
-        this.hasFocus = true;        
+        this.hasFocus = true;
     },    
+	"li mouseleave" : function(el, ev) {
+		// we don't want mouseleave events on elements
+		// inside dropdown to make dropdown.hasFocus = false
+		ev.stopPropagation();
+	},
     mouseleave : function(el, ev) {
-        // trick to make dropdown close when combobox looses focus            
-        this.hasFocus = false;
-        this.combobox.find("input[type=text]").focus();    
-    },    
+		// trick to make dropdown close when combobox looses focus  
+		this.hasFocus = false;
+		this.combobox.find("input[type=text]").focus();                        
+    }, 
     hide : function() {
         this.element.slideUp("fast");
+		
+		// trick to make dropdown close when combobox looses focus  
+		this.hasFocus = false;		
     },
     show : function() {
         this.element.slideDown("fast");    
-        
+		
+		// trick to make dropdown close when combobox looses focus  
+		this.hasFocus = true;        
+		
         // position the dropdown bellow the combobox input
         this.element.phui_positionable({
             my: 'left top',
