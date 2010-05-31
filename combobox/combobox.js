@@ -220,7 +220,7 @@ steal.plugins('jquery/controller',
                 })
                 item.attr("activated", true);                    
                                      
-                this.dropdown.controller().draw( this.modelList );                
+                this.dropdown.controller().draw( this.modelList);                
                 
                 // bind values to the hidden input
                 this.find("input[name='" + this.oldElementName + "']").val(this.currentValue);            

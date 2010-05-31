@@ -146,7 +146,6 @@ $.Controller.extend("Phui.Combobox.DropdownController",
             el.removeClass( this.options.activatedClassName );
         }
     },
-    
     mouseenter : function(el, ev) {
         // trick to make dropdown close when combobox looses focus            
         this.hasFocus = true;

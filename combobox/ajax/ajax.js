@@ -16,7 +16,7 @@ steal.plugins('phui/combobox')
                 this.find(".phui_combobox_ajax").trigger("autocomplete", [this, val]);
             }
         },
-		loadAutocompleteData : function(data) {
+        loadAutocompleteData : function(data) {
             // create model instances from items
             var instances = [];
             for (var i = 0; i < data.length; i++) {
@@ -46,13 +46,36 @@ steal.plugins('phui/combobox')
             }
             
             // wrap input data item within a combobox.models.item instance so we 
-            // can leverage model helper functions in the code later 			
+            // can leverage model helper functions in the code later             
             instances = Combobox.Models.Item.wrapMany(instances);
-            var modelList = new $.Model.List(instances);			
-			
+            this.modelList = new $.Model.List(instances);            
+            
             // render the dropdown and set an initial value for combobox
-            this.dropdown.controller().draw(modelList, this.options.showNested, true);
-		}
+            this.dropdown.controller().draw( this.modelList, this.options.showNested, true );
+        },
+        val: function(value){
+            if(!value && value != 0) 
+                return this.currentValue;
+                
+            var item = this.modelList.match("value", value)[0];
+            if (item && item.enabled) {
+                this.currentValue = item.value;
+                this.find("input[type=text]").val(item.text);
+                
+                // higlight the activated item
+                this.modelList.each(function(i, item){
+                    item.attr("activated", false)
+                })
+                item.attr("activated", true);                    
+                                     
+                this.dropdown.controller().draw( this.modelList, this.options.autocompleteEnabled );                
+                
+                // bind values to the hidden input
+                this.find("input[name='" + this.oldElementName + "']").val(this.currentValue);            
+                
+                this.element.trigger("change", this.currentValue);                
+            }
+         }
     });
 
 
@@ -98,9 +121,9 @@ steal.plugins('phui/combobox')
             }
         },
         loadDataFromServer : function(combobox, params, isAutocompleteData) {
-			 if(this.options.loadOnDemand) 
-			     params = "loadOnDemand";
-			 
+             if(this.options.loadOnDemand) 
+                 params = "loadOnDemand";
+             
              $.ajax({
                 url: this.options.url,
                 type: 'get',
