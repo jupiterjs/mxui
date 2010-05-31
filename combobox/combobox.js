@@ -82,8 +82,6 @@ steal.plugins('jquery/controller',
                         item.id = item.value;
                     if (item.enabled === undefined) 
                         item.enabled = true;
-                    // _flattenEls adds level
-                    //if(item.level === undefined) item.level = 0;
                     if (item.children === undefined) 
                         item.children = [];
                 }
@@ -92,12 +90,11 @@ steal.plugins('jquery/controller',
                 if (item.selected) 
                     selectedItem = item;
                 
-                // wrap input data item within a combobox.models.item instance so we 
-                // can leverage model helper functions in the code later 
                 instances.push(item);
             }
 
-            // this is where we store the loaded data in the controller
+            // wrap input data item within a combobox.models.item instance so we 
+            // can leverage model helper functions in the code later 
             instances = Combobox.Models.Item.wrapMany(instances);
             this.modelList = new $.Model.List(instances);
             
@@ -127,7 +124,7 @@ steal.plugins('jquery/controller',
             // close dropdown on escape
             if (key == "escape") {
                 this.dropdown.controller().hide();   
-				return false;             
+                return false;             
             }
             
             // if down key is clicked, navigate to first item
@@ -149,13 +146,18 @@ steal.plugins('jquery/controller',
             this.autocomplete( el.val() );
         },
         autocomplete : function(val) {
-			// does autocomplete if it's enabled and item has a text attribute
-            if (this.options.filterEnabled && this.modelList[0].text) {
-                var matches = this.modelList.grep(function(item){
-                    return item.text.indexOf(val) > -1;
-                });
-                this.dropdown.controller().draw(new $.Model.List(matches), this.options.showNested);
-                this.dropdown.controller().show();
+            // does autocomplete if it's enabled
+            if (this.options.filterEnabled) {
+				// and if item has a text attribute
+                if (this.modelList[0] && this.modelList[0].text) {
+					var isAutocompleteData = true;
+                    var matches = this.modelList.grep(function(item){
+                        return item.text.indexOf(val) > -1;
+                    });
+					if(!val || $.trim(val) == "") isAutocompleteData = false;
+                    this.dropdown.controller().draw(new $.Model.List(matches), this.options.showNested, isAutocompleteData);
+                    this.dropdown.controller().show();
+                }
             }            
         },
         "input focusin": function(el, ev){
@@ -247,8 +249,8 @@ steal.plugins('jquery/controller',
             }
         },         
         ".toggle click": function(el, ev){
-			this.dropdown.is(":visible") ? this.dropdown.controller().hide() :
-			                                   this.dropdown.controller().show();  
+            this.dropdown.is(":visible") ? this.dropdown.controller().hide() :
+                                               this.dropdown.controller().show();  
             this.focusInputAndShowDropdown( this.find("input[type=text]") );
         },
         /*
@@ -258,10 +260,10 @@ steal.plugins('jquery/controller',
          */
         ".toggle dblclick": function(el){
             if ($.browser.msie) {
-				this.dropdown.is(":visible") ? this.dropdown.controller().hide() :
-				                                   this.dropdown.controller().show(); 
-	            this.focusInputAndShowDropdown( this.find("input[type=text]") );
-			}
+                this.dropdown.is(":visible") ? this.dropdown.controller().hide() :
+                                                   this.dropdown.controller().show(); 
+                this.focusInputAndShowDropdown( this.find("input[type=text]") );
+            }
            },            
         destroy: function(){
             this.dropdown.remove();

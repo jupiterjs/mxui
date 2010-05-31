@@ -21,7 +21,7 @@
                 
                 
                 // fixtures that simulate nested data sent by the server
-                $.fixture["-make"](["items", "item"], 40, function(num, items) {
+                $.fixture["-make"](["items", "item"], 50, function(num, items) {
                     
                         var itemId = parseInt(Math.random() * num);
                         var item = items[itemId]
@@ -80,14 +80,17 @@
                         }
                     }
                     
-                    if(settings.data == "findAll") {
+                    if(settings.data == "loadOnDemand") {
                         return [{
                             "count": clonedItems.length,
                             "data" : clonedItems
                         }]                        
                     }
-   
-                    var retArr = match(clonedItems, [], settings.data);
+                    
+					var retArr = [];
+                    if (settings.data != "") {
+						retArr = match(clonedItems, [], settings.data);
+					}
                     
                     return [{
                         "count": retArr.length,
@@ -98,8 +101,8 @@
  
                 $("#demo").phui_combobox_ajax({
                     maxHeight: "320px",
-                    autocompleteEnabled: false,
-                    loadOnDemand: true,
+                    autocompleteEnabled: true,
+                    loadOnDemand: false,
                     url: "/Archer/Service/DiscussionForumServiceJS.svc/GetForumsForCommunity"
                 });
                 

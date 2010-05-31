@@ -30,11 +30,18 @@ $.Controller.extend("Phui.Combobox.DropdownController",
             }                                           
         })            
     },
-    draw : function(modelList, showNested) {
+    draw : function(modelList, showNested, isAutocompleteData) {
         // draw the dropdown
-        var listToDraw = $.extend(true, {}, modelList); 
-        var html = this._makeEl(listToDraw, 0);
-        listToDraw = null;
+        var html = "";
+        if (isAutocompleteData) {
+            html = this._makeHtmlForAutocompleteData(modelList);
+        }
+        else {
+            var listToDraw = $.extend(true, {}, modelList);
+            html = this._makeEl(listToDraw, 0);
+            listToDraw = null;
+        }
+        
         // if starts with <li> wrap under <ul>
         // so selectable as something to attach to
         if( html.indexOf("<li") === 0 ) {
@@ -59,6 +66,15 @@ $.Controller.extend("Phui.Combobox.DropdownController",
         });
         
         this.style();                
+    },
+    _makeHtmlForAutocompleteData : function(list) {
+        var html = [];
+        // we assume autocomplete data is a linear list
+        // with no nesting information
+        for(var i=0;i<list.length;i++) {
+            html.push("<li>" + this._drawItemHtml(list[i], true) + "</li>")
+        }
+        return html.join(" ");
     },
     _makeEl : function(list, currentLevel, initialLevel){
         if(!list.length) return "";
@@ -94,12 +110,13 @@ $.Controller.extend("Phui.Combobox.DropdownController",
 
         }
     },       
-    _drawItemHtml : function(item) {
+    _drawItemHtml : function(item, isAutocompleteData) {
             var html = [];
             html.push("<span class='item " + item.identity()); 
             html.push(" selectable ");
             item.enabled ? html.push("' >") : html.push(this.options.disabledClassName + "' >");             
-            html.push("<span style='float:left;margin-left:" + item.level*20 + "px'>&nbsp;</span>");
+            if(!isAutocompleteData) 
+                html.push("<span style='float:left;margin-left:" + item.level*20 + "px'>&nbsp;</span>");
             html.push( this.options.render["itemTemplate"](item) ); 
             html.push("</span>");       
             return html.join(" ");        

@@ -15,7 +15,44 @@ steal.plugins('phui/combobox')
             else {
                 this.find(".phui_combobox_ajax").trigger("autocomplete", [this, val]);
             }
-        }
+        },
+		loadAutocompleteData : function(data) {
+            // create model instances from items
+            var instances = [];
+            for (var i = 0; i < data.length; i++) {
+                var item = data[i];
+                
+                if (typeof item === "string") {
+                    item = {
+                        "text": item
+                    };
+                    item["id"] = i;
+                    item["value"] = i;
+                    item["enabled"] = true;
+                    item["level"] = 0;
+                    item["children"] = [];
+                }
+                
+                // add reasonable default attributes
+                if (typeof item === "object") {
+                    if (item.id === undefined) 
+                        item.id = item.value;
+                    if (item.enabled === undefined) 
+                        item.enabled = true;
+                    if (item.children === undefined) 
+                        item.children = [];
+                }
+                instances.push(item);
+            }
+            
+            // wrap input data item within a combobox.models.item instance so we 
+            // can leverage model helper functions in the code later 			
+            instances = Combobox.Models.Item.wrapMany(instances);
+            var modelList = new $.Model.List(instances);			
+			
+            // render the dropdown and set an initial value for combobox
+            this.dropdown.controller().draw(modelList, this.options.showNested, true);
+		}
     });
 
 
@@ -45,14 +82,14 @@ steal.plugins('phui/combobox')
             }
         },
         comboboxFocusInput : function(el, ev, combobox) {
-			if (this.options.loadOnDemand && !this.dataAlreadyLoaded && !this.notFirstFocus) {
-				this.loadDataFromServer(combobox);
-				this.notFirstFocus = true;
-			}			
+            if (this.options.loadOnDemand && !this.notFirstFocus) {
+                this.loadDataFromServer(combobox);
+                this.notFirstFocus = true;
+            }
         },
         autocomplete : function(el, ev, combobox, val) {
             if (this.options.autocompleteEnabled && !this.timeout) {
-                this.loadDataFromServer(combobox, val);
+                this.loadDataFromServer(combobox, val, true);
                 this.timeout = true;
                 var self = this;
                 setTimeout(function(){
@@ -60,21 +97,29 @@ steal.plugins('phui/combobox')
                 }, 100);
             }
         },
-        loadDataFromServer : function(combobox, params) {
+        loadDataFromServer : function(combobox, params, isAutocompleteData) {
+			 if(this.options.loadOnDemand) 
+			     params = "loadOnDemand";
+			 
              $.ajax({
                 url: this.options.url,
                 type: 'get',
                 dataType: 'json',
-                data: params || 'findAll',
-                success: this.callback('showData', combobox),
+                data: params,
+                success: this.callback('showData', combobox, isAutocompleteData),
                 error: this.callback('loadDataFromServerError'),
                 fixture: "-items"
             })                
         },
-        showData : function(combobox, data) {
+        showData : function(combobox, isAutocompleteData, data) {
             data = data.data ? data.data : data;
-            combobox.loadData(data);
-            this.dataAlreadyLoaded = true;
+            if (isAutocompleteData) {
+                combobox.loadAutocompleteData(data);
+            }
+            else {
+                combobox.loadData(data);
+                this.dataAlreadyLoaded = true;
+            }
         },
         loadDataFromServerError : function() {
             alert("There was an errror getting data from the server.");
