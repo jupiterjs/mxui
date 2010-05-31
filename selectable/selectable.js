@@ -47,7 +47,7 @@ steal.plugins('jquery/controller', 'phui/keycode')
 				if ($.browser.msie) {
 					el.trigger("focusin");
 				}
-				el.focus();			
+				el.focus();
 			},
 			".{selectableClassName} deselect": function(el, ev){
 				el.removeClass( this.options.selectedClassName );
@@ -60,6 +60,10 @@ steal.plugins('jquery/controller', 'phui/keycode')
 					this.focusPrev(el);
 				if(key == "enter")
 					el.trigger("activate")
+				
+				// this is a trick to fix issue with 
+				// key navigation in large overflowed lists
+				if(!$.browser.mozilla) return false;
 			},
 			focusNext: function(el){
 				var last = this.element.find('.' +

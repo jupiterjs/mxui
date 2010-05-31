@@ -21,7 +21,7 @@
                 
                 
                 // fixtures that simulate nested data sent by the server
-                $.fixture["-make"](["items", "item"], 50, function(num, items) {
+                $.fixture["-make"](["items", "item"], 200, function(num, items) {
                     
                         var itemId = parseInt(Math.random() * num);
                         var item = items[itemId]
@@ -101,8 +101,8 @@
  
                 $("#demo").phui_combobox_ajax({
                     maxHeight: "320px",
-                    autocompleteEnabled: true,
-                    loadOnDemand: false,
+                    autocompleteEnabled: false,
+                    loadOnDemand: true,
                     url: "/Archer/Service/DiscussionForumServiceJS.svc/GetForumsForCommunity"
                 });
                 
