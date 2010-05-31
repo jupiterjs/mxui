@@ -17,7 +17,7 @@ steal.plugins('jquery/controller',
                 }
             },
             textStyle: {'color':'blue','font-style':'italic'},
-            showNested: false,
+            showNested: true,
             maxHeight: null,
             filterEnabled : true,
             selectedClassName: "selected",
@@ -57,13 +57,16 @@ steal.plugins('jquery/controller',
             if (this.options.items) this.loadData(this.options.items);      
         },
         loadData : function(items) {
-            // flatten input data structure (which may be nested)
-            var flattenEls = this.flattenEls(items, 0);
+			var data = items;
+			if (this.options.showNested) {
+				// flatten input data structure (which may be nested)
+				data = this.flattenEls(items, 0);
+			}
             
             // create model instances from items
             var selectedItem, instances = [];
-            for (var i = 0; i < flattenEls.length; i++) {
-                var item = flattenEls[i];
+            for (var i = 0; i < data.length; i++) {
+                var item = data[i];
                 
                 if (typeof item === "string") {
                     item = {
@@ -84,6 +87,8 @@ steal.plugins('jquery/controller',
                         item.enabled = true;
                     if (item.children === undefined) 
                         item.children = [];
+					if(!this.options.showNested)
+					    item.level = 0;
                 }
                 
                 // pick inital combobox value
@@ -99,7 +104,7 @@ steal.plugins('jquery/controller',
             this.modelList = new $.Model.List(instances);
             
             // render the dropdown and set an initial value for combobox
-            this.dropdown.controller().draw(this.modelList, this.options.showNested);
+            this.dropdown.controller().draw(this.modelList);
             if (selectedItem) 
                 this.val(selectedItem.value);
         },
@@ -155,7 +160,7 @@ steal.plugins('jquery/controller',
                         return item.text.indexOf(val) > -1;
                     });
 					if(!val || $.trim(val) == "") isAutocompleteData = false;
-                    this.dropdown.controller().draw(new $.Model.List(matches), this.options.showNested, isAutocompleteData);
+                    this.dropdown.controller().draw(new $.Model.List(matches), isAutocompleteData);
                     this.dropdown.controller().show();
                 }
             }            
@@ -215,7 +220,7 @@ steal.plugins('jquery/controller',
                 })
                 item.attr("activated", true);                    
                                      
-                this.dropdown.controller().draw( this.modelList, this.options.showNested );                
+                this.dropdown.controller().draw( this.modelList );                
                 
                 // bind values to the hidden input
                 this.find("input[name='" + this.oldElementName + "']").val(this.currentValue);            
@@ -237,7 +242,7 @@ steal.plugins('jquery/controller',
             var item = this.modelList.match("value", value)[0];
             if (item) {
                 item.attr("enabled", true);
-                this.dropdown.controller().draw(this.modelList, this.options.showNested);
+                this.dropdown.controller().draw(this.modelList);
             }
         },
         disable : function(value) {
@@ -245,7 +250,7 @@ steal.plugins('jquery/controller',
             if (item) {
                 item.attr("enabled", false);
                 item.attr("activated", false);                
-                this.dropdown.controller().draw(this.modelList, this.options.showNested);
+                this.dropdown.controller().draw(this.modelList);
             }
         },         
         ".toggle click": function(el, ev){

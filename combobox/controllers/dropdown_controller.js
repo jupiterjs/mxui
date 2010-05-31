@@ -30,7 +30,7 @@ $.Controller.extend("Phui.Combobox.DropdownController",
             }                                           
         })            
     },
-    draw : function(modelList, showNested, isAutocompleteData) {
+    draw : function(modelList, isAutocompleteData) {
         // draw the dropdown
         var html = "";
         if (isAutocompleteData) {
