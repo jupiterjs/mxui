@@ -63,7 +63,7 @@ steal.plugins('jquery/controller', 'phui/keycode')
 				
 				// this is a trick to fix issue with 
 				// key navigation in large overflowed lists
-				if(!$.browser.mozilla) return false;
+				if(!$.browser.mozilla) ev.preventDefault();
 			},
 			focusNext: function(el){
 				var last = this.element.find('.' +
