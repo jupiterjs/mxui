@@ -167,10 +167,7 @@ $.Controller.extend("Phui.Combobox.DropdownController",
         this.hasFocus = false;        
     },
     show : function() {
-        this.element.slideDown("fast");    
-        
-        // trick to make dropdown close when combobox looses focus  
-        this.hasFocus = true;        
+        this.element.slideDown("fast");          
         
         // position the dropdown bellow the combobox input
         this.element.phui_positionable({

@@ -35,7 +35,6 @@ steal.plugins('jquery/controller',
         init: function(){
             this.element.find("input").wrap("<div class='container' />")
             this.currentValue = "-1";
-            this.hasFocus = false;
             
             // draw input box
             var arrowHtml = "<div class='toggle'>&nbsp;</div>";
@@ -51,17 +50,17 @@ steal.plugins('jquery/controller',
             // create dropdown and append it to body
             this.dropdown = $("<div/>").phui_combobox_dropdown( this.element, this.options ).hide();
             document.body.appendChild(this.dropdown[0]);    
-            this.dropdown.controller().style();        
+            this.dropdown.controller().style();
             
             // pre-populate with items case they exist
             if (this.options.items) this.loadData(this.options.items);      
         },
         loadData : function(items) {
-			var data = items;
-			if (this.options.showNested) {
-				// flatten input data structure (which may be nested)
-				data = this.flattenEls(items, 0);
-			}
+            var data = items;
+            if (this.options.showNested) {
+                // flatten input data structure (which may be nested)
+                data = this.flattenEls(items, 0);
+            }
             
             // create model instances from items
             var selectedItem, instances = [];
@@ -87,8 +86,8 @@ steal.plugins('jquery/controller',
                         item.enabled = true;
                     if (item.children === undefined) 
                         item.children = [];
-					if(!this.options.showNested)
-					    item.level = 0;
+                    if(!this.options.showNested)
+                        item.level = 0;
                 }
                 
                 // pick inital combobox value
@@ -153,13 +152,13 @@ steal.plugins('jquery/controller',
         autocomplete : function(val) {
             // does autocomplete if it's enabled
             if (this.options.filterEnabled) {
-				// and if item has a text attribute
+                // and if item has a text attribute
                 if (this.modelList[0] && this.modelList[0].text) {
-					var isAutocompleteData = true;
+                    var isAutocompleteData = true;
                     var matches = this.modelList.grep(function(item){
                         return item.text.indexOf(val) > -1;
                     });
-					if(!val || $.trim(val) == "") isAutocompleteData = false;
+                    if(!val || $.trim(val) == "") isAutocompleteData = false;
                     this.dropdown.controller().draw(new $.Model.List(matches), isAutocompleteData);
                     this.dropdown.controller().show();
                 }
@@ -190,15 +189,15 @@ steal.plugins('jquery/controller',
                 clearTimeout(this.closeDropdownOnBlurTimeout);
         },
         focusout: function(el, ev){
-            // trick to make dropdown close when combobox looses focus                
+            // trick to make dropdown close when combobox looses focus
             var self = this;
-            if (this.dropdown.controller().hasFocus) {
-                this.closeDropdownOnBlurTimeout = setTimeout(function(){
+            this.closeDropdownOnBlurTimeout = setTimeout(function(){
+                if (self.dropdown.controller().hasFocus) {
                     self.element.trigger("focusin");
-                }, 1);
-            } else {
-                this.dropdown.controller().hide();    
-            }    
+                } else {
+                    self.dropdown.controller().hide();    
+                }    
+            }, 250);
         },
         mouseleave : function(el, ev) {
             if (this.dropdown.is(":visible")) {
