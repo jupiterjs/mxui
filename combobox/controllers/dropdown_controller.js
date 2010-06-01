@@ -167,7 +167,7 @@ $.Controller.extend("Phui.Combobox.DropdownController",
         this.hasFocus = false;        
     },
     show : function() {
-        this.element.slideDown("fast");          
+        this.element.slideDown("fast");
         
         // position the dropdown bellow the combobox input
         this.element.phui_positionable({

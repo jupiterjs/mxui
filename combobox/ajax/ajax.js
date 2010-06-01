@@ -36,7 +36,8 @@ steal.plugins('phui/combobox')
 
     $.Controller.extend("Phui.Combobox.Ajax", {
         defaults : {
-            loadOnDemand : true
+            loadOnDemand : true,
+            loadingMessage: "Loading ..."
         },
         listensTo : ["comboboxFocusInput"]
     },
@@ -61,6 +62,7 @@ steal.plugins('phui/combobox')
         },
         comboboxFocusInput : function(el, ev, combobox) {
             if (this.options.loadOnDemand && !this.notFirstFocus) {
+                combobox.dropdown.html("<center><h3>" + this.options.loadingMessage + "</h3></center>");
                 this.loadDataFromServer(combobox);
                 this.notFirstFocus = true;
             }
