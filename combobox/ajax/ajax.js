@@ -8,51 +8,6 @@ steal.plugins('phui/combobox')
             this._super(el);
             this.find(".phui_combobox_ajax").trigger("comboboxFocusInput", this);
         },
-        autocomplete : function(val) {
-            if (this.options.loadOnDemand) {
-                this._super(val);
-            }
-            else {
-                this.find(".phui_combobox_ajax").trigger("autocomplete", [this, val]);
-            }
-        },
-        loadAutocompleteData : function(data) {
-            // create model instances from items
-            var instances = [];
-            for (var i = 0; i < data.length; i++) {
-                var item = data[i];
-                
-                if (typeof item === "string") {
-                    item = {
-                        "text": item
-                    };
-                    item["id"] = i;
-                    item["value"] = i;
-                    item["enabled"] = true;
-                    item["level"] = 0;
-                    item["children"] = [];
-                }
-                
-                // add reasonable default attributes
-                if (typeof item === "object") {
-                    if (item.id === undefined) 
-                        item.id = item.value;
-                    if (item.enabled === undefined) 
-                        item.enabled = true;
-                    if (item.children === undefined) 
-                        item.children = [];
-                }
-                instances.push(item);
-            }
-            
-            // wrap input data item within a combobox.models.item instance so we 
-            // can leverage model helper functions in the code later             
-            instances = Combobox.Models.Item.wrapMany(instances);
-            this.modelList = new $.Model.List(instances);            
-            
-            // render the dropdown and set an initial value for combobox
-            this.dropdown.controller().draw( this.modelList, this.options.showNested, true );
-        },
         val: function(value){
             if(!value && value != 0) 
                 return this.currentValue;
@@ -83,7 +38,7 @@ steal.plugins('phui/combobox')
         defaults : {
             loadOnDemand : true
         },
-        listensTo : ["comboboxFocusInput", "autocomplete"]
+        listensTo : ["comboboxFocusInput"]
     },
     {
         setup : function(el, options) {
@@ -110,16 +65,6 @@ steal.plugins('phui/combobox')
                 this.notFirstFocus = true;
             }
         },
-        autocomplete : function(el, ev, combobox, val) {
-            if (this.options.autocompleteEnabled && !this.timeout) {
-                this.loadDataFromServer(combobox, val, true);
-                this.timeout = true;
-                var self = this;
-                setTimeout(function(){
-                    self.timeout = false;
-                }, 100);
-            }
-        },
         loadDataFromServer : function(combobox, params, isAutocompleteData) {
              if(this.options.loadOnDemand) 
                  params = "loadOnDemand";
@@ -136,13 +81,8 @@ steal.plugins('phui/combobox')
         },
         showData : function(combobox, isAutocompleteData, data) {
             data = data.data ? data.data : data;
-            if (isAutocompleteData) {
-                combobox.loadAutocompleteData(data);
-            }
-            else {
-                combobox.loadData(data);
-                this.dataAlreadyLoaded = true;
-            }
+            combobox.loadData(data);
+            this.dataAlreadyLoaded = true;
         },
         loadDataFromServerError : function() {
             alert("There was an errror getting data from the server.");
