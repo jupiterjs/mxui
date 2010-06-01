@@ -105,7 +105,7 @@ steal.plugins('jquery/controller',
             // render the dropdown and set an initial value for combobox
             this.dropdown.controller().draw(this.modelList);
             if (selectedItem) 
-                this.val(selectedItem.value);
+                this.val(selectedItem.value);  
         },
         flattenEls : function(list, currentLevel, items){
             items = items || [];
@@ -175,7 +175,7 @@ steal.plugins('jquery/controller',
             el[0].focus();
             el[0].select();
             if(!this.dropdown.is(":visible"))
-                this.dropdown.controller().show();            
+                this.dropdown.controller().show();   
         },
         /*
          * Trick to make dropdown close when combobox looses focus

@@ -16,7 +16,7 @@ $.Controller.extend("Phui.Combobox.DropdownController",
             });
         }        
         
-        // apply custom style to item and
+        // apply custom style to item
         var self = this;
         this.find(".item").each(function(i, el){
             el = $(el);
@@ -28,7 +28,13 @@ $.Controller.extend("Phui.Combobox.DropdownController",
             } else {
                 el.removeClass(self.options.activatedClassName);
             }                                           
-        })            
+        });
+        
+		// ajdust dropdown height so it can fit in the page
+		// even if the window is small
+        if (this.element.is(":visible")) {
+            this.adjustHeightToFitWindow();
+        }               
     },
     draw : function(modelList, isAutocompleteData) {
         // draw the dropdown
@@ -65,7 +71,15 @@ $.Controller.extend("Phui.Combobox.DropdownController",
             activatedClassName: "activated"            
         });
         
-        this.style();                
+        // if maxHeight was not defined in options 
+        // make it the same size as that that dropdown is rendered
+        // so it can be used when resizing the dropdown
+        // to make it fit inside the window
+        if (this.options.maxHeight == null) {
+            this.options.maxHeight = this.element.height() + "px";
+        }        
+
+        this.style();           
     },
     _makeHtmlForAutocompleteData : function(list) {
         var html = [];
@@ -160,6 +174,21 @@ $.Controller.extend("Phui.Combobox.DropdownController",
         this.hasFocus = false;
         this.combobox.find("input[type=text]").focus();                        
     }, 
+    windowresize : function(el, ev) {
+		// ajdust dropdown height so it can fit in the page
+		// even if the window is small		
+        this.adjustHeightToFitWindow();
+    },
+    adjustHeightToFitWindow : function() {		
+        var newHeight =  $(window).height() - 4*$("body").offset().top;
+        var maxHeight = this.options.maxHeight;
+        maxHeight = parseInt( maxHeight.substr(0, maxHeight.indexOf("px")) );
+        if(newHeight > maxHeight) newHeight = maxHeight;
+        this.element.css({
+            "height": newHeight + "px",
+            "overflow": "auto"
+        });        
+    },
     hide : function() {
         this.element.slideUp("fast");
         
@@ -176,8 +205,8 @@ $.Controller.extend("Phui.Combobox.DropdownController",
             collision: 'none none'
         }).trigger("move", this.combobox);        
         
-        this.style();         
-                    
-        this.combobox.trigger("open");        
+        this.style();             
+
+        this.combobox.trigger("open");         
     }
 })
