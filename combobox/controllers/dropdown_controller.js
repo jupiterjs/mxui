@@ -30,11 +30,9 @@ $.Controller.extend("Phui.Combobox.DropdownController",
             }                                           
         });
         
-		// ajdust dropdown height so it can fit in the page
-		// even if the window is small
-        if (this.element.is(":visible")) {
-            this.adjustHeightToFitWindow();
-        }               
+        // ajdust dropdown height so it can fit in the page
+        // even if the window is small
+        this.adjustHeightToFitWindow();               
     },
     draw : function(modelList, isAutocompleteData) {
         // draw the dropdown
@@ -70,16 +68,8 @@ $.Controller.extend("Phui.Combobox.DropdownController",
             selectedClassName: "selected",
             activatedClassName: "activated"            
         });
-        
-        // if maxHeight was not defined in options 
-        // make it the same size as that that dropdown is rendered
-        // so it can be used when resizing the dropdown
-        // to make it fit inside the window
-        if (this.options.maxHeight == null) {
-            this.options.maxHeight = this.element.height() + "px";
-        }        
 
-        this.style();           
+        //this.style();           
     },
     _makeHtmlForAutocompleteData : function(list) {
         var html = [];
@@ -175,19 +165,34 @@ $.Controller.extend("Phui.Combobox.DropdownController",
         this.combobox.find("input[type=text]").focus();                        
     }, 
     windowresize : function(el, ev) {
-		// ajdust dropdown height so it can fit in the page
-		// even if the window is small		
+        // ajdust dropdown height so it can fit in the page
+        // even if the window is small        
         this.adjustHeightToFitWindow();
     },
-    adjustHeightToFitWindow : function() {		
-        var newHeight =  $(window).height() - 4*$("body").offset().top;
-        var maxHeight = this.options.maxHeight;
-        maxHeight = parseInt( maxHeight.substr(0, maxHeight.indexOf("px")) );
-        if(newHeight > maxHeight) newHeight = maxHeight;
-        this.element.css({
-            "height": newHeight + "px",
-            "overflow": "auto"
-        });        
+    adjustHeightToFitWindow : function() {
+        if (this.element.is(":visible")) {
+            // if maxHeight was not defined in options 
+            // make it the same size as that with which 
+            // dropdown is rendered
+			var defaultMaxHeight = this.options.maxHeight; 
+            if (defaultMaxHeight == null) {
+				var maxHeight = 0;
+				this.find(".selectable").each(function(i, el){
+					maxHeight += $(el).outerHeight();
+				})
+                defaultMaxHeight = maxHeight + "px"; 
+            }  
+
+            // resizing the dropdown to make it fit inside the window
+            var newHeight = $(window).height() - 4 * $("body").offset().top;
+            defaultMaxHeight = parseInt(defaultMaxHeight.substr(0, defaultMaxHeight.indexOf("px")));
+            if (newHeight > defaultMaxHeight) 
+                newHeight = defaultMaxHeight;
+            this.element.css({
+                "height": newHeight + "px",
+                "overflow": "auto"
+            });
+        }
     },
     hide : function() {
         this.element.slideUp("fast");
@@ -196,17 +201,18 @@ $.Controller.extend("Phui.Combobox.DropdownController",
         this.hasFocus = false;        
     },
     show : function() {
-        this.element.slideDown("fast");
-        
+        this.element.slideDown("fast", this.callback("shown"));   
+    },
+    shown : function() {
         // position the dropdown bellow the combobox input
         this.element.phui_positionable({
             my: 'left top',
             at: 'left bottom',
             collision: 'none none'
-        }).trigger("move", this.combobox);        
+        }).trigger("move", this.combobox);
         
-        this.style();             
+        this.style();                     
 
-        this.combobox.trigger("open");         
+        this.combobox.trigger("open");        
     }
 })
