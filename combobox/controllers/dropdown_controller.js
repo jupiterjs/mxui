@@ -69,14 +69,14 @@ $.Controller.extend("Phui.Combobox.DropdownController",
             activatedClassName: "activated"            
         });
 
-        //this.style();           
+        this.style();           
     },
     _makeHtmlForAutocompleteData : function(list) {
         var html = [];
         // we assume autocomplete data is a linear list
         // with no nesting information
         for(var i=0;i<list.length;i++) {
-            html.push("<li>" + this._drawItemHtml(list[i], true) + "</li>")
+            html.push("<li>" + this.drawItemHtml(list[i], true) + "</li>")
         }
         return html.join(" ");
     },
@@ -92,15 +92,15 @@ $.Controller.extend("Phui.Combobox.DropdownController",
             for(var i=0; i<diff; i++){
                 endStr += "</ul></li>"
             }
-            return "<li>"+this._drawItemHtml(item)+
+            return "<li>"+this.drawItemHtml(item)+
                    "</li>" + endStr
         }
         if(nextLevel == currentLevel) {
-             return "<li>"+this._drawItemHtml(item)+"</li>"+
+             return "<li>"+this.drawItemHtml(item)+"</li>"+
                 this._makeEl(list.splice(1, list.length-1), nextLevel, initialLevel)
         }
         if(nextLevel > currentLevel){
-            return "<li>"+this._drawItemHtml(item)+"<ul>"+
+            return "<li>"+this.drawItemHtml(item)+"<ul>"+
                 this._makeEl(list.splice(1, list.length-1), nextLevel, initialLevel)
         }
         if(nextLevel < currentLevel){
@@ -109,12 +109,12 @@ $.Controller.extend("Phui.Combobox.DropdownController",
             for(var i=0; i<diff; i++){
                 endStr += "</ul></li>"
             }
-            return "<li>"+this._drawItemHtml(item)+"</li>"+endStr+
+            return "<li>"+this.drawItemHtml(item)+"</li>"+endStr+
                 this._makeEl(list.splice(1, list.length-1), nextLevel, initialLevel)
 
         }
     },       
-    _drawItemHtml : function(item, isAutocompleteData) {
+    drawItemHtml : function(item, isAutocompleteData) {
             var html = [];
             html.push("<span class='item " + item.identity()); 
             html.push(" selectable ");
@@ -138,7 +138,7 @@ $.Controller.extend("Phui.Combobox.DropdownController",
             var item = el.model();
             if (item) {
                 // set combobox new value
-                this.combobox.controller().val(item.value);
+                this.combobox.controller().val(item.value, el.html());
                 
                 // then hide dropdown            
                 this.element.hide();
@@ -174,12 +174,12 @@ $.Controller.extend("Phui.Combobox.DropdownController",
             // if maxHeight was not defined in options 
             // make it the same size as that with which 
             // dropdown is rendered
-			var defaultMaxHeight = this.options.maxHeight; 
+            var defaultMaxHeight = this.options.maxHeight; 
             if (defaultMaxHeight == null) {
-				var maxHeight = 0;
-				this.find(".selectable").each(function(i, el){
-					maxHeight += $(el).outerHeight();
-				})
+                var maxHeight = 0;
+                this.find(".selectable").each(function(i, el){
+                    maxHeight += $(el).outerHeight();
+                })
                 defaultMaxHeight = maxHeight + "px"; 
             }  
 
@@ -194,6 +194,9 @@ $.Controller.extend("Phui.Combobox.DropdownController",
             });
         }
     },
+	getElementFor : function(instance) {
+		return this.find("." + instance.identity());
+	},
     hide : function() {
         this.element.slideUp("fast");
         
