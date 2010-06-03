@@ -17,12 +17,12 @@
                 src='../../steal/steal.js'>   
         </script>
         <script type='text/javascript'>
-            steal.plugins("phui/combobox/ajax", "jquery/dom/fixtures").then(function($){
+            steal.plugins("phui/combobox/ajax", "jquery/dom/fixture").then(function($){
                 
                 
-                // fixtures that simulate nested data sent by the server
-                $.fixture["-make"](["items", "item"], 200, function(num, items) {
-                    
+                // fixture that simulate nested data sent by the server
+                $.fixture.make(["items", "item"], 200, function(num, items) {
+                   
                         var itemId = parseInt(Math.random() * num);
                         var item = items[itemId]
                         var experiment = parseInt(Math.random() * 10);
@@ -71,7 +71,7 @@
                     
                     // make a clone of the data so that changes
                     // in the to the data in combobox don't get 
-                    // reflected in the fixtures
+                    // reflected in the fixture
                     var clonedItems = [];                    
                     for (var i = 0; i < items.length; i++) {
                         var parentId = items[i].parentId;
