@@ -34,7 +34,7 @@ steal.plugins('jquery/controller',
         },
         init: function(){
             this.element.find("input").wrap("<div class='container' />").hide();
-			this.element.find(".container").append( $("<div class='viewbox' tabindex='0' />") );
+            this.element.find(".container").append( $("<div class='viewbox' tabindex='0' />") );
             this.currentItem = { "value": -1 };
             
             // draw input box
@@ -105,12 +105,12 @@ steal.plugins('jquery/controller',
             
             // render the dropdown and set an initial value for combobox
             this.dropdown.controller().draw(this.modelList);
-			this.dropdown.controller().style();
+            this.dropdown.controller().style();
             if (selectedItem) {
-				var instance = Combobox.Models.Item.wrap(selectedItem);
-				var el = this.dropdown.controller().getElementFor(instance);
-				this.val(selectedItem.value, el.html());
-			}  
+                var instance = Combobox.Models.Item.wrap(selectedItem);
+                var el = this.dropdown.controller().getElementFor(instance);
+                this.val(selectedItem.value, el.html());
+            }  
         },
         flattenEls : function(list, currentLevel, items){
             items = items || [];
@@ -127,19 +127,19 @@ steal.plugins('jquery/controller',
             this.flattenEls(list.splice(1, list.length-1), currentLevel, items);
             return items;
         },
-		".viewbox click" : function(el, ev) {
-			this._toggleComboboxView(el);
-		},
-		".viewbox focusin" : function(el, ev) {
-			this._toggleComboboxView(el);
-		},
-		_toggleComboboxView : function(el) {
-			el.hide();
-			var input = this.find("input[type='text']");
-			input.show();
-			input[0].focus();			
-			input[0].select();
-		},
+        ".viewbox click" : function(el, ev) {
+            this._toggleComboboxView(el);
+        },
+        ".viewbox focusin" : function(el, ev) {
+            this._toggleComboboxView(el);
+        },
+        _toggleComboboxView : function(el) {
+            el.hide();
+            var input = this.find("input[type='text']");
+            input.show();
+            input[0].focus();            
+            input[0].select();
+        },
         "input keyup": function(el, ev){
             var key = $.keyname(ev);
             
@@ -213,8 +213,11 @@ steal.plugins('jquery/controller',
                 if (self.dropdown.controller().hasFocus) {
                     self.element.trigger("focusin");
                 } else {
-					var el = self.dropdown.controller().getElementFor(self.currentItem.item);
-				    self.val(self.currentItem.value, el.html());
+                    if (self.currentItem.item) {
+						// update viewbox with current item html
+                        var el = self.dropdown.controller().getElementFor(self.currentItem.item);
+                        self.val(self.currentItem.value, el.html());
+                    }
                     self.dropdown.controller().hide();  
                 }    
             }, 250);
@@ -231,16 +234,16 @@ steal.plugins('jquery/controller',
             var item = this.modelList.match("value", value)[0];
             if (item && item.enabled) {
                 this.currentItem = {
-					"value": item.value,
-					"item": item,
-					"html": html
-				};
-				var input = this.find("input[type=text]");
-				input.val(item.text);
+                    "value": item.value,
+                    "item": item,
+                    "html": html
+                };
+                var input = this.find("input[type=text]");
+                input.val(item.text);
                 input.hide();
-				var viewbox = this.find(".viewbox");
-				viewbox.show();
-				viewbox.html(html);
+                var viewbox = this.find(".viewbox");
+                viewbox.show();
+                viewbox.html(html);
                 
                 // higlight the activated item
                 this.modelList.each(function(i, item){
@@ -285,8 +288,8 @@ steal.plugins('jquery/controller',
             this.dropdown.is(":visible") ? this.dropdown.controller().hide() :
                                                this.dropdown.controller().show();  
             this.focusInputAndShowDropdown( this.find("input[type=text]") );
-			var viewbox = this.find(".viewbox");
-			if( viewbox.is(":visible") ) viewbox.click(); 
+            var viewbox = this.find(".viewbox");
+            if( viewbox.is(":visible") ) viewbox.click(); 
         },
         /*
          * Internet Explorer interprets two fast clicks in a row as one single-click, 
