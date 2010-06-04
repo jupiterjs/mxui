@@ -6,6 +6,7 @@ $.Controller.extend("Phui.Combobox.DropdownController",
         this.combobox = combobox;
         this.options = options;
         this.hasFocus = false;  
+        this.isFirstPass = true;
     },
     style : function() {
         this.element.css("width", this.combobox.css("width"));
@@ -17,27 +18,79 @@ $.Controller.extend("Phui.Combobox.DropdownController",
         }        
         
         // apply custom style to item
-		var self = this;
-		this.find("span.item").each(function(i, el){
-			el = $(el);
-			var item = el.model();
-			if (item.enabled) {
-				el.find("span.text").css(self.options.textStyle);
-			}
-			
-			if (item.attr("activated")) {
-				el.addClass(self.options.activatedClassName);
-			}
-			else {
-				el.removeClass(self.options.activatedClassName);
-			}
-		});
+        var self = this;
+        this.find(".item").each(function(i, el){
+            el = $(el);
+            var item = el.model();
+            if (item.enabled) {
+                el.find("span.text").css(self.options.textStyle);
+            }
+            
+            el.removeClass(self.options.activatedClassName);
+            if (item.attr("activated")) {
+                el.addClass(self.options.activatedClassName);
+            }
+        });
         
         // ajdust dropdown height so it can fit in the page
         // even if the window is small
         this.adjustHeightToFitWindow();               
     },
     draw : function(modelList, isAutocompleteData) {
+        if(this.isFirstPass) {
+            var listToDraw = $.extend(true, {}, modelList);
+            var html = this._makeEl(listToDraw, 0);
+            listToDraw = null;
+
+            // if starts with <li> wrap under <ul>
+            // so selectable as something to attach to
+            if (html.indexOf("<li") === 0) {
+                html = "<ul>" + html + "</ul>";
+            }
+            this.element.html(html);
+        }
+        
+
+ 
+        
+        var identityList = modelList.map(function(inst){
+            return inst.identity();
+        })
+        
+        // hides the elements that do not match the item list
+        var itemEls = this.find(".item");
+        for (var i = 0; i < itemEls.length; i++) {
+            var el = $(itemEls[i]);
+            el.show();
+            var identity = el[0].className.match(/(combobox_models_item_\d*)/)[0];
+            if (identity) {
+                if ($.inArray(identity, identityList) == -1) 
+                    el.hide();
+            }
+            
+            if (this.isFirstPass) {
+                var item = modelList.grep(function(inst){
+                    return el[0].className.indexOf(inst.identity() + " ") > -1;
+                })
+                if (item[0]) 
+                    item[0].hookup(el[0]);
+            }
+        }
+        
+        if (this.isFirstPass) {
+            // add up/down key navigation
+            this.element.children("ul").phui_selectable({
+                selectedClassName: "selected",
+                activatedClassName: "activated"
+            });
+        }
+
+        this.isFirstPass = false;
+
+        this.style();
+        
+    },
+    /*draw : function(modelList, isAutocompleteData) {
         // draw the dropdown
         var html = "";
         if (isAutocompleteData) {
@@ -60,8 +113,7 @@ $.Controller.extend("Phui.Combobox.DropdownController",
         for(var i=0;i<modelList.length;i++) {
             var item = modelList[i];
             
-            var liEls = this.find("li#" + item.identity())
-			var el = liEls.find("span." + item.identity());
+            var el = this.find("." + item.identity());
             if (el[0]) {
                 item.hookup(el[0]);
             }     
@@ -75,14 +127,14 @@ $.Controller.extend("Phui.Combobox.DropdownController",
         });
 
         this.style();           
-    },
+    },*/
     _makeHtmlForAutocompleteData : function(list) {
         var html = [];
         // we assume autocomplete data is a linear list
         // with no nesting information
         for(var i=0;i<list.length;i++) {
-			var item = list[i];
-            html.push("<li id='" + item.identity() + "'>" + this.drawItemHtml(item, true) + "</li>")
+            var item = list[i];
+            html.push("<li>" + this.drawItemHtml(item, true) + "</li>")
         }
         return html.join(" ");
     },
@@ -98,15 +150,15 @@ $.Controller.extend("Phui.Combobox.DropdownController",
             for(var i=0; i<diff; i++){
                 endStr += "</ul></li>"
             }
-            return "<li id='" + item.identity() + "'>"+this.drawItemHtml(item)+
+            return "<li>"+this.drawItemHtml(item)+
                    "</li>" + endStr
         }
         if(nextLevel == currentLevel) {
-             return "<li id='" + item.identity() + "'>"+this.drawItemHtml(item)+"</li>"+
+             return "<li>"+this.drawItemHtml(item)+"</li>"+
                 this._makeEl(list.splice(1, list.length-1), nextLevel, initialLevel)
         }
         if(nextLevel > currentLevel){
-            return "<li id='" + item.identity() + "'>"+this.drawItemHtml(item)+"<ul>"+
+            return "<li>"+this.drawItemHtml(item)+"<ul>"+
                 this._makeEl(list.splice(1, list.length-1), nextLevel, initialLevel)
         }
         if(nextLevel < currentLevel){
@@ -115,7 +167,7 @@ $.Controller.extend("Phui.Combobox.DropdownController",
             for(var i=0; i<diff; i++){
                 endStr += "</ul></li>"
             }
-            return "<li id='" + item.identity() + "'>"+this.drawItemHtml(item)+"</li>"+endStr+
+            return "<li>"+this.drawItemHtml(item)+"</li>"+endStr+
                 this._makeEl(list.splice(1, list.length-1), nextLevel, initialLevel)
 
         }
@@ -200,9 +252,9 @@ $.Controller.extend("Phui.Combobox.DropdownController",
             });
         }
     },
-	getElementFor : function(instance) {
-		return this.find("." + instance.identity());
-	},
+    getElementFor : function(instance) {
+        return this.find("." + instance.identity());
+    },
     hide : function() {
         this.element.slideUp("fast");
         
