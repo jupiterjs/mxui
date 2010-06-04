@@ -33,8 +33,9 @@ steal.plugins('jquery/controller',
             this._super(div, options);    
         },
         init: function(){
-            this.element.find("input").wrap("<div class='container' />")
-            this.currentValue = "-1";
+            this.element.find("input").wrap("<div class='container' />").hide();
+            this.element.find(".container").append( $("<div class='viewbox' tabindex='0' />") );
+            this.currentItem = { "value": -1 };
             
             // draw input box
             var arrowHtml = "<div class='toggle'>&nbsp;</div>";
@@ -104,8 +105,12 @@ steal.plugins('jquery/controller',
             
             // render the dropdown and set an initial value for combobox
             this.dropdown.controller().draw(this.modelList);
-            if (selectedItem) 
-                this.val(selectedItem.value);  
+            this.dropdown.controller().style();
+            if (selectedItem) {
+                var instance = Combobox.Models.Item.wrap(selectedItem);
+                var el = this.dropdown.controller().getElementFor(instance);
+                this.val(selectedItem.value, el.html());
+            }  
         },
         flattenEls : function(list, currentLevel, items){
             items = items || [];
@@ -122,8 +127,21 @@ steal.plugins('jquery/controller',
             this.flattenEls(list.splice(1, list.length-1), currentLevel, items);
             return items;
         },
+        ".viewbox click" : function(el, ev) {
+            this._toggleComboboxView(el);
+        },
+        ".viewbox focusin" : function(el, ev) {
+            this._toggleComboboxView(el);
+        },
+        _toggleComboboxView : function(el) {
+            el.hide();
+            var input = this.find("input[type='text']");
+            input.show();
+            input[0].focus();            
+            input[0].select();
+        },
         "input keyup": function(el, ev){
-            var key = $.keyname(ev)
+            var key = $.keyname(ev);
             
             // close dropdown on escape
             if (key == "escape") {
@@ -195,23 +213,37 @@ steal.plugins('jquery/controller',
                 if (self.dropdown.controller().hasFocus) {
                     self.element.trigger("focusin");
                 } else {
-                    self.dropdown.controller().hide();    
+                    if (self.currentItem.item) {
+						// update viewbox with current item html
+                        var el = self.dropdown.controller().getElementFor(self.currentItem.item);
+                        self.val(self.currentItem.value, el.html());
+                    }
+                    self.dropdown.controller().hide();  
                 }    
             }, 250);
         },
         mouseleave : function(el, ev) {
             if (this.dropdown.is(":visible")) {
-                this.find("input[type=text]").focus();
+                this.find("input[type='text']").focus();
             }
         },        
-        val: function(value){
+        val: function(value, html){
             if(!value && value != 0) 
-                return this.currentValue;
+                return this.currentItem.value;
                 
             var item = this.modelList.match("value", value)[0];
             if (item && item.enabled) {
-                this.currentValue = item.value;
-                this.find("input[type=text]").val(item.text);
+                this.currentItem = {
+                    "value": item.value,
+                    "item": item,
+                    "html": html
+                };
+                var input = this.find("input[type=text]");
+                input.val(item.text);
+                input.hide();
+                var viewbox = this.find(".viewbox");
+                viewbox.show();
+                viewbox.html(html);
                 
                 // higlight the activated item
                 this.modelList.each(function(i, item){
@@ -222,9 +254,9 @@ steal.plugins('jquery/controller',
                 this.dropdown.controller().draw( this.modelList);                
                 
                 // bind values to the hidden input
-                this.find("input[name='" + this.oldElementName + "']").val(this.currentValue);            
+                this.find("input[name='" + this.oldElementName + "']").val(this.currentItem.value);            
                 
-                this.element.trigger("change", this.currentValue);                
+                this.element.trigger("change", this.currentItem.value);                
             }
          },
         query : function(text) {
@@ -256,6 +288,8 @@ steal.plugins('jquery/controller',
             this.dropdown.is(":visible") ? this.dropdown.controller().hide() :
                                                this.dropdown.controller().show();  
             this.focusInputAndShowDropdown( this.find("input[type=text]") );
+            var viewbox = this.find(".viewbox");
+            if( viewbox.is(":visible") ) viewbox.click(); 
         },
         /*
          * Internet Explorer interprets two fast clicks in a row as one single-click, 

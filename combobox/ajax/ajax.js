@@ -8,7 +8,7 @@ steal.plugins('phui/combobox')
             this._super(el);
             this.find(".phui_combobox_ajax").trigger("comboboxFocusInput", this);
         },
-        val: function(value){
+        /*val: function(value){
             if(!value && value != 0) 
                 return this.currentValue;
                 
@@ -30,7 +30,7 @@ steal.plugins('phui/combobox')
                 
                 this.element.trigger("change", this.currentValue);                
             }
-         }
+         }*/
     });
 
 

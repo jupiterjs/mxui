@@ -10,7 +10,9 @@
 }
 
 .phui_combobox input,
-.phui_combobox_wrapper input {
+.phui_combobox .viewbox,
+.phui_combobox_wrapper input,
+.phui_combobox_wrapper .viewbox {
 	background:none repeat scroll 0 0 transparent;
 	border:0 none;
 	height:14px;
@@ -19,6 +21,13 @@
 	vertical-align:top;
 	width:100%;
 	padding:0;
+}
+
+.phui_combobox .viewbox,
+.phui_combobox_wrapper .viewbox {
+    font-size: 12px;
+    height: 16px;
+	margin-top: 0;
 }
 
 .phui_combobox .container,

@@ -6,6 +6,7 @@ $.Controller.extend("Phui.Combobox.DropdownController",
         this.combobox = combobox;
         this.options = options;
         this.hasFocus = false;  
+        this.isFirstPass = true;
     },
     style : function() {
         this.element.css("width", this.combobox.css("width"));
@@ -20,23 +21,76 @@ $.Controller.extend("Phui.Combobox.DropdownController",
         var self = this;
         this.find(".item").each(function(i, el){
             el = $(el);
-            if(el.model().enabled)
-                el.find(".text").css(self.options.textStyle);
+            var item = el.model();
+            if (item.enabled) {
+                el.find("span.text").css(self.options.textStyle);
+            }
             
-            if (el.model().attr("activated")) {
+            el.removeClass(self.options.activatedClassName);
+            if (item.attr("activated")) {
                 el.addClass(self.options.activatedClassName);
-            } else {
-                el.removeClass(self.options.activatedClassName);
-            }                                           
+            }
         });
         
-		// ajdust dropdown height so it can fit in the page
-		// even if the window is small
-        if (this.element.is(":visible")) {
-            this.adjustHeightToFitWindow();
-        }               
+        // ajdust dropdown height so it can fit in the page
+        // even if the window is small
+        this.adjustHeightToFitWindow();               
     },
     draw : function(modelList, isAutocompleteData) {
+        if(this.isFirstPass) {
+            var listToDraw = $.extend(true, {}, modelList);
+            var html = this._makeEl(listToDraw, 0);
+            listToDraw = null;
+
+            // if starts with <li> wrap under <ul>
+            // so selectable as something to attach to
+            if (html.indexOf("<li") === 0) {
+                html = "<ul>" + html + "</ul>";
+            }
+            this.element.html(html);
+        }
+        
+
+ 
+        
+        var identityList = modelList.map(function(inst){
+            return inst.identity();
+        })
+        
+        // hides the elements that do not match the item list
+        var itemEls = this.find(".item");
+        for (var i = 0; i < itemEls.length; i++) {
+            var el = $(itemEls[i]);
+            el.show();
+            var identity = el[0].className.match(/(combobox_models_item_\d*)/)[0];
+            if (identity) {
+                if ($.inArray(identity, identityList) == -1) 
+                    el.hide();
+            }
+            
+            if (this.isFirstPass) {
+                var item = modelList.grep(function(inst){
+                    return el[0].className.indexOf(inst.identity() + " ") > -1;
+                })
+                if (item[0]) 
+                    item[0].hookup(el[0]);
+            }
+        }
+        
+        if (this.isFirstPass) {
+            // add up/down key navigation
+            this.element.children("ul").phui_selectable({
+                selectedClassName: "selected",
+                activatedClassName: "activated"
+            });
+        }
+
+        this.isFirstPass = false;
+
+        this.style();
+        
+    },
+    /*draw : function(modelList, isAutocompleteData) {
         // draw the dropdown
         var html = "";
         if (isAutocompleteData) {
@@ -62,7 +116,8 @@ $.Controller.extend("Phui.Combobox.DropdownController",
             var el = this.find("." + item.identity());
             if (el[0]) {
                 item.hookup(el[0]);
-            }            
+            }     
+
         }
         
         // add up/down key navigation
@@ -70,23 +125,16 @@ $.Controller.extend("Phui.Combobox.DropdownController",
             selectedClassName: "selected",
             activatedClassName: "activated"            
         });
-        
-        // if maxHeight was not defined in options 
-        // make it the same size as that that dropdown is rendered
-        // so it can be used when resizing the dropdown
-        // to make it fit inside the window
-        if (this.options.maxHeight == null) {
-            this.options.maxHeight = this.element.height() + "px";
-        }        
 
         this.style();           
-    },
+    },*/
     _makeHtmlForAutocompleteData : function(list) {
         var html = [];
         // we assume autocomplete data is a linear list
         // with no nesting information
         for(var i=0;i<list.length;i++) {
-            html.push("<li>" + this._drawItemHtml(list[i], true) + "</li>")
+            var item = list[i];
+            html.push("<li>" + this.drawItemHtml(item, true) + "</li>")
         }
         return html.join(" ");
     },
@@ -102,15 +150,15 @@ $.Controller.extend("Phui.Combobox.DropdownController",
             for(var i=0; i<diff; i++){
                 endStr += "</ul></li>"
             }
-            return "<li>"+this._drawItemHtml(item)+
+            return "<li>"+this.drawItemHtml(item)+
                    "</li>" + endStr
         }
         if(nextLevel == currentLevel) {
-             return "<li>"+this._drawItemHtml(item)+"</li>"+
+             return "<li>"+this.drawItemHtml(item)+"</li>"+
                 this._makeEl(list.splice(1, list.length-1), nextLevel, initialLevel)
         }
         if(nextLevel > currentLevel){
-            return "<li>"+this._drawItemHtml(item)+"<ul>"+
+            return "<li>"+this.drawItemHtml(item)+"<ul>"+
                 this._makeEl(list.splice(1, list.length-1), nextLevel, initialLevel)
         }
         if(nextLevel < currentLevel){
@@ -119,12 +167,12 @@ $.Controller.extend("Phui.Combobox.DropdownController",
             for(var i=0; i<diff; i++){
                 endStr += "</ul></li>"
             }
-            return "<li>"+this._drawItemHtml(item)+"</li>"+endStr+
+            return "<li>"+this.drawItemHtml(item)+"</li>"+endStr+
                 this._makeEl(list.splice(1, list.length-1), nextLevel, initialLevel)
 
         }
     },       
-    _drawItemHtml : function(item, isAutocompleteData) {
+    drawItemHtml : function(item, isAutocompleteData) {
             var html = [];
             html.push("<span class='item " + item.identity()); 
             html.push(" selectable ");
@@ -148,7 +196,7 @@ $.Controller.extend("Phui.Combobox.DropdownController",
             var item = el.model();
             if (item) {
                 // set combobox new value
-                this.combobox.controller().val(item.value);
+                this.combobox.controller().val(item.value, el.html());
                 
                 // then hide dropdown            
                 this.element.hide();
@@ -175,19 +223,37 @@ $.Controller.extend("Phui.Combobox.DropdownController",
         this.combobox.find("input[type=text]").focus();                        
     }, 
     windowresize : function(el, ev) {
-		// ajdust dropdown height so it can fit in the page
-		// even if the window is small		
+        // ajdust dropdown height so it can fit in the page
+        // even if the window is small        
         this.adjustHeightToFitWindow();
     },
-    adjustHeightToFitWindow : function() {		
-        var newHeight =  $(window).height() - 4*$("body").offset().top;
-        var maxHeight = this.options.maxHeight;
-        maxHeight = parseInt( maxHeight.substr(0, maxHeight.indexOf("px")) );
-        if(newHeight > maxHeight) newHeight = maxHeight;
-        this.element.css({
-            "height": newHeight + "px",
-            "overflow": "auto"
-        });        
+    adjustHeightToFitWindow : function() {
+        if (this.element.is(":visible")) {
+            // if maxHeight was not defined in options 
+            // make it the same size as that with which 
+            // dropdown is rendered
+            var defaultMaxHeight = this.options.maxHeight; 
+            if (defaultMaxHeight == null) {
+                var maxHeight = 0;
+                this.find(".selectable").each(function(i, el){
+                    maxHeight += $(el).outerHeight();
+                })
+                defaultMaxHeight = maxHeight + "px"; 
+            }  
+
+            // resizing the dropdown to make it fit inside the window
+            var newHeight = $(window).height() - 4 * $("body").offset().top;
+            defaultMaxHeight = parseInt(defaultMaxHeight.substr(0, defaultMaxHeight.indexOf("px")));
+            if (newHeight > defaultMaxHeight) 
+                newHeight = defaultMaxHeight;
+            this.element.css({
+                "height": newHeight + "px",
+                "overflow": "auto"
+            });
+        }
+    },
+    getElementFor : function(instance) {
+        return this.find("." + instance.identity());
     },
     hide : function() {
         this.element.slideUp("fast");
@@ -196,17 +262,18 @@ $.Controller.extend("Phui.Combobox.DropdownController",
         this.hasFocus = false;        
     },
     show : function() {
-        this.element.slideDown("fast");
-        
+        this.element.slideDown("fast", this.callback("shown"));   
+    },
+    shown : function() {
         // position the dropdown bellow the combobox input
         this.element.phui_positionable({
             my: 'left top',
             at: 'left bottom',
             collision: 'none none'
-        }).trigger("move", this.combobox);        
+        }).trigger("move", this.combobox);
         
-        this.style();             
+        this.style();                     
 
-        this.combobox.trigger("open");         
+        this.combobox.trigger("open");        
     }
 })
