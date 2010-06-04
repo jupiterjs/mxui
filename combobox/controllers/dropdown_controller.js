@@ -19,7 +19,7 @@ $.Controller.extend("Phui.Combobox.DropdownController",
         
         // apply custom style to item
         var self = this;
-        this.find(".item").each(function(i, el){
+        /*this.find(".item").each(function(i, el){
             el = $(el);
             var item = el.model();
             if (item.enabled) {
@@ -30,13 +30,24 @@ $.Controller.extend("Phui.Combobox.DropdownController",
             if (item.attr("activated")) {
                 el.addClass(self.options.activatedClassName);
             }
-        });
+        });*/
+		this.find(".text").each(function(i, el){
+			el = $(el);
+			var item = el.parent(".item").model();
+			if(item.enabled)
+                el.css(self.options.textStyle);
+				
+			el.parent(".item").removeClass(self.options.activatedClassName);				
+			if(item.activated)
+			    el.parent(".item").addClass(self.options.activatedClassName);
+		})
         
         // ajdust dropdown height so it can fit in the page
         // even if the window is small
         this.adjustHeightToFitWindow();               
     },
     draw : function(modelList, isAutocompleteData) {
+		
         if(this.isFirstPass) {
             var listToDraw = $.extend(true, {}, modelList);
             var html = this._makeEl(listToDraw, 0);
@@ -50,12 +61,11 @@ $.Controller.extend("Phui.Combobox.DropdownController",
             this.element.html(html);
         }
         
-
- 
-        
-        var identityList = modelList.map(function(inst){
-            return inst.identity();
-        })
+ 		var modelHash = {};
+		for(var i=0;i<modelList.length;i++) {
+			var inst = modelList[i];
+			modelHash[ inst.identity() ] = inst;
+		}
         
         // hides the elements that do not match the item list
         var itemEls = this.find(".item");
@@ -64,71 +74,29 @@ $.Controller.extend("Phui.Combobox.DropdownController",
             el.show();
             var identity = el[0].className.match(/(combobox_models_item_\d*)/)[0];
             if (identity) {
-                if ($.inArray(identity, identityList) == -1) 
-                    el.hide();
+				if( !modelHash[identity] ) el.hide();
             }
             
             if (this.isFirstPass) {
-                var item = modelList.grep(function(inst){
-                    return el[0].className.indexOf(inst.identity() + " ") > -1;
-                })
-                if (item[0]) 
-                    item[0].hookup(el[0]);
+				var item = modelHash[identity];
+                if (item) 
+                    item.hookup(el[0]);
             }
         }
-        
-        if (this.isFirstPass) {
-            // add up/down key navigation
-            this.element.children("ul").phui_selectable({
-                selectedClassName: "selected",
-                activatedClassName: "activated"
-            });
-        }
+		
+        // add up/down key navigation
+        var phui_selectable = this.element.children("ul").controller(Phui.Selectable);
+		if(phui_selectable) phui_selectable.destroy();
+        this.element.children("ul").phui_selectable({
+            selectedClassName: "selected",
+            activatedClassName: "activated"
+        });
 
         this.isFirstPass = false;
 
         this.style();
-        
     },
-    /*draw : function(modelList, isAutocompleteData) {
-        // draw the dropdown
-        var html = "";
-        if (isAutocompleteData) {
-            html = this._makeHtmlForAutocompleteData(modelList);
-        }
-        else {
-            var listToDraw = $.extend(true, {}, modelList);
-            html = this._makeEl(listToDraw, 0);
-            listToDraw = null;
-        }
-        
-        // if starts with <li> wrap under <ul>
-        // so selectable as something to attach to
-        if( html.indexOf("<li") === 0 ) {
-            html = "<ul>" + html + "</ul>";
-        }
-        this.element.html(html);
-        
-        // hookup the models to the elements
-        for(var i=0;i<modelList.length;i++) {
-            var item = modelList[i];
-            
-            var el = this.find("." + item.identity());
-            if (el[0]) {
-                item.hookup(el[0]);
-            }     
-
-        }
-        
-        // add up/down key navigation
-        this.element.children("ul").phui_selectable({
-            selectedClassName: "selected",
-            activatedClassName: "activated"            
-        });
-
-        this.style();           
-    },*/
-    _makeHtmlForAutocompleteData : function(list) {
+	_makeHtmlForAutocompleteData : function(list) {
         var html = [];
         // we assume autocomplete data is a linear list
         // with no nesting information
