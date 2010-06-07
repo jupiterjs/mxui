@@ -283,6 +283,7 @@ steal.plugins('jquery/controller',
 			  noitems.remove();
 		  	  this.cached.header.find("tr").html('//phui/grid/views/header', this);
 			  var tbl = this.find('.innerBody table').show();
+			  return this.found(messages)
 		  }
 		  var html = this._renderMessages(messages),
 			  els = $(html.join(''));
