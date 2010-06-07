@@ -245,7 +245,12 @@ steal.plugins('jquery/controller',
                 input.hide();
                 var viewbox = this.find(".viewbox");
                 viewbox.show();
-                viewbox.html(html);
+				if (html) {
+					viewbox.html(html);
+				} else {
+                    var el = this.dropdown.controller().getElementFor(item);
+					viewbox.html(el.html());
+				}
                 
                 // higlight the activated item
                 this.modelList.each(function(i, item){
@@ -275,7 +280,8 @@ steal.plugins('jquery/controller',
             var item = this.modelList.match("value", value)[0];
             if (item) {
                 item.attr("enabled", true);
-                this.dropdown.controller().draw(this.modelList);
+                //this.dropdown.controller().draw(this.modelList);
+                this.dropdown.controller().enable(item);
             }
         },
         disable : function(value) {
@@ -283,7 +289,8 @@ steal.plugins('jquery/controller',
             if (item) {
                 item.attr("enabled", false);
                 item.attr("activated", false);                
-                this.dropdown.controller().draw(this.modelList);
+                //this.dropdown.controller().draw(this.modelList);
+				this.dropdown.controller().disable(item);
             }
         },         
         ".toggle click": function(el, ev){

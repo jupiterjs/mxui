@@ -91,7 +91,7 @@
 }
 
 .phui_combobox_dropdown .disabled .text {
-	color: #bbbbbb;
+	color: #bbbbbb !important;
 }
 
 .phui_combobox_dropdown .selectable {

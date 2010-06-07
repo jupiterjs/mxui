@@ -246,6 +246,14 @@ $.Controller.extend("Phui.Combobox.DropdownController",
     getElementFor : function(instance) {
         return this.find("." + instance.identity());
     },
+	enable : function(item) {
+		var el = this.getElementFor(item);
+		el.removeClass( this.options.disabledClassName );
+	},
+	disable : function(item) {
+		var el = this.getElementFor(item);
+		el.addClass( this.options.disabledClassName );
+	},	
     hide : function() {
         this.element.slideUp("fast");
         
