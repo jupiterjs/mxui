@@ -41,11 +41,42 @@ $.Controller.extend("Phui.Combobox.DropdownController",
             if(item.activated)
                 el.parent(".item").addClass(self.options.activatedClassName);
         })*/
+		
         
         // ajdust dropdown height so it can fit in the page
         // even if the window is small
-        this.adjustHeightToFitWindow();               
+        this.adjustHeightToFitWindow();     
+		
+		// trick for handling IE7 overflow bug
+		var ul = this.find("ul.phui_selectable"); 
+		if (ul[0] && this.element.width() != this.element[0].clientWidth) {
+			//var ulWidth = this.element.innerWidth() - this.scrollbarWidth();
+			var ulWidth = this.element.innerWidth() - 18 // scrollbar width;
+			ul.width(ulWidth);
+		}      
     },
+    /*scrollbarWidth :  function() { 
+	    var outerDiv = $('<div/>');
+		var innerDiv = $('<div/>');
+		outerDiv.html(innerDiv);	
+	    // Append our div, do our calculation and then remove it 
+	    $('body').append(outerDiv); 
+		outerDiv.css({
+			'width':'50px',
+			'height':'50px',
+			'overflow': 'hidden',
+			'position': 'absolute',
+			'top': '-200px'
+		});
+		innerDiv.css({
+			'height':'100px'
+		});			
+	    var w1 = $('div', innerDiv).innerWidth(); 
+	    outerDiv.css('overflow-y', 'scroll'); 
+	    var w2 = $('div', innerDiv).innerWidth(); 
+	    $(innerDiv).remove(); 
+	    return (w1 - w2); 
+	},*/
     draw : function(modelList, isAutocompleteData) {
         
         if(this.isFirstPass) {

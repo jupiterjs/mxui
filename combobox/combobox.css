@@ -55,7 +55,7 @@
 	list-style-position: outside;
 	list-style: none;
 	padding: 0;
-	margin: 0;	
+	margin: 0;
 }
 
 .phui_combobox_dropdown li {
@@ -65,6 +65,8 @@
 	/*display: block;*/
 	/*border-bottom: 1px solid #cccccc;*/
 	width: 100%;
+	padding: 0;
+	margin: 0;
 	font: menu;
 	font-size: 12px;
 	overflow: hidden;
@@ -85,7 +87,7 @@
 }
 
 .phui_combobox_dropdown .selected span {
-	color: white !important;
+	color: white !important;	
 }
 
 .phui_combobox_dropdown .disabled .text {
@@ -95,7 +97,8 @@
 .phui_combobox_dropdown .selectable {
 	display: block;
 	width: 100%;
+	margin:0;
 	padding: 3px 0;
 	border-bottom: 1px solid #cccccc;
-    cursor: pointer;		
+    cursor: pointer;
 }
