@@ -7,30 +7,7 @@ steal.plugins('phui/combobox')
         focusInputAndShowDropdown : function(el) {
             this._super(el);
             this.find(".phui_combobox_ajax").trigger("comboboxFocusInput", this);
-        },
-        /*val: function(value){
-            if(!value && value != 0) 
-                return this.currentValue;
-                
-            var item = this.modelList.match("value", value)[0];
-            if (item && item.enabled) {
-                this.currentValue = item.value;
-                this.find("input[type=text]").val(item.text);
-                
-                // higlight the activated item
-                this.modelList.each(function(i, item){
-                    item.attr("activated", false)
-                })
-                item.attr("activated", true);                    
-                                     
-                this.dropdown.controller().draw( this.modelList, this.options.autocompleteEnabled );                
-                
-                // bind values to the hidden input
-                this.find("input[name='" + this.oldElementName + "']").val(this.currentValue);            
-                
-                this.element.trigger("change", this.currentValue);                
-            }
-         }*/
+        }
     });
 
 

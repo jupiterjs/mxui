@@ -19,35 +19,35 @@ $.Controller.extend("Phui.Combobox.DropdownController",
         
         // apply custom style to item
         var self = this;
-        /*this.find(".item").each(function(i, el){
+        this.find(".item").each(function(i, el){
             el = $(el);
             var item = el.model();
             if (item.enabled) {
-                el.find("span.text").css(self.options.textStyle);
+                el.find(".text").css(self.options.textStyle);
             }
             
             el.removeClass(self.options.activatedClassName);
             if (item.attr("activated")) {
                 el.addClass(self.options.activatedClassName);
             }
-        });*/
-		this.find(".text").each(function(i, el){
-			el = $(el);
-			var item = el.parent(".item").model();
-			if(item.enabled)
+        });
+        /*this.find(".text").each(function(i, el){
+            el = $(el);
+            var item = el.parent(".item").model();
+            if(item.enabled)
                 el.css(self.options.textStyle);
-				
-			el.parent(".item").removeClass(self.options.activatedClassName);				
-			if(item.activated)
-			    el.parent(".item").addClass(self.options.activatedClassName);
-		})
+                
+            el.parent(".item").removeClass(self.options.activatedClassName);                
+            if(item.activated)
+                el.parent(".item").addClass(self.options.activatedClassName);
+        })*/
         
         // ajdust dropdown height so it can fit in the page
         // even if the window is small
         this.adjustHeightToFitWindow();               
     },
     draw : function(modelList, isAutocompleteData) {
-		
+        
         if(this.isFirstPass) {
             var listToDraw = $.extend(true, {}, modelList);
             var html = this._makeEl(listToDraw, 0);
@@ -61,42 +61,34 @@ $.Controller.extend("Phui.Combobox.DropdownController",
             this.element.html(html);
         }
         
- 		var modelHash = {};
-		for(var i=0;i<modelList.length;i++) {
-			var inst = modelList[i];
-			modelHash[ inst.identity() ] = inst;
-		}
+         var modelHash = {};
+        for(var i=0;i<modelList.length;i++) {
+            var inst = modelList[i];
+            modelHash[ inst.identity() ] = inst;
+        }
         
         // hides the elements that do not match the item list
         var itemEls = this.find(".item");
         for (var i = 0; i < itemEls.length; i++) {
             var el = $(itemEls[i]);
-            el.show();
+            el.parent("li").show();
             var identity = el[0].className.match(/(combobox_models_item_\d*)/)[0];
             if (identity) {
-				if( !modelHash[identity] ) el.hide();
+                if( !modelHash[identity] ) el.parent("li").hide();
             }
             
             if (this.isFirstPass) {
-				var item = modelHash[identity];
+                var item = modelHash[identity];
                 if (item) 
                     item.hookup(el[0]);
             }
         }
-		
-        // add up/down key navigation
-        var phui_selectable = this.element.children("ul").controller(Phui.Selectable);
-		if(phui_selectable) phui_selectable.destroy();
-        this.element.children("ul").phui_selectable({
-            selectedClassName: "selected",
-            activatedClassName: "activated"
-        });
-
+        
         this.isFirstPass = false;
 
         this.style();
     },
-	_makeHtmlForAutocompleteData : function(list) {
+    _makeHtmlForAutocompleteData : function(list) {
         var html = [];
         // we assume autocomplete data is a linear list
         // with no nesting information
@@ -239,6 +231,15 @@ $.Controller.extend("Phui.Combobox.DropdownController",
             at: 'left bottom',
             collision: 'none none'
         }).trigger("move", this.combobox);
+		
+        // add up/down key navigation
+		var phui_selectable = this.element.children("ul").controller(Phui.Selectable);
+		if (phui_selectable) 
+			phui_selectable.destroy();
+        this.element.children("ul").phui_selectable({
+            selectedClassName: "selected",
+            activatedClassName: "activated"
+        });		
         
         this.style();                     
 
