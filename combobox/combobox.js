@@ -235,6 +235,10 @@ steal.plugins('jquery/controller',
                 
             var item = this.modelList.match("value", value)[0];
             if (item && item.enabled) {
+				if (!html) {
+					var el = this.dropdown.controller().getElementFor(item);
+					html = el.html();
+				}
                 this.currentItem = {
                     "value": item.value,
                     "item": item,
@@ -247,9 +251,6 @@ steal.plugins('jquery/controller',
                 viewbox.show();
 				if (html) {
 					viewbox.html(html);
-				} else {
-                    var el = this.dropdown.controller().getElementFor(item);
-					viewbox.html(el.html());
 				}
                 
                 // higlight the activated item

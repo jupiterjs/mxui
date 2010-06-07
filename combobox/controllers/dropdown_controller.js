@@ -31,52 +31,44 @@ $.Controller.extend("Phui.Combobox.DropdownController",
                 el.addClass(self.options.activatedClassName);
             }
         });
-        /*this.find(".text").each(function(i, el){
-            el = $(el);
-            var item = el.parent(".item").model();
-            if(item.enabled)
-                el.css(self.options.textStyle);
-                
-            el.parent(".item").removeClass(self.options.activatedClassName);                
-            if(item.activated)
-                el.parent(".item").addClass(self.options.activatedClassName);
-        })*/
-		
         
         // ajdust dropdown height so it can fit in the page
         // even if the window is small
         this.adjustHeightToFitWindow();     
-		
-		// trick for handling IE7 overflow bug
-		var ul = this.find("ul.phui_selectable"); 
-		if (ul[0] && this.element.width() != this.element[0].clientWidth) {
-			//var ulWidth = this.element.innerWidth() - this.scrollbarWidth();
-			var ulWidth = this.element.innerWidth() - 18 // scrollbar width;
-			ul.width(ulWidth);
-		}      
+        
+        this.fixOverflowBugInIE7();
+    },
+    fixOverflowBugInIE7 : function() {
+        // trick for handling IE7 overflow bug
+        var ul = this.find("ul.phui_selectable"); 
+        if (ul[0] && this.element.width() > this.element[0].clientWidth) {
+            //var ulWidth = this.element.innerWidth() - this.scrollbarWidth();
+            var ulWidth = this.element.innerWidth() - 18 // scrollbar width;
+            ul.width(ulWidth);
+        }
     },
     /*scrollbarWidth :  function() { 
-	    var outerDiv = $('<div/>');
-		var innerDiv = $('<div/>');
-		outerDiv.html(innerDiv);	
-	    // Append our div, do our calculation and then remove it 
-	    $('body').append(outerDiv); 
-		outerDiv.css({
-			'width':'50px',
-			'height':'50px',
-			'overflow': 'hidden',
-			'position': 'absolute',
-			'top': '-200px'
-		});
-		innerDiv.css({
-			'height':'100px'
-		});			
-	    var w1 = $('div', innerDiv).innerWidth(); 
-	    outerDiv.css('overflow-y', 'scroll'); 
-	    var w2 = $('div', innerDiv).innerWidth(); 
-	    $(innerDiv).remove(); 
-	    return (w1 - w2); 
-	},*/
+        var outerDiv = $('<div/>');
+        var innerDiv = $('<div/>');
+        outerDiv.html(innerDiv);    
+        // Append our div, do our calculation and then remove it 
+        $('body').append(outerDiv); 
+        outerDiv.css({
+            'width':'50px',
+            'height':'50px',
+            'overflow': 'hidden',
+            'position': 'absolute',
+            'top': '-200px'
+        });
+        innerDiv.css({
+            'height':'100px'
+        });            
+        var w1 = $('div', innerDiv).innerWidth(); 
+        outerDiv.css('overflow-y', 'scroll'); 
+        var w2 = $('div', innerDiv).innerWidth(); 
+        $(innerDiv).remove(); 
+        return (w1 - w2); 
+    },*/
     draw : function(modelList, isAutocompleteData) {
         
         if(this.isFirstPass) {
@@ -246,14 +238,14 @@ $.Controller.extend("Phui.Combobox.DropdownController",
     getElementFor : function(instance) {
         return this.find("." + instance.identity());
     },
-	enable : function(item) {
-		var el = this.getElementFor(item);
-		el.removeClass( this.options.disabledClassName );
-	},
-	disable : function(item) {
-		var el = this.getElementFor(item);
-		el.addClass( this.options.disabledClassName );
-	},	
+    enable : function(item) {
+        var el = this.getElementFor(item);
+        el.removeClass( this.options.disabledClassName );
+    },
+    disable : function(item) {
+        var el = this.getElementFor(item);
+        el.addClass( this.options.disabledClassName );
+    },    
     hide : function() {
         this.element.slideUp("fast");
         
@@ -270,15 +262,15 @@ $.Controller.extend("Phui.Combobox.DropdownController",
             at: 'left bottom',
             collision: 'none none'
         }).trigger("move", this.combobox);
-		
+        
         // add up/down key navigation
-		var phui_selectable = this.element.children("ul").controller(Phui.Selectable);
-		if (phui_selectable) 
-			phui_selectable.destroy();
+        var phui_selectable = this.element.children("ul").controller(Phui.Selectable);
+        if (phui_selectable) 
+            phui_selectable.destroy();
         this.element.children("ul").phui_selectable({
             selectedClassName: "selected",
             activatedClassName: "activated"
-        });		
+        });        
         
         this.style();                     
 
