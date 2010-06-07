@@ -71,10 +71,10 @@ $.Controller.extend("Phui.Combobox.DropdownController",
         var itemEls = this.find(".item");
         for (var i = 0; i < itemEls.length; i++) {
             var el = $(itemEls[i]);
-            el.parent("li").show();
+            el.show();
             var identity = el[0].className.match(/(combobox_models_item_\d*)/)[0];
             if (identity) {
-                if( !modelHash[identity] ) el.parent("li").hide();
+                if( !modelHash[identity] ) el.hide();
             }
             
             if (this.isFirstPass) {
