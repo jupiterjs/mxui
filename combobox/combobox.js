@@ -189,11 +189,13 @@ steal.plugins('jquery/controller',
             this.focusInputAndShowDropdown(el);    
         },
         focusInputAndShowDropdown : function(el) {
-            // select all text
-            el[0].focus();
-            el[0].select();
-            if(!this.dropdown.is(":visible"))
-                this.dropdown.controller().show();   
+			if (el[0].tagName == "INPUT" && el.is(":visible")) {
+				// select all text
+				el[0].focus();
+				el[0].select();
+				if (!this.dropdown.is(":visible")) 
+					this.dropdown.controller().show();
+			}   
         },
         /*
          * Trick to make dropdown close when combobox looses focus
@@ -233,6 +235,10 @@ steal.plugins('jquery/controller',
                 
             var item = this.modelList.match("value", value)[0];
             if (item && item.enabled) {
+				if (!html) {
+					var el = this.dropdown.controller().getElementFor(item);
+					html = el.html();
+				}
                 this.currentItem = {
                     "value": item.value,
                     "item": item,
@@ -243,7 +249,9 @@ steal.plugins('jquery/controller',
                 input.hide();
                 var viewbox = this.find(".viewbox");
                 viewbox.show();
-                viewbox.html(html);
+				if (html) {
+					viewbox.html(html);
+				}
                 
                 // higlight the activated item
                 this.modelList.each(function(i, item){
@@ -273,7 +281,8 @@ steal.plugins('jquery/controller',
             var item = this.modelList.match("value", value)[0];
             if (item) {
                 item.attr("enabled", true);
-                this.dropdown.controller().draw(this.modelList);
+                //this.dropdown.controller().draw(this.modelList);
+                this.dropdown.controller().enable(item);
             }
         },
         disable : function(value) {
@@ -281,7 +290,8 @@ steal.plugins('jquery/controller',
             if (item) {
                 item.attr("enabled", false);
                 item.attr("activated", false);                
-                this.dropdown.controller().draw(this.modelList);
+                //this.dropdown.controller().draw(this.modelList);
+				this.dropdown.controller().disable(item);
             }
         },         
         ".toggle click": function(el, ev){
@@ -289,7 +299,10 @@ steal.plugins('jquery/controller',
                                                this.dropdown.controller().show();  
             this.focusInputAndShowDropdown( this.find("input[type=text]") );
             var viewbox = this.find(".viewbox");
-            if( viewbox.is(":visible") ) viewbox.click(); 
+            if (viewbox.is(":visible")) {
+				//viewbox.click();
+				this._toggleComboboxView(viewbox);
+			}
         },
         /*
          * Internet Explorer interprets two fast clicks in a row as one single-click, 
