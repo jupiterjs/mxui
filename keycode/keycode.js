@@ -54,7 +54,7 @@ steal.plugins('jquery').then(function(){
 		if(event.type == 'keypress' && $.browser.msie){
 			return event.keyCode ? String.fromCharCode(event.keyCode) : String.fromCharCode(event.which)
 		}
-		if(!event.keyCode){
+        if (!event.keyCode || event.which) {
 			return String.fromCharCode(event.which)
 		}
 
