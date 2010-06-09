@@ -54,13 +54,12 @@ steal.plugins('jquery/controller','jquery/dom/dimensions','jquery/event/resize')
 		if(!ajuster || parent == document || parent == document.body || parent == document.documentElement) 
 			return {first: true, last: true};
 		
-		var get = {
-			paddingBottom : true,
-			borderBottomWidth : true,
-			paddingTop: true,
-			borderTopWidth : true
-		}
-		$.curStyles(parent, get);
+
+		var get = $.curStyles(parent, 
+			['paddingBottom',
+			 'borderBottomWidth',
+			 'paddingTop',
+			 'borderTopWidth']);
 		var ret = {first: false, last: false}
 		//if any have a value and containerSizeAdjustments is true ...
 		var ads = jQuery.support.containerSizeAdjustments
@@ -95,8 +94,7 @@ steal.plugins('jquery/controller','jquery/dom/dimensions','jquery/event/resize')
 			children = $(parent).children().filter(function(){
 				if (matches.test(this.nodeName.toLowerCase()) && this !== adjustingChild)
 					return false;
-				var get = {"position": true, "display": true};
-				$.curStyles(this, get);
+				var get = $.curStyles(this, ['position','display']);
 				return get.position !== "absolute" && get.position !== "fixed" &&
 					   get.display !== "none" && !jQuery.expr.filters.hidden(this)
 			}),
@@ -109,25 +107,22 @@ steal.plugins('jquery/controller','jquery/dom/dimensions','jquery/event/resize')
 		
 		for(i =0; i < children.length; i++){
 			child = children[i];
-			get = {
-				//paddingBottom : true,
-				borderBottomWidth : true,
-				//paddingTop: true,
-				borderTopWidth : true
-			};
+			var styles = ['borderBottomWidth','borderTopWidth']
+
 			mySpaceUsed = 0;
 			
 			if(i!=0 ||  adjust.first || force ){ 
-				get.marginTop = true //get top margin
+				styles.push('marginTop')
+				//get.marginTop = true //get top margin
 			}
 			if(i!=children.length-1 || adjust.last || force){
-				get.marginBottom = true //get bottom margin
+				styles.push('marginBottom')
+				//get.marginBottom = true //get bottom margin
 			}
 			if((child == adjustingChild && !/table/.test($.curCSS(child,"display"))) && ! force){
-				get.paddingBottom = true;
-				get.paddingTop = true;
+				styles.push('paddingBottom','paddingTop')
 			}
-			$.curStyles(child, get)
+			get = $.curStyles(child, styles)
 			if(child != adjustingChild || force){
 				mySpaceUsed+= $(child).innerHeight();
 			}
