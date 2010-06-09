@@ -21,23 +21,23 @@
 	<body>
 		<h1>Basic Selectable</h1>
         <div id='menu'>
-            <li><span class="selectable">one</span></li>
-            <li><span class="selectable">two</span></li>
-            <li><span class="selectable">three</span></li>
+            <li><span class="selectable" tabindex="0">one</span></li>
+            <li><span class="selectable" tabindex="0">two</span></li>
+            <li><span class="selectable" tabindex="0">three</span></li>
         </div>
 		
 		<h1>Nested Selectable</h1>
         <div id='nested_menu'>
-            <li><span class="selectable">one</span>
+            <li><span class="selectable" tabindex="0">one</span>
 			    <ul>
-			    	<li><span class="selectable">four</span></li>
-					<li><span class="selectable">five</span></li>
+			    	<li><span class="selectable" tabindex="0">four</span></li>
+					<li><span class="selectable" tabindex="0">five</span></li>
 				</ul>
 			</li>
-            <li><span class="selectable">two</span></li>
-            <li><span class="selectable">three</span>
+            <li><span class="selectable" tabindex="0">two</span></li>
+            <li><span class="selectable" tabindex="0">three</span>
 			    <ul>
-			    	<li><span class="selectable">six</span></li>
+			    	<li><span class="selectable" tabindex="0">six</span></li>
 			    </ul>
 			</li>
         </div>
@@ -135,6 +135,9 @@
 				$('#nested_menu').phui_selectable()
 			});
 			$(function(){
+				$('#overflow_menu .selectable').each(function(i, el){
+					$(el).attr("tabindex", "0");
+				});
 				$('#overflow_menu').phui_selectable()
 			});
         </script>

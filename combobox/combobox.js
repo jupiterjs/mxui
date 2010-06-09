@@ -16,8 +16,6 @@ steal.plugins('jquery/controller',
                     return html.join(" ");
                 }
             },
-            textStyle: {'color':'blue','font-style':'italic'},
-            showNested: true,
             maxHeight: null,
             filterEnabled : true,
             selectedClassName: "selected",
@@ -26,24 +24,23 @@ steal.plugins('jquery/controller',
         }
     }, {
         setup : function(el, options) {
-            var div = $('<div/>');
+            var div = $("<div><div class='viewbox' tabindex='0' /></div>");
             this.oldElement = $(el).replaceWith(div);
             div.attr("id", this.oldElement.attr("id"));
-            div.html(this.oldElement);
+            this.oldElement.removeAttr("id");
+            div.append(this.oldElement);
             this._super(div, options);    
         },
         init: function(){
-            this.element.find("input").wrap("<div class='container' />").hide();
-            this.element.find(".container").append( $("<div class='viewbox' tabindex='0' />") );
+            this.oldElement.wrap("<div class='container' />").hide();
             this.currentItem = { "value": -1 };
             
             // draw input box
             var arrowHtml = "<div class='toggle'>&nbsp;</div>";
-            this.element.prepend(arrowHtml);        
-            this.element.css({height:"", width:""});    
+            this.element.prepend(arrowHtml);
             
             // append hidden input to help with form data submit
-            this.oldElementName = this.oldElement.attr("name")
+            this.oldElementName = this.oldElement.attr("name");
             this.oldElement.removeAttr("name");
             $("<input type='hidden' />").attr("name", this.oldElementName)
                          .appendTo(this.element);
@@ -58,10 +55,8 @@ steal.plugins('jquery/controller',
         },
         loadData : function(items) {
             var data = items;
-            if (this.options.showNested) {
-                // flatten input data structure (which may be nested)
-                data = this.flattenEls(items, 0);
-            }
+            // flatten input data structure (which may be nested)
+            data = this.flattenEls(items, 0);
             
             // create model instances from items
             var selectedItem, instances = [];
@@ -81,14 +76,12 @@ steal.plugins('jquery/controller',
                 
                 // add reasonable default attributes
                 if (typeof item === "object") {
-                    if (item.id === undefined) 
-                        item.id = item.value;
-                    if (item.enabled === undefined) 
-                        item.enabled = true;
-                    if (item.children === undefined) 
-                        item.children = [];
-                    if(!this.options.showNested)
-                        item.level = 0;
+                    item = $.extend({
+                        id: item.value,
+                        enabled: true,
+                        children: [],
+                        level: 0
+                    }, item);
                 }
                 
                 // pick inital combobox value
@@ -105,7 +98,6 @@ steal.plugins('jquery/controller',
             
             // render the dropdown and set an initial value for combobox
             this.dropdown.controller().draw(this.modelList);
-            this.dropdown.controller().style();
             if (selectedItem) {
                 var instance = Combobox.Models.Item.wrap(selectedItem);
                 var el = this.dropdown.controller().getElementFor(instance);
@@ -113,19 +105,20 @@ steal.plugins('jquery/controller',
             }  
         },
         flattenEls : function(list, currentLevel, items){
-            items = items || [];
-            currentLevel = currentLevel || 0;
-            if(!list.length) return items;
-            var item = list[0];
-            var children = item.children;
-            delete item.children;
-            item.level = currentLevel;
-            items.push(item)
-            if (children) {
-                this.flattenEls(children, currentLevel + 1, items);
-            }
-            this.flattenEls(list.splice(1, list.length-1), currentLevel, items);
-            return items;
+           items = items || [];
+           currentLevel = currentLevel || 0;
+           if ( !list || !list.length ) {
+               return;
+           }
+           var item = list.shift(),
+           children = item.children;
+
+           item.level = currentLevel;
+           items.push(item);
+
+           this.flattenEls(children, currentLevel + 1, items);
+           this.flattenEls(list, currentLevel, items);
+           return items;
         },
         ".viewbox click" : function(el, ev) {
             this._toggleComboboxView(el);
@@ -152,16 +145,22 @@ steal.plugins('jquery/controller',
             // if down key is clicked, navigate to first item
             if (key == "down") {
                 this.dropdown.controller().hasFocus = true;
-                var firstTabIndex = this.dropdown.find("ul:first").controller().firstTabIndex;
-                this.dropdown.find(".selectable[tabindex=" + firstTabIndex + "]").trigger("select");
+                var first = this.dropdown
+                                .children("ul")
+                                .controller()
+                                .getFirst();
+                $(first).trigger("select");
                 return;
             }
             
             // if up key is clicked, navigate to last item            
             if (key == "up") {
                 this.dropdown.controller().hasFocus = true;
-                var lastTabIndex = this.dropdown.find("ul:first").controller().lastTabIndex;
-                this.dropdown.find(".selectable[tabindex=" + lastTabIndex + "]").trigger("select");                
+                var last = this.dropdown
+                               .children("ul")
+                               .controller()
+                               .getLast();
+                $(last).trigger("select");
                 return;
             }
             
@@ -185,17 +184,18 @@ steal.plugins('jquery/controller',
         "input focusin": function(el, ev){
             this.focusInputAndShowDropdown(el);
         },
-        "input click" : function(el, ev) {
-            this.focusInputAndShowDropdown(el);    
-        },
         focusInputAndShowDropdown : function(el) {
-			if (el[0].tagName == "INPUT" && el.is(":visible")) {
-				// select all text
-				el[0].focus();
-				el[0].select();
-				if (!this.dropdown.is(":visible")) 
-					this.dropdown.controller().show();
-			}   
+            if (el[0].tagName == "INPUT" && el.is(":visible")) {
+                // select all text
+                el[0].focus();
+                setTimeout(function(){
+                    el[0].select();
+                });
+                if (!this.dropdown.is(":visible")) {
+                    this.dropdown.controller().show();
+                    el.trigger("show:dropdown", this);
+                }
+            }   
         },
         /*
          * Trick to make dropdown close when combobox looses focus
@@ -216,7 +216,7 @@ steal.plugins('jquery/controller',
                     self.element.trigger("focusin");
                 } else {
                     if (self.currentItem.item) {
-						// update viewbox with current item html
+                        // update viewbox with current item html
                         var el = self.dropdown.controller().getElementFor(self.currentItem.item);
                         self.val(self.currentItem.value, el.html());
                     }
@@ -235,10 +235,10 @@ steal.plugins('jquery/controller',
                 
             var item = this.modelList.match("value", value)[0];
             if (item && item.enabled) {
-				if (!html) {
-					var el = this.dropdown.controller().getElementFor(item);
-					html = el.html();
-				}
+                if (!html) {
+                    var el = this.dropdown.controller().getElementFor(item);
+                    html = el.html();
+                }
                 this.currentItem = {
                     "value": item.value,
                     "item": item,
@@ -249,9 +249,9 @@ steal.plugins('jquery/controller',
                 input.hide();
                 var viewbox = this.find(".viewbox");
                 viewbox.show();
-				if (html) {
-					viewbox.html(html);
-				}
+                if (html) {
+                    viewbox.html(html);
+                }
                 
                 // higlight the activated item
                 this.modelList.each(function(i, item){
@@ -291,7 +291,7 @@ steal.plugins('jquery/controller',
                 item.attr("enabled", false);
                 item.attr("activated", false);                
                 //this.dropdown.controller().draw(this.modelList);
-				this.dropdown.controller().disable(item);
+                this.dropdown.controller().disable(item);
             }
         },         
         ".toggle click": function(el, ev){
@@ -300,9 +300,8 @@ steal.plugins('jquery/controller',
             this.focusInputAndShowDropdown( this.find("input[type=text]") );
             var viewbox = this.find(".viewbox");
             if (viewbox.is(":visible")) {
-				//viewbox.click();
-				this._toggleComboboxView(viewbox);
-			}
+                this._toggleComboboxView(viewbox);
+            }
         },
         /*
          * Internet Explorer interprets two fast clicks in a row as one single-click, 

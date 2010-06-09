@@ -1,22 +1,12 @@
 steal.plugins('phui/combobox')
     .then(function($){
 
-    Phui.Combobox.extend("Phui.Combobox.Wrapper",{
-    },
-    {
-        focusInputAndShowDropdown : function(el) {
-            this._super(el);
-            this.find(".phui_combobox_ajax").trigger("comboboxFocusInput", this);
-        }
-    });
-
 
     $.Controller.extend("Phui.Combobox.Ajax", {
         defaults : {
             loadOnDemand : true,
             loadingMessage: "Loading ..."
-        },
-        listensTo : ["comboboxFocusInput"]
+        }
     },
     {
         setup : function(el, options) {
@@ -33,11 +23,11 @@ steal.plugins('phui/combobox')
                 
                 el.after(input);
                 el.remove();
-                input.phui_combobox_wrapper(options);
+                input.phui_combobox(options);
                 this._super(input[0], options);
             }
         },
-        comboboxFocusInput : function(el, ev, combobox) {
+        "show:dropdown" : function(el, ev, combobox) {
             if (this.options.loadOnDemand && !this.notFirstFocus) {
                 combobox.dropdown.html("<center><h3>" + this.options.loadingMessage + "</h3></center>");
                 this.loadDataFromServer(combobox);

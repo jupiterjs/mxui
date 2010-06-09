@@ -8,25 +8,8 @@ steal.plugins('jquery/controller', 'phui/keycode')
             }
         },
         {
-            init: function(){
-                var self = this;
-                var firstPass = true;
-                var j = 0;
-                this.element.find('.' + this.options.selectableClassName).each(function(i, el){
-                    el = $(el);
-                    el.removeAttr("tabindex");
-                    if (el.is(":visible")) {
-                        el.attr('tabindex', j);
-                        
-                        if (firstPass) {
-                            self.firstTabIndex = j;
-                            firstPass = false;
-                        }
-                        self.lastTabIndex = j;
-                        j = j + 1;
-                    }
-                    var i;
-                })
+            init: function() {
+                this.selectableEls = this.find( "*[tabindex=0]" );
             },
             ".{selectableClassName} mouseenter": function(el, ev){
                 el.trigger("select")
@@ -73,36 +56,46 @@ steal.plugins('jquery/controller', 'phui/keycode')
                 if(!$.browser.mozilla) ev.preventDefault();
             },
             focusNext: function(el){
-                var last = this.element.find('.' +
-                               this.options.selectableClassName +
-                               '[tabindex=' + this.lastTabIndex + ']'), 
-                    first = this.element.find('.' +
-                               this.options.selectableClassName +
-                               '[tabindex=' + this.firstTabIndex + ']')
-                if(el[0] == last[0])
-                    return first.trigger("select");
+                var els = this.selectableEls.filter(":visible");
+                var first = els.eq(0),
+                    last = els.eq(-1);
                 
-                var nextTabIndex = parseInt( el.attr("tabindex") ) + 1;
-                var nextEl = this.element.find('.' +
-                               this.options.selectableClassName +
-                               '[tabindex=' + nextTabIndex + ']')                    
-                nextEl.trigger("select");
-            },
-            focusPrev: function(el){                                
-                var last = this.element.find('.' +
-                               this.options.selectableClassName +
-                               '[tabindex=' + this.lastTabIndex + ']'), 
-                    first = this.element.find('.' + 
-                               this.options.selectableClassName +
-                               '[tabindex=' + this.firstTabIndex + ']')
-                if(el[0] == first[0])
-                    return last.trigger("select");
+                if (el[0] == last[0]) {
+                    return first.trigger("select");
+                }
                     
-                var prevTabIndex = parseInt( el.attr("tabindex") ) - 1;
-                var prevEl = this.element.find('.' +
-                               this.options.selectableClassName +
-                               '[tabindex=' + prevTabIndex + ']')                    
-                prevEl.trigger("select");                    
+                var nextEl;
+                for(var i=0;i<els.length;i++) {
+                    if(el[0] == els[i]) {
+                        nextEl =  els[i + 1];
+                        break;
+                    }
+                }
+                $(nextEl).trigger("select");
+            },
+            focusPrev: function(el){
+                var els = this.selectableEls.filter(":visible");
+                var first = els.eq(0),
+                    last = els.eq(-1);
+                
+                if (el[0] == first[0]) {
+                    return last.trigger("select");
+                }
+
+                var prevEl;
+                for(var i=0;i<els.length;i++) {
+                    if(el[0] == els[i]) {
+                        prevEl = els[i - 1];
+                        break;
+                    }
+                }
+                $(prevEl).trigger("select");                    
+            },
+            getFirst: function() {
+                return this.selectableEls.filter(":visible").get(0);
+            },
+            getLast: function() { 
+                return this.selectableEls.filter(":visible").get(-1);
             }
         })
      })

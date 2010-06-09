@@ -6,7 +6,7 @@ $.Controller.extend("Phui.Combobox.DropdownController",
         this.combobox = combobox;
         this.options = options;
         this.hasFocus = false;  
-        this.isFirstPass = true;
+        this.isFirstPass = true;        
     },
     style : function() {
         this.element.css("width", this.combobox.css("width"));
@@ -22,10 +22,6 @@ $.Controller.extend("Phui.Combobox.DropdownController",
         this.find(".item").each(function(i, el){
             el = $(el);
             var item = el.model();
-            if (item.enabled) {
-                el.find(".text").css(self.options.textStyle);
-            }
-            
             el.removeClass(self.options.activatedClassName);
             if (item.attr("activated")) {
                 el.addClass(self.options.activatedClassName);
@@ -82,6 +78,13 @@ $.Controller.extend("Phui.Combobox.DropdownController",
                 html = "<ul>" + html + "</ul>";
             }
             this.element.html(html);
+            
+            // position the dropdown bellow the combobox input
+            this.element.phui_positionable({
+                my: 'left top',
+                at: 'left bottom',
+                collision: 'none none'
+            }).trigger("move", this.combobox);
         }
         
          var modelHash = {};
@@ -157,7 +160,7 @@ $.Controller.extend("Phui.Combobox.DropdownController",
     },       
     drawItemHtml : function(item, isAutocompleteData) {
             var html = [];
-            html.push("<span class='item " + item.identity()); 
+            html.push("<span tabindex='0' class='item " + item.identity()); 
             html.push(" selectable ");
             item.enabled ? html.push("' >") : html.push(this.options.disabledClassName + "' >");             
             if(!isAutocompleteData) 
@@ -256,13 +259,6 @@ $.Controller.extend("Phui.Combobox.DropdownController",
         this.element.slideDown("fast", this.callback("shown"));   
     },
     shown : function() {
-        // position the dropdown bellow the combobox input
-        this.element.phui_positionable({
-            my: 'left top',
-            at: 'left bottom',
-            collision: 'none none'
-        }).trigger("move", this.combobox);
-        
         // add up/down key navigation
         var phui_selectable = this.element.children("ul").controller(Phui.Selectable);
         if (phui_selectable) 
