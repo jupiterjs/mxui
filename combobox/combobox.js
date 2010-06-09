@@ -67,8 +67,8 @@ steal.plugins('jquery/controller',
                     item = {
                         "text": item
                     };
-                    item["id"] = i;
-                    item["value"] = i;
+                    item["id"] = i + 1;
+                    item["value"] = i + 1;
                     item["enabled"] = true;
                     item["level"] = 0;
                     item["children"] = [];
@@ -77,7 +77,7 @@ steal.plugins('jquery/controller',
                 // add reasonable default attributes
                 if (typeof item === "object") {
                     item = $.extend({
-                        id: item.value,
+                        id: i + 1,
                         enabled: true,
                         children: [],
                         level: 0
