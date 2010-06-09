@@ -187,13 +187,13 @@ steal.plugins('jquery/controller','jquery/event/default','jquery/event/livehack'
 			})
 		},
 		">default.hide:before": function(el, ev){
-			el.triggerDefault("hide:after")
+			el.triggerDefaults("hide:after")
 		},
 		">default.show": function(el, ev){
 			el.trigger("show:before")
 		},
 		">default.show:before": function(el, ev){
-			el.triggerDefault("show:after")
+			el.triggerDefaults("show:after")
 		}
    });
 	
