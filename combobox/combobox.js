@@ -93,18 +93,18 @@ steal.plugins('jquery/controller',
 
             // wrap input data item within a combobox.models.item instance so we 
             // can leverage model helper functions in the code later 
-            instances = Combobox.Models.Item.wrapMany(instances);
-            this.modelList = new $.Model.List(instances);
+            instances = Combobox.Models.Item.wrapMany( instances );
+            this.modelList = new $.Model.List( instances );
             
             // render the dropdown and set an initial value for combobox
-            this.dropdown.controller().draw(this.modelList);
-            if (selectedItem) {
-                var instance = Combobox.Models.Item.wrap(selectedItem);
-                var el = this.dropdown.controller().getElementFor(instance);
-                this.val(selectedItem.value, el.html());
+            this.dropdown.controller().draw( this.modelList );
+            if ( selectedItem ) {
+                var instance = Combobox.Models.Item.wrap( selectedItem );
+                var el = this.dropdown.controller().getElementFor( instance );
+                this.val( selectedItem.value, el.html() );
             }  
         },
-        flattenEls : function(list, currentLevel, items){
+        flattenEls : function( list, currentLevel, items ){
            items = items || [];
            currentLevel = currentLevel || 0;
            if ( !list || !list.length ) {
@@ -114,7 +114,7 @@ steal.plugins('jquery/controller',
            children = item.children;
 
            item.level = currentLevel;
-           items.push(item);
+           items.push( item );
 
            this.flattenEls(children, currentLevel + 1, items);
            this.flattenEls(list, currentLevel, items);
@@ -131,7 +131,7 @@ steal.plugins('jquery/controller',
             var input = this.find("input[type='text']");
             input.show();
             input[0].focus();            
-            input[0].select();
+			el[0].select();
         },
         "input keyup": function(el, ev){
             var key = $.keyname(ev);

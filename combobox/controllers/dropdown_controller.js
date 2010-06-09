@@ -36,12 +36,13 @@ $.Controller.extend("Phui.Combobox.DropdownController",
     },
     fixOverflowBugInIE7 : function() {
         // trick for handling IE7 overflow bug
-        var ul = this.find("ul.phui_selectable"); 
-        if (ul[0] && this.element.width() > this.element[0].clientWidth) {
-            //var ulWidth = this.element.innerWidth() - this.scrollbarWidth();
-            var ulWidth = this.element.innerWidth() - 18 // scrollbar width;
-            ul.width(ulWidth);
-        }
+        var ul = this.find( "ul.phui_selectable" ); 
+        if (this.element.width() > this.element[0].clientWidth) {
+            var ulWidth = this.element.innerWidth() - 18; // scrollbar width;
+        } else {
+			var ulWidth = this.element.innerWidth();		
+		}
+		ul.width( ulWidth );
     },
     /*scrollbarWidth :  function() { 
         var outerDiv = $('<div/>');
@@ -211,10 +212,12 @@ $.Controller.extend("Phui.Combobox.DropdownController",
     windowresize : function(el, ev) {
         // ajdust dropdown height so it can fit in the page
         // even if the window is small        
-        this.adjustHeightToFitWindow();
+        //this.adjustHeightToFitWindow();
+		this.style();
+		
     },
     adjustHeightToFitWindow : function() {
-        if (this.element.is(":visible")) {
+        if ( this.element.is(":visible") ) {
             // if maxHeight was not defined in options 
             // make it the same size as that with which 
             // dropdown is rendered
