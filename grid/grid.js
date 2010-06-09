@@ -281,8 +281,9 @@ steal.plugins('jquery/controller',
 		  var noitems = this.find('.noitems')
 		  if (noitems.length) {
 			  noitems.remove();
-			  this.cached.header.show();
+		  	  this.cached.header.find("tr").html('//phui/grid/views/header', this);
 			  var tbl = this.find('.innerBody table').show();
+			  return this.found(messages)
 		  }
 		  var html = this._renderMessages(messages),
 			  els = $(html.join(''));

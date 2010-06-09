@@ -36,13 +36,13 @@ steal.plugins('phui/menuable').then(function($){
 		 * Gets the sub element from the href, or just the order of things.
 		 * @param {Object} el
 		 */
-		sub : function(el){
-			var a = el.find("a[href]"), c
-			if(a.length){
-				c = $(a.attr('href'))
-				if(c.length)
-					return c;
-			}
+        sub: function (el) {
+            var a = el.find("a[href]"), c
+            if (a.length) {
+                c = $(a.attr('href').match(/^.*(#.*)/)[1])
+                if (c.length)
+                    return c;
+            }
 			//find first parent that has next
 			var cur = this.element, 
 				next = cur.next();

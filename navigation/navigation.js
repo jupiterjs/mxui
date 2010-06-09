@@ -54,7 +54,7 @@ steal.plugins('phui/toolbar').then(function(){
 	})
 	
 	$.Controller.extend("Phui.FadeInable",{
-		listensTo: [">show:before",">hide:before"]
+		listensTo: ["show:before","hide:before"]
 	}, {
 	   ">show:before" : function(el, ev){
 			ev.preventDefault();
@@ -113,7 +113,7 @@ steal.plugins('phui/toolbar').then(function(){
 		init : function(){
 			this._super.apply(this, arguments)
 			this.element.mixin(Phui.Shiftable, Phui.Highlight)
-            this.element.children("ul").css("position","relative")
+            this.element.css("position","relative")
 		},
 		"li select:before" : function(el, ev){
 			ev.preventDefault();

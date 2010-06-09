@@ -35,8 +35,8 @@ steal.plugins('jquery/controller','jquery/event/default','jquery/event/livehack'
 			select : "selected",
 			child_selector : "li"
 		},
-		listensTo : [">default.hide",">default.show", ">default.hide:before", 
-			">default.hide:after", ">default.show:before", ">default.show:after"]
+		listensTo : ["hide","show", "hide:before", 
+			"hide:after", "show:before", "show:after"]
 	},
 	{
 		ifThereIs : function(options){
