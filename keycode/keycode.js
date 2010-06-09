@@ -5,7 +5,7 @@ steal.plugins('jquery').then(function(){
 		var types = $.makeArray(arguments);
 		var event = types.shift();
 		var name = $.keyname(event);
-		console.log("checking for ",name, " char ", event.charCode," key ",event.keyCode)
+
 		for(var i=0; i < types.length;i++){
 			
 			if(types[i] ===  name){
@@ -54,7 +54,7 @@ steal.plugins('jquery').then(function(){
 		if(event.type == 'keypress' && $.browser.msie){
 			return event.keyCode ? String.fromCharCode(event.keyCode) : String.fromCharCode(event.which)
 		}
-        if (!event.keyCode || event.which) {
+        if (!event.keyCode && event.which) {
 			return String.fromCharCode(event.which)
 		}
 
