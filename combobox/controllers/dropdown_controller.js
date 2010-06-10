@@ -36,6 +36,7 @@ $.Controller.extend("Phui.Combobox.DropdownController",
         this.fixOverflowBugInIE7();
     },
     fixOverflowBugInIE7 : function() {
+		if( !$.browser.msie ) return;
         // trick for handling IE7 overflow bug
         var ul = this.find( "ul.phui_selectable" ); 
         if (this.element.width() > this.element[0].clientWidth) {
