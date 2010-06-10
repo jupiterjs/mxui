@@ -80,13 +80,6 @@ $.Controller.extend("Phui.Combobox.DropdownController",
                 html = "<ul>" + html + "</ul>";
             }
             this.element.html(html);
-            
-            // position the dropdown bellow the combobox input
-            this.element.phui_positionable({
-                my: 'left top',
-                at: 'left bottom',
-                collision: 'none none'
-            }).trigger("move", this.combobox);
 			
 	        // add up/down key navigation
 	        this.element.children("ul").phui_selectable({
@@ -95,7 +88,7 @@ $.Controller.extend("Phui.Combobox.DropdownController",
 	        });   			
         }
         
-         var modelHash = {};
+        var modelHash = {};
         for(var i=0;i<modelList.length;i++) {
             var inst = modelList[i];
             modelHash[ inst.identity() ] = inst;
@@ -114,9 +107,18 @@ $.Controller.extend("Phui.Combobox.DropdownController",
             if (this.isFirstPass) {
                 var item = modelHash[identity];
                 if (item) 
-                    item.hookup(el[0]);
+                    item.hookup(el[0]);				
             }
         }
+		
+		if (this.isFirstPass) {
+			// position the dropdown bellow the combobox input
+			this.element.phui_positionable({
+				my: 'left top',
+				at: 'left bottom',
+				collision: 'none none'
+			}).trigger("move", this.combobox);
+		}	
         
         this.isFirstPass = false;
 
@@ -220,7 +222,8 @@ $.Controller.extend("Phui.Combobox.DropdownController",
     }, 
     windowresize : function(el, ev) {
         // ajdust dropdown height so it can fit in the page
-        // even if the window is small        
+        // even if the window is small   
+        //this.fixOverflowBugInIE7();     
 		this.style();
     },
     adjustHeightToFitWindow : function() {
