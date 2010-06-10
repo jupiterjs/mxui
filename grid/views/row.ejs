@@ -6,7 +6,7 @@
 <%for(var name in this.options.columns){%>
 	<%if($.inArray(name, this.options.group) == -1){%>
 		<td>
-			<%= this.options.render && this.options.render[name] ?  this.options.render[name](item) : item[name] %>
+			<%= this.options.render && this.options.render[name] ?  this.options.render[name](item, i, items) : item[name] %>
 		</td>
 	<%}%>
 <%}%>
