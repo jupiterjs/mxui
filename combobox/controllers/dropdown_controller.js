@@ -18,18 +18,18 @@ $.Controller.extend("Phui.Combobox.DropdownController",
             });
         }        
        
-	   	if( this.isFirstPass )
-			return;
-        // apply custom style to item
-        var self = this;
-        this.find(".item").each(function(i, el){
-            el = $(el);
-            var item = el.model();
-            el.removeClass(self.options.activatedClassName);
-            if (item.attr("activated")) {
-                el.addClass(self.options.activatedClassName);
-            }
-        });
+	   	if (this.isFirstPass) {
+			// apply custom style to item
+			var self = this;
+			this.find(".item").each(function(i, el){
+				el = $(el);
+				var item = el.model();
+				el.removeClass(self.options.activatedClassName);
+				if (item.attr("activated")) {
+					el.addClass(self.options.activatedClassName);
+				}
+			});
+		}
         
         // ajdust dropdown height so it can fit in the page
         // even if the window is small
@@ -48,28 +48,6 @@ $.Controller.extend("Phui.Combobox.DropdownController",
 		}
 		ul.width( ulWidth );
     },
-    /*scrollbarWidth :  function() { 
-        var outerDiv = $('<div/>');
-        var innerDiv = $('<div/>');
-        outerDiv.html(innerDiv);    
-        // Append our div, do our calculation and then remove it 
-        $('body').append(outerDiv); 
-        outerDiv.css({
-            'width':'50px',
-            'height':'50px',
-            'overflow': 'hidden',
-            'position': 'absolute',
-            'top': '-200px'
-        });
-        innerDiv.css({
-            'height':'100px'
-        });            
-        var w1 = $('div', innerDiv).innerWidth(); 
-        outerDiv.css('overflow-y', 'scroll'); 
-        var w2 = $('div', innerDiv).innerWidth(); 
-        $(innerDiv).remove(); 
-        return (w1 - w2); 
-    },*/
     draw : function(modelList, isAutocompleteData) {
         
         if(this.isFirstPass) {
