@@ -17,7 +17,9 @@ $.Controller.extend("Phui.Combobox.DropdownController",
                 "overflow": "auto"
             });
         }        
-        
+       
+	   	if( this.isFirstPass )
+			return;
         // apply custom style to item
         var self = this;
         this.find(".item").each(function(i, el){
@@ -80,6 +82,13 @@ $.Controller.extend("Phui.Combobox.DropdownController",
             if (html.indexOf("<li") === 0) {
                 html = "<ul>" + html + "</ul>";
             }
+			// position the dropdown bellow the combobox input
+			this.element.phui_positionable({
+				my: 'left top',
+				at: 'left bottom',
+				collision: 'none none'
+			}).trigger("move", this.combobox);
+			
             this.element.html(html);
 			
 	        // add up/down key navigation
@@ -111,15 +120,6 @@ $.Controller.extend("Phui.Combobox.DropdownController",
                     item.hookup(el[0]);				
             }
         }
-		
-		if (this.isFirstPass) {
-			// position the dropdown bellow the combobox input
-			this.element.phui_positionable({
-				my: 'left top',
-				at: 'left bottom',
-				collision: 'none none'
-			}).trigger("move", this.combobox);
-		}	
         
         this.isFirstPass = false;
 
