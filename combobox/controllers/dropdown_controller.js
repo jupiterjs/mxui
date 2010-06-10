@@ -6,6 +6,7 @@ $.Controller.extend("Phui.Combobox.DropdownController",
         this.combobox = combobox;
         this.options = options;
         this.hasFocus = false;  
+        this.canOpen = true;
         this.isFirstPass = true;        
     },
     style : function() {
@@ -86,6 +87,12 @@ $.Controller.extend("Phui.Combobox.DropdownController",
                 at: 'left bottom',
                 collision: 'none none'
             }).trigger("move", this.combobox);
+			
+	        // add up/down key navigation
+	        this.element.children("ul").phui_selectable({
+	            selectedClassName: "selected",
+	            activatedClassName: "activated"
+	        });   			
         }
         
          var modelHash = {};
@@ -207,14 +214,14 @@ $.Controller.extend("Phui.Combobox.DropdownController",
     mouseleave : function(el, ev) {
         // trick to make dropdown close when combobox looses focus  
         this.hasFocus = false;
-        this.combobox.find("input[type=text]").focus();                        
+        this.canOpen = false
+		this.combobox.find( "input[type=text]" ).focus();  
+        this.canOpen = true;
     }, 
     windowresize : function(el, ev) {
         // ajdust dropdown height so it can fit in the page
         // even if the window is small        
-        //this.adjustHeightToFitWindow();
 		this.style();
-		
     },
     adjustHeightToFitWindow : function() {
         if ( this.element.is(":visible") ) {
@@ -262,17 +269,7 @@ $.Controller.extend("Phui.Combobox.DropdownController",
         this.element.slideDown("fast", this.callback("shown"));   
     },
     shown : function() {
-        // add up/down key navigation
-        var phui_selectable = this.element.children("ul").controller(Phui.Selectable);
-        if (phui_selectable) 
-            phui_selectable.destroy();
-        this.element.children("ul").phui_selectable({
-            selectedClassName: "selected",
-            activatedClassName: "activated"
-        });        
-        
-        this.style();                     
-
+		this.style();                     
         this.combobox.trigger("open");        
     }
 })

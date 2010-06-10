@@ -18,6 +18,7 @@ steal.plugins('jquery/controller',
             },
             maxHeight: null,
             filterEnabled : true,
+			displayHTML : false,
             selectedClassName: "selected",
             activatedClassName: "activated",
             disabledClassName: "disabled"
@@ -32,7 +33,13 @@ steal.plugins('jquery/controller',
             this._super(div, options);    
         },
         init: function(){
-            this.oldElement.wrap("<div class='container' />").hide();
+			// HTML mode
+			if (this.options.displayHTML) {
+				this.oldElement.wrap("<div class='container' />").hide();
+			} else { // TEXT mode
+				this.find(".viewbox").hide();
+				this.oldElement.wrap("<div class='container' />")
+			}
             this.currentItem = { "value": -1 };
             
             // draw input box
@@ -131,7 +138,7 @@ steal.plugins('jquery/controller',
             var input = this.find("input[type='text']");
             input.show();
             input[0].focus();            
-			el[0].select();
+			input[0].select();
         },
         "input keyup": function(el, ev){
             var key = $.keyname(ev);
@@ -181,19 +188,24 @@ steal.plugins('jquery/controller',
                 }
             }            
         },
-        "input focusin": function(el, ev){
-            this.focusInputAndShowDropdown(el);
+        "input focusin": function( el, ev  ) {				
+            this.focusInputAndShowDropdown( el );		
         },
-        focusInputAndShowDropdown : function(el) {
-            if (el[0].tagName == "INPUT" && el.is(":visible")) {
+		"input click": function(el, ev) {
+            this.focusInputAndShowDropdown( el );			
+		},
+        focusInputAndShowDropdown : function( el ) {
+            if ( el[0].tagName.toUpperCase() == "INPUT" 
+			         && el.is( ":visible" ) ) {
                 // select all text
                 el[0].focus();
                 setTimeout(function(){
                     el[0].select();
                 });
-                if (!this.dropdown.is(":visible")) {
+                if ( !this.dropdown.is( ":visible" ) 
+				        && this.dropdown.controller().canOpen ) {
                     this.dropdown.controller().show();
-                    el.trigger("show:dropdown", this);
+                    el.trigger( "show:dropdown", this );
                 }
             }   
         },
@@ -208,18 +220,18 @@ steal.plugins('jquery/controller',
             if(this.closeDropdownOnBlurTimeout) 
                 clearTimeout(this.closeDropdownOnBlurTimeout);
         },
-        focusout: function(el, ev){
+        focusout: function(el, ev) {
             // trick to make dropdown close when combobox looses focus
             var self = this;
             this.closeDropdownOnBlurTimeout = setTimeout(function(){
-                if (self.dropdown.controller().hasFocus) {
-                    self.element.trigger("focusin");
+                if ( self.dropdown.controller().hasFocus ) {				
+                    self.element.trigger( "focusin" );					
                 } else {
-                    if (self.currentItem.item) {
+                    if ( self.currentItem.item ) {
                         // update viewbox with current item html
-                        var el = self.dropdown.controller().getElementFor(self.currentItem.item);
-                        self.val(self.currentItem.value, el.html());
-                    }
+                        var el = self.dropdown.controller().getElementFor( self.currentItem.item );
+                        self.val( self.currentItem.value, el.html() );
+                    }			
                     self.dropdown.controller().hide();  
                 }    
             }, 250);
@@ -233,10 +245,10 @@ steal.plugins('jquery/controller',
             if(!value && value != 0) 
                 return this.currentItem.value;
                 
-            var item = this.modelList.match("value", value)[0];
+            var item = this.modelList.match( "value", value )[0];
             if (item && item.enabled) {
                 if (!html) {
-                    var el = this.dropdown.controller().getElementFor(item);
+                    var el = this.dropdown.controller().getElementFor( item );
                     html = el.html();
                 }
                 this.currentItem = {
@@ -244,14 +256,18 @@ steal.plugins('jquery/controller',
                     "item": item,
                     "html": html
                 };
-                var input = this.find("input[type=text]");
+                var input = this.find( "input[type=text]" );
                 input.val(item.text);
-                input.hide();
-                var viewbox = this.find(".viewbox");
-                viewbox.show();
-                if (html) {
-                    viewbox.html(html);
-                }
+				
+				if (this.options.displayHTML) {
+					input.hide();
+					var viewbox = this.find( ".viewbox" );
+					viewbox.show();
+					if ( html ) {
+						viewbox.html( html );
+					}
+				}
+				
                 
                 // higlight the activated item
                 this.modelList.each(function(i, item){
@@ -295,12 +311,12 @@ steal.plugins('jquery/controller',
             }
         },         
         ".toggle click": function(el, ev){
-            this.dropdown.is(":visible") ? this.dropdown.controller().hide() :
+            this.dropdown.is( ":visible" ) ? this.dropdown.controller().hide() :
                                                this.dropdown.controller().show();  
-            this.focusInputAndShowDropdown( this.find("input[type=text]") );
-            var viewbox = this.find(".viewbox");
-            if (viewbox.is(":visible")) {
-                this._toggleComboboxView(viewbox);
+            this.focusInputAndShowDropdown( this.find( "input[type=text]" ) );
+            var viewbox = this.find( ".viewbox" );
+            if ( viewbox.is( ":visible" ) ) {
+                this._toggleComboboxView( viewbox );
             }
         },
         /*

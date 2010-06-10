@@ -129,7 +129,11 @@
         </script>
 		<script type='text/javascript'>
 			$(function(){
-				$('#menu').phui_selectable()
+				$('#menu').phui_selectable();
+				/*var els = $('#menu').find('.selectable[tabindex]');
+                els.each(function(i, el){
+					$('#menu').append(el.tagName);
+				});*/				
 			})
 			$(function(){
 				$('#nested_menu').phui_selectable()

@@ -18,13 +18,18 @@
         <link type="text/css" href="combobox.css" rel="stylesheet" />
     </head>
     <body>
-        <h3>Nested Data Demo</h3>
+    	
+		<h3>Select Combobox Demo</h3>
+        <select id='expirationBehavior' name='forum[expirationBehavior]'>
+			<option value='0' selected='true'>archive</option>
+			<option value='1'>delete</option>
+			<option value='2'>none</option>
+		</select>
+			
+		<br/>				
+        <h3>Nested Data Demo (Text Mode)</h3>
         <input id="combobox_demo" type="text" name="myname" />
         
-		<br/>
-		<h3>Color Picker Demo</h3>
-        <input id="color_picker" type="text" name="color_picker" />
-		
         <br/>
 		<br/>
         <span class="log"><label>Log (Set Value, Query, Change, Open):</label><div id="log"></div></span>
@@ -37,21 +42,40 @@
             <button id="query">Query</button>
             <button id="enable">Enable</button>
             <button id="disable">Disable</button>                        
-        </div>
+        </div>		
+		
+		<br/>
+		<br/>
+		<h3>Color Picker Demo (HTML Mode)</h3>
+        <input id="color_picker" type="text" name="color_picker" />
+		
+		<br/>
+		<h3>Ajax Combobox Demo</h3>
+        <input id="ajax_demo" name="ajax_demo" />		
 
         <script type='text/javascript' 
                 src='../../steal/steal.js'>   
         </script>
         <script type='text/javascript'>
-            steal.plugins("phui/combobox").then(function($){
+            steal.plugins("phui/combobox/select",
+			              "phui/combobox/ajax",
+			              "jquery/dom/fixture").then(function($){
                                 
-                 
+
+                // SELECT COMBOBOX DEMO								
+			    $("#expirationBehavior").phui_combobox_select();                 
+				 
+
+
+				 
                 /*$("#combobox_demo").phui_combobox({
                     items: [{value: 1, text: "archive", selected: true}, 
                             {value: 2, text: "delete"},
                             {value: 3, text: "none"}] });*/
 
-                // Nested example
+
+
+                // NESTED COMBOBOX DEMO (TEXT MODE)
                 $("#combobox_demo").phui_combobox({
                     items: [{ value: "1", text: "hola", enabled: "true", selected: true,
                                 children: [  { value: "5", text: "chicago", enabled: "true", children: [] },
@@ -61,41 +85,7 @@
                             { value: "3", text: "nuevo", enabled: "true", 
                                 children: [ { value: "8", text: "sanfrancisco", enabled: "true", children: [] } ] },
                             { value: "4", text: "viva", enabled: "true", children: [] }] });                            
-                            
-                $("#color_picker").phui_combobox({
-                    render: {
-                        "itemTemplate" : function(item) {
-                            var html = [];
-							for (var i = 0; i < item.colors.length; i++) {
-								var color = item.colors[i];
-								if (color == 1) {
-									html.push("<span class='color1'>&nbsp;</span>");
-								}
-								if (color == 2) {
-									html.push("<span class='color2'>&nbsp;</span>");
-								}	
-								if (color == 3) {
-									html.push("<span class='color3'>&nbsp;</span>");
-								}	
-								if (color == 4) {
-									html.push("<span class='color4'>&nbsp;</span>");
-								}	
-								if (color == 5) {
-									html.push("<span class='color5'>&nbsp;</span>");
-								}																																
-							}
-							html.push("<span class='text'>" + item.text + "</span>");
-                            return html.join(" ");
-                        }
-                    },                    
-                    items: [{value: 1, text: "pallete1", colors: [1, 2, 3, 4, 5], selected: true}, 
-                            {value: 2, text: "pallete2", colors: [5, 4, 3, 2, 1]},
-                            {value: 3, text: "pallete3", colors: [3, 2, 1, 5, 4]},
-							{value: 4, text: "pallete4", colors: [2, 5, 1, 3, 4]},
-							{value: 5, text: "pallete5", colors: [4, 1, 5, 3, 2]} ]
-                    });                            
-                                        
-                 
+                
                 // get/set API demo
                 $("#getValue").bind("click", function(ev){
                     var value = $("#combobox_demo").controller().val();
@@ -136,9 +126,140 @@
                 // event API for when the dropdown is opened
                 $("#combobox_demo").bind("open", function(ev){
                     $("#log").html("<div>Combobox Opened.</div>");
-                })                                                                          
+                });   
+				
+				$("input#someValue").val("");
+								
+				
+				
+				
+				
+				// NESTED COMBOBOX DEMO (HTML MODE)            
+                $("#color_picker").phui_combobox({
+                    render: {
+                        "itemTemplate" : function(item) {
+                            var html = [];
+							for (var i = 0; i < item.colors.length; i++) {
+								var color = item.colors[i];
+								if (color == 1) {
+									html.push("<span class='color1'>&nbsp;</span>");
+								}
+								if (color == 2) {
+									html.push("<span class='color2'>&nbsp;</span>");
+								}	
+								if (color == 3) {
+									html.push("<span class='color3'>&nbsp;</span>");
+								}	
+								if (color == 4) {
+									html.push("<span class='color4'>&nbsp;</span>");
+								}	
+								if (color == 5) {
+									html.push("<span class='color5'>&nbsp;</span>");
+								}																																
+							}
+							html.push("<span class='text'>" + item.text + "</span>");
+                            return html.join(" ");
+                        }
+                    },                    
+                    items: [{value: 1, text: "pallete1", colors: [1, 2, 3, 4, 5], selected: true}, 
+                            {value: 2, text: "pallete2", colors: [5, 4, 3, 2, 1]},
+                            {value: 3, text: "pallete3", colors: [3, 2, 1, 5, 4]},
+							{value: 4, text: "pallete4", colors: [2, 5, 1, 3, 4]},
+							{value: 5, text: "pallete5", colors: [4, 1, 5, 3, 2]} ],
+					displayHTML: true
+                });                                                                                                   
                 
+				
+				
+				
+				
+				// AJAX COMBOBOX DEMO
+                // fixture that simulate nested data sent by the server
+                $.fixture.make(["items", "item"], 200, function(num, items) {
+                   
+                        var itemId = parseInt(Math.random() * num);
+                        var item = items[itemId]
+                        var experiment = parseInt(Math.random() * 10);
+                        if (num < 5) {
+                            return {
+                                "value": num,
+                                "text": "dir" + num,
+                                "enabled": experiment > 3 ? true : false,
+                                "parentId": null,
+                                children: []
+                            }
+                        } else {
+                            var child =  { 
+                                "value": num,
+                                "text": experiment > 6 ? "file" + num : "dir" + num,
+                                "enabled": experiment > 3 ? true : false,
+                                "parentId": itemId,
+                                children: []
+                            }
+                            item.children.push(child);
+                            return child;
+                        }
+                });
+                
+                
+                var match = function(list, results, target) {
+                    results = results || [];
+                    for(var i=0;i<list.length;i++) {
+                        var item = list[i];
+                        if(item.children && item.children.length) match(item.children, results, target);
+                        if (item.text.indexOf(target) > -1) {
+                            delete item.children;
+                            results.push(item);
+                            return results;
+                        }
+                    }
+                    return results;
+                }
+                
+                // modify fixture to return only data filtered
+                // by value in combobox input (autocomplete)
+                var oldFixture1 = $.fixture["-items"]; 
+                $.fixture["-items"] = function(settings){
+                    
+                    var items = oldFixture1(settings)[0].data;
+                    
+                    // make a clone of the data so that changes
+                    // in the to the data in combobox don't get 
+                    // reflected in the fixture
+                    var clonedItems = [];                    
+                    for (var i = 0; i < items.length; i++) {
+                        var parentId = items[i].parentId;
+                        if (!parentId && parentId != 0) {
+                            clonedItems.push($.extend(true, {}, items[i]));
+                        }
+                    }
+                    
+                    if(settings.data == "loadOnDemand") {
+                        return [{
+                            "count": clonedItems.length,
+                            "data" : clonedItems
+                        }]                        
+                    }
+                    
+                    var retArr = [];
+                    if (settings.data != "") {
+                        retArr = match(clonedItems, [], settings.data);
+                    }
+                    
+                    return [{
+                        "count": retArr.length,
+                        "data" : retArr
+                    }]
+                }
+                
+ 
+                $("#ajax_demo").phui_combobox_ajax({
+                    maxHeight: "320px",
+                    url: "/Archer/Service/DiscussionForumServiceJS.svc/GetForumsForCommunity"
+                });				
             });
+			
+			
             
             
             steal.start();

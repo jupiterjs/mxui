@@ -9,7 +9,8 @@ steal.plugins('jquery/controller', 'phui/keycode')
         },
         {
             init: function() {
-                this.selectableEls = this.find( "*[tabindex=0]" );
+                this.selectableEls = this.find( "." + 
+				     this.options.selectableClassName + "[tabindex]" );
             },
             ".{selectableClassName} mouseenter": function(el, ev){
                 el.trigger("select")
