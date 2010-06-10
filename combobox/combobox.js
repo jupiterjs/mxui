@@ -310,11 +310,14 @@ steal.plugins('jquery/controller',
                 this.dropdown.controller().disable(item);
             }
         },         
-        ".toggle click": function(el, ev){
-            this.dropdown.is( ":visible" ) ? this.dropdown.controller().hide() :
-                                               this.dropdown.controller().show();  
-            this.focusInputAndShowDropdown( this.find( "input[type=text]" ) );
-            var viewbox = this.find( ".viewbox" );
+        ".toggle click": function(el, ev) {
+			if( this.dropdown.is( ":visible" ) ) {
+				this.dropdown.controller().hide();
+			}  else {			
+	            this.focusInputAndShowDropdown( this.find( "input[type=text]" ) );
+			}
+            
+			var viewbox = this.find( ".viewbox" );
             if ( viewbox.is( ":visible" ) ) {
                 this._toggleComboboxView( viewbox );
             }
