@@ -47,7 +47,7 @@ steal.plugins('phui/grid','jquery/event/drop','phui/sortable').then(function($){
 					var group = options.group[i]
 					html.push("<tr class='group-col'>")
 					html.push( new Array(i+1).join("<td></td>") );
-					html.push( "<td>"+this.options.columns[group]+":",
+					html.push( "<td>"+options.columns[group]+":",
 								options.render && options.render[group] ?  options.render[group](item) : item[group],
 								"</td>")
 					html.push( new Array(colsNum-i ).join("<td></td>") );
@@ -60,7 +60,7 @@ steal.plugins('phui/grid','jquery/event/drop','phui/sortable').then(function($){
 					if(!equal || item[group] !== items[itemNum-1][group]){
 						html.push("<tr class='group-col'>")
 						html.push( new Array(i+1).join("<td></td>") );
-						html.push( "<td>"+this.options.columns[group]+":",
+						html.push( "<td>"+options.columns[group]+":",
 									options.render && options.render[group] ?  options.render[group](item) : item[group],
 									"</td>")
 						html.push( new Array(colsNum - i).join("<td></td>") );

@@ -27,8 +27,8 @@
 			steal.plugins("phui/grid",
 							"phui/filler",
 							"jquery/model",
-							"jquery/dom/fixtures").then(function($){
-				$.fixture["-make"](["resources","resource"],0,function(num){
+							"jquery/dom/fixture").then(function($){
+				$.fixture["make"](["resources","resource"],100,function(num){
 					return {
 						id		:	num,
 						name : "Resource "+num,
