@@ -266,6 +266,7 @@ $.Controller.extend("Phui.Combobox.DropdownController",
         this.hasFocus = false;        
     },
     show : function() {
+		this.element.trigger("move", this.combobox);		
         this.element.slideDown("fast", this.callback("shown"));   
     },
     shown : function() {
