@@ -16,8 +16,8 @@ steal.plugins('jquery/controller',
 		  hoverClass: "hover",
 		  display: {},
 		  //paginatorType: Phui.Paginator.Page,
-		  renderer: function (inst, options, i) {
-			  return $.View("//phui/grid/views/row", { item: inst, options: options, i: i })
+		  renderer: function (inst, options, i, items) {
+			  return $.View("//phui/grid/views/row", { item: inst, options: options, i: i, items: items })
 		  },
 		  noItems: "No Items Found."
 	  },
