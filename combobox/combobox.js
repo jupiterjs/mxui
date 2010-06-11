@@ -104,12 +104,13 @@ steal.plugins('jquery/controller',
             this.modelList = new $.Model.List( instances );
             
             // render the dropdown and set an initial value for combobox
-            this.dropdown.controller().draw( this.modelList );
             if ( selectedItem ) {
                 var instance = Combobox.Models.Item.wrap( selectedItem );
                 var el = this.dropdown.controller().getElementFor( instance );
                 this.val( selectedItem.value, el.html() );
-            }  
+            } else {
+            	this.dropdown.controller().draw( this.modelList );				
+			}
         },
         flattenEls : function( list, currentLevel, items ){
            items = items || [];
@@ -230,7 +231,8 @@ steal.plugins('jquery/controller',
                     if ( self.currentItem.item ) {
                         // update viewbox with current item html
                         var el = self.dropdown.controller().getElementFor( self.currentItem.item );
-                        self.val( self.currentItem.value, el.html() );
+                        //self.val( self.currentItem.value, el.html() );
+					    self._setViewboxHtmlAndShow( el.html() );
                     }			
                     self.dropdown.controller().hide();  
                 }    
@@ -241,7 +243,7 @@ steal.plugins('jquery/controller',
                 this.find("input[type='text']").focus();
             }
         },        
-        val: function(value, html){
+        val: function( value, html ){
             if(!value && value != 0) 
                 return this.currentItem.value;
                 
@@ -260,32 +262,36 @@ steal.plugins('jquery/controller',
                 input.val(item.text);
 				
 				if (this.options.displayHTML) {
-					input.hide();
-					var viewbox = this.find( ".viewbox" );
-					viewbox.show();
-					if ( html ) {
-						viewbox.html( html );
-					}
+				    this._setViewboxHtmlAndShow( html );
 				}
-				
                 
                 // higlight the activated item
                 this.modelList.each(function(i, item){
                     item.attr("activated", false)
                 })
-                item.attr("activated", true);                    
+                item.attr("activated", true);         
+				
+                // bind values to the hidden input
+                this.find("input[type=hidden]").val(this.currentItem.value);				
+				
+				if ( !this.dropdown.controller().isFirstPass ) {
+					this.element.trigger("change", this.currentItem.value);
+					console.log("changed: " + this.currentItem.value)
+				}                           
                                      
                 this.dropdown.controller().draw( this.modelList);                
-                
-                // bind values to the hidden input
-                
-                // bind values to the hidden input
-                this.find("input[type=hidden]").val(this.currentItem.value);
-                
-                this.element.trigger("change", this.currentItem.value);                
             }
          },
-        query : function(text) {
+		 _setViewboxHtmlAndShow: function( html ) {
+		 	var input = this.find( "input[type=text]" );
+			input.hide();
+			var viewbox = this.find( ".viewbox" );
+			viewbox.show();
+			if ( html ) {
+				viewbox.html( html );
+			}		 	
+		 },
+         query : function(text) {
             var matches = this.modelList.grep(function(item){
                 return item.text.indexOf(text) > -1;
             });
