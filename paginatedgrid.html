@@ -27,8 +27,8 @@
 		<script type='text/javascript'>
 			steal.plugins("phui/grid/paginated",
 							"jquery/model",
-							"jquery/dom/fixtures").then(function($){
-				$.fixture["-make"](["resources","resource"],1000,function(num){
+							"jquery/dom/fixture").then(function($){
+				$.fixture["make"](["resources","resource"],1000,function(num){
 					return {
 						id		:	num,
 						name : "Resource "+num,

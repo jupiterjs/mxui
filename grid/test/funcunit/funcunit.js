@@ -1,3 +1,3 @@
 steal
- .plugins("funcunit/functional")
- .then("tests/basic")
+ .plugins("funcunit")
+ .then("grid")
