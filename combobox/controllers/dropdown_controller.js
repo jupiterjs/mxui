@@ -61,11 +61,12 @@ $.Controller.extend("Phui.Combobox.DropdownController",
                 html = "<ul>" + html + "</ul>";
             }
 			// position the dropdown bellow the combobox input
-			this.element.phui_positionable({
+			/*this.element.phui_positionable({
 				my: 'left top',
 				at: 'left bottom',
 				collision: 'none none'
-			}).trigger("move", this.combobox);
+			}).trigger("move", this.combobox);*/
+			this.element.trigger("move", this.combobox);
 			
             this.element.html(html);
 			
@@ -247,13 +248,21 @@ $.Controller.extend("Phui.Combobox.DropdownController",
         // trick to make dropdown close when combobox looses focus  
         this.hasFocus = false;        
     },
-    show : function() {
-		this.element.css("opacity", 0);
+    show : function() {		
+		this.element.css("opacity", 0)
+		  	.show()
+			.scrollTop(0)
+		  	.trigger("move", this.combobox)
+		  	.hide()
+		  	.css("opacity", 1)
+		  	.slideDown( "fast", this.callback("shown") );		  
+		  
+		/*this.element.css("opacity", 0);
 		this.element.show();
 		this.element.trigger("move", this.combobox);
 		this.element.css("opacity", 1);
 		this.element.hide();
-        this.element.slideDown("fast", this.callback("shown"));   
+        this.element.slideDown("fast", this.callback("shown"));*/   
     },
     shown : function() {
 		this.style();                     

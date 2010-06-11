@@ -54,7 +54,13 @@ steal.plugins('jquery/controller',
             
             // create dropdown and append it to body
             this.dropdown = $("<div/>").phui_combobox_dropdown( this.element, this.options ).hide();
-            document.body.appendChild(this.dropdown[0]);    
+            document.body.appendChild(this.dropdown[0]);  
+ 			// position the dropdown bellow the combobox input
+			this.dropdown.phui_positionable({
+				my: 'left top',
+				at: 'left bottom',
+				collision: 'none none'
+			}).trigger("move", this.element);			 
             this.dropdown.controller().style();
             
             // pre-populate with items case they exist
@@ -124,8 +130,8 @@ steal.plugins('jquery/controller',
            item.level = currentLevel;
            items.push( item );
 
-           this.flattenEls(children, currentLevel + 1, items);
-           this.flattenEls(list, currentLevel, items);
+           this.flattenEls( children, currentLevel + 1, items );
+           this.flattenEls( list, currentLevel, items );
            return items;
         },
         ".viewbox click" : function(el, ev) {
@@ -185,7 +191,9 @@ steal.plugins('jquery/controller',
                     });
                     if(!val || $.trim(val) == "") isAutocompleteData = false;
                     this.dropdown.controller().draw(new $.Model.List(matches), isAutocompleteData);
-                    this.dropdown.controller().show();
+                    if ( !this.dropdown.is(":visible") ) {
+						this.dropdown.controller().show();
+					}
                 }
             }            
         },
@@ -231,16 +239,15 @@ steal.plugins('jquery/controller',
                     if ( self.currentItem.item ) {
                         // update viewbox with current item html
                         var el = self.dropdown.controller().getElementFor( self.currentItem.item );
-                        //self.val( self.currentItem.value, el.html() );
-					    self._setViewboxHtmlAndShow( el.html() );
+						self._setViewboxHtmlAndShow( el.html() );
                     }			
                     self.dropdown.controller().hide();  
                 }    
             }, 250);
         },
         mouseleave : function(el, ev) {
-            if (this.dropdown.is(":visible")) {
-                this.find("input[type='text']").focus();
+            if (this.dropdown.is( ":visible" ) ) {
+                this.find( "input[type='text']" ).focus();
             }
         },        
         val: function( value, html ){
@@ -261,7 +268,7 @@ steal.plugins('jquery/controller',
                 var input = this.find( "input[type=text]" );
                 input.val(item.text);
 				
-				if (this.options.displayHTML) {
+				if ( this.options.displayHTML ) {
 				    this._setViewboxHtmlAndShow( html );
 				}
                 
@@ -276,46 +283,45 @@ steal.plugins('jquery/controller',
 				
 				if ( !this.dropdown.controller().isFirstPass ) {
 					this.element.trigger("change", this.currentItem.value);
-					console.log("changed: " + this.currentItem.value)
 				}                           
                                      
                 this.dropdown.controller().draw( this.modelList);                
             }
          },
 		 _setViewboxHtmlAndShow: function( html ) {
-		 	var input = this.find( "input[type=text]" );
-			input.hide();
-			var viewbox = this.find( ".viewbox" );
-			viewbox.show();
-			if ( html ) {
-				viewbox.html( html );
-			}		 	
+			var input = this.find("input[type=text]");
+		    if (this.options.displayHTML) {
+				input.hide();
+				var viewbox = this.find( ".viewbox" );
+				viewbox.show();
+				if ( html ) {
+					viewbox.html( html );
+				}
+			} 		 	
 		 },
-         query : function(text) {
-            var matches = this.modelList.grep(function(item){
-                return item.text.indexOf(text) > -1;
-            });
+         query : function( text ) {
+            var matches = this.modelList.grep( function( item ){
+                return item.text.indexOf( text ) > -1;
+            } );
             var results = [];
             for(var i=0;i<matches.length;i++) {
-                results.push(matches[i].value)
+                results.push( matches[i].value );
             }
             return results;
          },
         enable : function(value) {
-            var item = this.modelList.match("value", value)[0];
+            var item = this.modelList.match( "value", value )[0];
             if (item) {
                 item.attr("enabled", true);
-                //this.dropdown.controller().draw(this.modelList);
-                this.dropdown.controller().enable(item);
+                this.dropdown.controller().enable( item );
             }
         },
         disable : function(value) {
-            var item = this.modelList.match("value", value)[0];
+            var item = this.modelList.match( "value", value )[0];
             if (item) {
                 item.attr("enabled", false);
                 item.attr("activated", false);                
-                //this.dropdown.controller().draw(this.modelList);
-                this.dropdown.controller().disable(item);
+                this.dropdown.controller().disable( item );
             }
         },         
         ".toggle click": function(el, ev) {
