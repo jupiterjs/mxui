@@ -73,16 +73,21 @@ steal.plugins('phui/toolbar').then(function(){
 	})
 	
 	
-	J.Menu({
-        types: [J.Positionable({my: "left top", at : "right top"}), Phui.Shiftable, J.FadeInable, Phui.Highlight],
-		class_names: "menu",
-		apply_types_to_top : true
-    }).extend("ClickMenu",{
+	J.Menu.extend("ClickMenu",{
+		defaults : {
+			 types: [  J.Positionable.extend({defaults: {my: "left top",at: "right top"}},{}), 
+				 Phui.Shiftable, 
+				 J.FadeInable, 
+				 Phui.Highlight],
+			 class_names: "menu",
+			 apply_types_to_top : true
+		},
 		init: function(){
 			this.listensTo.push('shifted');
 			this._super(arguments)
 		}
-	},{
+    },
+	{
 		init : function(){
 			this.element.hide();
 			this._super.apply(this,arguments)
@@ -109,7 +114,12 @@ steal.plugins('phui/toolbar').then(function(){
 		">hide": function(){} // TODO figure out the right way to make hide appear to be triggered
 	})
 	//({menu_type: ClickMenu})
-	J.Toolbar({menu_type: ClickMenu, child_class_names: "menu"}).extend("Phui.Navigation",{listensTo: ["shifted"]},{
+	J.Toolbar.extend("Phui.Navigation",
+	{
+		defaults: {menu_type: ClickMenu, child_class_names: "menu"},
+		listensTo: ["shifted"]
+	},
+	{
 		init : function(){
 			this._super.apply(this, arguments)
 			this.element.mixin(Phui.Shiftable, Phui.Highlight)

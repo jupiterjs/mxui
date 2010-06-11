@@ -44,12 +44,6 @@ steal.plugins('phui/positionable','phui/menuable','jquery/event/hover').then(fun
 			 * If you want the top level menu to have 'types' mixed in.
 			 */
 			apply_types_to_top : false
-		},
-		init: function(){
-			this.listensTo.push(">show:before")
-			this.listensTo.push(">hide:before")
-			this.listensTo.push(">hide")
-			this._super(arguments)
 		}
 	},
 	{
@@ -139,20 +133,25 @@ steal.plugins('phui/positionable','phui/menuable','jquery/event/hover').then(fun
    /**
     * jQuery.UI themed highlighting
     */
-   Phui.Highlight({hover_class : "ui-state-hover"}).extend("Phui.UI.Highlight")
+   Phui.Highlight.extend("Phui.UI.Highlight",{
+   		defaults: {hover_class : "ui-state-hover"}
+   },{})
    
    /**
     * Phui.UI.Menu is a jQuery.UI themed menu.
     */
-   Phui.Menu({
-			types : [Phui.Positionable({my :"left top", at: "right top"}), Phui.UI.Highlight],
+   Phui.Menu.extend("Phui.UI.Menu",{
+   		defaults: {
+			types : [Phui.Positionable.extend({defaults: {my: "left top",at: "right top"}},{}), 
+					 Phui.UI.Highlight],
 			select_event : "hoverenter",
 			child_selector : "li",
 			class_names : "ui-widget-content ui-menu ui-widget ui-corner-all",
 			child_class_names : "ui-menu-item ui-state-default", 
 			apply_types_to_top : true,
 			active : "ui-state-active"
-	}).extend("Phui.UI.Menu")
+		}
+	},{})
    
    
    
