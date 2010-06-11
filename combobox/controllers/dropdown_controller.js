@@ -248,7 +248,11 @@ $.Controller.extend("Phui.Combobox.DropdownController",
         this.hasFocus = false;        
     },
     show : function() {
-		this.element.trigger("move", this.combobox);		
+		this.element.css("opacity", 0);
+		this.element.show();
+		this.element.trigger("move", this.combobox);
+		this.element.css("opacity", 1);
+		this.element.hide();
         this.element.slideDown("fast", this.callback("shown"));   
     },
     shown : function() {
