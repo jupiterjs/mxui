@@ -278,7 +278,9 @@ steal.plugins('jquery/controller',
                 this.dropdown.controller().draw( this.modelList);                
                 
                 // bind values to the hidden input
-                this.find("input[name='" + this.oldElementName + "']").val(this.currentItem.value);            
+                
+                // bind values to the hidden input
+                this.find("input[type=hidden]").val(this.currentItem.value);
                 
                 this.element.trigger("change", this.currentItem.value);                
             }
