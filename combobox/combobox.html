@@ -117,17 +117,17 @@
                             { value: "4", text: "viva", enabled: "true", children: [] }] });                            
                 
                 // get/set API demo
-                $("#getValue").bind("click", function(ev){
+                $("#getValue").bind("click", function(ev) {
                     var value = $("#combobox_demo").controller().val();
                     $("#log2").html("<span>" + value + "</span>");
                 })        
-                $("#setValue").bind("click", function(ev){
+                $("#setValue").bind("click", function(ev) {
                     var value = $("input#someValue").val();
                     $("#combobox_demo").controller().val(value);
                 })
                 
                 // query API demo
-                $("#query").bind("click", function(ev){
+                $("#query").bind("click", function(ev) {
                     var text = $("input#someValue").val();
                     var values = $("#combobox_demo").controller().query(text);
                     if (values.length) {
@@ -139,7 +139,7 @@
                 });
                 
                 // enable/disable API demo
-                $("#enable").click( function(ev){
+                $("#enable").click( function(ev) {
                     var value = $("#someValue").val();
                     $("#combobox_demo").controller().enable(value);
                 });
@@ -149,12 +149,12 @@
                 });    
                 
                 // event API for when a value is selected demo
-                $("#combobox_demo").bind("change", function(ev, value){
+                $("#combobox_demo").bind("change", function(ev, value) {
                     $("#log").html("<div>" + value + "</div>");
-                })        
+                });   
                 
                 // event API for when the dropdown is opened
-                $("#combobox_demo").bind("open", function(ev){
+                $("#combobox_demo").bind("open", function(ev) {
                     $("#log").html("<div>Combobox Opened.</div>");
                 });   
 				
@@ -208,7 +208,7 @@
                 $.fixture.make(["items", "item"], 200, function(num, items) {
                    
                         var itemId = parseInt(Math.random() * num);
-                        var item = items[itemId]
+                        var item = items[itemId];
                         var experiment = parseInt(Math.random() * 10);
                         if (num < 5) {
                             return {
