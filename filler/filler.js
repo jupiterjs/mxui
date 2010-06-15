@@ -1,3 +1,5 @@
+// TODO elements that have height 0 but have border/margin are not accounted for by filler, but they do take up space in the page, which makes filler not work correctly
+
 steal.plugins('jquery/controller','jquery/dom/dimensions','jquery/event/resize').then(function($){
 	
 	/*logg = function(text){
