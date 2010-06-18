@@ -69,7 +69,7 @@ steal.plugins('phui/grid','jquery/event/drop','phui/sortable').then(function($){
 					}
 				}
 			}
-            html.push($.View("//phui/grid/views/row", { item: item, options: options, i: itemNum }))
+            html.push($.View("//phui/grid/views/row", { item: item, options: options, i: itemNum, items: items }))
 			return html.join('')
 			//is it the same as the previous?
 			//deal with groups
