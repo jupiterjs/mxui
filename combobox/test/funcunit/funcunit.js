@@ -1,3 +1,3 @@
 steal
- .plugins("funcunit/functional")
- .then("basic_test")
+ .plugins("funcunit")
+ .then("combobox_tests")
