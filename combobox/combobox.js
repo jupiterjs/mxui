@@ -106,8 +106,9 @@ steal.plugins('jquery/controller',
 
             // wrap input data item within a combobox.models.item instance so we 
             // can leverage model helper functions in the code later 
-            instances = Combobox.Models.Item.wrapMany( instances );
-            this.modelList = new $.Model.List( instances );
+            /* instances = Combobox.Models.Item.wrapMany( instances );
+            this.modelList = new $.Model.List( instances ); */
+			this.modelList = Combobox.Models.Item.wrapMany( instances );
             
             // render the dropdown and set an initial value for combobox
             if ( selectedItem ) {
