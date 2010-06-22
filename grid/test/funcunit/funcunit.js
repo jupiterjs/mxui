@@ -1,3 +1,3 @@
 steal
  .plugins("funcunit")
- .then("grid")
+ .then("grid_test")

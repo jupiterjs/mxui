@@ -41,8 +41,10 @@ steal.plugins('jquery/controller','jquery/event/default','jquery/event/livehack'
 	{
 		ifThereIs : function(options){
 			var trigger = function(){
-				if(typeof options.beforeTriggering == "string")
+				if(typeof options.beforeTriggering == "string"){
 					options.on.trigger(options.beforeTriggering)
+				}
+					
 				else if(options.beforeTriggering)
 					options.beforeTriggering()
 			}

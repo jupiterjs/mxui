@@ -8,10 +8,10 @@
             .error {border: solid 1px red;}
             .error_text { color: red; font-size: 10px;}
             td {padding: 3px;}
-			.selected>a{
+			.selected>span, .selected>a{
             	background-color: #ddffee;
             }
-			.active>a {
+			.active>a, .active>span{
 				color: red;
 			}
         </style>
@@ -34,12 +34,12 @@
         </ul>
 		<h1>Menuable with focus for select and enter key for active</h1>
 		<ul id='menu2'>
-            <li><a tabindex='0' href="javascript://">Option 1</a>
+            <li tabindex='0'><span>Option 1</span>
                 <ul>
                 	<li>Here is a subMenu :)</li>
                 </ul>
             </li>
-            <li><a tabindex='0' href="javascript://">Option 2</a>
+            <li tabindex='0'><span>Option 2</span>
                 <ul>
                 	<li>Here is a subMenu :)</li>
                 </ul>
@@ -74,12 +74,14 @@
         </script>
 		<script type='text/javascript'>
 			$("#menu1").phui_menuable().find("ul").phui_menuable().hide()
-				.bind("show", function(){
+				.bind("show:before", function(ev){
+					ev.preventDefault()
 					$(this).show(function(){
 						$(this).trigger("show:after")
 					});
 				})
-				.bind("hide", function(){
+				.bind("hide:before", function(ev){
+					ev.preventDefault()
 					$(this).hide(function(){
 						$(this).trigger("hide:after")
 					});
@@ -91,33 +93,39 @@
 			
 			//menu with focus
 			$("#menu2").phui_menuable().find("ul").phui_menuable().hide()
-				.bind("show", function(){
+				.bind("show:before", function(ev){
+					ev.preventDefault();
 					$(this).show(function(){
 						$(this).trigger("show:after")
 					});
 				})
-				.bind("hide", function(){
+				.bind("hide:before", function(ev){
+					ev.preventDefault();
 					$(this).hide(function(){
 						$(this).trigger("hide:after")
 					});
 				});
-        	$("#menu2").find("a").focus(function(){
-				$(this).closest("li").trigger("select")
+				
+        	$("#menu2").find("li").focus(function(){
+				$(this).trigger("select")
 			});
-			$("#menu2").find("a").keypress(function(ev){
+			$("#menu2").find("li").keypress(function(ev){
 				if(ev.keyCode == 13 || ev.keyCode == 10)
-					$(this).closest("li").trigger("activate")
+					$(this).trigger("activate")
 			});
 			
+			
+			
+			
 			$("#menu3").phui_menuable().find("ul").phui_menuable().hide()
-			$('#menu3').delegate("ul", "show", function(ev){
+			$('#menu3').delegate("ul", "show:before", function(ev){
 				ev.stopPropagation();
 				ev.preventDefault();
 				$(this).fadeIn("slow",function(){
 					$(this).trigger("show:after")
 				});
 			})
-			$('#menu3').delegate("ul", "hide", function(ev){
+			$('#menu3').delegate("ul", "hide:before", function(ev){
 				ev.stopPropagation();
 				ev.preventDefault();
 				$(this).fadeOut("slow",function(){

@@ -17,6 +17,7 @@ steal.plugins('phui/positionable','phui/menuable','jquery/event/hover').then(fun
 	 * "hide" -> hides the menu
 	 * "show" -> shows the menu
 	 */
+	
 	Phui.Menuable.extend("Phui.Menu",
 	{
 		defaults : {

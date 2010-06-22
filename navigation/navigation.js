@@ -62,12 +62,13 @@ steal.plugins('phui/toolbar').then(function(){
 				el.trigger("show:after")
 			})
 	   },
-       ">hide:before" : function(el, ev){
+       ">hide" : function(el, ev){
 		   var e = this.element;
 		   ev.preventDefault();
+		   ev.pause()
 		   this.element.animate({opacity: 0.2},"slow", function(){ 
 		   		el.hide()
-		   		el.trigger("hide:after")
+		   		ev.resume()
 			});
    		}
 	})
