@@ -3,7 +3,8 @@ steal.plugins('jquery/controller',
 			  'jquery/event/drag',
 //'phui/paginator/page', 
 			  "jquery/dom/dimensions",
-			  "phui/filler").then(function ($) {
+			  "phui/filler",
+			  "phui/scrollbar_width").then(function ($) {
   $.Controller.extend("Phui.Grid", {
 	  defaults: {
 		  columns: null,
@@ -61,16 +62,17 @@ steal.plugins('jquery/controller',
 		  if (hideHead) {
 			  header.hide();
 		  }
-		  var footer = this.cached.footer.width();
-		  var table = body.find('table').width(footer > 0 ? footer - 20 : 20);
-		  body.children().eq(0).width(footer > 20 ? footer : 20);
-		  header.width(footer > 20 ? footer : 20);
+		  var footer = this.cached.footer.width(),
+		  	  scrollbarWidth = Phui.scrollbarWidth;
+		  var table = body.find('table').width(footer  > scrollbarWidth ? footer - scrollbarWidth : scrollbarWidth);
+		  body.children().eq(0).width(footer > scrollbarWidth ? footer : scrollbarWidth);
+		  header.width(footer > scrollbarWidth ? footer : scrollbarWidth);
 		  body.show();
 		  if (hideHead) {
 			  header.show();
 		  }
 		  if (table.height() < body.height()) {
-			  table.width(footer > 0 ? footer : 20)
+			  table.width(footer > 0 ? footer : scrollbarWidth)
 		  }
 	  },
 	  /**
