@@ -5,12 +5,12 @@
 		<title>sortable</title>
         <style type='text/css'>
             body {font-family: verdana}
-            .error {border: solid 1px red;}
+            .error {border: solid 2px red;}
             .error_text { color: red; font-size: 10px;}
             td {padding: 3px;}
 			.sortable {
 				float: left;
-				border: dashed 1px red;
+				border: dashed 2px red;
 				padding: 5px;
 			}
 			#sortable {
@@ -36,7 +36,7 @@
 			}
 			.somethingElse {
 				width: 200px;
-				height: 30px;
+
 				border: dotted 2px orange;
 			}
         </style>
@@ -50,13 +50,14 @@
 			
 		</div>
 		<br/>
-		<div class='somethingElse'>SOMETHING ELSE</div>
+		<div class='somethingElse' id='drag'>SOMETHING ELSE</div>
+		<div id='away'>away</div>
 		<script type='text/javascript' 
                 src='../../steal/steal.js?steal[app]=phui/sortable&steal[env]=development'>   
         </script>
 		<script type='text/javascript'>
 			$("#sortable").phui_sortable().bind("sortable:addPlaceholder", function(){
-				console.log("adding")
+				$(document.body).append("<p>added placeholder</p>")
 			})
 			$(".somethingElse").bind("draginit",function(){})
 			

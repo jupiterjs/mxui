@@ -12,14 +12,15 @@ steal.plugins('jquery/controller','jquery/event/drop','jquery/event/drag/limit',
 		}
 	},{
 		".sortable draginit" : function(el, ev, drag){
-			//drag.ghost(); //move a ghost
-			//el.hide();
+			//make sure we can't move it out
 			drag.limit(this.element);
-			
+			drag.horizontal();
+			//clone the drag and hide placehodler
 			var clone = el.clone().addClass("sortable-placeholder").css("visibility","hidden")
 			el.after(clone)
-			el.css("position","absolute")
-			drag.horizontal();
+			el.css("position","absolute");
+			
+			
 		},
 		".sortable dragend" : function(el){
 			el.css({
@@ -31,7 +32,7 @@ steal.plugins('jquery/controller','jquery/event/drop','jquery/event/drag/limit',
 
 			if(!this.element.has(drag.element).length){
 				this.element.triggerDefaults("sortable:addPlaceholder")
-				var placeholder = this.options.makePlaceHolder(drag.element).addClass("sortable-placeholder")
+				var placeholder = this.options.makePlaceHolder(drag.element).addClass("sortable-placeholder").removeAttr("id")
 				var res = this.where(ev);
 				res.el[res.pos](placeholder)
 			}
@@ -83,10 +84,17 @@ steal.plugins('jquery/controller','jquery/event/drop','jquery/event/drag/limit',
 			}
 		},
 		"dropon" : function(el, ev, drop, drag){
+			// if we started in the sortable
 			if(this.element.has(drag.element).length){
+				// put drag element where it goes
 				this.find(".sortable-placeholder").replaceWith(drag.element)
 			}else{
-				this.find(".sortable-placeholder").css("visibility","").removeClass("sortable-placeholder").addClass("sortable")
+				//show the placeholder
+				this.find(".sortable-placeholder").css({
+					"visibility": "",
+					top: "",
+					left: ""
+				}).removeClass("sortable-placeholder").addClass("sortable")
 			}
 			this.element.trigger("change")
 		}
