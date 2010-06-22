@@ -32,8 +32,9 @@
         
         <br/>
 		<br/>
-        <span class="log"><label>Log (Set Value, Query, Change, Open):</label><div id="log"></div></span>
+        <span class="log"><label>Log (Set Value, Query, Open):</label><div id="log"></div></span>
         <span class="log"><label>Log (Get Value):</label><div id="log2"></div></span>
+		<span class="log"><label>Log (Change):</label><div id="log3"></div></span>		
                 
         <div class="commands">
             <input id="someValue" />
@@ -150,7 +151,7 @@
                 
                 // event API for when a value is selected demo
                 $("#combobox_demo").bind("change", function(ev, value) {
-                    $("#log").html("<div>" + value + "</div>");
+                    $("#log3").text(value);
                 });   
                 
                 // event API for when the dropdown is opened
