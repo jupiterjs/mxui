@@ -143,7 +143,7 @@ steal.plugins('phui/positionable','phui/menuable','jquery/event/hover').then(fun
     */
    Phui.Menu.extend("Phui.UI.Menu",{
    		defaults: {
-			types : [Phui.Positionable.extend({defaults: {my: "left top",at: "right top"}},{}), 
+			types : [Phui.Positionable.extend("Phui.UI.TopLeft",{defaults: {my: "left top",at: "right top"}},{}), 
 					 Phui.UI.Highlight],
 			select_event : "hoverenter",
 			child_selector : "li",

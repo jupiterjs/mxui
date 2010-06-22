@@ -14,7 +14,6 @@ steal.plugins('jquery','jquery/controller').then(function($){
         *       of
         */
 	   init : function(element, options){
-	   	   this._super(element, options);
            this.element.css("position","absolute");
            this.element[0].parentNode.removeChild(this.element[0])
            document.body.appendChild(this.element[0]);
