@@ -136,7 +136,7 @@ steal.plugins('jquery/controller',
 		  var body = this.cached.innerBody,
 			  table = this.cached.table,
 			  tbody = this.cached.tbody;
-		  table.children("colgroup").remove();
+		  table.children("col").remove();
 		  //draw column with set widths
 		  table.prepend('//phui/grid/views/columns', {
 			  columns: this.options.columns,
@@ -247,9 +247,9 @@ steal.plugins('jquery/controller',
 			attr = el[0].className.match(/([^ ]+)-column-header/)[1],
 			cg;
 		  if (width > el.find("span:first").outerWidth())
-			  cg = this.element.find("colgroup:eq(" + el.index() + ")").outerWidth(width)
+			  cg = this.element.find("col:eq(" + el.index() + ")").outerWidth(width)
 		  else {
-			  cg = this.element.find("colgroup:eq(" + el.index() + ")").outerWidth(el.find("span:first").outerWidth())
+			  cg = this.element.find("col:eq(" + el.index() + ")").outerWidth(el.find("span:first").outerWidth())
 		  }
 		  this.widths[attr] = cg.width();
 		  setTimeout(this.callback('sizeTitle'), 1)
