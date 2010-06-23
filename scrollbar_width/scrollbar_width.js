@@ -6,7 +6,7 @@ steal.plugins('jquery').then(function($){
 				visibility: "hidden",
 				width: "100px",
 				height: "100px",
-				overflow: "hidden",
+				overflow: "hidden"
 			}).appendTo(document.documentElement),
 			inner = $(div[0].childNodes[0]),
 			w1 = inner[0].offsetWidth,
@@ -14,7 +14,7 @@ steal.plugins('jquery').then(function($){
 
 		div.css("overflow","scroll");
 		inner.css("width","100%"); //have to set this here for chrome
-		var w2 = inner[0].offsetWidth;
+		var w2 = inner[0].offsetWidth;		
 		div.remove();
 		(window.Phui || (window.Phui = {}) ).scrollbarWidth = w1 - w2;
 })

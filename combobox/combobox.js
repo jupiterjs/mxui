@@ -2,7 +2,8 @@ steal.plugins('jquery/controller',
               'jquery/event/hover',
               'jquery/model/list',
               'phui/positionable',
-              'phui/selectable')
+              'phui/selectable',
+			  'phui/scrollbar_width')
      .models('item')
      .controllers('dropdown').then(function(){
          
