@@ -6,7 +6,7 @@ module("phui/grid", {
 })
 
 test("sorting", function(){
-	S(".users_count-column-header a").click();
+	S(".users_count-column-header a").exists().click();
 	S.wait(20)
 	S(".body tr:eq(5)").exists();
 	

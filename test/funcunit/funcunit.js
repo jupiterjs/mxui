@@ -5,7 +5,9 @@ steal
  "phui/sortable/test/funcunit",
  "phui/grid/test/funcunit",
  
- 	"phui/grid/groupable/funcunit"
+ 	"phui/grid/groupable/funcunit",
+	
+	"phui/scrollable_table/test/funcunit"
  
  
  )
