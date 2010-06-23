@@ -12,8 +12,6 @@ steal.plugins('phui/menuable').then(function($){
 	},
 	{
 		init : function(){
-			this._super.apply(this, arguments);
-			
 			var selected = this.find(this.options.child_selector+"."+this.options.active)
 			selected = selected.length ? selected : this.find(this.options.child_selector+":first")
 			var self = this;
@@ -37,10 +35,12 @@ steal.plugins('phui/menuable').then(function($){
 		 * @param {Object} el
 		 */
         sub: function (el) {
-            var a = el.find("a[href]"), c
+            var a = el.find("a[href]"), c, hashMatch;
             if (a.length) {
-                c = $(a.attr('href').match(/^.*(#.*)/)[1])
-                if (c.length)
+				hashMatch = a.attr('href').match(/^.*(#.*)/);
+				if(hashMatch)
+ 	            	c = $(a.attr('href').match(/^.*(#.*)/)[1])
+                if (c && c.length)
                     return c;
             }
 			//find first parent that has next
@@ -77,15 +77,17 @@ steal.plugins('phui/menuable').then(function($){
 	})
 	
 	
-	Phui.Tabable({
-       tabs_container_class: "ui-tabs ui-widget ui-widget-content ui-corner-all",
-       tab_class_names: "ui-tabs-panel ui-widget-content ui-corner-bottom",
-       button_class_names: "ui-state-default ui-corner-all",
-	   class_names : "ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all",
-	   active : "ui-state-active",
-	   select  : "ui-tabs-selected",
-	   types : []
-   }).extend("Phui.UI.Tabs",{
+	Phui.Tabable.extend("Phui.UI.Tabs", {
+		defaults: {
+			tabs_container_class: "ui-tabs ui-widget ui-widget-content ui-corner-all",
+			tab_class_names: "ui-tabs-panel ui-widget-content ui-corner-bottom",
+			button_class_names: "ui-state-default ui-corner-all",
+			class_names: "ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all",
+			active: "ui-state-active",
+			select: "ui-tabs-selected",
+			types: []
+		}
+	}, {
 	   "{child_selector} mouseenter" : function(el){
 			el.addClass("ui-state-hover")	  
 	   },

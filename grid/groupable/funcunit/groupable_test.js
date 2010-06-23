@@ -7,6 +7,7 @@ module("phui/grid/groupable test",{
 
 test("Groupable Test", function(){
     
+    S('th.users_count-column-header span').exists()
     S('th.users_count-column-header span').dragTo("#dragToGroupText")
 	
 	

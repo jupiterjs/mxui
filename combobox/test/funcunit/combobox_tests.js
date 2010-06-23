@@ -1,6 +1,6 @@
 module("combobox test", { 
 	setup: function(){
-        S.open("combobox.html");
+        S.open("//phui/combobox/combobox.html");
 	}
 })
 
