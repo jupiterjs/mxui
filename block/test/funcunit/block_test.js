@@ -26,10 +26,16 @@ test("Block Test", function(){
 	
 	S('#block').exists();	
 	S('#block').click();	
+
+    S("button[name=showText]").waitCss( "zIndex", function( zIndex ) {
+	    ok( S("#blocker").css( "zIndex" ) > zIndex, "Blocker's z-index is higher than Show Text's." );	
+	} );
 	
-	S('button[name=showText]').exists();	
-	S('button[name=showText]').click();
-	S('#text').text(function(val){
-		ok(/Click the Show Text button./.test(val), "Text for phui/block test after Show Text button clicked and page is blocked is correct.")
-	});	
+	S("#blocker").waitCss( "width", function( width ) {
+		ok( width == $(window).width(), "Blocker width is set correctly to window's width." );
+	} );
+	S("#blocker").waitCss( "height", function( height ) {
+		ok( height == $(window).height(), "Blocker height is set correctly to window's height." );		 
+	} );	
+
 })
