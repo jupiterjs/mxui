@@ -11,21 +11,41 @@
 			#blocker {
 				background-color: green;
 			}
+			.buttons {
+				margin: 20px;
+			}
+			#text {
+				margin: 20px;
+				border: 2px solid black;
+				width: 320px;
+			}
         </style>
 	</head>
 	<body>
 	    <h1>Block</h1>
 		<div id='blocker'></div>
 		<a href='#' id='block'>Block</a>
+		<div class="buttons">
+			<button name="showText" type="text">Show Text</button>
+			<button name="reset" type="text">Reset</button>
+			<div id="text">Click the Show Text button.</div>
+		</div>
 		<script type='text/javascript' 
                 src='../../steal/steal.js?steal[app]=phui/block&steal[env]=development'>   
         </script>
 		<script type='text/javascript'>
 			$(function(){
-				$("#blocker").css("opacity",0.5)
+				$("#blocker").css("opacity",0.5);
 				$("#block").click(function(){
 					$("#blocker").phui_block().trigger('show')
-				})
+				});
+				
+				$("button[name=showText]").click( function(ev) {
+					$("#text").text("You were able to click the button!")
+				} );
+				$("button[name=reset]").click( function(ev) {
+					$("#text").text("Click the Show Text button.")				
+				} );				
 			})
 		</script>
 	</body>
