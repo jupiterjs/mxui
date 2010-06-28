@@ -1,1 +1,1 @@
-steal.plugins("funcunit").then("filler_test");
+steal.plugins("funcunit").then("filler_tests"/*, "filler3_tests"*/);
