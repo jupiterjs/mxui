@@ -1,4 +1,21 @@
 steal.plugins('jquery/controller','phui/positionable','phui/bgiframe','phui/filler').then(function($){
+	/**
+	 * @tag phui
+	 * @plugin phui/block
+	 * @test phui/block/funcunit.html
+	 * Blocks the browser screen from user interaction.
+	 * <p>
+	 * Sometimes it is necessary to block the browser from user interaction such as when a spinner image
+	 * is giving the user feedback that a request for data is taking place. Phui.Block attaches to an 
+	 * element sets its width and height to the window's width and height and sets its z-index to a 
+	 * configurable value (default is 9999).
+	 * </p>
+	 * <p>To block the browser screen just attach Phui.Block to an element and trigger 'show'.</p>
+	 * @codestart
+	 * 		$("#blocker").phui_block().trigger('show')	
+	 * @codeend
+	 * @demo phui/block/block.html
+	 */	
 	$.Controller.extend("Phui.Block", 
 	{
 		defaults : {
