@@ -9,5 +9,6 @@ steal
 	
 	"phui/scrollable_table/test/funcunit",
 	
-	"phui/filler/test/funcunit" 
+	"phui/filler/test/funcunit" ,
+	"phui/block/test/funcunit"
  )

@@ -65,10 +65,9 @@ steal.plugins('phui/toolbar').then(function(){
        ">hide" : function(el, ev){
 		   var e = this.element;
 		   ev.preventDefault();
-		   ev.pause()
 		   this.element.animate({opacity: 0.2},"slow", function(){ 
 		   		el.hide()
-		   		ev.resume()
+				el.trigger("hide:after")
 			});
    		}
 	})
@@ -76,7 +75,7 @@ steal.plugins('phui/toolbar').then(function(){
 	
 	J.Menu.extend("ClickMenu",{
 		defaults : {
-			 types: [  J.Positionable.extend({defaults: {my: "left top",at: "right top"}},{}), 
+			 types: [  J.Positionable.extend("LeftTop", {defaults: {my: "left top",at: "right top"}},{}), 
 				 Phui.Shiftable, 
 				 J.FadeInable, 
 				 Phui.Highlight],
