@@ -60,125 +60,127 @@
         </style>
 	</head>
 	<body>
-		<h1>Filler</h1>
-		<!--<p>Phui.Filler will expand an element to fill a parent.  This is very useful for elements that change size.
-			Phui.Filler is smart enough to know when to adjust for internal element's margins.  To 
-			make resizables on the page, click run.  This will add Phui.Resizables.  Resize the parent to watch the internal
-			filler fill the space.  
-		</p>-->
-		
-		<a href="javascript://" id='run'>Run</a>
-		<!--<h2>Limitations</h2>
-		<p>If you want to support IE6, it's best to not have top margins on the first element in a container, and bottom
-			margins on the last element.  Phui.Filler will compensate for this, but things will not look exactly the same in 
-			IE6.  
-		</p>-->
-		<h3>jQuery.support.containerSizeAdjustments: <span id='log'></span></h3>
-		
-		<table>
-	    	<tr>
-	    		<td>
-				
-						
-						<div class='container'>
-							<h3>Nothing &uarr;</h3>
-							<div class='redBack'>
-								<p class='grnBack'>No Pad & Bord &uarr;</p>
-								<div class='grnBack fill'><p>Some deep content</p></div>
-								<p class='grnBack'>No Pad & Bord &darr;</p>
-							</div>
-							<h4>Nothing &darr;</h4>
-						</div>
-				
-				</td>
-				<td>
-					
-						<div class='container'>
-							<h3>Nothing &uarr;</h3>
-							<div class='redBack redBD'>
-								<p class='grnBack'>Border &uarr;</p>
-								<div class='grnBack fill'><p>Some deep content</p></div>
-								<p class='grnBack'>Border &darr;</p>
-							</div>
-							<h4>Nothing &darr;</h4>
-						</div>
-					
-				</td>
-				<td>
-					
-						<div class='container bluBD'>
-							<h3>Border &uarr;</h3>
-							<div class='redBack' style="padding-top: 1px">
-								<p class='grnBack'>Padding &uarr;</p>
-								<div class='grnBack fill'><p>Some deep content</p></div>
-								<p class='grnBack'>No Pad & Bord &darr;</p>
-							</div>
-							<h4>Border &darr;</h4>
-						</div>
-			
-				</td>
-	    	</tr>
-			
-	    </table>
-		<div id='myloggin'></div>
-		
-		
-		
-		
-		
-		
-		<script type='text/javascript' 
-                src='../../steal/steal.js'>   
-        </script>
-		<script type='text/javascript'>
-			steal.plugins('phui/filler','phui/resizable').then(function(){
-				$(function(){
-					var out = [], affects= jQuery.support.containerSizeAdjustments;
-					for (var part in affects) {
-						out.push(part+"="+affects[part])
-					}
+<div id="demo-html">
+<h1>Filler</h1>
+<!--<p>Phui.Filler will expand an element to fill a parent.  This is very useful for elements that change size.
+	Phui.Filler is smart enough to know when to adjust for internal element's margins.  To 
+	make resizables on the page, click run.  This will add Phui.Resizables.  Resize the parent to watch the internal
+	filler fill the space.  
+</p>-->
 
-					$("#log").html(out.join(", "))
-				});
-				$("#run").click(function(){
-					$(".container").each(function(){
-						$(this).phui_resizable().find(".fill").phui_filler({
-							parent: $(this),
-							adjust: true
-						})
-					})
-				})
-				loggin = function(text){
-					$("#myloggin").append("<p>"+text+"</p>")
-					//$("#myloggin")[0].scrollTop = $("#myloggin")[0].scrollHeight
-				}
-				/**/
-				/*$("#nestedFiller2").phui_filler({
-					parent: $("#resize2").phui_resizable(),
-					cache: true
-				});*/
+<a href="javascript://" id='run'>Run</a>
+<!--<h2>Limitations</h2>
+<p>If you want to support IE6, it's best to not have top margins on the first element in a container, and bottom
+	margins on the last element.  Phui.Filler will compensate for this, but things will not look exactly the same in 
+	IE6.  
+</p>-->
+<h3>jQuery.support.containerSizeAdjustments: <span id='log'></span></h3>
+
+<table>
+	<tr>
+		<td>
+		
 				
-				//$("#content").phui_filler();
-				/*$("#modal").css({
-					opacity: 0.5
+				<div class='container'>
+					<h3>Nothing &uarr;</h3>
+					<div class='redBack'>
+						<p class='grnBack'>No Pad & Bord &uarr;</p>
+						<div class='grnBack fill'><p>Some deep content</p></div>
+						<p class='grnBack'>No Pad & Bord &darr;</p>
+					</div>
+					<h4>Nothing &darr;</h4>
+				</div>
+		
+		</td>
+		<td>
+			
+				<div class='container'>
+					<h3>Nothing &uarr;</h3>
+					<div class='redBack redBD'>
+						<p class='grnBack'>Border &uarr;</p>
+						<div class='grnBack fill'><p>Some deep content</p></div>
+						<p class='grnBack'>Border &darr;</p>
+					</div>
+					<h4>Nothing &darr;</h4>
+				</div>
+			
+		</td>
+		<td>
+			
+				<div class='container bluBD'>
+					<h3>Border &uarr;</h3>
+					<div class='redBack' style="padding-top: 1px">
+						<p class='grnBack'>Padding &uarr;</p>
+						<div class='grnBack fill'><p>Some deep content</p></div>
+						<p class='grnBack'>No Pad & Bord &darr;</p>
+					</div>
+					<h4>Border &darr;</h4>
+				</div>
+	
+		</td>
+	</tr>
+	
+</table>
+<div id='myloggin'></div>
+</div>		
+		
+		
+		
+		
+		
+		
+<script type='text/javascript' 
+        src='../../steal/steal.js'>   
+</script>
+<script type='text/javascript' id="demo-source">
+	steal.plugins('phui/filler','phui/resizable').then(function(){
+		$(function(){
+			var out = [], affects= jQuery.support.containerSizeAdjustments;
+			for (var part in affects) {
+				out.push(part+"="+affects[part])
+			}
+
+			$("#log").html(out.join(", "))
+		});
+		$("#run").click(function(){
+			$(".container").each(function(){
+				$(this).phui_resizable().find(".fill").phui_filler({
+					parent: $(this),
+					adjust: true
 				})
-				$("#expand").click(function(){
-					$("#modal").phui_filler({width: true, parent: $([window, document.documentElement]), all: true})
-					
-				})	
-				$("#nestedFiller").phui_filler({
-					parent: $("#resize1").phui_resizable()
-				});*/
-				
-				/*$("#nestedFiller2").phui_filler({
-					parent: $("#resize2").phui_resizable(),
-					cache: true
-				});
-				$("#changeme").click(function(){
-					$("#nestedFiller2").siblings().height(40)
-				})*/
 			})
-			steal.start();
-		</script>
+		})
+		loggin = function(text){
+			$("#myloggin").append("<p>"+text+"</p>")
+			//$("#myloggin")[0].scrollTop = $("#myloggin")[0].scrollHeight
+		}
+		/**/
+		/*$("#nestedFiller2").phui_filler({
+			parent: $("#resize2").phui_resizable(),
+			cache: true
+		});*/
+		
+		//$("#content").phui_filler();
+		/*$("#modal").css({
+			opacity: 0.5
+		})
+		$("#expand").click(function(){
+			$("#modal").phui_filler({width: true, parent: $([window, document.documentElement]), all: true})
+			
+		})	
+		$("#nestedFiller").phui_filler({
+			parent: $("#resize1").phui_resizable()
+		});*/
+		
+		/*$("#nestedFiller2").phui_filler({
+			parent: $("#resize2").phui_resizable(),
+			cache: true
+		});
+		$("#changeme").click(function(){
+			$("#nestedFiller2").siblings().height(40)
+		})*/
+	})
+	steal.start();
+</script>
 	</body>
 </html>
