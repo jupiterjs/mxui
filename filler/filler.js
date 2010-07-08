@@ -150,10 +150,10 @@ steal.plugins('jquery/controller','jquery/dom/dimensions','jquery/event/resize')
 	 * Auto-resizes a dom element in response to the resizing of a container
 	 * <p> 
 	 * One common design pattern is to have both the header and footer of an html page with fixed positions
-	 * and sizes letting the element between them adjust to the available area on the screen.
-	 * It's possible to do just that by attaching Phui.Filler to the adjustable size element. 
+	 * and sizes letting the element between them adjust its width/height to the remaining available area on the screen.
+	 * It's possible to do just that by attaching Phui.Filler to the element whose size you want to auto-adjust. 
 	 * </p>
-	 * <p>To make an adjustable size element attach it to Phui.Filler, set a reference to a container element
+	 * <p>To make an auto-sizeable element attach it to Phui.Filler, set a reference to a container element
 	 * and trigger 'resize' on that container.</p>
 	 * @codestart
 	 * 		$("#content").phui_filler({parent: $("#container"});
