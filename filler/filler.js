@@ -1,7 +1,6 @@
 // TODO elements that have height 0 but have border/margin are not accounted for by filler, but they do take up space in the page, which makes filler not work correctly
 
-steal.plugins('jquery/controller','jquery/dom/dimensions','jquery/event/resize').then(function($){
-	
+steal.plugins('jquery/controller','jquery/dom/dimensions','jquery/event/resize').then(function($){	
 	/*logg = function(text){
 		if(!$("#clear-logg").length){
 			$(".message_window").html("<a id='clear-logg'>Clear</a>")
@@ -144,6 +143,24 @@ steal.plugins('jquery/controller','jquery/dom/dimensions','jquery/event/resize')
 	}
 	count = 3;
 	
+	/**
+	 * @tag phui
+	 * @plugin phui/filler
+	 * @test phui/filler/funcunit.html
+	 * Auto-resizes a dom element in response to the resizing of a container
+	 * <p> 
+	 * One common design pattern is to have both the header and footer of an html page with fixed positions
+	 * and sizes letting the element between them adjust its width/height to the remaining available area on the screen.
+	 * It's possible to do just that by attaching Phui.Filler to the element whose size you want to auto-adjust. 
+	 * </p>
+	 * <p>To make an auto-sizeable element attach it to Phui.Filler, set a reference to a container element
+	 * and trigger 'resize' on that container.</p>
+	 * @codestart
+	 * 		$("#content").phui_filler({parent: $("#container"});
+	 * 		$("#container").trigger('resize');
+	 * @codeend
+	 * @demo phui/filler/filler.html
+	 */		
 	$.Controller.extend("Phui.Filler",
 	{
 		listensTo : ["show"]

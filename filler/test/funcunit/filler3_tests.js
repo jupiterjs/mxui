@@ -1,6 +1,6 @@
 module("phui/filler test",{ 
 	setup: function(){
-        S.open("//phui/filler/filler_tests.html");
+        S.open("//phui/filler/filler3.html");
 		S("#filler_tests").exists();
 	}
 })
