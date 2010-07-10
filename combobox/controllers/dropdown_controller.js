@@ -41,8 +41,7 @@ $.Controller.extend("Phui.Combobox.DropdownController",
 		if( !$.browser.msie ) return;
         // trick for handling IE7 overflow bug
         var ul = this.find( "ul.phui_selectable" ); 
-        if (this.element.width() > this.element[0].clientWidth) {
-            //var ulWidth = this.element.innerWidth() - 18; // scrollbar width;
+        if (this.element.width() - this.element[0].clientWidth > 5) {
             var ulWidth = this.element.innerWidth() - Phui.scrollbarWidth;
         } else {
 			var ulWidth = this.element.innerWidth();		
@@ -209,27 +208,20 @@ $.Controller.extend("Phui.Combobox.DropdownController",
     },
     adjustHeightToFitWindow : function() {
         if ( this.element.is(":visible") ) {
-            // if maxHeight was not defined in options 
-            // make it the same size as that with which 
-            // dropdown is rendered
-            var defaultMaxHeight = this.options.maxHeight; 
-            if (defaultMaxHeight == null) {
-                var maxHeight = 0;
-                this.find(".selectable").each(function(i, el){
-                    maxHeight += $(el).outerHeight();
-                })
-                defaultMaxHeight = maxHeight + "px"; 
-            }  
-
-            // resizing the dropdown to make it fit inside the window
-            var newHeight = $(window).height() - 4 * $("body").offset().top;
-            defaultMaxHeight = parseInt(defaultMaxHeight.substr(0, defaultMaxHeight.indexOf("px")));
-            if (newHeight > defaultMaxHeight) 
-                newHeight = defaultMaxHeight;
-            this.element.css({
-                "height": newHeight + "px",
-                "overflow": "auto"
-            });
+			var newHeight = 0,
+            	defaultMaxHeight = this.options.maxHeight || 0, 
+				curHeight = this.element.height(),
+            	// resizing the dropdown to make it fit inside the window
+            	maxHeight = $(window).height() - 4 * $("body").offset().top;
+			if (defaultMaxHeight && maxHeight > defaultMaxHeight) {
+				maxHeight = defaultMaxHeight;
+			}
+            if (maxHeight && curHeight > maxHeight) {
+				this.element.css({
+					"height": newHeight,
+					"overflow-y": "auto"
+				});
+			}
         }
     },
     getElementFor : function(instance) {
