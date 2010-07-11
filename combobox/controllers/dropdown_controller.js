@@ -203,27 +203,29 @@ $.Controller.extend("Phui.Combobox.DropdownController",
         this.canOpen = true;
     }, 
     windowresize : function(el, ev) {
-        // ajdust dropdown height so it can fit in the page
-        // even if the window is small   
-        //this.fixOverflowBugInIE7();     
 		this.style();
     },
     adjustHeightToFitWindow : function() {
         if ( this.element.is(":visible") ) {
-			var newHeight = 0,
-            	defaultMaxHeight = this.options.maxHeight || 0, 
-				curHeight = this.element.height(),
+			var curHeight = this.element.height(),
+            	defaultMaxHeight = this.defaultMaxHeight ? 
+								   this.defaultMaxHeight : 
+					   			   this.options.maxHeight || curHeight, 
             	// resizing the dropdown to make it fit inside the window
-            	maxHeight = $(window).height() - 4 * $("body").offset().top;
-			if (defaultMaxHeight && maxHeight > defaultMaxHeight) {
-				maxHeight = defaultMaxHeight;
+            	maxHeight = $(window).height() - 4 * $("body").offset().top; 
+				var idx = defaultMaxHeight.indexOf 
+						&& defaultMaxHeight.indexOf("px");
+				if (idx && idx > -1) {
+					defaultMaxHeight = defaultMaxHeight.substr(0, idx); 
+				} 
+				this.defaultMaxHeight = defaultMaxHeight;
+			if (maxHeight > this.defaultMaxHeight) {
+				maxHeight = this.defaultMaxHeight;
 			}
-            if (maxHeight && curHeight > maxHeight) {
-				this.element.css({
-					"height": newHeight,
-					"overflow-y": "auto"
-				});
-			}
+			this.element.css({
+				"height": maxHeight - this.combobox.outerHeight(),
+				"overflow-y": "auto"
+			});
         }
     },
     getElementFor : function(instance) {
