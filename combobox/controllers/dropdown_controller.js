@@ -31,22 +31,24 @@ $.Controller.extend("Phui.Combobox.DropdownController",
 			});
 		}
         
-        // ajdust dropdown height so it can fit in the page
+        // adjust dropdown height so it can fit in the page
         // even if the window is small
         this.adjustHeightToFitWindow();     
         
         this.fixOverflowBugInIE7();
     },
+    /* Most browsers when overflowing an element put the vertical overflow
+	 * scroll bar on the outside of the element
+	 * IE6 and IE7 put it on the inside causing horizontal overflow if the
+	 * contained elements have 100% width as is the case with the <ul> element
+	 * contained in the dropdown <div>
+	 * to fix this we simply set the <ul> element to the container width
+	 * without scrollbar - this.element[0].clientWidth.
+	 */	
     fixOverflowBugInIE7 : function() {
 		if( !$.browser.msie ) return;
-        // trick for handling IE7 overflow bug
         var ul = this.find( "ul.phui_selectable" ); 
-        if (this.element.width() - this.element[0].clientWidth > 5) {
-            var ulWidth = this.element.innerWidth() - Phui.scrollbarWidth;
-        } else {
-			var ulWidth = this.element.innerWidth();		
-		}
-		ul.width( ulWidth );
+		ul.width( this.element[0].clientWidth );
     },
     draw : function(modelList, isAutocompleteData) {
         
