@@ -206,27 +206,20 @@ $.Controller.extend("Phui.Combobox.DropdownController",
 		this.style();
     },
     adjustHeightToFitWindow : function() {
-        if ( this.element.is(":visible") ) {
-			var curHeight = this.element.height(),
-            	defaultMaxHeight = this.defaultMaxHeight ? 
-								   this.defaultMaxHeight : 
-					   			   this.options.maxHeight || curHeight, 
-            	// resizing the dropdown to make it fit inside the window
-            	maxHeight = $(window).height() - 4 * $("body").offset().top; 
-				var idx = defaultMaxHeight.indexOf 
-						&& defaultMaxHeight.indexOf("px");
-				if (idx && idx > -1) {
-					defaultMaxHeight = defaultMaxHeight.substr(0, idx); 
-				} 
-				this.defaultMaxHeight = defaultMaxHeight;
-			if (maxHeight > this.defaultMaxHeight) {
-				maxHeight = this.defaultMaxHeight;
-			}
-			this.element.css({
-				"height": maxHeight, //- this.combobox.outerHeight(),
-				"overflow-y": "auto"
-			});
-        }
+	     var newHeight = 0,
+             defaultMaxHeight = this.options.maxHeight || 0, 
+        	 curHeight = this.element.height(),
+              // resizing the dropdown to make it fit inside the window
+              maxHeight = $(window).height() - 4 * $("body").offset().top;
+      	 if (defaultMaxHeight && maxHeight > defaultMaxHeight) {
+        	maxHeight = defaultMaxHeight;	
+      	 }
+         if (maxHeight && curHeight > maxHeight) {
+        	this.element.css({	
+          		"height": newHeight,	
+          		"overflow-y": "auto"
+        	});
+      	 }
     },
     getElementFor : function(instance) {
         return this.find("." + instance.identity());
@@ -252,7 +245,7 @@ $.Controller.extend("Phui.Combobox.DropdownController",
 		  	.trigger("move", this.combobox)
 		  	.hide()
 		  	.css("opacity", 1)
-		  	.slideDown( "fast", this.callback("shown") );				
+		  	.slideDown( "slow", this.callback("shown") );				
     },
     shown : function() {
 		var self = this;
