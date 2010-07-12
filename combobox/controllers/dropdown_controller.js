@@ -46,9 +46,11 @@ $.Controller.extend("Phui.Combobox.DropdownController",
 	 * without scrollbar - this.element[0].clientWidth.
 	 */	
     fixOverflowBugInIE7 : function() {
-		if( !$.browser.msie ) return;
-        var ul = this.find( "ul.phui_selectable" ); 
-		ul.width( this.element[0].clientWidth );
+		// TODO: use feature detection instead of browser detection
+		if ($.browser.msie && navigator.appVersion.indexOf('MSIE 7.') != -1) {
+			var ul = this.find("ul.phui_selectable");
+			ul.width(this.element[0].clientWidth);
+		}
     },
     draw : function(modelList, isAutocompleteData) {
         
