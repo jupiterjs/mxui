@@ -7,7 +7,7 @@ module("phui/sortable", {
 test("adding an item", function(){
 	S("#drag").dragTo(".sortable:eq(1)").dragTo("#away");
 	
-	S(".sortable:eq(1)").text(function(text){
+	S(".sortable:eq(2)").text(function(text){
 		ok(/SOMETHING ELSE/.test(text), "Something else in page")
 	})
 })

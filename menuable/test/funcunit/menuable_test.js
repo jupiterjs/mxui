@@ -26,14 +26,14 @@ test("Focus Menu", function(){
 		ok(true, "first menu is invisible")
 	})
 	
-	S("#menu2 li:first span").type("\n")
+	S("#menu2 li:first span").type("\r")
 	
 	S("#menu2 li:first ul li").visible(function(){
 		ok(true, "first menu is visible")
 	})
 	S.wait(500);
 	
-	S("#menu2 li:eq(2) span").click().type("\n");
+	S("#menu2 li:eq(2) span").click().type("\r");
 	
 	S("#menu2 li:first ul li").invisible(function(){
 		ok(true, "first menu is invisible")

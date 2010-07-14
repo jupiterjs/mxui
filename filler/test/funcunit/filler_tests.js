@@ -6,15 +6,41 @@ module("phui/filler test",{
 
 test("Filler Tests", function(){
 	/* No Pading/No Borders */
-	S("a#run").exists();
+	var height1,
+		height2,
+		height3,
+		withinAPixel = function(a, b){
+			return  a >= b -1 && a <= b+1;
+		};
+	S("#fill1 .fill").height(function(hght){
+		height1= hght
+	})
+	S("#fill2 .fill").height(function(hght){
+		height2= hght
+	})
+	S("#fill3 .fill").height(function(hght){
+		height3= hght
+	})
 	S("a#run").click();
 	
-	S("table td:eq(0) .fill").waitHeight( function( height ) {
-		ok(/18/.test( height ), "Initial height for no padding/no borders tests correct.")
-	} );
-	S("table td:eq(0) .ui-resizable-handle").dragTo({ x: "+10", y: "+10" })
-	S("table td:eq(0) .fill").waitHeight( function( height ) {
-		ok(/18/.test( height ), "Initial height for no padding/no borders tests correct.")
-	} );
+	S("#fill1 .fill").height(function(hght){
+		ok(withinAPixel(height1, hght),"heights are close");
+		height1 = hght;
+	})
+	
+	S("#fill1 .ui-resizable-se").dragTo("+0x+50");
+	S("#fill2 .ui-resizable-se").dragTo("+0x+50");
+	S("#fill3 .ui-resizable-se").dragTo("+0x+50");
+	
+	S("#fill1 .fill").height(function(hght){
+		ok(withinAPixel(height1+50, hght),"heights are close")
+	})
+	
+	S("#fill2 .fill").height(function(hght){
+		ok(withinAPixel(height2+50, hght),"heights are close")
+	})
+	S("#fill3 .fill").height(function(hght){
+		ok(withinAPixel(height3+50, hght),"heights are close")
+	})
 })
 

@@ -19,11 +19,24 @@ test("Block Test", function(){
 	
 	S("#blocker").waitOffset( function(offset) {
 		return (offset.left == 0 && offset.top == 0)
-	} );			
-    S("#blocker").waitWidth( $(window).width() );
-	S("#blocker").waitHeight( $(window).height() );
-	S("#blocker").waitCss( "zIndex", function(zIndex) {
-		return (zIndex == 9999)
+	} );
+	var winWidth, 
+		winHeight
+	S(S.window).width(function(w){
+		winWidth = w;
+	})
+	S(S.window).height(function(h){
+		winHeight = h;
+	})
+	
+    S("#blocker").width( function(w){
+		equals(w, winWidth,"width is correct")
+	});
+	S("#blocker").height( function(h){
+		equals(h, winHeight,"height is correct")
+	});
+	S("#blocker").css( "zIndex", function(zIndex) {
+		equals(zIndex,  9999, "zIndex is high")
 	} );	
 
 })

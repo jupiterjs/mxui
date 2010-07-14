@@ -72,7 +72,7 @@ steal(function($){
 
 
 $.Controller.extend("Phui.Bgiframe",{
-	init : function(){
+	init : function(s){
 		if ( $.browser.msie && /6.0/.test(navigator.userAgent) ) {
 			s = $.extend({
 				top     : 'auto', // auto == .currentStyle.borderTopWidth
