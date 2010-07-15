@@ -1,0 +1,146 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
+            "http://www.w3.org/TR/html4/strict.dtd">
+<html lang="en">
+	<head>
+		<title>splitter</title>
+        <style type='text/css'>
+            body {font-family: verdana}
+            .error {border: solid 1px red;}
+            .error_text { color: red; font-size: 10px;}
+            td {padding: 3px;}
+			#container, #container2 {
+				border: solid 1px;
+				width: 300px;
+				height: 400px;
+				margin: 10px;
+			}
+			.hsplitter {
+				height: 3px;
+				background-color: gray;
+				cursor: s-resize;
+				border: solid 1px gray;
+				line-height: 3px;
+				font-size: 0px;
+			}
+			.phui_splitter .split-hover{
+				border: solid 1px blue;
+			}
+			.phui_splitter {
+				overflow: hidden
+			}
+			.split {
+				overflow: auto;
+			}
+			#container .panel:nth-child(even),
+			#container2 .panel:nth-child(even) {
+				background-color: #ddddee;
+			}
+			#container .panel:nth-child(odd),
+			#container2 .panel:nth-child(odd) {
+				background-color: #eedddd;
+			}
+			table {
+				border-collapse: collapse;
+			}
+			table td {
+				border-width: 1px;
+				border-style: solid;
+				border-color: #CCCCCC;
+			}
+        </style>
+	</head>
+	<body>
+	    <h1>Splitter</h1>
+		<table>
+			<tr>
+				<td>
+					<div id='container'>
+				    	<div class='panel'>
+				    		<a href='javsacript://' class='remove'>remove</a>
+							Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.
+				        	Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.
+				        	Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.
+				    	</div>
+						<div class='panel'>
+				    		<a href='javsacript://' class='remove'>remove</a>				
+							Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.
+				        	Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.
+				        	Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.
+				    	</div>
+				    </div>
+					<a href='javascript://' id="add">add</a>
+					<a href='javascript://' id="resize">resize</a>
+					
+				</td>
+				<td>
+					<div id='container2'>
+				    	<div class='panel' style="border:1px solid #CCCCCC;padding:5px;margin:5px;height:80px;">
+				    		<a href='javsacript://' class='remove'>remove</a>
+							<table>
+								<tr><td>Lorem</td><td>ipsum dolor</td><td>sit amet</td></tr>
+								<tr><td>Lorem</td><td>ipsum dolor</td><td>sit amet</td></tr>
+								<tr><td>Lorem</td><td>ipsum dolor</td><td>sit amet</td></tr>
+								<tr><td>Lorem</td><td>ipsum dolor</td><td>sit amet</td></tr>
+								<tr><td>Lorem</td><td>ipsum dolor</td><td>sit amet</td></tr>
+								<tr><td>Lorem</td><td>ipsum dolor</td><td>sit amet</td></tr>
+							</table>
+				    	</div>
+						<div class='panel' style="border:1px solid #CCCCCC;padding:5px;margin:5px;">
+				    		<a href='javsacript://' class='remove'>remove</a>				
+							Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.
+				        	Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.
+				        	Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.
+				    	</div>
+				    </div>		
+					<a href='javascript://' id="add2">add</a>
+					<a href='javascript://' id="resize2">resize</a>		
+					
+				</td>
+			</tr>
+		</table>
+		
+		
+	    
+		
+		<script type='text/javascript' 
+                src='../../steal/steal.js?steal[app]=phui/splitter&steal[env]=development'
+                package='main.js'
+                compress='false'>   
+        </script>
+		<script type='text/javascript'>
+			$("#container").phui_splitter();
+			$("#add").click(function(){
+				$("<div class='panel'><a href='javsacript://' class='remove'>remove</a>Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.</div>")
+					.appendTo($("#container")).trigger("insert")
+			})
+			$(".remove").live("click", function(ev){
+				ev.preventDefault();
+				$(this).parent().trigger("remove").remove();
+			})
+			var big = true;
+			$("#resize").click(function(){
+				if(big){
+					$("#container").height(600).trigger("resize")
+				}else{
+					$("#container").height(400).trigger("resize")
+				}
+				big = ! big;
+			});
+			
+			$("#container2").phui_splitter();
+			$("#add2").click(function(){
+				$("<div class='panel'><a href='javsacript://' class='remove'>remove</a>Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.</div>")
+					.appendTo($("#container2")).trigger("insert")
+			})
+			var big2 = true;
+			$("#resize2").click(function(){
+				if(big2){
+					$("#container2").height(600).trigger("resize")
+				}else{
+					$("#container2").height(400).trigger("resize")
+				}
+				big2 = ! big2;
+			});			
+		</script>
+	</body>
+</html>

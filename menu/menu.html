@@ -3,7 +3,7 @@
 <html lang="en">
 	<head>
 		<title>menu</title>
-        <link type="text/css" href="../../css/ui-lightness/jquery-ui-1.7.2.custom.css" rel="stylesheet" />
+        <link type="text/css" href="../smoothness/jquery-ui-1.7.2.custom.css" rel="stylesheet" />
         <style type='text/css'>
             body {font-family: verdana}
             .error {border: solid 1px red;}
@@ -24,11 +24,18 @@
 		</style>
 	</head>
 	<body>
-	    <h1>Steps</h1>
+	    <h1>Menu</h1>
         <ul id='menu1'>
             <li>A
                 <ul>
-                    <li>A1</li>
+                    <li>A1
+						<ul>
+                            <li>A1.X</li>
+                            <li>A1.Y</li>
+                            <li>A1.Z</li>
+                        </ul>
+					
+					</li>
                     <li>A2</li>
                     <li>A3</li>
                 </ul>
@@ -73,15 +80,15 @@
             
             </li>
         </ul>
-        
+
 		<script type='text/javascript' 
-                src='../../jmvc/include.js?include[app]=jupiter/menu&include[env]=development'
-                package='main.js'
-                compress='false'>   
+                src='../../steal/steal.js'>   
         </script>
         <script type='text/javascript'>
-            $("#menu1").jupiter_menu();
-            $("#menu2").jupiter_ui_menu().trigger("show", {top: 40, left: 300});
+            steal.plugins('phui/menu').then(function(){
+				$("#menu1").phui_menu();
+            	$("#menu2").phui_ui_menu().show().trigger("move", {top: 60, left: 280});
+			}).start();
         </script>
 	</body>
 </html>

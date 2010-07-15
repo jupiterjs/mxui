@@ -1,7 +1,7 @@
-include.apps('jupiter/toolbar').then(function(){
+steal.plugins('phui/toolbar').then(function(){
 	
-	var J = Jupiter;
-	$.Controller.extend("Jupiter.Shiftable",{listensTo: ["shift"]},
+	var J = Phui;
+	$.Controller.extend("Phui.Shiftable",{listensTo: ["shift"]},
 	{
         "li shift" : function(el){
 			//move this guy to the first ... shift everything else around
@@ -39,6 +39,11 @@ include.apps('jupiter/toolbar').then(function(){
 						el.trigger("shifted")
 					}
 					
+					if($.browser.msie)
+						// fix weird IE cleartype font bug
+						$('li.button').each(function(){
+							$(this).get(0).style.removeAttribute('filter');
+						})
 					
 				}, duration: "slow"}
 			)
@@ -48,29 +53,48 @@ include.apps('jupiter/toolbar').then(function(){
 		}
 	})
 	
-	$.Controller.extend("Jupiter.FadeInable",{listensTo: ["show","hide"]}, {
-	   show : function(el, ev){
+	$.Controller.extend("Phui.FadeInable",{
+		listensTo: ["show:before","hide:before"]
+	}, {
+	   ">show:before" : function(el, ev){
 			ev.preventDefault();
-			this.element.css("opacity",0.2).show().animate({opacity: 1.0},"slow")
+			this.element.css("opacity",0.2).show().animate({opacity: 1.0},"slow", function(){
+				el.trigger("show:after")
+			})
 	   },
-       hide : function(el, ev){
+       ">hide" : function(el, ev){
 		   var e = this.element;
 		   ev.preventDefault();
-		   this.element.animate({opacity: 0.2},"slow", function(){ e.hide()});
-       }
+		   this.element.animate({opacity: 0.2},"slow", function(){ 
+		   		el.hide()
+				el.trigger("hide:after")
+			});
+   		}
 	})
 	
 	
-	J.Menu({
-        TYPES: [J.Positionable, Jupiter.Shiftable, J.FadeInable, Jupiter.Highlight],
-		CLASS_NAMES: "menu"
-    }).extend("ClickMenu",{listensTo: ["shifted","hide"]},{
-		"li deselect" : function(el, ev){
+	J.Menu.extend("ClickMenu",{
+		defaults : {
+			 types: [  J.Positionable.extend("LeftTop", {defaults: {my: "left top",at: "right top"}},{}), 
+				 Phui.Shiftable, 
+				 J.FadeInable, 
+				 Phui.Highlight],
+			 class_names: "menu",
+			 apply_types_to_top : true
+		},
+		init: function(){
+			this.listensTo.push('shifted');
+			this._super(arguments)
+		}
+    },
+	{
+		init : function(){
+			this.element.hide();
+			this._super.apply(this,arguments)
+		},
+		"li select:before" : function(el, ev){
 			ev.preventDefault();
-			ev.preventDefault();
-			this.hideOld();
-			
-			$(el).addClass("selected").removeClass("deslected").trigger("shift")
+			$(el).addClass("selected").removeClass("deselected").trigger("shift")
 		},
 		calculateSubmenuPosition : function(el, ev){
 			var off = this.element.offset();
@@ -79,25 +103,32 @@ include.apps('jupiter/toolbar').then(function(){
 			return off;
 		},
 		"li shifted" : function(el){
-			el.trigger("select");
-			el.siblings().removeClass("selected").addClass("deslected")
+			el.trigger("select:after");
+			el.siblings().removeClass("selected").addClass("deselected")
 		},
-		hide : function(){
-			this.element.find("li").removeClass("selected").removeClass("deslected")
-		}
+		"hide:after" : function(el){
+			this.element.find("li").removeClass("selected").removeClass("deselected")
+		},
+		">hide:before" : function(el, ev){},
+		">show:before" : function(el, ev){},
+		">hide": function(){} // TODO figure out the right way to make hide appear to be triggered
 	})
-	//({MENU_TYPE: ClickMenu})
-	J.Toolbar({MENU_TYPE: ClickMenu, CHILD_CLASS_NAMES: "menu"}).extend("Jupiter.Navigation",{listensTo: ["shifted"]},{
+	//({menu_type: ClickMenu})
+	J.Toolbar.extend("Phui.Navigation",
+	{
+		defaults: {menu_type: ClickMenu, child_class_names: "menu"},
+		listensTo: ["shifted"]
+	},
+	{
 		init : function(){
 			this._super.apply(this, arguments)
-			this.element.mixin(Jupiter.Shiftable, Jupiter.Highlight)
-            this.element.children("ul").css("position","relative")
+			this.element.mixin(Phui.Shiftable, Phui.Highlight)
+            this.element.css("position","relative")
 		},
-		"li deselect" : function(el, ev){
-			//$(el).siblings()
+		"li select:before" : function(el, ev){
 			ev.preventDefault();
-			this.hideOld();
-			$(el).removeClass("deslected").addClass("selected").trigger("shift");
+			this.find("."+this.options.active+":first").removeClass(this.options.active);
+			$(el).removeClass("deselected").addClass("selected").trigger("shift");
 		},
 		calculateSubmenuPosition : function(el, ev){
 	   		var off = this.element.offset();
@@ -106,9 +137,9 @@ include.apps('jupiter/toolbar').then(function(){
 			return off;
 	   },
 	   "li shifted" : function(el, ev){
-			el.trigger("select");
-			el.siblings().removeClass("selected").addClass("deslected");
-			el.addClass("selected").removeClass("deslected");
+			el.trigger("select:after");
+			el.siblings().removeClass("selected").addClass("deselected");
+			el.addClass("selected").removeClass("deselected");
 	   }
 	})
 	

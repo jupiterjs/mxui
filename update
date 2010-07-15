@@ -1,0 +1,2 @@
+_args = ["http://github.com/pinhook/phui/","phui"];
+load("steal/scripts/get")

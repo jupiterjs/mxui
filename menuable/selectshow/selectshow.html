@@ -1,0 +1,65 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
+            "http://www.w3.org/TR/html4/strict.dtd">
+<html lang="en">
+	<head>
+		<title>selectopen</title>
+        <style type='text/css'>
+            body {font-family: verdana}
+            .error {border: solid 1px red;}
+            .error_text { color: red; font-size: 10px;}
+            td {padding: 3px;}
+			.selected>a{
+            	background-color: #ddffee;
+            }
+			.active>a {
+				color: red;
+			}
+        </style>
+	</head>
+	<body>
+        <ul id="menu3">
+            <li><a>older 2</a>
+					<ul class='submenu'>
+                        <li><a>Folder Control</a>
+							<ul class='submenu'>
+	                        	<li><a>Another</a></li>
+	                        	<li><a>Exec</a></li>
+	                        	<li><a>Policy</a></li>
+							</ul>
+						</li>
+                        <li><a>Search Policies</a></li>
+                        <li><a>View Policies</a></li>
+					</ul>
+			</li>
+			<li><a>Google</a>
+					<ul class='submenu'>
+                        <li><a>Risk</a></li>
+                        <li><a>Enterprise</a></li>
+                        <li><a>Incident</a></li>
+					</ul>
+			</li>
+        </ul>
+		<script type='text/javascript' 
+                src='../../../steal/steal.js?steal[app]=phui/menuable/selectshow&steal[env]=development'>   
+        </script>
+		<script type='text/javascript'>
+			
+			Phui.Menuable.SelectShow.extend("Phui.Menuable.SelectShow.Submenu",
+			{
+				">li click": function(el, ev){
+					el.trigger("activate")
+				},
+				">li hoverinit": function(el, ev, hover){
+					hover.setDelay(50);
+				},
+				">li hoverenter": function(el, ev, hover){
+					el.trigger("select")
+				}
+			});
+			$("#menu3").phui_menuable_select_show_submenu().find("ul")
+					   .phui_menuable_select_show_submenu().hide()
+					  
+			
+		</script>
+	</body>
+</html>

@@ -1,0 +1,71 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
+            "http://www.w3.org/TR/html4/strict.dtd">
+<html lang="en">
+	<head>
+		<title>datatable</title>
+        <link type="text/css" href="../smoothness/jquery-ui-1.7.2.custom.css" rel="stylesheet" />
+        <style type='text/css'>
+            body {font-family: verdana}
+            .error {border: solid 1px red;}
+            .error_text { color: red; font-size: 10px;}
+            td {padding: 3px;}
+			
+			/* Phui.Datatable css */
+			.phui_datatable {
+             	font-size: 0.7em;
+            }			
+			.phui_datatable table {
+				border-width: 0px;
+				border-style: outset;
+				border-collapse: collapse;
+				background-color: white;
+			}
+			.phui_datatable table th {
+				text-align: left;
+				border-width: 1px;
+				border-style: solid;
+				padding: 7px;
+			}
+			.phui_datatable table th input {
+				width: 200px;
+				height: 20px;
+				border: 2px solid #CCCCCC;
+				margin-left: 10px;
+			}
+			.phui_datatable table td {
+				border-width: 1px;
+				padding: 7px;
+				border-style: solid;
+			}
+        </style>
+	</head>
+	<body>
+	    <h1>Welcome to JavaScriptMVC 3.0!</h1>
+        <ul>
+            <li>Include plugins and files in <i>phui/datatable/datatable.js</i>.</li>
+            <li>Change to production mode by changing <i>development</i> to <i>production</i> in this file.</li>
+        </ul>
+        <div class="loans" style="margin:20px;"></div>
+		<script type='text/javascript' 
+                src='../../steal/steal.js?steal[app]=phui/datatable&steal[env]=development'
+                package='main.js'
+                compress='false'>   
+        </script>
+		<script type='text/javascript'>
+	        //var loans = [{"auto_extended_flg":false,"created_on":"2009/11/20 16:52:53.117391 +0000","funding_date_actual":"2009-11-23","gov_law_state_cd":"IL","rules_file_id":8,"brand_id":1,"hidden_flg":false,"loan_type_cd":"installment","payment_flg":null,"requested_time":"2009/11/20 16:46:19.720789 +0000","bank_authorization_revoked_on":null,"run_callcredit_flg":false,"comment_hidden":"","created_by":"C:13161918 I:75.57.210.217","interest_rate":2.61,"pay_stub_id":null,"status_cd":"issued","updated_on":"2009/11/20 18:26:56.44254 +0000","discount_instances":[{"created_on":"2009/11/20 16:52:54.157613 +0000","expired_flg":false,"confirmed_on":"2009/11/20 16:52:03.576008 +0000","created_by":"C:13161918 I:75.57.210.217","discount_id":12068,"hash_key":"b900973f9a453dd415462d4744e7488c","loan_id":27152052,"referred_by_id":null,"updated_on":"2009/11/20 16:52:54.157613 +0000","lock_version":0,"referrals_id":null,"id":2837375,"updated_by":"C:13161918 I:75.57.210.217","confirmation_ip":null,"customer_id":13161918,"loan_task_id":null}],"cso_lender_cd":null,"lock_version":3,"funding_date":"2009-11-23","id":27152052,"loan_rule_set_id":706,"updated_by":"issue_all_approved","amount":300.0,"base_loan_id":null,"coupon_code":null,"customer_id":13161918,"end_action_cd":"pay_in_full","fee_amount":0.0,"payoff_by_ach_flg":true,"coupon_discount_amount":0.0,"due_date":"2009-12-03","currency_cd":"USD","end_partial_payment_amount":0.0,"comment":"","due_date_adjusted":"2009-12-03","approved_time":"2009/11/20 17:46:19.82527 +0000","country_cd":"US","cso_interest_rate":null,"grace_period_status_id":null,"paid_off_date":null,"payment_method_cd":"bank_account_ach","status_onhold_cd":null},{"auto_extended_flg":false,"created_on":"2009/11/19 18:40:40.160330 +0000","funding_date_actual":"2009-11-20","gov_law_state_cd":"IL","rules_file_id":7,"brand_id":1,"hidden_flg":true,"loan_type_cd":"installment","payment_flg":null,"requested_time":"2009/11/19 18:39:31.480115 +0000","bank_authorization_revoked_on":null,"run_callcredit_flg":false,"comment_hidden":"","created_by":"C:13161918 I:99.36.29.124","interest_rate":2.61,"pay_stub_id":null,"status_cd":"withdrawn","updated_on":"2009/11/19 20:59:01.299594 +0000","discount_instances":[{"created_on":"2009/11/19 18:40:40.365705 +0000","expired_flg":false,"confirmed_on":"2009/11/19 18:39:34.262285 +0000","created_by":"C:13161918 I:99.36.29.124","discount_id":12068,"hash_key":"0fa01c29e8eeddece282c21222b841a8","loan_id":27146702,"referred_by_id":null,"updated_on":"2009/11/19 18:40:40.365705 +0000","lock_version":0,"referrals_id":null,"id":2835114,"updated_by":"C:13161918 I:99.36.29.124","confirmation_ip":null,"customer_id":13161918,"loan_task_id":null}],"cso_lender_cd":null,"lock_version":2,"funding_date":"2009-11-20","id":27146702,"loan_rule_set_id":2,"updated_by":"E:acooks I:10.224.88.194","amount":300.0,"base_loan_id":null,"coupon_code":null,"customer_id":13161918,"end_action_cd":"pay_in_full","fee_amount":0.0,"payoff_by_ach_flg":true,"coupon_discount_amount":0.0,"due_date":"2009-12-03","currency_cd":"USD","end_partial_payment_amount":0.0,"comment":"","due_date_adjusted":"2009-12-03","approved_time":null,"country_cd":"US","cso_interest_rate":null,"grace_period_status_id":null,"paid_off_date":null,"payment_method_cd":"bank_account_ach","status_onhold_cd":null}];
+			var loans = [{"auto_extended_flg":false,"created_on":"2005/05/25 22:33:53.0 +0000","funding_date_actual":"2005-05-26","gov_law_state_cd":"NM","rules_file_id":null,"brand_id":1,"hidden_flg":false,"loan_type_cd":"payday","payment_flg":null,"requested_time":"2005/05/25 22:33:53.0 +0000","bank_authorization_revoked_on":null,"run_callcredit_flg":false,"comment_hidden":"","created_by":"unspecified","interest_rate":null,"pay_stub_id":null,"status_cd":"paid_off","updated_on":"2005/08/09 17:33:10.0 +0000","cso_lender_cd":null,"lock_version":0,"funding_date":"2005-05-26","id":89197,"loan_rule_set_id":null,"updated_by":"unspecified","amount":200.0,"base_loan_id":null,"coupon_code":"","customer_id":39404,"end_action_cd":"partial_payment","fee_amount":50.0,"payoff_by_ach_flg":true,"coupon_discount_amount":0.0,"due_date":"2005-06-15","currency_cd":"USD","end_partial_payment_amount":0.0,"comment":"YOUR REQUEST HAS BEEN COMPLETED AND FUNDS WILL BE AVAILABLE TO YOU ON 6\/1\/05. THANK YOU FOR CHOOSING","due_date_adjusted":"2005-06-15","approved_time":null,"country_cd":"US","cso_interest_rate":null,"grace_period_status_id":null,"paid_off_date":null,"payment_method_cd":"bank_account_ach","status_onhold_cd":null},{"auto_extended_flg":false,"created_on":"2005/06/13 21:52:23.0 +0000","funding_date_actual":"2005-06-15","gov_law_state_cd":"NM","rules_file_id":null,"brand_id":1,"hidden_flg":false,"loan_type_cd":"payday","payment_flg":null,"requested_time":"2005/06/13 21:52:23.0 +0000","bank_authorization_revoked_on":null,"run_callcredit_flg":false,"comment_hidden":"","created_by":"unspecified","interest_rate":null,"pay_stub_id":null,"status_cd":"paid_off","updated_on":"2005/08/09 17:33:10.0 +0000","cso_lender_cd":null,"lock_version":0,"funding_date":"2005-06-15","id":95746,"loan_rule_set_id":null,"updated_by":"unspecified","amount":200.0,"base_loan_id":89197,"coupon_code":"","customer_id":39404,"end_action_cd":"partial_payment","fee_amount":50.0,"payoff_by_ach_flg":true,"coupon_discount_amount":0.0,"due_date":"2005-07-01","currency_cd":"USD","end_partial_payment_amount":0.0,"comment":"","due_date_adjusted":"2005-07-01","approved_time":null,"country_cd":"US","cso_interest_rate":null,"grace_period_status_id":null,"paid_off_date":null,"payment_method_cd":"bank_account_ach","status_onhold_cd":null},{"auto_extended_flg":false,"created_on":"2005/10/13 06:10:01.0 +0000","funding_date_actual":"2005-10-14","gov_law_state_cd":"NM","rules_file_id":null,"brand_id":1,"hidden_flg":false,"loan_type_cd":"payday","payment_flg":null,"requested_time":"2005/10/13 06:10:00.0 +0000","bank_authorization_revoked_on":null,"run_callcredit_flg":false,"comment_hidden":"","created_by":"generate_extensions","interest_rate":null,"pay_stub_id":null,"status_cd":"in_default","updated_on":"2005/10/31 16:14:54.0 +0000","cso_lender_cd":null,"lock_version":4,"funding_date":"2005-10-14","id":2042231,"loan_rule_set_id":null,"updated_by":"returns","amount":250.0,"base_loan_id":2022259,"coupon_code":null,"customer_id":39404,"end_action_cd":"pay_in_full","fee_amount":62.5,"payoff_by_ach_flg":true,"coupon_discount_amount":0.0,"due_date":"2005-10-28","currency_cd":"USD","end_partial_payment_amount":0.0,"comment":"","due_date_adjusted":"2005-10-28","approved_time":"2005/10/13 06:10:01.0 +0000","country_cd":"US","cso_interest_rate":null,"grace_period_status_id":null,"paid_off_date":null,"payment_method_cd":"bank_account_ach","status_onhold_cd":null},{"auto_extended_flg":false,"created_on":"2005/06/27 19:58:50.0 +0000","funding_date_actual":"2005-07-01","gov_law_state_cd":"NM","rules_file_id":null,"brand_id":1,"hidden_flg":false,"loan_type_cd":"payday","payment_flg":null,"requested_time":"2005/06/27 19:58:50.0 +0000","bank_authorization_revoked_on":null,"run_callcredit_flg":false,"comment_hidden":"","created_by":"unspecified","interest_rate":null,"pay_stub_id":null,"status_cd":"paid_off","updated_on":"2005/08/09 17:33:10.0 +0000","cso_lender_cd":null,"lock_version":0,"funding_date":"2005-07-01","id":101784,"loan_rule_set_id":null,"updated_by":"unspecified","amount":200.0,"base_loan_id":89197,"coupon_code":"","customer_id":39404,"end_action_cd":"partial_payment","fee_amount":50.0,"payoff_by_ach_flg":true,"coupon_discount_amount":0.0,"due_date":"2005-08-01","currency_cd":"USD","end_partial_payment_amount":0.0,"comment":"","due_date_adjusted":"2005-08-01","approved_time":null,"country_cd":"US","cso_interest_rate":null,"grace_period_status_id":null,"paid_off_date":null,"payment_method_cd":"bank_account_ach","status_onhold_cd":null},{"auto_extended_flg":false,"created_on":"2005/07/25 16:05:18.0 +0000","funding_date_actual":"2005-08-01","gov_law_state_cd":"NM","rules_file_id":null,"brand_id":1,"hidden_flg":false,"loan_type_cd":"payday","payment_flg":null,"requested_time":"2005/07/25 16:05:18.0 +0000","bank_authorization_revoked_on":null,"run_callcredit_flg":false,"comment_hidden":"","created_by":"unspecified","interest_rate":null,"pay_stub_id":null,"status_cd":"paid_off","updated_on":"2005/09/06 16:40:52.0 +0000","cso_lender_cd":null,"lock_version":2,"funding_date":"2005-08-01","id":114982,"loan_rule_set_id":null,"updated_by":"unknown update author","amount":200.0,"base_loan_id":89197,"coupon_code":"","customer_id":39404,"end_action_cd":"partial_payment","fee_amount":50.0,"payoff_by_ach_flg":true,"coupon_discount_amount":0.0,"due_date":"2005-09-01","currency_cd":"USD","end_partial_payment_amount":0.0,"comment":"","due_date_adjusted":"2005-09-01","approved_time":null,"country_cd":"US","cso_interest_rate":null,"grace_period_status_id":null,"paid_off_date":null,"payment_method_cd":"bank_account_ach","status_onhold_cd":null},{"auto_extended_flg":false,"created_on":"2005/08/31 00:03:50.0 +0000","funding_date_actual":"2005-09-01","gov_law_state_cd":"NM","rules_file_id":null,"brand_id":1,"hidden_flg":false,"loan_type_cd":"payday","payment_flg":null,"requested_time":"2005/08/31 00:03:48.0 +0000","bank_authorization_revoked_on":null,"run_callcredit_flg":false,"comment_hidden":"","created_by":"Loan.extend","interest_rate":null,"pay_stub_id":null,"status_cd":"paid_off","updated_on":"2005/09/19 17:04:39.0 +0000","cso_lender_cd":null,"lock_version":4,"funding_date":"2005-09-01","id":2010471,"loan_rule_set_id":null,"updated_by":"unknown update author","amount":200.0,"base_loan_id":89197,"coupon_code":null,"customer_id":39404,"end_action_cd":"pay_in_full","fee_amount":50.0,"payoff_by_ach_flg":true,"coupon_discount_amount":0.0,"due_date":"2005-09-15","currency_cd":"USD","end_partial_payment_amount":0.0,"comment":"","due_date_adjusted":"2005-09-15","approved_time":"2005/08/31 00:03:51.0 +0000","country_cd":"US","cso_interest_rate":null,"grace_period_status_id":null,"paid_off_date":null,"payment_method_cd":"bank_account_ach","status_onhold_cd":null},{"auto_extended_flg":false,"created_on":"2005/09/19 16:32:21.0 +0000","funding_date_actual":"2005-09-20","gov_law_state_cd":"NM","rules_file_id":null,"brand_id":1,"hidden_flg":false,"loan_type_cd":"payday","payment_flg":null,"requested_time":"2005/09/19 16:33:50.0 +0000","bank_authorization_revoked_on":null,"run_callcredit_flg":false,"comment_hidden":"","created_by":"JANDSKENNELS@AOL.COM","interest_rate":null,"pay_stub_id":null,"status_cd":"in_default","updated_on":"2005/10/17 15:14:30.0 +0000","cso_lender_cd":null,"lock_version":7,"funding_date":"2005-09-20","id":2022259,"loan_rule_set_id":null,"updated_by":"returns","amount":250.0,"base_loan_id":null,"coupon_code":"PMT081546","customer_id":39404,"end_action_cd":"partial_payment","fee_amount":62.5,"payoff_by_ach_flg":true,"coupon_discount_amount":6.25,"due_date":"2005-10-14","currency_cd":"USD","end_partial_payment_amount":0.0,"comment":"","due_date_adjusted":"2005-10-14","approved_time":"2005/09/19 17:04:42.0 +0000","country_cd":"US","cso_interest_rate":null,"grace_period_status_id":null,"paid_off_date":null,"payment_method_cd":"bank_account_ach","status_onhold_cd":"settlement"}];
+			$('.loans').phui_datatable({
+				fields: [{name:'loan_type_cd', text: 'Loan Type'},
+				         {name:'id', text: 'Loan Id'},
+						 {name:'gov_law_state_cd', text: 'Gov Law State'},
+						 {name:'status_cd', text: 'Status'},
+						 {name:'end_action_cd', text: 'End Action'},
+						 {name:'funding_date_actual', text: 'Funding date'},
+						 {name:'due_date_adjusted', text: 'Due date adjusted'},
+						 {name:'amount', text: 'Amount'},
+						 {name:'coupon_discount_amount', text: 'Discounted Fee'}],    
+				rows: loans
+			});
+		</script>
+	</body>
+</html>

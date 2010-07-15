@@ -1,0 +1,1 @@
+steal.plugins('funcunit').then('block_test')

@@ -1,0 +1,4 @@
+<% for(var i=0;i<options.options.length;i++){ 
+       var option = options.options[i]; %>
+       <option value='<%= option.value %>' <% if(option.value == options.value){ %> SELECTED <% } %>><%= option.text %></option>
+<% } %>
