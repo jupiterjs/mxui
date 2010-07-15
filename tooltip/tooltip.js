@@ -13,7 +13,7 @@ steal.plugins('jquery/controller',
 					.hide()
 					.appendTo( $(document.body) )
 					.phui_positionable( {
-						my: 'left top',
+						my: 'right top',
 						at: 'left bottom',
 						offset: '10 10',
 						collision: 'none none'
@@ -23,8 +23,9 @@ steal.plugins('jquery/controller',
 			
 			defaults: {
 				html: "<h1>Hello World</h1>",
-				width: 120,
-				height: 60,
+				width: "auto",
+				height: "auto",
+				pading: "5px",
 				backgroundColor: "#AFEEEE",
 				border: "1px solid #555555",
 				opacity: 1
@@ -47,6 +48,7 @@ steal.plugins('jquery/controller',
 					.html(this.options.html)
 					.css({border: this.options.border,
 									backgroundColor: this.options.backgroundColor,
+									padding: this.options.padding,
 									width: this.options.width,
 									height: this.options.height,
 									opacity: this.options.opacity})
