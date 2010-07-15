@@ -16,7 +16,7 @@ steal.plugins('jquery/controller',
 						my: 'left top',
 						at: 'left bottom',
 						offset: '10 10',
-						collision: 'none none'
+						collision: 'flip flip'
 					});
 				
 			},
