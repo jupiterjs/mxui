@@ -23,48 +23,34 @@ steal.plugins('jquery/controller',
 			
 			defaults: {
 				html: "<h1>Hello World</h1>",
-				autoOpen:  true,
 				width: "auto",
 				height: "auto",
 				pading: "5px",
 				backgroundColor: "#AFEEEE",
 				border: "1px solid #555555",
-				opacity: 1
+				opacity: 1,
+				renderCallback: null
 			}
 		},
 		{
-			init: function() {
-				
-				/*this.tooltipEl.css({border: this.options.border,
-									backgroundColor: this.options.backgroundColor,
-									width: this.options.width,
-									height: this.options.height,
-									opacity: this.options.opacity});
-				this.tooltipEl.html(this.options.html);
-				this.tooltipEl );
-				this.tooltipEl.hide();*/
-			},
 			mouseenter: function(el, ev) {
-				if (this.options.autoOpen) {
-					this.Class.tooltipEl.html(this.options.html).css({
-						border: this.options.border,
-						backgroundColor: this.options.backgroundColor,
-						padding: this.options.padding,
-						width: this.options.width,
-						height: this.options.height,
-						opacity: this.options.opacity
-					}).trigger("move", el).fadeIn("fast");
+				if(this.options.renderCallback){
+					return this.options.renderCallback(this.element, this.callback('_openTooltip'));
 				}
+				this._openTooltip(this.options.html);
 			},
 			"open:tooltip": function(el, ev, html) {
-					this.Class.tooltipEl.html(html).css({
-						border: this.options.border,
-						backgroundColor: this.options.backgroundColor,
-						padding: this.options.padding,
-						width: this.options.width,
-						height: this.options.height,
-						opacity: this.options.opacity
-					}).trigger("move", el).fadeIn("fast");				
+				this._openTooltip(html);		
+			},
+			_openTooltip: function(html){
+				this.Class.tooltipEl.html(html).css({
+					border: this.options.border,
+					backgroundColor: this.options.backgroundColor,
+					padding: this.options.padding,
+					width: this.options.width,
+					height: this.options.height,
+					opacity: this.options.opacity
+				}).trigger("move", this.element).fadeIn("fast");
 			},
 			mouseleave: function(el, ev) {
 				this.Class.tooltipEl.fadeOut("fast");
