@@ -1,6 +1,7 @@
 steal.plugins('jquery/controller',
 			  'jquery/view/ejs',
-			  'phui/positionable')
+			  'phui/positionable',
+			  'jquery/event/hover')
 	 .then( function($){
 	 	
 		$.Controller.extend("Phui.Tooltip",
@@ -33,18 +34,21 @@ steal.plugins('jquery/controller',
 			}
 		},
 		{
-			mouseenter: function(el, ev) {
+			hoverenter: function(el, ev) {
+				console.log("hoverenter")
 				if (this.options.renderCallback) {
-					this.options.renderCallback(this.element, this.callback('_openTooltip'));
+					this.options.renderCallback(this.element,ev, this.callback('_openTooltip'));
 				}
 				else {
-					this._openTooltip(this.options.html);
+					
+					this._openTooltip(this.options.html, ev);
 				}
 			},
 			"open:tooltip": function(el, ev, html) {
 				this._openTooltip(html);		
 			},
-			_openTooltip: function(html){
+			_openTooltip: function(html, location){
+				console.log(location)
 				this.Class.tooltipEl.html(html).css({
 					border: this.options.border,
 					backgroundColor: this.options.backgroundColor,
@@ -52,9 +56,9 @@ steal.plugins('jquery/controller',
 					width: this.options.width,
 					height: this.options.height,
 					opacity: this.options.opacity
-				}).trigger("move", this.element).fadeIn("fast");
+				}).trigger("move", location || this.element).fadeIn("fast");
 			},
-			mouseleave: function(el, ev) {
+			hoverleave: function(el, ev) {
 				this.Class.tooltipEl.fadeOut("fast");
 			}
 		});
