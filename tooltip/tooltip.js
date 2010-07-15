@@ -9,6 +9,7 @@ steal.plugins('jquery/controller',
 				this._super()
 				//make tooltip element for everyone
 				this.tooltipEl = $("<div class='tooltip'></div>")
+					.css("zIndex",9998)
 					.hide()
 					.appendTo( $(document.body) )
 					.phui_positionable( {
@@ -26,7 +27,7 @@ steal.plugins('jquery/controller',
 				height: 60,
 				backgroundColor: "#AFEEEE",
 				border: "1px solid #555555",
-				opacity: 0.5
+				opacity: 1
 			}
 		},
 		{
