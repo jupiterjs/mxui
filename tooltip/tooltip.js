@@ -35,7 +35,6 @@ steal.plugins('jquery/controller',
 		},
 		{
 			hoverenter: function(el, ev) {
-				console.log("hoverenter")
 				if (this.options.renderCallback) {
 					this.options.renderCallback(this.element,ev, this.callback('_openTooltip'));
 				}
@@ -48,7 +47,6 @@ steal.plugins('jquery/controller',
 				this._openTooltip(html);		
 			},
 			_openTooltip: function(html, location){
-				console.log(location)
 				this.Class.tooltipEl.html(html).css({
 					border: this.options.border,
 					backgroundColor: this.options.backgroundColor,
