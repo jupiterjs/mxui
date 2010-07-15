@@ -34,10 +34,12 @@ steal.plugins('jquery/controller',
 		},
 		{
 			mouseenter: function(el, ev) {
-				if(this.options.renderCallback){
-					return this.options.renderCallback(this.element, this.callback('_openTooltip'));
+				if (this.options.renderCallback) {
+					this.options.renderCallback(this.element, this.callback('_openTooltip'));
 				}
-				this._openTooltip(this.options.html);
+				else {
+					this._openTooltip(this.options.html);
+				}
 			},
 			"open:tooltip": function(el, ev, html) {
 				this._openTooltip(html);		
