@@ -13,7 +13,7 @@ steal.plugins('jquery/controller',
 					.hide()
 					.appendTo( $(document.body) )
 					.phui_positionable( {
-						my: 'right top',
+						my: 'left top',
 						at: 'left bottom',
 						offset: '10 10',
 						collision: 'none none'
@@ -23,6 +23,7 @@ steal.plugins('jquery/controller',
 			
 			defaults: {
 				html: "<h1>Hello World</h1>",
+				autoOpen:  true,
 				width: "auto",
 				height: "auto",
 				pading: "5px",
@@ -44,16 +45,26 @@ steal.plugins('jquery/controller',
 				this.tooltipEl.hide();*/
 			},
 			mouseenter: function(el, ev) {
-				this.Class.tooltipEl
-					.html(this.options.html)
-					.css({border: this.options.border,
-									backgroundColor: this.options.backgroundColor,
-									padding: this.options.padding,
-									width: this.options.width,
-									height: this.options.height,
-									opacity: this.options.opacity})
-					.trigger("move", ev)
-					.fadeIn("fast");
+				if (this.options.autoOpen) {
+					this.Class.tooltipEl.html(this.options.html).css({
+						border: this.options.border,
+						backgroundColor: this.options.backgroundColor,
+						padding: this.options.padding,
+						width: this.options.width,
+						height: this.options.height,
+						opacity: this.options.opacity
+					}).trigger("move", el).fadeIn("fast");
+				}
+			},
+			"open:tooltip": function(el, ev, html) {
+					this.Class.tooltipEl.html(html).css({
+						border: this.options.border,
+						backgroundColor: this.options.backgroundColor,
+						padding: this.options.padding,
+						width: this.options.width,
+						height: this.options.height,
+						opacity: this.options.opacity
+					}).trigger("move", el).fadeIn("fast");				
 			},
 			mouseleave: function(el, ev) {
 				this.Class.tooltipEl.fadeOut("fast");
