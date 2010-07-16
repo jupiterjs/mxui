@@ -23,7 +23,7 @@ steal.plugins('jquery/controller',
 			},
 			
 			defaults: {
-				html: "<h1>Hello World</h1>",
+				//html: "<h1>Hello World</h1>",
 				width: "auto",
 				height: "auto",
 				pading: "5px",
@@ -38,8 +38,7 @@ steal.plugins('jquery/controller',
 				if (this.options.renderCallback) {
 					this.options.renderCallback(this.element,ev, this.callback('_openTooltip'));
 				}
-				else {
-					
+				else if (this.options.html) {
 					this._openTooltip(this.options.html, ev);
 				}
 			},
@@ -57,6 +56,7 @@ steal.plugins('jquery/controller',
 				}).trigger("move", location || this.element).fadeIn("fast");
 			},
 			hoverleave: function(el, ev) {
+				cosnole.log("Fade out")
 				this.Class.tooltipEl.fadeOut("fast");
 			}
 		});
