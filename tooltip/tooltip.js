@@ -56,7 +56,6 @@ steal.plugins('jquery/controller',
 				}).trigger("move", location || this.element).fadeIn("fast");
 			},
 			hoverleave: function(el, ev) {
-				cosnole.log("Fade out")
 				this.Class.tooltipEl.fadeOut("fast");
 			}
 		});
