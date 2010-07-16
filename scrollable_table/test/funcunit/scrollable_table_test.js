@@ -4,20 +4,16 @@ module("phui/scrollable_test", {
 		
 		// helps compare columns
 		this.compareCols = function(i, size){
-			var width;
+			var width = S(".header th:eq("+i+")").outerWidth();
 			
-			S(".header th:eq("+i+")").outerWidth(function(outer){
-				width = outer
-			})
+			var outer = S("#table tr:first td:eq("+i+")").outerWidth();
 			
+			if(i == size -1){
+				ok(outer < width,"Last is bigger")
+			}else{
+				equals(outer, width, ""+i+" columns widths match")
+			}
 			
-			S("#table tr:first td:eq("+i+")").outerWidth(function(outer){
-				if(i == size -1){
-					ok(outer < width,"Last is bigger")
-				}else{
-					equals(outer, width, ""+i+" columns widths match")
-				}
-			})
 		}
 	}
 })
@@ -25,38 +21,29 @@ module("phui/scrollable_test", {
 test("columns are the right size", function(){
 	var compareCols = this.compareCols;
 	
-	S("#scrollable").click();
-	S.wait(100);
-	//check columns are right
-	
-	S(".header th").size(function(size){
-		var sizes = [];
+	S("#scrollable").click().delay(100, function(){
+		var size = S(".header th").size();
 		for(var i =0; i < size; i++){
 			compareCols(i, size);
 		}
-	})
-	S.wait(1,function(){
-		ok(true, "assertions make people feel better")
-	})
+	});
 });
 
 test("horizontal scroll", function(){
-	S("#scrollable").click();
-	S.wait(100);
+	S("#scrollable").click().delay(100);
+
 	
-	S('.scrollBody').scrollLeft(100);
-	S('.header').waitScrollLeft(100);
-	S.wait(1,function(){
+	S('.scrollBody').leftScroll(100);
+	S('.header').scrollLeft(100, function(){
 		ok(true, "assertions make people feel better")
-	})
+	});
 })
 
 test("resize test", function(){
-	S("#scrollable").click();
-	S.wait(100);
-	S("#resize").click();
-	S.wait(100);
-	S.wait(1,function(){
+	S("#scrollable").click().delay(100);
+
+	S("#resize").click().delay(100, function(){
 		ok(true, "assertions make people feel better")
-	})
+	});
+
 })

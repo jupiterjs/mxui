@@ -8,16 +8,14 @@ module("phui/grid/groupable test",{
 test("Groupable Test", function(){
     
     S('th.users_count-column-header span').exists()
-    S('th.users_count-column-header span').dragTo("#dragToGroupText")
+    S('th.users_count-column-header span').drag("#dragToGroupText")
+	var gd = S('.groupDrag'),
+		gc = S('.group-col:first');
 	
-	
-	S('.groupDrag').exists()
-	S('.groupDrag').text(function(val){
-		ok(/Users\_count/.test(val), "Group dragged ok")
-	})
-	S('.group-col:first').exists()
-	S('.group-col:first').text(function(val){
-		ok(/Users\_count\:\d/.test(val), "Group header ok")
+	gd.exists()
+	gc.exists(function(){
+		ok(/Users\_count/.test(gd.text()), "Group dragged ok")
+		ok(/Users\_count\:\d/.test(gc.text()), "Group header ok")
 	})
 	
 	S('.groupDrag .remove').click();

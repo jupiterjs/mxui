@@ -8,40 +8,34 @@ module("phui/grid", {
 test("sorting", function(){
 	S(".users_count-column-header a").exists().click();
 	S.wait(20)
-	S(".body tr:eq(5)").exists();
 	
-	var order = []
-	S('.body tr:eq(0) td:eq(4)').text(function(text){
-		order.push(parseInt(text))
-	})
-	S('.body tr:eq(4) td:eq(4)').text(function(text){
-		order.push(parseInt(text))
-	})
-	S('.body tr:eq(8) td:eq(4)').text(function(text){
-		order.push(parseInt(text))
+	var order = [],
+		r0 = S('.body tr:eq(0) td:eq(4)'),
+		r4 = S('.body tr:eq(4) td:eq(4)'),
+		r8 = S('.body tr:eq(4) td:eq(4)');
 		
+	S(".body tr:eq(5)").exists(function(){
+		order.push(parseInt(r0.text()))
+		order.push(parseInt(r4.text()))
+		order.push(parseInt(r8.text()))
 		var sorted = order.sort();
 		
 		same(order, sorted, "they seem sorted");
 		order = [];
-	})
+	});
 	
-	S(".users_count-column-header a").click();
-	S.wait(20)
-	S(".body tr:eq(5)").exists();
 	
-	S('.body tr:eq(0) td:eq(4)').text(function(text){
-		order.push(parseInt(text))
-	})
-	S('.body tr:eq(4) td:eq(4)').text(function(text){
-		order.push(parseInt(text))
-	})
-	S('.body tr:eq(8) td:eq(4)').text(function(text){
-		order.push(parseInt(text))
-		
+	S(".users_count-column-header a").click().delay(20);
+
+	S(".body tr:eq(5)").exists(function(){
+		order.push(parseInt(r0.text()))
+		order.push(parseInt(r4.text()))
+		order.push(parseInt(r8.text()))
 		var sorted = order.sort().reverse();
 		
 		same(order, sorted, "they seem reversed");
-	})
+	});
+	
+
 	
 })
