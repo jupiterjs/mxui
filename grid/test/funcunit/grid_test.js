@@ -25,7 +25,7 @@ test("sorting", function(){
 	});
 	
 	
-	S(".users_count-column-header a").click().delay(20);
+	S(".users_count-column-header a").click().wait(20);
 
 	S(".body tr:eq(5)").exists(function(){
 		order.push(parseInt(r0.text()))

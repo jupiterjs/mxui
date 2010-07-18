@@ -12,7 +12,7 @@ $.Controller.extend("Phui.Resizer",
 	
 },
 {
-	"th dragdown": function (el, ev, drag) {
+	"{selector} dragdown": function (el, ev, drag) {
 		if (this.isMouseOnRight(el, ev, 2)) {
 			var resize = $("<div id='phui_resizer' class='column-resizer'/>")
 							.css("position","absolute")
@@ -27,12 +27,12 @@ $.Controller.extend("Phui.Resizer",
 		}
 	},
 	//overwrite to size
-	"th default.resize:start" : function(el){
+	"{selector} default.resize:start" : function(el){
 		$("#phui_resizer")
 			.outerWidth(el.outerWidth())
 			.height(el.outerHeight());
 	},
-	"th dragmove": function (el, ev, drag) {
+	"{selector} dragmove": function (el, ev, drag) {
 		ev.preventDefault();
 		var width = ev.vector().minus(el.offsetv()).left();
 		
@@ -40,14 +40,14 @@ $.Controller.extend("Phui.Resizer",
 		if (width > el.find("span.minWidth").outerWidth())
 			$("#phui_resizer").width(width)
 	},
-	"th dragend": function (el, ev, drag) {
+	"{selector} dragend": function (el, ev, drag) {
 		ev.preventDefault();
 		el.trigger("resize:end")
 		
 		$("#phui_resizer").remove();
 	},
 	//make sure this is really fast
-	"th mousemove": function (el, ev) {
+	"{selector} mousemove": function (el, ev) {
 		if (this.isMouseOnRight(el, ev)) {
 			el.css("cursor", "e-resize")
 		} else {

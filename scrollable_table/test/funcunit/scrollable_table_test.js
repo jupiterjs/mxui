@@ -21,7 +21,7 @@ module("phui/scrollable_test", {
 test("columns are the right size", function(){
 	var compareCols = this.compareCols;
 	
-	S("#scrollable").click().delay(100, function(){
+	S("#scrollable").click().wait(100, function(){
 		var size = S(".header th").size();
 		for(var i =0; i < size; i++){
 			compareCols(i, size);
@@ -30,20 +30,20 @@ test("columns are the right size", function(){
 });
 
 test("horizontal scroll", function(){
-	S("#scrollable").click().delay(100);
+	S("#scrollable").click().wait(100);
 
 	
 	S('.scrollBody').leftScroll(100);
 	S('.header').scrollLeft(100, function(){
 		ok(true, "assertions make people feel better")
 	});
-})
+});
 
 test("resize test", function(){
-	S("#scrollable").click().delay(100);
+	S("#scrollable").click().wait(100);
 
-	S("#resize").click().delay(100, function(){
+	S("#resize").click().wait(100, function(){
 		ok(true, "assertions make people feel better")
 	});
 
-})
+});
