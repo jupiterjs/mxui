@@ -62,7 +62,7 @@ steal.plugins('jquery/controller','jquery/event/drop','jquery/event/drag/limit',
 			for(var i=0; i < sortables.length; i++){
 				//check if cursor is past 1/2 way
 				sortable =  $(sortables[i]);
-				if (ev.pageX < sortable.offset().left+sortable.width()/2) {
+				if (ev.pageX < Math.floor(sortable.offset().left+sortable.width()/2)) {
 					return {
 						pos: "before",
 						el: sortable
@@ -76,7 +76,7 @@ steal.plugins('jquery/controller','jquery/event/drop','jquery/event/drag/limit',
 					}
 			}
 			//check if it is at the end ...
-			if (ev.pageX >= sortable.offset().left+sortable.width()/2) {
+			if (ev.pageX >= Math.floor(sortable.offset().left+sortable.width()/2)) {
 				return {
 						pos: "after",
 						el: sortable
