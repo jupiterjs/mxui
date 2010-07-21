@@ -37,7 +37,7 @@ test("horizontal scroll", function(){
 	S('.header').scrollLeft(100, function(){
 		ok(true, "assertions make people feel better")
 	});
-})
+});
 
 test("resize test", function(){
 	S("#scrollable").click().wait(100);
@@ -46,4 +46,4 @@ test("resize test", function(){
 		ok(true, "assertions make people feel better")
 	});
 
-})
+});
