@@ -3,7 +3,7 @@ steal.plugins('jquery','jquery/controller').then(function($){
     {
 		listensTo : ["show",'move'],
 		iframe: false,
-		keep : false,
+		keep : false
     },
     {
        /**
