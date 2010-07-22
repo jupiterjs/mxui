@@ -26,9 +26,9 @@ steal.plugins('jquery/controller',
 				//html: "<h1>Hello World</h1>",
 				width: "auto",
 				height: "auto",
-				pading: "5px",
-				backgroundColor: "#AFEEEE",
-				border: "1px solid #555555",
+				padding: "10px",
+				backgroundColor: "#FFFFFF",
+				border: "2px solid #000000",
 				opacity: 1,
 				renderCallback: null
 			}
