@@ -62,7 +62,7 @@ steal.plugins('jquery/dom/dimensions','jquery/event/resize').then(function($){
 			var parent = $(this),
 				isWindow = this == window,
 				container = (isWindow ? $(document.body) : parent)
-				offset = ev.data.filler.offsetParent() == container.offsetParent() ? offsetTop : pageOffset
+				
 				//if the parent bleeds margins, we don't care what the last element's margin is
 				isBleeder = bleeder(parent),
 				children = container.children().filter(function(){
@@ -72,22 +72,30 @@ steal.plugins('jquery/dom/dimensions','jquery/event/resize').then(function($){
 					return get.position !== "absolute" && get.position !== "fixed" &&
 						   get.display !== "none" && !jQuery.expr.filters.hidden(this)
 				}),
-				first = children.eq(0),
-				firstOffset = offset(first),
 				last = children.eq(-1),
+				offsetParentIsContainer = ev.data.filler.offsetParent()[0] === container[0]
+				offset = 	offsetParentIsContainer || 
+							ev.data.last.offsetParent()[0] == container.offsetParent()[0] ? 
+									offsetTop : 
+									pageOffset;
+				firstOffset = offsetParentIsContainer ? 
+								0 : 
+								offset(container),
 				parentHeight = parent.height();
 				
 			if(!isBleeder){
 				//temporarily add a small div to use to figure out the 'bleed-through' margin
 				//of the last element
-				last = $('<div style="height: 0px; line-height:0px;overflow:hidden"/>')
+				last = $('<div style="height: 0px; background-color: red;line-height:0px;overflow:hidden"/>')
 					.appendTo(container);
-				
 			}
+
 			// the current size the content is taking up
-			var currentSize = bottom(last, offset) - firstOffset,
+			var currentSize = (bottom(last, offset) -0)- firstOffset;
+
+			
 			// what the difference between the parent height and what we are going to take up is
-				delta = parentHeight - currentSize,
+			var	delta = parentHeight - currentSize,
 			// the current height of the object
 				fillerHeight = ev.data.filler.height();
 			
@@ -96,7 +104,7 @@ steal.plugins('jquery/dom/dimensions','jquery/event/resize').then(function($){
 			
 			//remove the temporary element
 			if (!isBleeder) {
-				last.remove();
+				//last.remove();
 			}
 			ev.data.filler.triggerHandler('resize');
 		}
