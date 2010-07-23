@@ -73,11 +73,15 @@ steal.plugins('jquery/dom/dimensions','jquery/event/resize').then(function($){
 						   get.display !== "none" && !jQuery.expr.filters.hidden(this)
 				}),
 				last = children.eq(-1),
+				
 				offsetParentIsContainer = ev.data.filler.offsetParent()[0] === container[0]
+				//if the last element shares our containers offset parent or is the container
+				//we can just use offsetTop
 				offset = 	offsetParentIsContainer || 
 							ev.data.last.offsetParent()[0] == container.offsetParent()[0] ? 
 									offsetTop : 
 									pageOffset;
+				//the offset of the container
 				firstOffset = offsetParentIsContainer ? 
 								0 : 
 								offset(container),
@@ -86,7 +90,7 @@ steal.plugins('jquery/dom/dimensions','jquery/event/resize').then(function($){
 			if(!isBleeder){
 				//temporarily add a small div to use to figure out the 'bleed-through' margin
 				//of the last element
-				last = $('<div style="height: 0px; background-color: red;line-height:0px;overflow:hidden"/>')
+				last = $('<div style="height: 0px; line-height:0px;overflow:hidden"/>')
 					.appendTo(container);
 			}
 
@@ -104,7 +108,7 @@ steal.plugins('jquery/dom/dimensions','jquery/event/resize').then(function($){
 			
 			//remove the temporary element
 			if (!isBleeder) {
-				//last.remove();
+				last.remove();
 			}
 			ev.data.filler.triggerHandler('resize');
 		}
