@@ -20,9 +20,9 @@ test("moving items", function(){
 	first.drag(".sortable:eq(2)", function(){
 		ok(/Second/.test(first.text()), "Second is first")
 		
-		ok(/First/.test(second.text()), "First is second")
+		ok(/Third/.test(second.text()), "First is second")
 		
-		ok(/Third/.test(third.text()), "Third stays the same")
+		ok(/First/.test(third.text()), "Third stays the same")
 	});
 
 

@@ -33,7 +33,7 @@ test("horizontal scroll", function(){
 	S("#scrollable").click().wait(100);
 
 	
-	S('.scrollBody').leftScroll(100);
+	S('.scrollBody').scroll("left",100);
 	S('.header').scrollLeft(100, function(){
 		ok(true, "assertions make people feel better")
 	});

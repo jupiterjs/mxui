@@ -2,7 +2,8 @@ steal.plugins('jquery','jquery/controller').then(function($){
     $.Controller.extend("Phui.Positionable",
     {
 		listensTo : ["show",'move'],
-		iframe: false
+		iframe: false,
+		keep : false
     },
     {
        /**
@@ -15,8 +16,11 @@ steal.plugins('jquery','jquery/controller').then(function($){
         */
 	   init : function(element, options){
            this.element.css("position","absolute");
-           this.element[0].parentNode.removeChild(this.element[0])
-           document.body.appendChild(this.element[0]);
+           if(!this.options.keep){
+		   	this.element[0].parentNode.removeChild(this.element[0])
+            document.body.appendChild(this.element[0]);
+		   }
+		   
        },
        show : function(el, ev, position){
 		   this.move.apply(this, arguments)
@@ -55,7 +59,19 @@ steal.plugins('jquery','jquery/controller').then(function($){
 			}else {
 				targetWidth = target.outerWidth();
 				targetHeight = target.outerHeight();
-				basePosition = target.offset();
+				if(this.options.keep){
+					var to = target.offset();
+					
+					var eo =this.element.parent().children(":first").offset();
+					
+					basePosition = {
+						left: to.left - eo.left,
+						top: to.top -eo.top
+					}
+				}else{
+					basePosition = target.offset();
+				}
+				
 			}
 		
 			// force my and at to have valid horizontal and veritcal positions
