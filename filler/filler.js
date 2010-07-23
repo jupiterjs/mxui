@@ -32,22 +32,37 @@ steal.plugins('jquery/dom/dimensions','jquery/event/resize').then(function($){
 	filler = $.fn.phui_filler = function(options){
 		options || (options = {});
 		options.parent || (options.parent = $(this).parent())
+		options.parent = $(options.parent)
 		if(isThePage(options.parent[0])){
 			options.parent = $(window)
 		}
-		
 		$(options.parent).bind('resize',{filler: this},filler.parentResize);
 		//if this element is removed, take it out
-		this.bind('destroyed', function(){
+		this.bind('destroyed',{filler: this}, function(ev){
+			ev.filler.removeClass('phui_filler')
 			$(options.parent).unbind('resize', filler.parentResize)
 		})
+		this.addClass('phui_filler')
+		//add a resize to get things going
+		var func = function(){
+			//logg("triggering ..")
+			setTimeout(function(){
+				options.parent.triggerHandler("resize");
+			},13)
+		}
+		if($.isReady){
+			func();
+		}else{
+			$(func)
+		}
+		
 	};
 	$.extend(filler,{
 		parentResize : function(ev){
 			var parent = $(this),
 				isWindow = this == window,
 				container = (isWindow ? $(document.body) : parent)
-				offset = ev.data.filler.offsetParent() == parent.offsetParent() ? offsetTop : pageOffset
+				offset = ev.data.filler.offsetParent() == container.offsetParent() ? offsetTop : pageOffset
 				//if the parent bleeds margins, we don't care what the last element's margin is
 				isBleeder = bleeder(parent),
 				children = container.children().filter(function(){
@@ -65,11 +80,8 @@ steal.plugins('jquery/dom/dimensions','jquery/event/resize').then(function($){
 			if(!isBleeder){
 				//temporarily add a small div to use to figure out the 'bleed-through' margin
 				//of the last element
-				var last = $('<div/>').css({
-					height: "0px",
-					lineHeight: "0px",
-					overflow: "hidden"
-				}).appendTo(container);
+				last = $('<div style="height: 0px; line-height:0px;overflow:hidden"/>')
+					.appendTo(container);
 				
 			}
 			// the current size the content is taking up
