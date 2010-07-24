@@ -55,7 +55,7 @@ steal.plugins('jquery/dom/dimensions','jquery/event/resize').then(function($){
 		}else{
 			$(func)
 		}
-		
+		return this;
 	};
 	$.extend(filler,{
 		parentResize : function(ev){
@@ -78,7 +78,7 @@ steal.plugins('jquery/dom/dimensions','jquery/event/resize').then(function($){
 				//if the last element shares our containers offset parent or is the container
 				//we can just use offsetTop
 				offset = 	offsetParentIsContainer || 
-							ev.data.last.offsetParent()[0] == container.offsetParent()[0] ? 
+							last.offsetParent()[0] == container.offsetParent()[0] ? 
 									offsetTop : 
 									pageOffset;
 				//the offset of the container

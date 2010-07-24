@@ -139,12 +139,14 @@
 			for (var part in affects) {
 				out.push(part+"="+affects[part])
 			}
-
+			$(".container").each(function(){
+				$(this).phui_resizable()
+			})
 			$("#log").html(out.join(", "))
 		});
 		$("#run").click(function(){
 			$(".container").each(function(){
-				$(this).phui_resizable().find(".fill").phui_filler({
+				$(this).find(".fill").phui_filler({
 					parent: $(this),
 					adjust: true
 				})
