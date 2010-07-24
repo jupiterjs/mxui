@@ -20,6 +20,14 @@ steal.plugins('jquery/controller',
 						collision: 'flip flip'
 					});
 				
+				var self = this;
+				this.tooltipEl.bind( "mouseenter", function(ev) {
+					self.mouseOverTooltip = true;			
+				} );
+				
+				this.tooltipEl.bind( "mouseleave", function(ev) {
+					self.mouseOverTooltip = false;
+				} );														
 			},
 			
 			defaults: {
@@ -30,10 +38,27 @@ steal.plugins('jquery/controller',
 				backgroundColor: "#FFFFFF",
 				border: "2px solid #000000",
 				opacity: 1,
-				renderCallback: null
+				renderCallback: null,
+				keep: false
 			}
 		},
 		{
+			init: function(el) {
+				var el = el, 
+					that = this;
+				
+				this.tooltipActive = false;
+					
+				$(document.body).click( function(ev){
+					if (that.tooltipActive == true) {
+						if (ev.target != that.Class.tooltipEl[0] &&
+						ev.target != el) {
+							that.Class.tooltipEl.fadeOut("fast");
+							that.tooltipActive = false;
+						}
+					}
+				});					
+			},			
 			hoverenter: function(el, ev) {
 				if (this.options.renderCallback) {
 					this.options.renderCallback(this.element,ev, this.callback('_openTooltip'));
@@ -54,9 +79,17 @@ steal.plugins('jquery/controller',
 					height: this.options.height,
 					opacity: this.options.opacity
 				}).trigger("move", location || this.element).fadeIn("fast");
+				
+				this.tooltipActive = true;
 			},
 			hoverleave: function(el, ev) {
-				this.Class.tooltipEl.fadeOut("fast");
+				var self = this;
+				setTimeout( function(){
+					if ( !self.Class.mouseOverTooltip || !self.options.keep ) {
+						self.Class.tooltipEl.fadeOut("fast");
+						self.tooltipActive = false;
+					}
+				}, 100 );
 			}
 		});
 		
