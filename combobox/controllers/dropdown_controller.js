@@ -1,3 +1,6 @@
+steal.then(function(){
+	
+
 $.Controller.extend("Phui.Combobox.DropdownController", 
 {
 },
@@ -256,4 +259,6 @@ $.Controller.extend("Phui.Combobox.DropdownController",
 			}, 1);                     
         this.combobox.trigger("open");        
     }
+})
+
 })
