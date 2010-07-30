@@ -4,7 +4,10 @@ steal.plugins('phui/combobox')
 
     $.Controller.extend("Phui.Combobox.Ajax", {
         defaults : {
-            loadingMessage: "Loading ..."
+            loadingMessage: "Loading ...",
+			process : function(data){
+				return data.data ? data.data : data;
+			}
         }
     },
     {
@@ -46,8 +49,7 @@ steal.plugins('phui/combobox')
             })                
         },
         showData : function(combobox, isAutocompleteData, data) {
-            data = data.data ? data.data : data;
-            combobox.loadData(data);
+            combobox.loadData(this.options.process(data));
             this.dataAlreadyLoaded = true;
         },
         loadDataFromServerError : function() {
