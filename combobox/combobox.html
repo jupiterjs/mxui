@@ -54,7 +54,10 @@
 		<br/>
 		<h3>Ajax Combobox Demo</h3>
         <input id="ajax_demo" name="ajax_demo" />		
-
+		<br/>
+		
+		<h3>Slow</h3>
+		<input id="combobox_slow" type="text" name="myname" />
 		<div>abc</div>
 		<br/>
 		<div>abc</div>
@@ -97,13 +100,15 @@
                 // SELECT COMBOBOX DEMO								
 			    $("#expirationBehavior").phui_combobox_select();                 
 				 
-
-
+				
+				var data = [];
+				for(var i =0; i < 1000; i++){
+					data.push({value: i, text: "item"+i})
+				}
+				data[0].selected = true;
 				 
-                /*$("#combobox_demo").phui_combobox({
-                    items: [{value: 1, text: "archive", selected: true}, 
-                            {value: 2, text: "delete"},
-                            {value: 3, text: "none"}] });*/
+                $("#combobox_slow").phui_combobox({
+                    items: data });
 
 
 
@@ -173,21 +178,9 @@
                             var html = [];
 							for (var i = 0; i < item.colors.length; i++) {
 								var color = item.colors[i];
-								if (color == 1) {
-									html.push("<span class='color1'>&nbsp;</span>");
-								}
-								if (color == 2) {
-									html.push("<span class='color2'>&nbsp;</span>");
-								}	
-								if (color == 3) {
-									html.push("<span class='color3'>&nbsp;</span>");
-								}	
-								if (color == 4) {
-									html.push("<span class='color4'>&nbsp;</span>");
-								}	
-								if (color == 5) {
-									html.push("<span class='color5'>&nbsp;</span>");
-								}																																
+									
+								html.push("<span class='color"+color+"'>&nbsp;</span>");
+																																					
 							}
 							html.push("<span class='text'>" + item.text + "</span>");
                             return html.join(" ");

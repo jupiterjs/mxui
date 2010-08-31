@@ -113,39 +113,30 @@ $.Controller.extend("Phui.Combobox.DropdownController",
         }
         return html.join(" ");
     },
+	/**
+	 * returns the html for a list
+	 * @param {Object} list
+	 * @param {Object} currentLevel
+	 * @param {Object} initialLevel
+	 */
     _makeEl : function(list, currentLevel, initialLevel){
-        if(!list.length) return "";
-        currentLevel = currentLevel >-1 ? currentLevel: -1;
-        initialLevel = initialLevel ? initialLevel : currentLevel;
-        var nextLevel = list[1] ? list[1].level : 99999999,
-			item = list[0];
-        if(nextLevel == 99999999) {
-            var diff = currentLevel - initialLevel,
-				endStr = ""
-            for(var i=0; i<diff; i++){
-                endStr += "</ul></li>"
-            }
-            return "<li>"+this.drawItemHtml(item)+
-                   "</li>" + endStr
-        }
-        if(nextLevel == currentLevel) {
-             return "<li>"+this.drawItemHtml(item)+"</li>"+
-                this._makeEl(list.splice(1, list.length-1), nextLevel, initialLevel)
-        }
-        if(nextLevel > currentLevel){
-            return "<li>"+this.drawItemHtml(item)+"<ul>"+
-                this._makeEl(list.splice(1, list.length-1), nextLevel, initialLevel)
-        }
-        if(nextLevel < currentLevel){
-            var diff = currentLevel - nextLevel
-            var endStr = ""
-            for(var i=0; i<diff; i++){
-                endStr += "</ul></li>"
-            }
-            return "<li>"+this.drawItemHtml(item)+"</li>"+endStr+
-                this._makeEl(list.splice(1, list.length-1), nextLevel, initialLevel)
-
-        }
+        if (!list.length) {
+			return [];
+		}
+        var level = 0,
+			html = [];
+		for(var i =0; i < list.length; i++){
+			var item =  item = list[i];
+			if(item.level > level){
+				html.push("<ul>")
+			}
+			html.push("<li>",this.drawItemHtml(item),"</li>" );
+			if(item.level < level){
+				html.push("</ul>")
+			}
+			level = item.level;
+		}
+		return html.join("");
     },       
     drawItemHtml : function(item, isAutocompleteData) {
             return ["<span tabindex='0' class='item ",
