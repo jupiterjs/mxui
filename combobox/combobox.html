@@ -14,12 +14,15 @@
 			.color4 { background-color: #aabbbb; padding-left: 10px; margin: 1px; }
 			.color5 { background-color: #778877; padding-left: 10px; margin: 1px; }
 			.text { margin-left: 5px; }
-        </style>    
+        </style>     
         <link type="text/css" href="combobox.css" rel="stylesheet" />
-		<!--<link type="text/css" href="StyleResourceHandler.css" rel="stylesheet" /> -->
     </head>
     <body>
-    	
+		<h3>Empty Combobox Demo</h3>
+        
+        <select id='Empty' name='Empty'>
+		</select>
+
 		<h3>Select Combobox Demo</h3>
         <select id='expirationBehavior' name='forum[expirationBehavior]'>
 			<option value='0' selected='true'>archive</option>
@@ -43,7 +46,10 @@
             <button id="getValue">Get Value</button>
             <button id="query">Query</button>
             <button id="enable">Enable</button>
-            <button id="disable">Disable</button>                        
+            <button id="disable">Disable</button>   
+			<button id="select">Select</button>                     
+			<button id="clearSelection">Clear Selection</button>
+			<button id="getItems">Get Items</button>
         </div>		
 		
 		<br/>
@@ -53,38 +59,41 @@
 		
 		<br/>
 		<h3>Ajax Combobox Demo</h3>
-        <input id="ajax_demo" name="ajax_demo" />		
-
-		<div>abc</div>
-		<br/>
-		<div>abc</div>
-		<br/>
-		<div>abc</div>
-		<br/>
-		<div>abc</div>
-		<br/>
-		<div>abc</div>
-		<br/>
-		<div>abc</div>
-		<br/>
-		<div>abc</div>
-		<br/>
-		<div>abc</div>
-		<br/>
-		<div>abc</div>
-		<br/>
-		<div>abc</div>
-		<br/>
-		<div>abc</div>
-		<br/>
-		<div>abc</div>
-		<br/>
-		<div>abc</div>
-		<br/>
-		<div>abc</div>
-		<br/>
-		<div>abc</div>
-		<br/>
+		<button id="populateItems">Populate Items</button>
+        <input id="ajax_demo" name="ajax_demo" />
+		
+		<div id="ajax_demo_output">		
+			<div>abc</div>
+			<br/>
+			<div>abc</div>
+			<br/>
+			<div>abc</div>
+			<br/>
+			<div>abc</div>
+			<br/>
+			<div>abc</div>
+			<br/>
+			<div>abc</div>
+			<br/>
+			<div>abc</div>
+			<br/>
+			<div>abc</div>
+			<br/>
+			<div>abc</div>
+			<br/>
+			<div>abc</div>
+			<br/>
+			<div>abc</div>
+			<br/>
+			<div>abc</div>
+			<br/>
+			<div>abc</div>
+			<br/>
+			<div>abc</div>
+			<br/>
+			<div>abc</div>
+			<br/>
+		</div>
         <script type='text/javascript' 
                 src='../../steal/steal.js'>   
         </script>
@@ -92,8 +101,9 @@
             steal.plugins("phui/combobox/select",
 			              "phui/combobox/ajax",
 			              "jquery/dom/fixture").then(function($){
-                                
 
+
+			    $("#Empty").phui_combobox_select();      
                 // SELECT COMBOBOX DEMO								
 			    $("#expirationBehavior").phui_combobox_select();                 
 				 
@@ -109,7 +119,7 @@
 
                 // NESTED COMBOBOX DEMO (TEXT MODE)
                 $("#combobox_demo").phui_combobox({
-                    items: [{ value: "1", text: "hola", enabled: "true", selected: true,
+                    items: [{ value: "1", text: "hola", enabled: "true",
                                 children: [  { value: "5", text: "chicago", enabled: "true", children: [] },
                                               { value: "6", text: "kansas", enabled: "true", 
                                               children: [ { value: "7", text: "losangeles", enabled: "true", children: [] } ] } ] },
@@ -149,6 +159,25 @@
                     var value = $("#someValue").val();
                     $("#combobox_demo").controller().disable(value);
                 });    
+				
+                $("#select").bind("click", function(ev) {
+                    var value = $("input#someValue").val();
+                    $("#combobox_demo").controller().select( value );
+                })
+				$("#clearSelection").bind("click", function(ev) {
+                    var value = $("input#someValue").val();
+                    $("#combobox_demo").controller().clearSelection();
+                })
+				
+				$("#getItems").bind("click", function(ev) {
+                    var items = $("#combobox_demo").controller().getItems();
+					var html = [];
+					for(var i=0;i<items.length;i++) {
+						html.push( items[i].text );
+					}
+					$("#log").html("<div>" + html.join(", ") + "</div>");
+                })												
+												
                 
                 // event API for when a value is selected demo
                 $("#combobox_demo").bind("change", function(ev, value) {
@@ -189,7 +218,7 @@
 									html.push("<span class='color5'>&nbsp;</span>");
 								}																																
 							}
-							html.push("<span class='text'>" + item.text + "</span>");
+							//html.push("<span class='text'>" + item.text + "</span>");
                             return html.join(" ");
                         }
                     },                    
@@ -198,7 +227,8 @@
                             {value: 3, text: "pallete3", colors: [3, 2, 1, 5, 4]},
 							{value: 4, text: "pallete4", colors: [2, 5, 1, 3, 4]},
 							{value: 5, text: "pallete5", colors: [4, 1, 5, 3, 2]} ],
-					displayHTML: true
+					displayHTML: true, 
+                    width: 200
                 });                                                                                                   
                 
 				
@@ -253,6 +283,7 @@
                 var oldFixture1 = $.fixture["-items"]; 
                 $.fixture["-items"] = function(settings){
                     
+					settings.data = "loadOnDemand";
                     var items = oldFixture1(settings)[0].data;
                     
                     // make a clone of the data so that changes
@@ -269,7 +300,7 @@
                     if(settings.data == "loadOnDemand") {
                         return [{
                             "count": clonedItems.length,
-                            "data" : clonedItems
+                            "d" : clonedItems
                         }]                        
                     }
                     
@@ -288,7 +319,17 @@
                 $("#ajax_demo").phui_combobox_ajax({
                     maxHeight: "320px",
                     url: "/Archer/Service/DiscussionForumServiceJS.svc/GetForumsForCommunity"
-                });				
+                });	
+				
+				$("#populateItems").bind("click", function(ev) {
+                    $("#ajax_demo").controller().populateItems( function( items ) {
+						var html = [];
+						for(var i=0;i<items.length;i++) {
+							html.push( items[i].text );
+						}
+						$("#ajax_demo_output").html("<div>" + html.join(", ") + "</div>");
+					} );
+                })	
             });
 			
 			

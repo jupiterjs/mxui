@@ -11,9 +11,12 @@ $.Controller.extend("Phui.Combobox.DropdownController",
         this.hasFocus = false;  
         this.canOpen = true;
         this.isFirstPass = true;        
+        var comboboxId = combobox.attr('id');
+        if(comboboxId)
+            this.element.attr('id', comboboxId + "_dropdown");
     },
     style : function() {
-        this.element.css("width", this.combobox.css("width"));
+        this.element.css("width", this.combobox.width());
         if (this.options.maxHeight) {
             this.element.css({
                 "height": this.options.maxHeight,
@@ -58,8 +61,12 @@ $.Controller.extend("Phui.Combobox.DropdownController",
     draw : function(modelList, isAutocompleteData) {
         
         if(this.isFirstPass) {
-            var html = this._makeEl(modelList.slice(0), 0);
-
+			var html;
+			if(!modelList.length){
+				html = "<li>No items in the combobox</li>"
+			} else {
+            	html = this._makeEl(modelList.slice(0), 0);
+			}
 
             // if starts with <li> wrap under <ul>
             // so selectable as something to attach to
@@ -230,12 +237,15 @@ $.Controller.extend("Phui.Combobox.DropdownController",
         el.addClass( this.options.disabledClassName );
     },    
     hide : function() {
+        this.combobox.controller().resetWatermark();
         this.element.slideUp("fast");
         
         // trick to make dropdown close when combobox looses focus  
         this.hasFocus = false;        
     },
-    show : function() {		
+    show: function ()
+    {
+        this.combobox.controller().clearWatermark();
 		this.element.css("opacity", 0)
 		  	.show()
 			.scrollTop(0)
