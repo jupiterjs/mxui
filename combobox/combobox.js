@@ -230,6 +230,7 @@ steal.plugins('jquery/controller',
                 clearTimeout(this.closeDropdownOnBlurTimeout);
         },
         focusout: function(el, ev) {
+			if (this.dropdown().is(":hidden")) return;			
             // trick to make dropdown close when combobox looses focus
             var self = this;
             this.closeDropdownOnBlurTimeout = setTimeout(function(){

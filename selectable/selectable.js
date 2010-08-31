@@ -22,13 +22,19 @@ steal.plugins('jquery/controller', 'phui/keycode')
                 el.addClass( this.options.selectedClassName );
             },
             ".{selectableClassName} activate": function(el, ev){
-                var activated = this.element.find( "."+this.options.activatedClassName );
-                if(activated.length)
-                    activated.trigger('deactivate');
-                el.addClass( this.options.activatedClassName );
+                // if event is synthetic (not IE native activate event)
+                if (!ev.originalEvent) {
+					var activated = this.element.find("." + this.options.activatedClassName);
+					if (activated.length) 
+						activated.trigger('deactivate');
+					el.addClass(this.options.activatedClassName);
+				}
             },
             ".{selectableClassName} deactivate": function(el, ev){
-                el.removeClass( this.options.activatedClassName );
+                // if event is synthetic (not IE native deactivate event)
+                if (!ev.originalEvent) {
+					el.removeClass(this.options.activatedClassName);
+				}
             },
             ".{selectableClassName} select": function(el, ev){
                 var selected = this.element.find( "."+this.options.selectedClassName );
