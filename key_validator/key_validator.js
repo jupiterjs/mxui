@@ -17,19 +17,47 @@ steal.plugins('jquery/controller','phui/keycode').then(function(){
 			return r.text.length 
 		} else return el.selectionEnd 
 	}
-	
+	$.fn.selectText = function(start, end){
+		var el = this[0];
+		if(el.setSelectionRange){
+			if(!end){
+                el.focus();
+                el.setSelectionRange(start, start);
+			} else {
+				el.selectionStart = start;
+				el.selectionEnd = end;
+			}
+		}else if (el.createTextRange) {
+			//el.focus();
+			var r = el.createTextRange();
+			r.moveStart('character', start);
+			end = end || start;
+			r.moveEnd('character', end - el.value.length);
+			
+			r.select();
+		} 
+	}
 	/**
 	 * Only allows what matches the regexp.
 	 */
 	$.Controller.extend("Phui.KeyValidator",{
-		defaults : function(){
+		defaults : {
 			//can be a regexp or a function
-			test : /.*/
+			test : /.*/,
+			//add a default text
+			defaultText : null,
+			//overwrite next character with current
+			overwrite : false,
+			//if you move the curor to the left of the
+			hop : null
 		}
 	},{	
 		"keypress" : function(el, ev){
 			var key = $.keyname(ev)
-			if(key.length > 1){ //it is a special, non printable character
+			if(key.length > 1 && 
+				  key!= "backspace" &&
+				  key != "delete"
+				){ //it is a special, non printable character
 				return;
 			}
 			
@@ -39,15 +67,63 @@ steal.plugins('jquery/controller','phui/keycode').then(function(){
 					 key.toLowerCase() == "c" ||
 					 key.toLowerCase() == "x" ||
 					 key.toLowerCase() == "a")) return;			
-						
+					
 			var current = this.element.val(),
-				before = current.substr(0,this.element.selectionStart()),
-				end = current.substr(this.element.selectionEnd()),
-				newVal = before+key+end 
-
-			if(!( (typeof this.options.test) == 'object' ? this.options.test.test(newVal) :  this.options.test(newVal))){
-				ev.preventDefault();
+				start = this.element.selectionStart(),
+				end = this.element.selectionEnd();
+			
+			//move to the next character
+			if(this.options.hop && start == end && current.substr(end,1) == this.options.hop){
+				start++;
+				end++;
 			}
+			var	before = current.substr(0,start),
+				beforeMinus = before.length ? before.substr(0, start-1) : "",
+				after = current.substr(end),
+				afterMinus = after.length ? after.substr(1) : "",
+				moveSelection = 0,
+				first,
+				second;
+				
+			//try twice, first normal, second to overwrite
+			
+			if(key == 'backspace' && start == end){
+				first = beforeMinus+after;
+				second = beforeMinus+ this.options.defaultText.substr(start-1, 1)+after;
+				moveSelection = -1;
+			}else if(key == 'backspace'){
+				first = before+after;
+				second = before+ this.options.defaultText.substr(start, end)+after;
+			}else if(key == 'delete' && start == end){
+				first = before+afterMinus;
+				second = before+ this.options.defaultText.substr(start, 1)+afterMinus;
+				moveSelection = 1
+			}else if(key == 'delete'){
+				first = before+after;
+				second = before+ this.options.defaultText.substr(start, end)+after;
+			}else{
+				first = before + key + after;
+				second = before + key + afterMinus;
+				moveSelection = 1;
+			}
+			
+			if (!this.passes(first)) {
+				if(this.passes(second)){
+					ev.preventDefault();
+					if(moveSelection >0 &&
+						 this.options.hop && 
+						 second.substr(start+  moveSelection,1) == this.options.hop){
+						moveSelection++;
+					}
+					el.val(second).selectText(start+  moveSelection)
+				}else{
+					ev.preventDefault();
+					return;
+				}
+			}
+		},
+		passes : function(newVal){
+			return ( (typeof this.options.test) == 'object' ? this.options.test.test(newVal) :  this.options.test(newVal))
 		}
 	})
 })

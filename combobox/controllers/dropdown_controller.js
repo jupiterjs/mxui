@@ -26,7 +26,7 @@ $.Controller.extend("Phui.Combobox.DropdownController",
 			var self = this;
 			this.find(".item").each(function(i, el){
 				el = $(el);
-				var item = el.model();
+				var item = this.getModel(el);
 				el.removeClass(self.options.activatedClassName);
 				if (item.attr("activated")) {
 					el.addClass(self.options.activatedClassName);
@@ -58,9 +58,8 @@ $.Controller.extend("Phui.Combobox.DropdownController",
     draw : function(modelList, isAutocompleteData) {
         
         if(this.isFirstPass) {
-            var listToDraw = $.extend(true, {}, modelList);
-            var html = this._makeEl(listToDraw, 0);
-            listToDraw = null;
+            var html = this._makeEl(modelList.slice(0), 0);
+
 
             // if starts with <li> wrap under <ul>
             // so selectable as something to attach to
@@ -68,11 +67,7 @@ $.Controller.extend("Phui.Combobox.DropdownController",
                 html = "<ul>" + html + "</ul>";
             }
 			// position the dropdown bellow the combobox input
-			/*this.element.phui_positionable({
-				my: 'left top',
-				at: 'left bottom',
-				collision: 'none none'
-			}).trigger("move", this.combobox);*/
+
 			this.element.trigger("move", this.combobox);
 			
             this.element.html(html);
@@ -87,7 +82,7 @@ $.Controller.extend("Phui.Combobox.DropdownController",
         var modelHash = {};
         for(var i=0;i<modelList.length;i++) {
             var inst = modelList[i];
-            modelHash[ inst.identity() ] = inst;
+            modelHash[ inst.identity ? inst.identity() : "dropdown_"+inst.id ] = inst;
         }
         
         // hides the elements that do not match the item list
@@ -95,22 +90,19 @@ $.Controller.extend("Phui.Combobox.DropdownController",
         for (var i = 0; i < itemEls.length; i++) {
             var el = $(itemEls[i]);
             el.show();
-            var identity = el[0].className.match(/(combobox_models_item_\d*)/)[0];
-            if (identity) {
-                if( !modelHash[identity] ) el.hide();
-            }
-            
-            if (this.isFirstPass) {
-                var item = modelHash[identity];
-                if (item) 
-                    item.hookup(el[0]);				
+            var identity = el[0].className.match(/(dropdown_\d*)/)[0];
+            if (identity && !modelHash[identity]) {
+                el.hide();
             }
         }
-        
+    	this.modelHash = modelHash;    
         this.isFirstPass = false;
 
         this.style();
     },
+	getModel : function(el){
+		return this.modelHash[ el[0].className.match(/(dropdown_\d*)/)[0] ]
+	},
     _makeHtmlForAutocompleteData : function(list) {
         var html = [];
         // we assume autocomplete data is a linear list
@@ -125,11 +117,11 @@ $.Controller.extend("Phui.Combobox.DropdownController",
         if(!list.length) return "";
         currentLevel = currentLevel >-1 ? currentLevel: -1;
         initialLevel = initialLevel ? initialLevel : currentLevel;
-        var nextLevel = list[1] ? list[1].level : 99999999;
-        var item = list[0];
+        var nextLevel = list[1] ? list[1].level : 99999999,
+			item = list[0];
         if(nextLevel == 99999999) {
-            var diff = currentLevel - initialLevel
-            var endStr = ""
+            var diff = currentLevel - initialLevel,
+				endStr = ""
             for(var i=0; i<diff; i++){
                 endStr += "</ul></li>"
             }
@@ -156,15 +148,15 @@ $.Controller.extend("Phui.Combobox.DropdownController",
         }
     },       
     drawItemHtml : function(item, isAutocompleteData) {
-            var html = [];
-            html.push("<span tabindex='0' class='item " + item.identity()); 
-            html.push(" selectable ");
-            item.enabled ? html.push("' >") : html.push(this.options.disabledClassName + "' >");             
-            if(!isAutocompleteData) 
-                html.push("<span style='float:left;margin-left:" + item.level*20 + "px'>&nbsp;</span>");
-            html.push( this.options.render["itemTemplate"](item) ); 
-            html.push("</span>");       
-            return html.join(" ");        
+            return ["<span tabindex='0' class='item ",
+						item.identity ? item.identity() : "dropdown_"+item.id,
+						" selectable ",
+						item.enabled ? "" : this.options.disabledClassName, "' >",
+						
+						isAutocompleteData ? "" : "<span style='float:left;margin-left:" , item.level*20 , "px'>&nbsp;</span>",
+						this.options.render["itemTemplate"](item),
+						
+					"</span>"].join("")      
     },
     keyup : function(el, ev) {
         var key = $.keyname(ev);
@@ -176,7 +168,7 @@ $.Controller.extend("Phui.Combobox.DropdownController",
     },
     ".selectable activate" : function(el, ev) {
         if (!el.hasClass(this.options.disabledClassName)) {
-            var item = el.model();
+            var item = this.getModel(el);
             if (item) {
                 // set combobox new value
                 this.combobox.controller().val(item.value, el.html());
@@ -227,7 +219,7 @@ $.Controller.extend("Phui.Combobox.DropdownController",
       	 }
     },
     getElementFor : function(instance) {
-        return this.find("." + instance.identity());
+        return this.find("." + instance.identity ? instance.identity() : "dropdown_"+instance.id );
     },
     enable : function(item) {
         var el = this.getElementFor(item);

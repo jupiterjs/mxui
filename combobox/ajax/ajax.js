@@ -4,8 +4,10 @@ steal.plugins('phui/combobox')
 
     $.Controller.extend("Phui.Combobox.Ajax", {
         defaults : {
-            loadOnDemand : true,
-            loadingMessage: "Loading ..."
+            loadingMessage: "Loading ...",
+			process : function(data){
+				return data.data ? data.data : data;
+			}
         }
     },
     {
@@ -28,29 +30,26 @@ steal.plugins('phui/combobox')
             }
         },
         "show:dropdown" : function(el, ev, combobox) {
-            if (this.options.loadOnDemand && !this.notFirstFocus) {
-                combobox.dropdown.html("<center><h3>" + this.options.loadingMessage + "</h3></center>");
+            if (!this.notFirstFocus) {
+                combobox.dropdown().html("<center><h3>" + this.options.loadingMessage + "</h3></center>");
                 this.loadDataFromServer(combobox);
                 this.notFirstFocus = true;
             }
         },
         loadDataFromServer : function(combobox, params, isAutocompleteData) {
-             if(this.options.loadOnDemand) 
-                 params = "loadOnDemand";
-             
+
              $.ajax({
                 url: this.options.url,
                 type: 'get',
                 dataType: 'json',
-                data: params,
+                data: params || "loadOnDemand",
                 success: this.callback('showData', combobox, isAutocompleteData),
                 error: this.callback('loadDataFromServerError'),
                 fixture: "-items"
             })                
         },
         showData : function(combobox, isAutocompleteData, data) {
-            data = data.data ? data.data : data;
-            combobox.loadData(data);
+            combobox.loadData(this.options.process(data));
             this.dataAlreadyLoaded = true;
         },
         loadDataFromServerError : function() {
