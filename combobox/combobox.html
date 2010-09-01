@@ -56,12 +56,11 @@
 		
 		<br/>
 		<h3>Ajax Combobox Demo</h3>
-		<div style="width:450px">
+		<div id="ajax_container" style="width:450px">
 			<button id="populateItems" style="float:right">Populate Items</button>
         	<input id="ajax_demo" style="float:left" name="ajax_demo" />
 		</div>
-		
-		<div id="ajax_demo_output"></div>				
+					
 
 		<br/>
 		
@@ -320,6 +319,7 @@
 						for(var i=0;i<items.length;i++) {
 							html.push( items[i].text );
 						}
+						$("<div id='ajax_demo_output' />").appendTo("#ajax_container");
 						$("#ajax_demo_output").html("<div>" + html.join(", ") + "</div>");
 					} );
                 });							

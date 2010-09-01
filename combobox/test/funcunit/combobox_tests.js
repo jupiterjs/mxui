@@ -70,7 +70,8 @@ test("Test that change event is triggered when the combobox value is changed.", 
 test("Testing populateItems.", function() {
 	S("#ajax_demo").exists();
 	S("#populateItems").exists();
-	S("#populateItems").click( function() {
+	S("#populateItems").click();
+	S("#ajax_demo_output").exists( function() {
 		ok(/dir0,/.test(S("#ajax_demo_output").text()), "populateItems successfully called.");
 	} );
 });
