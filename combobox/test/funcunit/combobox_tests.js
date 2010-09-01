@@ -10,8 +10,6 @@ test("Test clicking combobox view in text mode and verify the dropdown opens.", 
 		ok(/archive/.test(val), "Item #1 (archive) is selected by default.");	
 		var hiddenVal = S("#expirationBehavior input[type=hidden]").val();
 		ok(/0/.test(hiddenVal), "Hidden input has the correct value.");
-		
-		
 	});
 
 	
@@ -66,6 +64,15 @@ test("Test that change event is triggered when the combobox value is changed.", 
 		 ok( S("#log3").text() === "6", "Change event was triggered as expected.");	
 	});
 	
+});
+
+/* Combobox API Test Cases */
+test("Testing populateItems.", function() {
+	S("#ajax_demo").exists();
+	S("#populateItems").exists();
+	S("#populateItems").click( function() {
+		ok(/dir0,/.test(S("#ajax_demo_output").text()), "populateItems successfully called.");
+	} );
 });
 
 
