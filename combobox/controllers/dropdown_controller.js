@@ -91,10 +91,11 @@ steal.then(function() {
 			// hides the elements that do not match the item list
 			var itemEls = this.find(".item");
 			for ( var j = 0; j < itemEls.length; j++ ) {
-				var el = $(itemEls[j]);
+				var el = $(itemEls[j]),
+					identity = el[0].className.match(/(dropdown_\d*)/)[0],
+					item = identity && modelHash[identity];
 				el.show();
-				var identity = el[0].className.match(/(dropdown_\d*)/)[0];
-				if ( identity && !modelHash[identity] ) {
+				if ( !item || item.forceHidden ) {
 					el.hide();
 				}
 			}

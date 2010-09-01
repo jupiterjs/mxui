@@ -271,10 +271,61 @@ steal.plugins('jquery/controller', 'phui/positionable', 'phui/selectable', 'phui
 				return item[attr] == value;
 			});
 		},
+		_setViewboxHtmlAndShow: function( html ) {
+
+			if ( this.options.displayHTML ) {
+				this.find("input[type=text]").hide();
+				this.find(".viewbox").show().html(html || "");
+
+			}
+		},
+		".toggle click": function( el, ev ) {
+			if ( this.dropdown().is(":visible") ) {
+				this.dropdown().controller().hide();
+			} else {
+				this.focusInputAndShowDropdown(this.find("input[type=text]"));
+			}
+
+			var viewbox = this.find(".viewbox");
+			if ( viewbox.is(":visible") ) {
+				this._toggleComboboxView(viewbox);
+			}
+		},
+		/*
+	     * Internet Explorer interprets two fast clicks in a row as one single-click, 
+	     * followed by one double-click, while the other browsers interpret it as 
+	     * two single-clicks and a double-click.
+	     */
+		".toggle dblclick": function( el ) {
+			if ( $.browser.msie ) {
+				this.dropdown().is(":visible") ? this.dropdown().controller().hide() : this.dropdown().controller().show();
+				this.focusInputAndShowDropdown(this.find("input[type=text]"));
+			}
+		},
+		destroy: function() {
+			this.dropdown().remove();
+			this._dropdown = null;
+			this.modelList = null;
+			this.oldElementName = null;
+			var me = this.element; //save a reference
+			this._super(); //unbind everything
+			me.replaceWith(this.oldElement); //replace with old
+			this.oldElement = null; //make sure we can't touch old            
+		},
+		
+		
+		/* **********************
+		 *		Public API		*
+		 ************************/
 		// returns the text value of the currently selected item
 		textVal: function() {
 			return this.find("input[type=text]").val();
 		},
+		/*
+		 * Sets combobox value. This does not simulate a user click, which means
+		 * the selected item won't get highlighted on the dropdown.
+		 * For that use 'select'
+		 */
 		val: function( value ) {
 			if ( value === undefined ) {
 				return this.currentItem.value;
@@ -310,15 +361,7 @@ steal.plugins('jquery/controller', 'phui/positionable', 'phui/selectable', 'phui
 					this.element.trigger("change", this.currentItem.value);
 				}
 			}
-		},
-		_setViewboxHtmlAndShow: function( html ) {
-
-			if ( this.options.displayHTML ) {
-				this.find("input[type=text]").hide();
-				this.find(".viewbox").show().html(html || "");
-
-			}
-		},
+		},		
 		// delegate item selection on dropdown
 		select: function( value ) {
 			var item = this.modelListMatches("value", value)[0];
@@ -360,7 +403,8 @@ steal.plugins('jquery/controller', 'phui/positionable', 'phui/selectable', 'phui
 			var item = this.modelListMatches("value", value)[0];
 			if ( item ) {
 				this.dropdown().controller().showItem( item );
-			}			
+				item.forceHidden = false;		
+			}	
 		},
 		hideItem: function( value ) {
 			var item = this.modelListMatches("value", value)[0];
@@ -370,6 +414,7 @@ steal.plugins('jquery/controller', 'phui/positionable', 'phui/selectable', 'phui
 					this.clearSelection();
 				}
 				this.dropdown().controller().hideItem( item );
+				item.forceHidden = true;
 			}						
 		},		
 		enable: function( value ) {
@@ -386,41 +431,7 @@ steal.plugins('jquery/controller', 'phui/positionable', 'phui/selectable', 'phui
 				item.activated = false;
 				this.dropdown().controller().disable(item);
 			}
-		},
-		".toggle click": function( el, ev ) {
-			if ( this.dropdown().is(":visible") ) {
-				this.dropdown().controller().hide();
-			} else {
-				this.focusInputAndShowDropdown(this.find("input[type=text]"));
-			}
-
-			var viewbox = this.find(".viewbox");
-			if ( viewbox.is(":visible") ) {
-				this._toggleComboboxView(viewbox);
-			}
-		},
-/*
-             * Internet Explorer interprets two fast clicks in a row as one single-click, 
-             * followed by one double-click, while the other browsers interpret it as 
-             * two single-clicks and a double-click.
-             */
-		".toggle dblclick": function( el ) {
-			if ( $.browser.msie ) {
-				this.dropdown().is(":visible") ? this.dropdown().controller().hide() : this.dropdown().controller().show();
-				this.focusInputAndShowDropdown(this.find("input[type=text]"));
-			}
-		},
-		destroy: function() {
-			this.dropdown().remove();
-			this._dropdown = null;
-			this.modelList = null;
-			this.oldElementName = null;
-			var me = this.element; //save a reference
-			this._super(); //unbind everything
-			me.replaceWith(this.oldElement); //replace with old
-			this.oldElement = null; //make sure we can't touch old            
 		}
-
 	});
 
 

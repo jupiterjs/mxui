@@ -58,8 +58,14 @@
 		
 		<br/>
 		<h3>Ajax Combobox Demo</h3>
-		<div id="ajax_container" style="width:450px">
+		<div id="ajax_container" style="width:1000px">
+			<input id="ajax_someValue" style="float:right" />
 			<button id="populateItems" style="float:right">Populate Items</button>
+            <button id="ajax_showItem" style="float:right">Show Item</button>
+            <button id="ajax_hideItem" style="float:right">Hide Item</button>   			   
+			<button id="ajax_select" style="float:right">Select</button>                     
+			<button id="ajax_clearSelection" style="float:right">Clear Selection</button>
+			<button id="ajax_getItems" style="float:right">Get Items</button>			                			
         	<input id="ajax_demo" style="float:left" name="ajax_demo" />
 		</div>
 					
@@ -332,7 +338,35 @@
 						$("<div id='ajax_demo_output' />").appendTo("#ajax_container");
 						$("#ajax_demo_output").html("<div>" + html.join(", ") + "</div>");
 					} );
-                });							
+                });
+				
+                $("#ajax_showItem").click( function(ev) {
+                    var value = $("#ajax_someValue").val();
+                    $("#ajax_demo").controller().showItem( value );
+                });
+                $("#ajax_hideItem").click( function(ev){
+                    var value = $("#ajax_someValue").val();
+                    $("#ajax_demo").controller().hideItem( value );
+                });				
+                $("#ajax_select").bind("click", function(ev) {
+                    var value = $("input#ajax_someValue").val();
+                    $("#ajax_demo").controller().select( value );
+                });
+				$("#ajax_clearSelection").bind("click", function(ev) {
+                    var value = $("input#ajax_someValue").val();
+                    $("#ajax_demo").controller().clearSelection();
+                });
+				
+				$("#ajax_getItems").bind("click", function(ev) {
+                    var items = $("#ajax_demo").controller().getItems();
+					var html = [];
+					for(var i=0;i<items.length;i++) {
+						html.push( items[i].text );
+					}
+					$("<div id='ajax_demo_output2' />").appendTo("#ajax_container");
+					$("#ajax_demo_output2").html("<div>" + html.join(", ") + "</div>");
+                });				
+											
             });
 			
 			
