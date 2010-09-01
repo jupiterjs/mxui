@@ -110,6 +110,9 @@ $.Controller.extend("Phui.Combobox.DropdownController",
 	getModel : function(el){
 		return this.modelHash[ el[0].className.match(/(dropdown_\d*)/)[0] ]
 	},
+	getEl: function( item ) {
+		return this.find( ".dropdown_" + item.id );
+	},	
     _makeHtmlForAutocompleteData : function(list) {
         var html = [];
         // we assume autocomplete data is a linear list
@@ -181,6 +184,16 @@ $.Controller.extend("Phui.Combobox.DropdownController",
             el.removeClass( this.options.activatedClassName );
         }
     },
+	// when item is selected through the api simulate click  
+	// to let phui/selectable manage element's activation  
+	select: function( item ) {
+		this.getEl( item ).trigger( "activate" );
+	},	
+	clearSelection: function( currentItem ) {
+		// TODO: this cleanup should probably be a feature of phui/selectable
+		this.getEl( currentItem )
+			.removeClass( this.options.activatedClassName );
+	},	
     mouseenter : function(el, ev) {
         // trick to make dropdown close when combobox looses focus            
         this.hasFocus = true;

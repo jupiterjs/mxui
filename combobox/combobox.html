@@ -43,7 +43,10 @@
             <button id="getValue">Get Value</button>
             <button id="query">Query</button>
             <button id="enable">Enable</button>
-            <button id="disable">Disable</button>                        
+            <button id="disable">Disable</button>        
+			<button id="select">Select</button>                     
+			<button id="clearSelection">Clear Selection</button>
+			<button id="getItems">Get Items</button>			                
         </div>		
 		
 		<br/>
@@ -53,11 +56,18 @@
 		
 		<br/>
 		<h3>Ajax Combobox Demo</h3>
-        <input id="ajax_demo" name="ajax_demo" />		
+		<div style="width:450px">
+			<button id="populateItems" style="float:right">Populate Items</button>
+        	<input id="ajax_demo" style="float:left" name="ajax_demo" />
+		</div>
+		
+		<div id="ajax_demo_output"></div>				
+
 		<br/>
 		
 		<h3>Slow</h3>
 		<input id="combobox_slow" type="text" name="myname" />
+		
 		<div>abc</div>
 		<br/>
 		<div>abc</div>
@@ -88,6 +98,7 @@
 		<br/>
 		<div>abc</div>
 		<br/>
+			
         <script type='text/javascript' 
                 src='../../steal/steal.js'>   
         </script>
@@ -155,6 +166,24 @@
                     var value = $("#someValue").val();
                     $("#combobox_demo").controller().disable(value);
                 });    
+				
+                $("#select").bind("click", function(ev) {
+                    var value = $("input#someValue").val();
+                    $("#combobox_demo").controller().select( value );
+                });
+				$("#clearSelection").bind("click", function(ev) {
+                    var value = $("input#someValue").val();
+                    $("#combobox_demo").controller().clearSelection();
+                });
+				
+				$("#getItems").bind("click", function(ev) {
+                    var items = $("#combobox_demo").controller().getItems();
+					var html = [];
+					for(var i=0;i<items.length;i++) {
+						html.push( items[i].text );
+					}
+					$("#log").html("<div>" + html.join(", ") + "</div>");
+                });				
                 
                 // event API for when a value is selected demo
                 $("#combobox_demo").bind("change", function(ev, value) {
@@ -246,7 +275,8 @@
                 // by value in combobox input (autocomplete)
                 var oldFixture1 = $.fixture["-items"]; 
                 $.fixture["-items"] = function(settings){
-                    
+					
+                    settings.data = "loadOnDemand"
                     var items = oldFixture1(settings)[0].data;
                     
                     // make a clone of the data so that changes
@@ -263,7 +293,7 @@
                     if(settings.data == "loadOnDemand") {
                         return [{
                             "count": clonedItems.length,
-                            "data" : clonedItems
+                            "d" : clonedItems
                         }]                        
                     }
                     
@@ -282,7 +312,17 @@
                 $("#ajax_demo").phui_combobox_ajax({
                     maxHeight: "320px",
                     url: "/Archer/Service/DiscussionForumServiceJS.svc/GetForumsForCommunity"
-                });				
+                });	
+				
+				$("#populateItems").bind("click", function(ev) {
+                    $("#ajax_demo").controller().populateItems( function( items ) {
+						var html = [];
+						for(var i=0;i<items.length;i++) {
+							html.push( items[i].text );
+						}
+						$("#ajax_demo_output").html("<div>" + html.join(", ") + "</div>");
+					} );
+                });							
             });
 			
 			
