@@ -1,3 +1,3 @@
 steal
-  .plugins("funcunit/qunit", "archer/ui/combobox")
-  .then("basic_test")
+ .plugins("funcunit/qunit")
+ .then("combobox_tests")

@@ -43,7 +43,9 @@
             <button id="getValue">Get Value</button>
             <button id="query">Query</button>
             <button id="enable">Enable</button>
-            <button id="disable">Disable</button>        
+            <button id="disable">Disable</button>     
+            <button id="showItem">Show Item</button>
+            <button id="hideItem">Hide Item</button>   			   
 			<button id="select">Select</button>                     
 			<button id="clearSelection">Clear Selection</button>
 			<button id="getItems">Get Items</button>			                
@@ -166,6 +168,14 @@
                     $("#combobox_demo").controller().disable(value);
                 });    
 				
+                $("#showItem").click( function(ev) {
+                    var value = $("#someValue").val();
+                    $("#combobox_demo").controller().showItem( value );
+                });
+                $("#hideItem").click( function(ev){
+                    var value = $("#someValue").val();
+                    $("#combobox_demo").controller().hideItem( value );
+                });				
                 $("#select").bind("click", function(ev) {
                     var value = $("input#someValue").val();
                     $("#combobox_demo").controller().select( value );

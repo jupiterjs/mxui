@@ -355,6 +355,23 @@ steal.plugins('jquery/controller', 'phui/positionable', 'phui/selectable', 'phui
 			}
 			return results;
 		},
+		// delegate show/hide items on dropdown_controller
+		showItem: function( value ) {
+			var item = this.modelListMatches("value", value)[0];
+			if ( item ) {
+				this.dropdown().controller().showItem( item );
+			}			
+		},
+		hideItem: function( value ) {
+			var item = this.modelListMatches("value", value)[0];
+			if ( item ) {
+				if ( this.currentItem.item && 
+						item.value === this.currentItem.item.value ) {
+					this.clearSelection();
+				}
+				this.dropdown().controller().hideItem( item );
+			}						
+		},		
 		enable: function( value ) {
 			var item = this.modelListMatches("value", value)[0];
 			if ( item ) {
