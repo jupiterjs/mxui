@@ -396,6 +396,18 @@ steal.plugins('jquery/controller', 'phui/positionable', 'phui/selectable', 'phui
 			}
 		},
 		/**
+		 * @param {String} value value of the item to be returned.
+	 	 * @return {Object} returns the item with the value passed as a parameter.	
+		 * Returns the item with the value passed as a parameter.
+		 */
+		getItem: function( value ) {
+			var item = this.modelListMatches("value", value)[0];
+			if (item) {
+				return item;
+			}
+			return null;
+		},
+		/**
 	 	 * @return {Array} returns the list of items loaded into combobox	
 		 * Returns the list of items loaded into combobox.
 		 */

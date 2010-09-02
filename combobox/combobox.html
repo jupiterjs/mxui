@@ -46,7 +46,8 @@
             <button id="disable">Disable</button>     
             <button id="showItem">Show Item</button>
             <button id="hideItem">Hide Item</button>   			   
-			<button id="select">Select</button>                     
+			<button id="select">Select</button>     
+			<button id="getItem">Get Item</button>                
 			<button id="clearSelection">Clear Selection</button>
 			<button id="getItems">Get Items</button>			                
         </div>		
@@ -192,6 +193,11 @@
                     var value = $("input#someValue").val();
                     $("#combobox_demo").controller().select( value );
                 });
+                $("#getItem").bind("click", function(ev) {
+                    var value = $("input#someValue").val();
+                    var item = $("#combobox_demo").controller().getItem( value );
+                    $("#log2").html("<span>" + item.text + "</span>");
+                });								
 				$("#clearSelection").bind("click", function(ev) {
                     var value = $("input#someValue").val();
                     $("#combobox_demo").controller().clearSelection();
@@ -260,7 +266,7 @@
                             return {
                                 "value": num,
                                 "text": "dir" + num,
-                                "enabled": num = 0 ? true : experiment > 3 ? true : false,
+                                "enabled": num < 5 ? true : experiment > 3 ? true : false,
                                 "parentId": null,
                                 children: []
                             }
