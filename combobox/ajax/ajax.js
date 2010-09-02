@@ -64,13 +64,11 @@ steal.plugins('phui/combobox')
 			var oldSelectedValue = combobox.currentItem.value,
 				newSelectedValue;
 				
-			if ( oldSelectedValue ) {
-				// lets clean the currently selected item
-				combobox.clearSelection();
-				// dropdown_controller will ignore us if we dont force firstPass
-				// when ajax combobox is prepopulated (already had a first pass you see)
-				combobox.dropdown().controller().isFirstPass = true;
-			}
+			// lets clean the currently selected item
+			combobox.clearSelection();
+			// dropdown_controller will ignore us if we dont force firstPass
+			// when ajax combobox is prepopulated (already had a first pass you see)
+			combobox.dropdown().controller().isFirstPass = true;
 							
             combobox.loadData( this.options.process( data ) );
 			combobox.dropdown().controller().draw( combobox.modelList );
