@@ -97,6 +97,9 @@ steal.plugins('jquery/controller', 'phui/positionable', 'phui/selectable', 'phui
 				this.val(selected.value);
 			}
 		},
+		cleanData: function() {
+			this.modeList = [];
+		},
 		/**
 		 * Makes modelList and returns the selectedItem
 		 * @param {Object} items

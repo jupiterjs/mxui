@@ -72,6 +72,12 @@
 
 		<br/>
 		
+		<br/>
+		<h3>Preloaded Ajax Combobox Demo</h3>
+		<div id="preloaded_ajax_container" style="width:1000px">                			
+        	<input id="preloaded_ajax_demo" style="float:left" name="preloaded_ajax_demo" />
+		</div>		
+		
 		<h3>Slow</h3>
 		<input id="combobox_slow" type="text" name="myname" />
 		
@@ -254,7 +260,7 @@
                             return {
                                 "value": num,
                                 "text": "dir" + num,
-                                "enabled": experiment > 3 ? true : false,
+                                "enabled": num = 0 ? true : experiment > 3 ? true : false,
                                 "parentId": null,
                                 children: []
                             }
@@ -365,7 +371,17 @@
 					}
 					$("<div id='ajax_demo_output2' />").appendTo("#ajax_container");
 					$("#ajax_demo_output2").html("<div>" + html.join(", ") + "</div>");
-                });				
+                });		
+				
+				
+				/*
+				 *  Pre-loaded Ajax Demo
+				 */
+               $("#preloaded_ajax_demo").phui_combobox_ajax({
+			   		items: [{ value: "0", text: "dir0", selected: true}],
+                    maxHeight: "320px",
+                    url: "/Archer/Service/DiscussionForumServiceJS.svc/GetForumsForCommunity"
+                });							
 											
             });
 			

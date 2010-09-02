@@ -59,8 +59,33 @@ steal.plugins('phui/combobox')
         showData: function (combobox, isAutocompleteData, callback, data)
         {
             data = data.d;
-            combobox.loadData(this.options.process(data));
-            combobox.dropdown().controller().draw( combobox.modelList );
+			
+			// lets check if ajax combobox was preloaded with a default value
+			var oldSelectedValue = combobox.currentItem.value,
+				newSelectedValue;
+				
+			if ( oldSelectedValue ) {
+				// lets clean the currently selected item
+				combobox.clearSelection();
+				// dropdown_controller will ignore us if we dont force firstPass
+				// when ajax combobox is prepopulated (already had a first pass you see)
+				combobox.dropdown().controller().isFirstPass = true;
+			}
+							
+            combobox.loadData( this.options.process( data ) );
+			combobox.dropdown().controller().draw( combobox.modelList );
+			
+			// lets see if new data had a selected item
+			newSelectedValue = combobox.currentItem.value;
+			if ( !newSelectedValue ) {
+				// if it doesn't lets see if the new data has the pre-selected item
+				var item = combobox.modelListMatches( "value", oldSelectedValue )[0];
+				// if it does lets just select it
+				if( item ) {
+					combobox.val( oldSelectedValue );
+				}
+			}
+			
             this.dataAlreadyLoaded = true;
 			if( callback ) {
 				callback( combobox.modelList );
