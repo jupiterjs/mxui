@@ -94,10 +94,8 @@ steal.then(function() {
 				var el = $(itemEls[j]),
 					identity = el[0].className.match(/(dropdown_\d*)/)[0],
 					item = identity && modelHash[identity];
-				el.show();
-				if ( !item || item.forceHidden ) {
-					el.hide();
-				}
+				
+				!item || item.forceHidden ?	el.hide() : el.show();
 			}
 			this.modelHash = modelHash;
 			this.isFirstPass = false;

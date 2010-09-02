@@ -366,6 +366,7 @@ steal.plugins('jquery/controller', 'phui/positionable', 'phui/selectable', 'phui
 		select: function( value ) {
 			var item = this.modelListMatches("value", value)[0];
 			if ( item ) {
+				item.forceHidden = false;
 				this.dropdown().controller().select(item);
 			}
 		},
