@@ -314,14 +314,16 @@ steal.plugins('jquery/controller', 'phui/positionable', 'phui/selectable', 'phui
 		},
 		
 		
-		/* **********************
-		 *		Public API		*
-		 ************************/
+		/********************************
+		 *		Combobox Public API		*
+		 ********************************/
 		// returns the text value of the currently selected item
 		textVal: function() {
 			return this.find("input[type=text]").val();
 		},
-		/*
+		/**
+		 * @param {String} value the new combobox value
+		 * @return {Object} if no input parameter returns the current item value
 		 * Sets combobox value. This does not simulate a user click, which means
 		 * the selected item won't get highlighted on the dropdown.
 		 * For that use 'select'
@@ -361,15 +363,22 @@ steal.plugins('jquery/controller', 'phui/positionable', 'phui/selectable', 'phui
 					this.element.trigger("change", this.currentItem.value);
 				}
 			}
-		},		
-		// delegate item selection on dropdown
+		},
+		/**
+		 * @param {String} value the new combobox value
+		 * Simulates the user clicking on an item.
+		 */
 		select: function( value ) {
 			var item = this.modelListMatches("value", value)[0];
 			if ( item ) {
 				item.forceHidden = false;
+				// delegate item selection on dropdown				
 				this.dropdown().controller().select(item);
 			}
 		},
+		/**
+		 * Clears combobox current selection.
+		 */		
 		clearSelection: function() {
 			if ( this.currentItem.item ) {
 				this.find("input[type='text']").val("");
@@ -383,12 +392,26 @@ steal.plugins('jquery/controller', 'phui/positionable', 'phui/selectable', 'phui
 				};
 			}
 		},
+		/**
+	 	 * @return {Array} returns the list of items loaded into combobox	
+		 * Returns the list of items loaded into combobox.
+		 */
 		getItems: function() {
 			return this.modelList;
 		},
+		/**
+	 	 * @param {Function} callback to be triggered after items are loaded into combobox	
+		 * Forces the ajax combobox to fetch data from the server. 
+		 * This method should probably be under phui/combobox/ajax.
+		 */		
 		populateItems: function( callback ) {
 			this.find("input[type='text']").trigger("show:dropdown", [this, callback]);
 		},
+		/**
+	 	 * @param {String} text query string to serve as filter for autocomplete.
+	 	 * @return {Array} returns the list of filtered items. 	
+		 * API to return filtered data from combobox's autocomplete. 
+		 */		
 		query: function( text ) {
 			var matches = $.grep(this.modelList, function( item ) {
 				return item.text.indexOf(text) > -1;
@@ -399,14 +422,22 @@ steal.plugins('jquery/controller', 'phui/positionable', 'phui/selectable', 'phui
 			}
 			return results;
 		},
-		// delegate show/hide items on dropdown_controller
+		/**
+	 	 * @param {String} value value of the item that will be made visible.
+		 * Show an item.
+		 */				
 		showItem: function( value ) {
 			var item = this.modelListMatches("value", value)[0];
 			if ( item ) {
+				// delegate show/hide items on dropdown_controller				
 				this.dropdown().controller().showItem( item );
 				item.forceHidden = false;		
 			}	
 		},
+		/**
+	 	 * @param {String} value value of the item that will be hidden.
+		 * Hides an item.
+		 */			
 		hideItem: function( value ) {
 			var item = this.modelListMatches("value", value)[0];
 			if ( item ) {
@@ -414,6 +445,7 @@ steal.plugins('jquery/controller', 'phui/positionable', 'phui/selectable', 'phui
 						item.value === this.currentItem.item.value ) {
 					this.clearSelection();
 				}
+				// delegate show/hide items on dropdown_controller					
 				this.dropdown().controller().hideItem( item );
 				item.forceHidden = true;
 			}						

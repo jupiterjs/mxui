@@ -27,7 +27,7 @@ steal.then(function() {
 				var self = this;
 				this.find(".item").each(function( i, el ) {
 					el = $(el);
-					var item = this.getModel(el);
+					var item = this._getModel(el);
 					el.removeClass(self.options.activatedClassName);
 					if ( item.attr("activated") ) {
 						el.addClass(self.options.activatedClassName);
@@ -102,10 +102,10 @@ steal.then(function() {
 
 			this.style();
 		},
-		getModel: function( el ) {
+		_getModel: function( el ) {
 			return this.modelHash[el[0].className.match(/(dropdown_\d*)/)[0]];
 		},
-		getEl: function( item ) {
+		_getEl: function( item ) {
 			return this.find(".dropdown_" + item.id);
 		},
 		_makeHtmlForAutocompleteData: function( list ) {
@@ -160,7 +160,7 @@ steal.then(function() {
 		},
 		".selectable activate": function( el, ev ) {
 			if (!el.hasClass(this.options.disabledClassName) ) {
-				var item = this.getModel(el);
+				var item = this._getModel(el);
 				if ( item ) {
 					// set combobox new value
 					this.combobox.controller().val(item.value, el.html());
@@ -174,21 +174,6 @@ steal.then(function() {
 			} else {
 				el.removeClass(this.options.activatedClassName);
 			}
-		},
-		// when item is selected through the api simulate click  
-		// to let phui/selectable manage element's activation  
-		select: function( item ) {
-			this.getEl( item ).trigger("activate");
-		},
-		showItem: function( item ) {
-			this.getEl( item ).show();
-		},
-		hideItem: function( item ) {
-			this.getEl( item ).hide();
-		},						
-		clearSelection: function( currentItem ) {
-			// TODO: this cleanup should probably be a feature of phui/selectable
-			this.getEl(currentItem).removeClass(this.options.activatedClassName);
 		},
 		mouseenter: function( el, ev ) {
 			// trick to make dropdown close when combobox looses focus            
@@ -225,15 +210,36 @@ steal.then(function() {
 				});
 			}
 		},
-		getElementFor: function( instance ) {
+		/*getElementFor: function( instance ) {
 			return this.find("." + instance.identity ? instance.identity() : "dropdown_" + instance.id);
+		},*/
+		
+		/************************************
+		 *		 Dropdown Public API		*
+		 ************************************/	
+		// when item is selected through the api simulate click  
+		// to let phui/selectable manage element's activation  
+		select: function( item ) {
+			this._getEl( item ).trigger("activate");
 		},
+		showItem: function( item ) {
+			this._getEl( item ).show();
+		},
+		hideItem: function( item ) {
+			this._getEl( item ).hide();
+		},						
+		clearSelection: function( currentItem ) {
+			// TODO: this cleanup should probably be a feature of phui/selectable
+			this._getEl(currentItem).removeClass(this.options.activatedClassName);
+		},		 	
 		enable: function( item ) {
-			var el = this.getElementFor(item);
+			//var el = this.getElementFor(item);
+			var el = this._getEl(item);
 			el.removeClass(this.options.disabledClassName);
 		},
 		disable: function( item ) {
-			var el = this.getElementFor(item);
+			//var el = this.getElementFor(item);
+			var el = this._getEl(item);
 			el.addClass(this.options.disabledClassName);
 		},
 		hide: function() {
@@ -245,9 +251,9 @@ steal.then(function() {
 		},
 		show: function() {
 			this.combobox.controller().clearWatermark();
-			this.element.css("opacity", 0).show().scrollTop(0).trigger("move", this.combobox).hide().css("opacity", 1).slideDown("fast", this.callback("shown"));
+			this.element.css("opacity", 0).show().scrollTop(0).trigger("move", this.combobox).hide().css("opacity", 1).slideDown("fast", this.callback("_shown"));
 		},
-		shown: function() {
+		_shown: function() {
 			var self = this;
 			setTimeout(function() {
 				self.style();
