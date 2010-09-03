@@ -1,4 +1,10 @@
-steal.plugins('jquery/controller', 'phui/positionable', 'phui/selectable', 'phui/scrollbar_width').controllers('dropdown').then(function() {
+steal.plugins('jquery/controller',
+			  'jquery/lang/json',
+			  'phui/positionable', 
+			  'phui/selectable', 
+			  'phui/scrollbar_width')
+	 .controllers('dropdown')
+	 .then(function() {
 
 
 	$.Controller.extend("Phui.Combobox", {
@@ -16,7 +22,8 @@ steal.plugins('jquery/controller', 'phui/positionable', 'phui/selectable', 'phui
 			disabledClassName: "disabled",
 			width: null,
 			emptyItemsText: "No items in the combobox",
-			watermarkText: "Click for options"
+			watermarkText: "Click for options",
+			nonSerializedAttrs: ["id", "activated", "children", "level", "parentId", "forceHidden"]
 		}
 	}, {
 		/**
@@ -355,7 +362,15 @@ steal.plugins('jquery/controller', 'phui/positionable', 'phui/selectable', 'phui
 				}
 
 				// bind values to the hidden input
-				this.find("input[type=hidden]")[0].value = (this.currentItem.value);
+				// (clone current item so we can remove fields  
+				// that are not relevant for the postback)
+				var clone = $.extend( {}, this.currentItem.item );
+				for(var field in clone) {
+					if( $.inArray( field, this.options.nonSerializedAttrs ) > -1 ) {
+						delete clone[field];
+					}
+				}
+				this.find("input[type=hidden]")[0].value = $.toJSON( clone );
 
 				//if we have a dropdown ... update it
 				if ( this._dropdown ) {
@@ -412,7 +427,7 @@ steal.plugins('jquery/controller', 'phui/positionable', 'phui/selectable', 'phui
 		 * Returns the list of items loaded into combobox.
 		 */
 		getItems: function() {
-			return this.modelList;
+			return this.modelList || [];
 		},
 		/**
 	 	 * @param {Function} callback to be triggered after items are loaded into combobox	

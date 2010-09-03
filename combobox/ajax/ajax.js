@@ -37,7 +37,7 @@ steal.plugins('phui/combobox')
         {
             if ( !this.notFirstFocus )
             {
-                combobox.dropdown().html("<center><h3>" + this.options.loadingMessage + "</h3></center>");
+				combobox.dropdown().html("<span class='loadingText'>" + this.options.loadingMessage + "</span>");
                 this.loadDataFromServer( combobox, callback );
                 this.notFirstFocus = true;
             }
