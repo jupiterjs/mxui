@@ -15,7 +15,7 @@ steal.plugins('phui/combobox').then(function(){
 							.attr("name", name)
 							.attr("className", className)
 							
-				var options = [], option, $option;
+				var items = [], option, $option;
 				el.find("option").each(function(){
 					$option = $(this);
 					option = {
@@ -24,13 +24,14 @@ steal.plugins('phui/combobox').then(function(){
 					}
 					if($option.attr("selected"))
 						option.selected = true;
-					options.push(option)
+					items.push(option)
 				})
 				el.after(input);
 				el.remove();
-				input.phui_combobox({
-					items: options
-				});
+				input.phui_combobox(
+					 $.extend( options, { items: items } )               
+				 );
+
 		    	this._super(input[0], options);	
 			}
 		}

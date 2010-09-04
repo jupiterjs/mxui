@@ -23,6 +23,7 @@ steal.plugins('jquery/controller',
 			width: null,
 			emptyItemsText: "No items in the combobox",
 			watermarkText: "Click for options",
+			storeSerializedItem: true,
 			nonSerializedAttrs: ["id", "activated", "children", "level", "parentId", "forceHidden"]
 		}
 	}, {
@@ -361,16 +362,20 @@ steal.plugins('jquery/controller',
 					this._setViewboxHtmlAndShow(html);
 				}
 
-				// bind values to the hidden input
-				// (clone current item so we can remove fields  
-				// that are not relevant for the postback)
-				var clone = $.extend( {}, this.currentItem.item );
-				for(var field in clone) {
-					if( $.inArray( field, this.options.nonSerializedAttrs ) > -1 ) {
-						delete clone[field];
-					}
-				}
-				this.find("input[type=hidden]")[0].value = $.toJSON( clone );
+             	if (this.options.storeSerializedItem) {
+                 	// bind values to the hidden input
+                 	// (clone current item so we can remove fields  
+                 	// that are not relevant for the postback)
+                 	var clone = $.extend({}, this.currentItem.item);
+                 	for (var field in clone) {
+                     	if ($.inArray(field, this.options.nonSerializedAttrs) > -1) {
+                         	delete clone[field];
+                     	}
+                 	}
+                 	this.find("input[type=hidden]")[0].value = $.toJSON(clone);
+             	} else { // just store the value
+                 	this.find("input[type=hidden]")[0].value = this.currentItem.value;
+             	}
 
 				//if we have a dropdown ... update it
 				if ( this._dropdown ) {
