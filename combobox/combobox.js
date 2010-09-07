@@ -362,8 +362,8 @@ steal.plugins('jquery/controller',
 					this._setViewboxHtmlAndShow(html);
 				}
 
+             	// bind values to the hidden input
              	if (this.options.storeSerializedItem) {
-                 	// bind values to the hidden input
                  	// (clone current item so we can remove fields  
                  	// that are not relevant for the postback)
                  	var clone = $.extend({}, this.currentItem.item);
