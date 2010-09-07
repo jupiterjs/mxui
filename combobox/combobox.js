@@ -90,7 +90,7 @@ steal.plugins('jquery/controller',
 					my: 'left top',
 					at: 'left bottom',
 					collision: 'none none'
-				}).trigger("move", this.element);
+	            }).css("opacity", 0).show().trigger("move", this.element).hide().css("opacity", 1);
 				this._dropdown.controller().style();
 
 				//if there are items, load
