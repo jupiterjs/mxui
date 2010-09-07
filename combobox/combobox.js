@@ -9,6 +9,7 @@ steal.plugins('jquery/controller',
 
 	$.Controller.extend("Phui.Combobox", {
 		defaults: {
+			classNames: "phui_combobox_wrapper",
 			render: {
 				"itemTemplate": function( item ) {
 					return "<span class='text'>" + item.text + "</span>";
@@ -39,8 +40,7 @@ steal.plugins('jquery/controller',
 					div = $("<div><div class='toggle'>&nbsp;</div>" + "<div class='viewbox' tabindex='0' style='display:none'/>" + 
 							"<div class='container'></div>" + "<input type='hidden' /></div>"),
 					container = div.find('.container');
-				this.oldElement = el.replaceWith(div).removeAttr("name");
-	
+				this.oldElement = el.replaceWith(div).removeAttr("name"); 
 	
 				//probably should not be removing the id
 				div.attr("id", this.oldElement.attr("id"));
@@ -57,6 +57,7 @@ steal.plugins('jquery/controller',
 				}
 			},
 		init: function() {
+			this.element.addClass( this.options.classNames );
 			if ( this.options.width ) {
 				this.element.width(this.options.width);
 			}
