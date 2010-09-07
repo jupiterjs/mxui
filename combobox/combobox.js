@@ -32,25 +32,30 @@ steal.plugins('jquery/controller',
 		 * @param {Object} el
 		 * @param {Object} options
 		 */
-		setup: function( el, options ) {
-			el = $(el);
-			var name = el.attr("name"),
-				div = $("<div><div class='toggle'>&nbsp;</div>" + "<div class='viewbox' tabindex='0' style='display:none'/>" + "<div class='container'></div>" + "<input type='hidden' name='" + name + "'/></div>"),
-				container = div.find('.container');
-			this.oldElement = el.replaceWith(div).removeAttr("name");
-
-
-			//probably should not be removing the id
-			div.attr("id", this.oldElement.attr("id"));
-			this.oldElement.removeAttr("id");
-			container.append(this.oldElement);
-			this._super(div, options);
-
-			if ( this.options.displayHTML ) {
-				this.oldElement.hide();
-				this.find(".viewbox").show();
-			}
-		},
+			setup: function( el, options ) {
+				el = $(el);
+				var name = el.attr("name"),
+					id = el.attr("id"),
+					div = $("<div><div class='toggle'>&nbsp;</div>" + "<div class='viewbox' tabindex='0' style='display:none'/>" + 
+							"<div class='container'></div>" + "<input type='hidden' /></div>"),
+					container = div.find('.container');
+				this.oldElement = el.replaceWith(div).removeAttr("name");
+	
+	
+				//probably should not be removing the id
+				div.attr("id", this.oldElement.attr("id"));
+				this.oldElement.removeAttr("id");
+				container.append(this.oldElement);
+				var hidden = div.find("input[type=hidden]")
+	            hidden.attr("name", name + "$hf");
+	            hidden.attr("id", id + "$hf");
+				this._super(div, options);
+	
+				if ( this.options.displayHTML ) {
+					this.oldElement.hide();
+					this.find(".viewbox").show();
+				}
+			},
 		init: function() {
 			if ( this.options.width ) {
 				this.element.width(this.options.width);
