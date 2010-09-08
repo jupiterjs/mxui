@@ -33,10 +33,11 @@ steal.plugins('phui/combobox')
                 this._super(input[0], options);
             }
         },
-        "show:dropdown": function (el, ev, combobox, callback)
+        "show:dropdown": function (el, ev, combobox, showDropdown, callback)
         {
             if ( !this.notFirstFocus )
             {
+				this.showDropdown = showDropdown;
 				combobox.dropdown().html("<span class='loadingText'>" + this.options.loadingMessage + "</span>");
                 this.loadDataFromServer( combobox, callback );
                 this.notFirstFocus = true;
@@ -83,7 +84,17 @@ steal.plugins('phui/combobox')
 					combobox.val( oldSelectedValue );
 				}
 			}
-			
+
+			combobox.dropdown().css("opacity", 0)
+			combobox.dropdown().show()
+			combobox.dropdown().css("height", "auto");
+			var h = combobox.dropdown().height(),
+				maxh = combobox.options.maxHeight;
+			combobox.dropdown().height( h > maxh ? maxh : h);			
+			combobox.dropdown().trigger("move", this.element)
+			combobox.dropdown().hide()
+			combobox.dropdown().css("opacity", 1);
+		
             this.dataAlreadyLoaded = true;
 			if( callback ) {
 				callback( combobox.modelList );

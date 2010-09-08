@@ -15,9 +15,11 @@ steal.then(function() {
 		},
 		style: function() {
 			this.element.css("width", this.combobox.width());
-			if ( this.options.maxHeight ) {
+			if ( this.options.maxHeight && this.element.is(":visible")) {
+				var h = this.element.height(),
+					maxh = this.options.maxHeight;
 				this.element.css({
-					"height": this.options.maxHeight,
+					"height": h > maxh ? maxh : h,
 					"overflow": "auto"
 				});
 			}
@@ -79,7 +81,7 @@ steal.then(function() {
 				this.element.children("ul").phui_selectable({
 					selectedClassName: "selected",
 					activatedClassName: "activated"
-				});
+				});			
 			}
 
 			var modelHash = {};
@@ -97,6 +99,7 @@ steal.then(function() {
 				
 				!item || item.forceHidden ?	el.hide() : el.show();
 			}
+			
 			this.modelHash = modelHash;
 			this.isFirstPass = false;
 

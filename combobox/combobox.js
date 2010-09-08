@@ -61,6 +61,10 @@ steal.plugins('jquery/controller',
 			if ( this.options.width ) {
 				this.element.width(this.options.width);
 			}
+         	// force default max height
+         	if (!this.options.maxHeight) {
+             	this.options.maxHeight = this.Class.defaults.maxHeight;
+         	}			
 			this.currentItem = {
 				"value": null
 			};
@@ -85,20 +89,20 @@ steal.plugins('jquery/controller',
 				this._dropdown = $("<div/>").phui_combobox_dropdown(this.element, this.options).hide();
 				document.body.appendChild(this._dropdown[0]);
 
-				// position the dropdown bellow the combobox input
+				//if there are items, load
+				if ( this.options.items ) {
+					this.dropdown().controller().draw(this.modelList);
+				}
+
+				// position the dropdown bellow the combobox input				
 				this._dropdown.phui_positionable({
 					my: 'left top',
 					at: 'left bottom',
 					collision: 'none flip'
 	            }).css("opacity", 0).show().trigger("move", this.element).hide().css("opacity", 1);
-				this._dropdown.controller().style();
-
-				//if there are items, load
-				if ( this.options.items ) {
-					this.dropdown().controller().draw(this.modelList);
-				}
+				this._dropdown.controller().style();				
 			}
-
+					
 			return this._dropdown;
 		},
 		loadData: function( items ) {
@@ -244,7 +248,7 @@ steal.plugins('jquery/controller',
 				});
 				if (!this.dropdown().is(":visible") && this.dropdown().controller().canOpen ) {
 					this.dropdown().controller().show();
-					el.trigger("show:dropdown", this);
+					el.trigger("show:dropdown", [this, false]);
 				}
 			}
 		},
@@ -397,7 +401,7 @@ steal.plugins('jquery/controller',
 		 * @param {String} value the new combobox value
 		 * Simulates the user clicking on an item.
 		 */
-		select: function( value ) {
+		selectItem: function( value ) {
 			var item = this.modelListMatches("value", value)[0];
 			if ( item ) {
 				item.forceHidden = false;
