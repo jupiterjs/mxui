@@ -15,7 +15,7 @@ steal.plugins('jquery/controller',
 					return "<span class='text'>" + item.text + "</span>";
 				}
 			},
-			maxHeight: null,
+			maxHeight: 320,
 			filterEnabled: true,
 			displayHTML: false,
 			selectedClassName: "selected",
@@ -89,7 +89,7 @@ steal.plugins('jquery/controller',
 				this._dropdown.phui_positionable({
 					my: 'left top',
 					at: 'left bottom',
-					collision: 'none none'
+					collision: 'none flip'
 	            }).css("opacity", 0).show().trigger("move", this.element).hide().css("opacity", 1);
 				this._dropdown.controller().style();
 
