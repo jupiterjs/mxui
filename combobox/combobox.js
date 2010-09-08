@@ -25,7 +25,8 @@ steal.plugins('jquery/controller',
 			emptyItemsText: "No items in the combobox",
 			watermarkText: "Click for options",
 			storeSerializedItem: true,
-			nonSerializedAttrs: ["id", "activated", "children", "level", "parentId", "forceHidden"]
+			nonSerializedAttrs: ["id", "activated", "children", "level", "parentId", "forceHidden"],
+			overrideDropdown: false
 		}
 	}, {
 		/**
@@ -247,8 +248,12 @@ steal.plugins('jquery/controller',
 					el[0].select();
 				});
 				if (!this.dropdown().is(":visible") && this.dropdown().controller().canOpen ) {
-					this.dropdown().controller().show();
-					el.trigger("show:dropdown", [this, false]);
+					if(this.options.overrideDropdown) {
+						el.trigger("show:dropdown", this);	
+					} else {
+						this.dropdown().controller().show();
+					}
+					
 				}
 			}
 		},

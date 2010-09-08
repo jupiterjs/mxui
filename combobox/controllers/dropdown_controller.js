@@ -15,7 +15,7 @@ steal.then(function() {
 		},
 		style: function() {
 			this.element.css("width", this.combobox.width());
-			if ( this.options.maxHeight && this.element.is(":visible")) {
+			if ( this.options.maxHeight ) {
 				var h = this.element.height(),
 					maxh = this.options.maxHeight;
 				this.element.css({
