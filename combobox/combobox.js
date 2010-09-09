@@ -265,16 +265,15 @@ steal.plugins('jquery/controller',
 			if ( el[0].tagName.toUpperCase() == "INPUT" && el.is(":visible") ) {
 				// select all text
 				el[0].focus();
-				setTimeout(function() {
-					el[0].select();
-				});
 				if (!this.dropdown().is(":visible") && this.dropdown().controller().canOpen ) {
 					if(this.options.overrideDropdown) {
 						el.trigger("show:dropdown", this);	
 					} else {
 						this.dropdown().controller().show();
 					}
-					
+					setTimeout(function() {
+						el[0].select();
+					});
 				}
 			}
 		},
