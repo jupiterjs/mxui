@@ -1,6 +1,7 @@
 steal.plugins('jquery/controller',
 			  'jquery/lang/json',
-			  'phui/positionable', 
+			  //'phui/positionable',
+			  'phui/fittable', 
 			  'phui/selectable', 
 			  'phui/scrollbar_width')
 	 .controllers('dropdown')
@@ -16,6 +17,7 @@ steal.plugins('jquery/controller',
 				}
 			},
 			maxHeight: 320,
+			minHeight: 300,
 			filterEnabled: true,
 			displayHTML: false,
 			selectedClassName: "selected",
@@ -88,22 +90,29 @@ steal.plugins('jquery/controller',
 			}
 		},
 		dropdown: function() {
-			if (!this._dropdown ) {
+			if ( !this._dropdown ) {
 				this._dropdown = $("<div/>").phui_combobox_dropdown(this.element, this.options).hide();
-				document.body.appendChild(this._dropdown[0]);
+				//document.body.appendChild(this._dropdown[0]);
+				//this._dropdown.css("position","absolute");
+				//this.element.after( this._dropdown );
 
 				//if there are items, load
 				if ( this.options.items ) {
-					this.dropdown().controller().draw(this.modelList);
+					this._dropdown.controller().draw(this.modelList);
 				}
+				
+				this.dropdown().phui_fittable( {
+					target: this.element,
+					minHeight: this.options.minHeight
+				});
 
 				// position the dropdown bellow the combobox input				
-				this._dropdown.phui_positionable({
+				/*this._dropdown.phui_positionable({
 					my: 'left top',
 					at: 'left bottom',
 					collision: 'none flip'
-	            }).css("opacity", 0).show().trigger("move", this.element).hide().css("opacity", 1);
-				this._dropdown.controller().style();				
+	            }).css("opacity", 0).show().trigger("move", this.element).hide().css("opacity", 1);*/
+				this._dropdown.controller().style();		
 			}
 					
 			return this._dropdown;
