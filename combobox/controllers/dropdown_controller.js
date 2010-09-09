@@ -191,7 +191,7 @@ steal.then(function() {
 			// trick to make dropdown close when combobox looses focus  
 			this.hasFocus = false;
 			this.canOpen = false;
-			this.combobox.find("input[type=text]").focus();
+			//this.combobox.find("input[type=text]").focus();
 			this.canOpen = true;
 		},
 		windowresize: function( el, ev ) {
