@@ -68,6 +68,10 @@
 	overflow: hidden;
 }
 
+*+html .phui_combobox_dropdown li {
+	display: inline;
+}
+
 .phui_combobox_dropdown .activated {
 	background-color: #FFDE58;
 }
