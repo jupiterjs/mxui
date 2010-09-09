@@ -26,7 +26,8 @@ steal.plugins('jquery/controller',
 			watermarkText: "Click for options",
 			storeSerializedItem: true,
 			nonSerializedAttrs: ["id", "activated", "children", "level", "parentId", "forceHidden"],
-			overrideDropdown: false
+			overrideDropdown: false,
+			noItemsMsg: "No items available"
 		}
 	}, {
 		/**
@@ -220,7 +221,8 @@ steal.plugins('jquery/controller',
 			if ( this.options.filterEnabled ) {
 				// and if item has a text attribute
 				if ( this.modelList && this.modelList[0] && this.modelList[0].text ) {
-					var isAutocompleteData = true;
+					var isAutocompleteData = true, 
+						noItemsMsg = this.dropdown().find('.noItemsMsg');;
 					var matches = $.grep(this.modelList, function( item ) {
 						return item.text.indexOf(val) > -1;
 					});
@@ -230,6 +232,15 @@ steal.plugins('jquery/controller',
 					this.dropdown().controller().draw(matches, isAutocompleteData);
 					if (!this.dropdown().is(":visible") ) {
 						this.dropdown().controller().show();
+					}
+					if(!matches.length){
+						if (!noItemsMsg.length) {
+							this.dropdown().append("<div class='noItemsMsg'>"+this.options.noItemsMsg+"</div>");
+						}
+					} else {
+						if(noItemsMsg.length){
+							noItemsMsg.remove();
+						}
 					}
 				}
 			}
