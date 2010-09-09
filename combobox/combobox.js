@@ -25,7 +25,7 @@ steal.plugins('jquery/controller',
 			emptyItemsText: "No items in the combobox",
 			watermarkText: "Click for options",
 			storeSerializedItem: true,
-			nonSerializedAttrs: ["id", "activated", "children", "level", "parentId", "forceHidden"],
+			nonSerializedAttrs: ["id", "activated", "children", "level", "parentId", "forceHidden", "__type"],
 			overrideDropdown: false,
 			noItemsMsg: "No items available"
 		}
@@ -49,11 +49,12 @@ steal.plugins('jquery/controller',
 				this.oldElement.removeAttr("id");
 				container.append(this.oldElement);
 				var hidden = div.find("input[type=hidden]")
-	            hidden.attr("name", name + "$hf");
-	            hidden.attr("id", id + "$hf");
+	            hidden.attr("name", name);
+	            hidden.attr("id", id + "_hf");
 				this._super(div, options);
 	
 				if ( this.options.displayHTML ) {
+					this.oldElement.width("0");
 					this.oldElement.hide();
 					this.find(".viewbox").show();
 				}
