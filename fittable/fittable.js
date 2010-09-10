@@ -21,46 +21,66 @@ steal.plugins('jquery/dom/dimensions').then(function($){
 		}
 	};
 	
-	var	fit = function( el, of, within ){
-			var op = of.scrollableParent(),
+	var	fit = function( dropdown, combobox, within ){
+			var scrollableParent = combobox.scrollableParent(),
 				spaceAvailableAbove,
-				spaceAvailableBellow,
-				bellowPosition;
+				spaceAvailableBelow,
+				belowPosition,
 				
-			if(op) {
-				spaceAvailableAbove = Math.abs(op.offset().top - of.offset().top) 
-						- parseInt( op.curStyles("borderTopWidth").borderTopWidth.replace("px","") )
-						- parseInt( op.curStyles("borderBottomWidth").borderBottomWidth.replace("px","") );
-				spaceAvailableBellow = op.outerHeight() - of.offset().top - of.outerHeight()
-						+ parseInt( op.curStyles("borderTopWidth").borderTopWidth.replace("px","") )
-						+ parseInt( op.curStyles("borderBottomWidth").borderBottomWidth.replace("px","") );
-				bellowPosition = { top: of.offset().top + of.outerHeight(), left: of.offset().left };				
+				comboOff = combobox.offset(),
+				comboHeight = combobox.outerHeight(),
+				
+				dropHeight = dropdown.outerHeight()
+			
+			if(scrollableParent) {
+				var scrollStyles = scrollableParent.curStyles(
+					"borderTopWidth",
+					"paddingTop",
+					"paddingBottom"
+					)
+				
+				var scrollableOff = scrollableParent.offset(),
+					scrollTop = scrollableOff.top + parseInt(scrollStyles.borderTopWidth);// + 
+									//parseInt(scrollStyles.paddingTop);
+							
+					scrollBottom = scrollTop + scrollableParent.height() + parseInt(scrollStyles.paddingTop) +
+						parseInt(scrollStyles.paddingBottom) ;
+					
+				spaceAvailableAbove = comboOff.top - scrollTop;
+				spaceAvailableBelow = scrollBottom - (comboOff.top+ comboHeight);		
 			} else {
-				op = fakeWindow;
-				spaceAvailableAbove = Math.abs(op.offset().top - of.offset().top) - op.scrollTop();
-				spaceAvailableBellow = op.outerHeight() - of.offset().top - of.outerHeight() + op.scrollTop();
-				bellowPosition = { top: of.offset().top + of.outerHeight(), left: of.offset().left };				
+				spaceAvailableAbove = comboOff.top;
+				spaceAvailableBelow = $(window).height() - (comboOff.top+ comboHeight);	
 			}	 												
+			belowPosition = {top: comboOff.top+ comboHeight, left: comboOff.left}
 				
 			// If the element can be positioned without scrolling below target, draw it
-			if (spaceAvailableBellow >= el.outerHeight()) {
-				el.offset( bellowPosition );
-			} else if( spaceAvailableBellow >= within ) { 
+			if (spaceAvailableBelow >= dropHeight) {
+				dropdown.offset( belowPosition );
+			} else if( spaceAvailableBelow >= within ) { 
 				// If the element can be positioned with scrolling greater than min height, draw it
-				el.height( spaceAvailableBellow );
-				el.css( "overflow","auto" ); 
-				el.offset( bellowPosition );
-			} else if (spaceAvailableAbove > spaceAvailableBellow) { 
+				dropdown.outerHeight( spaceAvailableBelow );
+				dropdown.css( "overflow","auto" ); 
+				dropdown.offset( belowPosition );
+			} else if (spaceAvailableAbove > spaceAvailableBelow) { 
 				// If the space above is greater than the space below, draw it above
-				el.height( spaceAvailableAbove );
-				el.css( "overflow","auto" ); 
-				el.offset( { top: of.offset().top - el.outerHeight(), left: of.offset().left } );
-			} else if (spaceAvailableAbove <= spaceAvailableBellow) { 
+				if(spaceAvailableAbove >= dropHeight ){
+					
+					dropdown.offset( { top: comboOff.top - dropHeight, left: comboOff.left } );
+					
+				}else{
+					//we have to shrink it
+					dropdown.outerHeight( spaceAvailableAbove );
+					dropdown.css( "overflow","auto" ); 
+					dropdown.offset( { top: comboOff.top - spaceAvailableAbove, left: comboOff.left } );
+				}
+			} else if (true) { 
 				//  If the space above is less than the space below, draw it to fit in the space remaining
-				el.height( spaceAvailableBellow );
-				el.css( "overflow","auto" ); 
-				el.offset( bellowPosition );					
+				dropdown.outerHeight( spaceAvailableBelow );
+				dropdown.css( "overflow","auto" ); 
+				dropdown.offset( belowPosition );					
 			}
+			dropdown.css("opacity",1);
 	}	
 	
 	$.fn.fit = function(options){
@@ -73,7 +93,7 @@ steal.plugins('jquery/dom/dimensions').then(function($){
 			}
 			
 			// make element absolute positioned	
-			$(this).css("position", "absolute");			
+	
 			
 			fit( $(this), of, within );
 				
