@@ -4,20 +4,110 @@
 	<head>
 		<title>fittable</title>
         <style type='text/css'>
-            body {font-family: verdana}
-            .error {border: solid 1px red;}
-            .error_text { color: red; font-size: 10px;}
-            td {padding: 3px;}
+            body { font-family: verdana;} 
+			.container, .container4 {
+				float:left;
+				width:23%;
+				margin-left:10px;
+				position:relative;
+				height:480px;
+				border:2px solid #CCCCCC;
+				overflow:auto;
+			}
+			.topPadding {height:10px}
+			.bottomPadding {height: 300px;}
+			.fittable {width:140px;background-color:#AAAAAA;border:1px solid blue;}
+			.topPadding3 {height:300px}
+			.bottomPadding3 {height: 100px;}
+			.container4 {
+				height: 250px;
+			}			
+			.topPadding4 {height:10px}
+			.bottomPadding4 {height: 150px;}			
         </style>
+       <link type="text/css" href="../../phui/combobox/combobox.css" rel="stylesheet" />
 	</head>
 	<body>
-	    <h1>Welcome to JavaScriptMVC 3.0!</h1>
-        <ul>
-            <li>Include plugins and files in <i>phui/fittable/fittable.js</i>.</li>
-            <li>Change to production mode by changing <i>development</i> to <i>production</i> in this file.</li>
-        </ul>
-		<script type='text/javascript' 
-                src='../../steal/steal.js?phui/fittable,development'>   
+		<div class="container">
+			<p>If the element can be positioned without scrolling below, draw it</p>
+			<div class="topPadding"></div>
+			<input id="target1" type="text" name="myname1" value="click here to move"/>
+			<div id='fittable1' class="fittable">Demo Fittable</div>
+			<div class="bottomPadding"></div>
+		</div>
+		<div class="container">
+			<p>If the dropdown can be positioned with scrolling greater than 300 px, draw it </p>
+			<div class="topPadding"></div>
+			<input id="target2" type="text" name="myname2" value="click here to move"/>
+			<div id='fittable2' class="fittable">Demo Fittable</div>
+			<div class="bottomPadding"></div>
+		</div>
+		<div class="container">
+			<p>If the space above is greater than the space below, draw it above</p>
+			<div class="topPadding3"></div>
+			<input id="target3" type="text" name="myname3" value="click here to move"/>
+			<div id='fittable3' class="fittable">Demo Fittable</div>
+			<div class="bottomPadding3"></div>
+		</div>
+		<div class="container4">
+			<p>If the space above is less than the space below, draw it to fit in the space remaining</p>
+			<div class="topPadding4"></div>
+			<input id="target4" type="text" name="myname4" value="click here to move"/>
+			<div id='fittable4' class="fittable">Demo Fittable</div>
+			<div class="bottomPadding4"></div>
+		</div>		
+        <script type='text/javascript' 
+                src='../../steal/steal.js'>   
         </script>
+        <script type='text/javascript'>
+            steal.plugins("phui/fittable").then(function($){
+				
+				var items = function(n) {
+					var items = ["<ul>"];
+					for(var i=0;i<n;i++){
+						items.push("<li>item" + i + "</li>");
+					}
+					items.push("</ul>");
+					return items.join("");					
+				}
+			
+				$("#fittable1").html( items(5));				
+				var el1 = $("#fittable1").phui_fittable({
+					target:$("#target1"),
+					minHeight:300
+				}).hide();//.trigger("move");
+				$("#target1").click(function(ev){
+					el1.show().trigger("move");
+				});
+				
+				$("#fittable2").html( items(30));				
+					var el2 = $("#fittable2").phui_fittable({
+					target:$("#target2"),
+					minHeight:300
+				}).hide();//.trigger("move");
+				$("#target2").click(function(ev){
+					el2.show().trigger("move");
+				});
+				
+				$("#fittable3").html( items(10));				
+					var el3 = $("#fittable3").phui_fittable({
+					target:$("#target3"),
+					minHeight:300
+				}).hide()//.trigger("move");
+				$("#target3").click(function(ev){
+					el3.show().trigger("move");
+				});
+				
+				$("#fittable4").html( items(40));				
+					var el4 = $("#fittable4").phui_fittable({
+					target:$("#target4"),
+					minHeight:300
+				}).hide()//.trigger("move");
+				$("#target4").click(function(ev){
+					el4.show().trigger("move");
+				});																				
+			});
+			steal.start();
+		</script>
 	</body>
 </html>

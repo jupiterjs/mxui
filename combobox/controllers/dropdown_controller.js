@@ -1,18 +1,27 @@
 steal.then(function() {
 
 	/**
-	 * A list of items
+	 * Dropdown has the following responsibilities:
+	 * - drawing a list of items
+	 * - positioning itself (will mostly be handled by Alex's fit plugin)
+	 * - creating a selectable (it has it's own api)
+	 * 
 	 */
 	$.Controller.extend("Phui.Combobox.DropdownController", {}, {
 		init: function( el, options ) {
 			
-			this.canOpen = true;
 			this.isFirstPass = true;
 			
 			var comboboxId = this.options.parentElement.attr('id');
 			if ( comboboxId ) {
 				this.element.attr('id', comboboxId + "_dropdown");
 			}
+			//add ul
+			
+		},
+		destroy : function(){
+			this.list = null;
+			this._super();
 		},
 		style: function() {
 			
@@ -60,29 +69,28 @@ steal.then(function() {
 			}
 		},
 		draw: function( modelList, val ) {
-
+			// if this is the first time we are drawing
+			// make the content
 			if ( this.isFirstPass ) {
-				var html;
-				if (!modelList.length ) {
-					html = "<li>No items in the combobox</li>";
-				} else {
-					html = this.getHTML(modelList.slice(0), 0);
-				}
-
+				
+				var html = modelList.length ?
+					this.getHTML(modelList) :
+					"<li><span class='item'>No items in the combobox</span></li>";
+	
 				// if starts with <li> wrap under <ul>
 				// so selectable as something to attach to
 				if ( html.indexOf("<li") === 0 ) {
 					html = "<ul>" + html + "</ul>";
 				}
-				// position the dropdown bellow the combobox input
-				this.element.trigger("move", this.options.parentElement);
+				this.list = this.element.html(html)
+					.children("ul")
+					.phui_combobox_selectable({
+						selectedClassName: "selected"
+					})
+					.phui_combobox_selectable("cache");
+				
 
-				this.element.html(html);
-
-				// add up/down key navigation
-				this.element.children("ul").phui_combobox_selectable({
-					selectedClassName: "selected"
-				});
+				
 			}
 			// fill hash for quick lookup of the instance
 			var modelHash = {};
@@ -92,7 +100,11 @@ steal.then(function() {
 			}
 
 			// hide the elements that do not match the item list
-			var itemEls = this.find(".item");
+			var itemEls = this.list.find(".item"),
+				first = false;
+			
+			//select the first one
+
 			for ( var j = 0; j < itemEls.length; j++ ) {
 				
 				var el = $(itemEls[j]),
@@ -100,16 +112,17 @@ steal.then(function() {
 					item = identity && modelHash[identity];
 				
 				if(!item || item.forceHidden){
+					
 					el.hide()
+				
 				}else{
-					el.find('.item-content').html( this.options.render.itemTemplate(item, val) )
-					/*if(val){
-						el.find('text').
-					}else{
-						//el.find('text').text(item.text)
-					}*/
-					
-					
+					// if we have an autosuggest, pick the first one
+					if(!first && val){
+						this.list.controller().selected(el, false);
+						first = true
+					}
+					el.find('.item-content')
+						.html( this.options.render.itemTemplate(item, val) );
 					el.show();
 				}
 			}
@@ -120,10 +133,7 @@ steal.then(function() {
 
 			this.style();
 		},
-		// gets an instance from the model hash
-		_getModel: function( el ) {
-			return this.modelHash[el[0].className.match(/(dropdown_\d*)/)[0]];
-		},
+		
 		// gets an element from an item .... what
 		_getEl: function( item ) {
 			return this.find(".dropdown_" + item.id);
@@ -172,31 +182,17 @@ steal.then(function() {
 				"</span></span>"
 			].join("");
 		},
-		/**
-		 * Listens for escape and closes
-		 * @param {Object} el
-		 * @param {Object} ev
-		 */
-		keyup: function( el, ev ) {
-			var key = $.keyname(ev);
-
-			// close dropdown on escape
-			if ( key == "escape" ) {
-				this.hide();
-			}
+		// gets an instance from the model hash
+		_getModel: function( el ) {
+			
+			return el && el.length && 
+					this.modelHash[el[0].className.match(/(dropdown_\d*)/)[0]];
 		},
 		/**
 		 * On activate (clicking or pressing enter) set our parent's val.
 		 */
-		".item click": function( el, ev ) {
-			// if we shouldn't be able to select it ... well ... 
-			// how could we selec this anyway.
-			if (el.hasClass(this.options.disabledClassName) ) {
-				el.removeClass(this.options.activatedClassName);
-				
-			} else {
-				this.selectElement(el);
-			}
+		".selectable click": function( el, ev ) {
+			this.selectElement(el);
 		},
 		selectElement : function(el){
 			var item = this._getModel(el);
@@ -240,9 +236,7 @@ steal.then(function() {
 				});
 			}
 		},
-/*getElementFor: function( instance ) {
-			return this.find("." + instance.identity ? instance.identity() : "dropdown_" + instance.id);
-		},*/
+
 
 		/************************************
 		 *		 Dropdown Public API		*
@@ -277,11 +271,18 @@ steal.then(function() {
 			this.element.slideUp("fast");
 
 		},
+		/**
+		 * Show will always show the selected element so make sure you have
+		 * it set before you call this.
+		 * @param {Function} callback
+		 */
 		show: function(callback) {
+			
 			// knows WAY too much
-			this.options.parentElement.controller().clearWatermark();
+
+			
 			this.element.css("opacity", 0)
-				.show().scrollTop(0)
+				.show().scrollTop(0) //scroll to the top to prevent a flash
 				.trigger("move", this.options.parentElement)
 				.hide()
 				.css("opacity", 1)
@@ -290,7 +291,10 @@ steal.then(function() {
 		_shown: function(callback) {
 			var self = this;
 			setTimeout(function() {
+				
 				self.style();
+				self.element.children("ul").controller().showSelected();
+				callback && callback()
 			}, 1);
 			this.options.parentElement.trigger("open");
 		}

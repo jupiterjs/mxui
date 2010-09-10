@@ -96,8 +96,7 @@ steal.plugins('phui/combobox')
 			combobox.dropdown().trigger("move", this.element)
 			combobox.dropdown().hide()
 			combobox.dropdown().css("opacity", 1);
-			
-			combobox.dropdown().controller().show();
+			combobox.showDropdown();
 			combobox.options.overrideDropdown = false;
 		
             this.dataAlreadyLoaded = true;

@@ -69,7 +69,7 @@ steal.plugins('jquery/controller', 'jquery/lang/json', 'phui/positionable', 'phu
 			this._super(div, options);
 
 			if ( this.options.displayHTML ) {
-				this.oldElement.width("0");
+				//this.oldElement.width("0");  WHY WAS THIS HERE
 				this.oldElement.hide();
 				this.find(".viewbox").show();
 			}
@@ -108,6 +108,7 @@ steal.plugins('jquery/controller', 'jquery/lang/json', 'phui/positionable', 'phu
 				input.val("");
 			}
 		},
+		
 		/**
 		 * Creates and cache's a dropdown controller
 		 */
@@ -201,9 +202,6 @@ steal.plugins('jquery/controller', 'jquery/lang/json', 'phui/positionable', 'phu
 			this.flattenEls(list, currentLevel, items);
 			return items;
 		},
-		".viewbox click": function( el, ev ) {
-			this._toggleComboboxView(el);
-		},
 		".viewbox focusin": function( el, ev ) {
 			this._toggleComboboxView(el);
 		},
@@ -214,18 +212,21 @@ steal.plugins('jquery/controller', 'jquery/lang/json', 'phui/positionable', 'phu
 			input[0].focus();
 			input[0].select();
 		},
-		showDropdownIfHidden : function(){
+		showDropdown : function(callback){
+			this.clearWatermark()
+			this.dropdown().controller().show(callback);
+		},
+		showDropdownIfHidden : function(callback){
 			if (!this.dropdown().is(":visible") ) {
-				this.dropdown().controller().show();
+				this.showDropdown(callback);
 				//this.dropdown().children("ul").controller().showSelected();
+			}else{
+				callback && callback();
 			}
 		},
 		"input keyup": function( el, ev ) {
-			var key = $.keyname(ev);
-			
-			if(key!= 'escape'){
-				this.showDropdownIfHidden();
-			}
+			var key = $.keyname(ev),
+				selectable = this.dropdown().children("ul").controller();
 			
 			switch($.keyname(ev)){
 				
@@ -236,20 +237,27 @@ steal.plugins('jquery/controller', 'jquery/lang/json', 'phui/positionable', 'phu
 				
 				case  "down" : 
 					// select the first element
-
-					var first = this.dropdown().children("ul").controller().selectNext();
-					//$(first).trigger("select");
+					this.showDropdownIfHidden(function(){
+						selectable.selectNext();
+					});
+					
 					return;
 				
 				case "up" : 
-					// select the last element
-					var last = this.dropdown().children("ul").controller().selectPrev();
-					//$(last).trigger("select");
+					this.showDropdownIfHidden(function(){
+						selectable.selectPrev();
+					});
+					
 					return;
 				case "enter" : 
 					//get the selected element
-					var selected = this.dropdown().children("ul").controller().selected();
-					this.dropdown().controller().selectElement(selected);
+					if(this.dropdown().is(":visible")){
+						var selected = this.dropdown().children("ul").controller().selected();
+						this.dropdown().controller().selectElement(selected);
+					}else{
+						this.showDropdown()
+					}
+					
 					//this.find('input:visible')[0].select();
 					return;
 				default :
@@ -284,9 +292,8 @@ steal.plugins('jquery/controller', 'jquery/lang/json', 'phui/positionable', 'phu
 			
 			this.dropdown().controller().draw(matches, val);
 			
-			if (!this.dropdown().is(":visible") ) {
-				this.dropdown().controller().show();
-			}
+			this.showDropdownIfHidden();
+			
 			if (!matches.length ) {
 				if (!noItemsMsg.length ) {
 					this.dropdown().append("<div class='noItemsMsg'>" + this.options.noItemsMsg + "</div>");
@@ -302,37 +309,32 @@ steal.plugins('jquery/controller', 'jquery/lang/json', 'phui/positionable', 'phu
 		"input focusin": function( el, ev ) {
 			this.focusInputAndShowDropdown(el);
 		},
-		"input click": function( el, ev ) {
-			this.focusInputAndShowDropdown(el);
-		},
+
 		focusInputAndShowDropdown: function( el ) {
-			if ( el[0].tagName.toUpperCase() == "INPUT" && el.is(":visible") ) {
-				// select all text
-				el[0].focus();
-				if (!this.dropdown().is(":visible") && this.dropdown().controller().canOpen ) {
-					
-					if ( this.options.overrideDropdown ) {
-						el.trigger("show:dropdown", this);
-					} else {
-						this.dropdown().controller().show();
+
+			// select all text
+			el[0].focus();
+			if (!this.dropdown().is(":visible") ) {
+				
+				if ( this.options.overrideDropdown ) {
+					el.trigger("show:dropdown", this);
+				} else {
+					//activate current item
+					if(this.currentItem){
+						var current = this.dropdown().controller()._getEl(this.currentItem.item);
+						if(current.length){
+							this.dropdown().controller().list.controller().selected(current, false);
+						}
 					}
-					setTimeout(function() {
-						el[0].select();
-					});
+					this.showDropdown();
 				}
+				setTimeout(function() {
+					el[0].select();
+				});
 			}
+			
 		},
 		
-		/**
-		 * Why does this happen?
-		 */
-		mouseleave: function( el, ev ) {
-			
-			if ( this.dropdown().is(":visible") ) {
-				console.log('focus')
-				this.find("input[type='text']").focus();
-			}
-		},
 		modelListMatches: function( attr, value ) {
 			return $.grep(this.modelList, function( item ) {
 				return item[attr] == value;
@@ -392,10 +394,16 @@ steal.plugins('jquery/controller', 'jquery/lang/json', 'phui/positionable', 'phu
 	     * Internet Explorer interprets two fast clicks in a row as one single-click, 
 	     * followed by one double-click, while the other browsers interpret it as 
 	     * two single-clicks and a double-click.
+	     * And, IE has a very long time that it will count 2 clicks as a dblclick.
+	     * Taken together, the user might click the toggle twice and not really be dblclicking.
 	     */
 		".toggle dblclick": function( el ) {
 			if ( $.browser.msie ) {
-				this.dropdown().is(":visible") ? this.dropdown().controller().hide() : this.dropdown().controller().show();
+				if(this.dropdown().is(":visible")){
+					this.dropdown().controller().hide()
+				}else{
+					this.showDropdown()
+				}
 				this.focusInputAndShowDropdown(this.find("input[type=text]"));
 			}
 		},

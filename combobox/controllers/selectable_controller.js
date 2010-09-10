@@ -26,6 +26,9 @@ $.Controller.extend("Phui.Combobox.Controllers.Selectable",{
 	},
 	showSelected : function(el){
 		el = el || this.selected();
+		if(!el.length){
+			return;
+		}
 		var scrollParent = el.scrollableParent(),
 			scrollOff = scrollParent.offset(),
 			scrollTop = scrollParent[0].scrollHeight,
@@ -64,8 +67,13 @@ $.Controller.extend("Phui.Combobox.Controllers.Selectable",{
 			el.trigger("select");
 		}
 	},
+	cache : function(){
+		this._cache = this.element.find("."+this.options.selectableClassName);
+	},
 	selectable : function(){
-		return this.element.find("."+this.options.selectableClassName+":visible")
+		return this._cache ?
+				this._cache.filter(":visible") :
+				this.element.find("."+this.options.selectableClassName+":visible")
 	},
 	/**
 	 * Selects the next element
