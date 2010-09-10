@@ -1,55 +1,67 @@
 steal.plugins('jquery/dom/dimensions').then(function($){
 	
-	var target, minHeight;
+	$.fn.scrollableParent = function(){
+		var el = this[0], parent = el;
+		while ((parent = parent.parentNode) && parent != document.body) {
+			if (parent.scrollHeight != parent.offsetHeight) {
+				return $(parent);
+			}
+		}
+	}
 	
 		fittable = $.fn.phui_fittable = function(options){
 			// check if we have all necessary data before doing the work
-			target = options.target,
-			minHeight = options.minHeight;
+			var t = options.target,
+				minH = options.minHeight;
 				
-			if( !target || !minHeight ) {
+			if( !t || !minH ) {
 				return;
 			}
 			
 			// make element absolute positioned	
 			$(this).css("position", "absolute");	
-			target.after( $(this) );		
+			t.after( $(this) );		
 			
-			$(this).bind('move', {fittable: this}, fittable.move );
+			$(this).bind('move', {fittable: this, t:t, minH:minH}, fittable.move );
+			//if this element is removed, take it out
+			this.bind('destroyed',{filler: this}, function(ev){
+				ev.fittable.removeClass('phui_fittable')
+				$(options.parent).unbind('move', fittable.move);
+			});
+			this.addClass('phui_fittable');
 				
 			return this;	
 		};
 	
 		$.extend(fittable,{
 			move : function(ev){
-				var el = $(this),
-					windowHeight = $(window).height(),
-					height = el.outerHeight(),
-					targetHeight = target.outerHeight(),
-					targetTop = target.offset().top,
-					targetLeft = target.offset().left,
-					targetBottom = targetTop - targetHeight,
-					spaceAvailableBellow = windowHeight - targetBottom,
-					spaceAvailableAbove = targetTop,
-					bellowPosition = { top: targetTop + targetHeight, left: targetLeft },
-					abovePosition = { top: targetTop - height, left: targetLeft };
-					
+				var t = ev.data.t, minH = ev.data.minH, el = $(this),
+					op = t.scrollableParent() || $(window),
+					spaceAvailableAbove = Math.abs(op.offset().top - t.offset().top) - op.scrollTop(),
+					spaceAvailableBellow = op.height() - t.offset().top - t.outerHeight(),
+					bellowPosition = { top: t.offset().top + t.outerHeight(), left: t.offset().left };
+				
+				// use it to calculate element's new height
+				var newAboveHeight = spaceAvailableAbove,
+					newBellowHeight = spaceAvailableBellow;	 												
 					
 				// If the element can be positioned without scrolling below target, draw it
-				if (spaceAvailableBellow >= height) {
+				if (spaceAvailableBellow >= el.outerHeight()) {
 					el.offset( bellowPosition );
-				} else if( spaceAvailableBellow >= minHeight ) { // If the dropdown can be positioned with scrolling greater than min height, draw it
-					el.height(spaceAvailableBellow);
-					el.css( "overflow","scroll" ); 
+				} else if( spaceAvailableBellow >= minH ) { 
+					// If the element can be positioned with scrolling greater than min height, draw it
+					el.height( newBellowHeight );
+					el.css( "overflow","auto" ); 
 					el.offset( bellowPosition );
-				} else if (spaceAvailableAbove > spaceAvailableBellow) { // If the space above is greater than the space below, draw it above
-					el.height(spaceAvailableAbove);
+				} else if (spaceAvailableAbove > spaceAvailableBellow) { 
+					// If the space above is greater than the space below, draw it above
+					el.height( newAboveHeight ); 
+					el.offset( { top: t.offset().top - el.outerHeight(), left: t.offset().left } );
+				} else if (spaceAvailableAbove <= spaceAvailableBellow) { 
+					//  If the space above is less than the space below, draw it to fit in the space remaining
+					el.height( newBellowHeight );
 					el.css( "overflow","auto" ); 
-					el.offset( abovePosition );
-				} else if (spaceAvailableAbove <= spaceAvailableBellow) { //  If the space above is less than the space below, draw it to fit in the space remaining
-					el.height(spaceAvailableAbove);
-					el.css( "overflow","auto" ); 
-					el.offset( abovePosition );					
+					el.offset( bellowPosition );					
 				}
 			}
 		});	
