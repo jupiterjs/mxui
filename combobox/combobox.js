@@ -273,6 +273,7 @@ steal.plugins('jquery/controller', 'jquery/lang/json', 'phui/positionable', 'phu
 		 * @param {Object} val
 		 */
 		autocomplete: function( val ) {
+			console.log("val = '"+val+"'")
 			// do nothing if we don't have text based list
 			if (!this.modelList || !this.modelList[0] || !this.modelList[0].text) {
 				return;
@@ -313,7 +314,9 @@ steal.plugins('jquery/controller', 'jquery/lang/json', 'phui/positionable', 'phu
 		focusInputAndShowDropdown: function( el ) {
 
 			// select all text
-			el[0].focus();
+			if(el.is(":visible")){ // IE won't let you focus an invisible input
+				el[0].focus();
+			}
 			if (!this.dropdown().is(":visible") ) {
 				
 				if ( this.options.overrideDropdown ) {
