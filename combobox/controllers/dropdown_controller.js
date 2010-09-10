@@ -139,6 +139,7 @@ steal.then(function() {
 		
 		// gets an element from an item .... what
 		_getEl: function( item ) {
+			if(!item || !item.id) return $([])
 			return this.find(".dropdown_" + item.id);
 		},
 		/**
