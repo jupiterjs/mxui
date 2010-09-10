@@ -4,58 +4,44 @@
 	<head>
 		<title>fittable</title>
         <style type='text/css'>
-            body { font-family: verdana;} 
-			.container, .container4 {
-				float:left;
-				width:23%;
-				margin-left:10px;
-				position:relative;
-				height:480px;
-				border:2px solid #CCCCCC;
-				overflow:auto;
-			}
-			.topPadding {height:10px}
-			.bottomPadding {height: 300px;}
-			.fittable {width:140px;background-color:#AAAAAA;border:1px solid blue;}
-			.topPadding3 {height:300px}
-			.bottomPadding3 {height: 100px;}
-			.container4 {
-				height: 250px;
-			}			
-			.topPadding4 {height:10px}
-			.bottomPadding4 {height: 150px;}			
+            body { font-family: verdana;}
+			.container {float:left;width:23%;margin-left:10px;}
+			.padding {height:200px;} 
+			.padding2 {height:120px;}
+			.fittable {width:140px;background-color:#AAAAAA;border:1px solid blue;}			
         </style>
        <link type="text/css" href="../../phui/combobox/combobox.css" rel="stylesheet" />
 	</head>
 	<body>
+		<h3>Window as the scrollable container</h3>
+		
 		<div class="container">
 			<p>If the element can be positioned without scrolling below, draw it</p>
-			<div class="topPadding"></div>
 			<input id="target1" type="text" name="myname1" value="click here to fit"/>
 			<div id='fittable1' class="fittable">Demo Fittable</div>
-			<div class="bottomPadding"></div>
 		</div>
+~
 		<div class="container">
 			<p>If the dropdown can be positioned with scrolling greater than 300 px, draw it </p>
-			<div class="topPadding"></div>
 			<input id="target2" type="text" name="myname2" value="click here to fit"/>
 			<div id='fittable2' class="fittable">Demo Fittable</div>
-			<div class="bottomPadding"></div>
 		</div>
+
 		<div class="container">
 			<p>If the space above is greater than the space below, draw it above</p>
-			<div class="topPadding3"></div>
+			<div class="padding"></div>
 			<input id="target3" type="text" name="myname3" value="click here to fit"/>
 			<div id='fittable3' class="fittable">Demo Fittable</div>
-			<div class="bottomPadding3"></div>
 		</div>
-		<div class="container4">
+
+		<div class="container">
 			<p>If the space above is less than the space below, draw it to fit in the space remaining</p>
-			<div class="topPadding4"></div>
+			<div class="padding2"></div>
 			<input id="target4" type="text" name="myname4" value="click here to fit"/>
 			<div id='fittable4' class="fittable">Demo Fittable</div>
-			<div class="bottomPadding4"></div>
-		</div>		
+		</div>
+
+		
         <script type='text/javascript' 
                 src='../../steal/steal.js'>   
         </script>
@@ -79,7 +65,7 @@
 					}).css("opacity",1);
 				});
 				
-				$("#fittable2").css("opacity",0).html( items(30));				
+				$("#fittable2").css("opacity",0).html( items(60));				
 				$("#target2").click(function(ev){
 					$("#fittable2").fit({
 						within:300,
