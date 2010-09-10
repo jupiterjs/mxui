@@ -1,4 +1,4 @@
-steal.then(function() {
+steal.plugins('phui/fittable').then(function() {
 
 	/**
 	 * Dropdown has the following responsibilities:
@@ -17,7 +17,7 @@ steal.then(function() {
 				this.element.attr('id', comboboxId + "_dropdown");
 			}
 			//add ul
-			
+			this.element.css("position","absolute")
 		},
 		destroy : function(){
 			this.list = null;
@@ -284,13 +284,11 @@ steal.then(function() {
 			
 			// knows WAY too much
 
-			
-			this.element.css("opacity", 0)
-				.show().scrollTop(0) //scroll to the top to prevent a flash
-				.trigger("move", this.options.parentElement)
-				.hide()
-				.css("opacity", 1)
-				.slideDown("fast", this.callback("_shown", callback));
+			this.element.fit({
+				within:300,
+				of:this.options.parentElement
+			})
+			.slideDown("fast", this.callback("_shown", callback));
 		},
 		_shown: function(callback) {
 			var self = this;
