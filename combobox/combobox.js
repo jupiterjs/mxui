@@ -273,7 +273,6 @@ steal.plugins('jquery/controller', 'jquery/lang/json', 'phui/positionable', 'phu
 		 * @param {Object} val
 		 */
 		autocomplete: function( val ) {
-			console.log("val = '"+val+"'")
 			// do nothing if we don't have text based list
 			if (!this.modelList || !this.modelList[0] || !this.modelList[0].text) {
 				return;
