@@ -1,29 +1,45 @@
-steal.plugins('jquery/controller',
-			  'jquery/lang/json',
-			  'phui/positionable', 
-			  'phui/selectable', 
-			  'phui/scrollbar_width')
-	 .controllers('dropdown')
-	 .then(function() {
+steal.plugins('jquery/controller', 'jquery/lang/json', 'phui/positionable', 'phui/scrollbar_width', 'phui/keycode')
+	.controllers('dropdown','selectable').then(function() {
 
-
+	/**
+	 * 
+	 * @param {Object} item
+	 */
 	$.Controller.extend("Phui.Combobox", {
 		defaults: {
 			classNames: "phui_combobox_wrapper",
 			render: {
-				"itemTemplate": function( item ) {
-					return "<span class='text'>" + item.text + "</span>";
+				"itemTemplate": function( item , val) {
+					if(!val){
+						return "<span class='text'>" + item.text + "</span>";
+					}else{
+						var pos = item.text.indexOf(val),
+							start = item.text.substr(0, pos),
+							end = item.text.substr(pos+val.length);
+						return "<span class='text'>" +
+							start + "<span class='item-match'>"+
+							item.text.substr(pos, val.length)+
+							"</span>"+end+
+							"</span>";
+					}
 				}
 			},
 			maxHeight: 320,
 			filterEnabled: true,
+			/**
+			 * Values to select aren't text but html.  This changes from an input to a 
+			 * 'viewbox' element.
+			 */
 			displayHTML: false,
 			selectedClassName: "selected",
 			activatedClassName: "activated",
 			disabledClassName: "disabled",
 			width: null,
 			emptyItemsText: "No items in the combobox",
+			
+			//text that shows up if nothing has been selected
 			watermarkText: "Click for options",
+			
 			storeSerializedItem: true,
 			nonSerializedAttrs: ["id", "activated", "children", "level", "parentId", "forceHidden", "__type"],
 			overrideDropdown: false,
@@ -35,39 +51,38 @@ steal.plugins('jquery/controller',
 		 * @param {Object} el
 		 * @param {Object} options
 		 */
-			setup: function( el, options ) {
-				el = $(el);
-				var name = el.attr("name"),
-					id = el.attr("id"),
-					div = $("<div><div class='toggle'>&nbsp;</div>" + "<div class='viewbox' tabindex='0' style='display:none'/>" + 
-							"<div class='container'></div>" + "<input type='hidden' /></div>"),
-					container = div.find('.container');
-				this.oldElement = el.replaceWith(div).removeAttr("name"); 
-	
-				//probably should not be removing the id
-				div.attr("id", this.oldElement.attr("id"));
-				this.oldElement.removeAttr("id");
-				container.append(this.oldElement);
-				var hidden = div.find("input[type=hidden]")
-	            hidden.attr("name", name);
-	            hidden.attr("id", id + "_hf");
-				this._super(div, options);
-	
-				if ( this.options.displayHTML ) {
-					this.oldElement.width("0");
-					this.oldElement.hide();
-					this.find(".viewbox").show();
-				}
-			},
+		setup: function( el, options ) {
+			el = $(el);
+			var name = el.attr("name"),
+				id = el.attr("id"),
+				div = $("<div><div class='toggle'>&nbsp;</div>" + "<div class='viewbox' tabindex='0' style='display:none'/>" + "<div class='container'></div>" + "<input type='hidden' /></div>"),
+				container = div.find('.container');
+			this.oldElement = el.replaceWith(div).removeAttr("name");
+
+			//probably should not be removing the id
+			div.attr("id", this.oldElement.attr("id"));
+			this.oldElement.removeAttr("id");
+			container.append(this.oldElement);
+			var hidden = div.find("input[type=hidden]")
+			hidden.attr("name", name);
+			hidden.attr("id", id + "_hf");
+			this._super(div, options);
+
+			if ( this.options.displayHTML ) {
+				this.oldElement.width("0");
+				this.oldElement.hide();
+				this.find(".viewbox").show();
+			}
+		},
 		init: function() {
-			this.element.addClass( this.options.classNames );
+			this.element.addClass(this.options.classNames);
 			if ( this.options.width ) {
 				this.element.width(this.options.width);
 			}
-         	// force default max height
-         	if (!this.options.maxHeight) {
-             	this.options.maxHeight = this.Class.defaults.maxHeight;
-         	}			
+			// force default max height
+			if (!this.options.maxHeight ) {
+				this.options.maxHeight = this.Class.defaults.maxHeight;
+			}
 			this.currentItem = {
 				"value": null
 			};
@@ -76,20 +91,29 @@ steal.plugins('jquery/controller',
 			//has the value been set already, if it has, we'll throw changes
 			this.valueSet = true;
 		},
+		/**
+		 * Set the watermark if there's no text
+		 */
 		resetWatermark: function() {
 			if (!this.val() ) {
 				this.find("input[type='text']").val(this.options.watermarkText);
 			}
 		},
+		/**
+		 * Only remove the text if it's the watermarkText
+		 */
 		clearWatermark: function() {
 			var input = this.find("input[type='text']");
 			if ( input.val() == this.options.watermarkText ) {
 				input.val("");
 			}
 		},
+		/**
+		 * Creates and cache's a dropdown controller
+		 */
 		dropdown: function() {
 			if (!this._dropdown ) {
-				this._dropdown = $("<div/>").phui_combobox_dropdown(this.element, this.options).hide();
+				this._dropdown = $("<div/>").phui_combobox_dropdown($.extend({parentElement : this.element}, this.options)).hide();
 				document.body.appendChild(this._dropdown[0]);
 
 				//if there are items, load
@@ -102,10 +126,10 @@ steal.plugins('jquery/controller',
 					my: 'left top',
 					at: 'left bottom',
 					collision: 'none flip'
-	            }).css("opacity", 0).show().trigger("move", this.element).hide().css("opacity", 1);
-				this._dropdown.controller().style();				
+				}).css("opacity", 0).show().trigger("move", this.element).hide().css("opacity", 1);
+				this._dropdown.controller().style();
 			}
-					
+
 			return this._dropdown;
 		},
 		loadData: function( items ) {
@@ -190,61 +214,90 @@ steal.plugins('jquery/controller',
 			input[0].focus();
 			input[0].select();
 		},
+		showDropdownIfHidden : function(){
+			if (!this.dropdown().is(":visible") ) {
+				this.dropdown().controller().show();
+				//this.dropdown().children("ul").controller().showSelected();
+			}
+		},
 		"input keyup": function( el, ev ) {
 			var key = $.keyname(ev);
-
-			// close dropdown on escape
-			if ( key == "escape" ) {
-				this.dropdown().controller().hide();
-				return false;
+			
+			if(key!= 'escape'){
+				this.showDropdownIfHidden();
 			}
+			
+			switch($.keyname(ev)){
+				
+				case "escape" : 
+					// close dropdown 
+					this.dropdown().controller().hide();
+					return false;
+				
+				case  "down" : 
+					// select the first element
 
-			// if down key is clicked, navigate to first item
-			if ( key == "down" ) {
-				this.dropdown().controller().hasFocus = true;
-				var first = this.dropdown().children("ul").controller().getFirst();
-				$(first).trigger("select");
-				return;
+					var first = this.dropdown().children("ul").controller().selectNext();
+					//$(first).trigger("select");
+					return;
+				
+				case "up" : 
+					// select the last element
+					var last = this.dropdown().children("ul").controller().selectPrev();
+					//$(last).trigger("select");
+					return;
+				case "enter" : 
+					//get the selected element
+					var selected = this.dropdown().children("ul").controller().selected();
+					this.dropdown().controller().selectElement(selected);
+					//this.find('input:visible')[0].select();
+					return;
+				default :
+					if(this.options.filterEnabled){
+						this.autocomplete(el.val());
+					}
+					
+				
 			}
-
-			// if up key is clicked, navigate to last item            
-			if ( key == "up" ) {
-				this.dropdown().controller().hasFocus = true;
-				var last = this.dropdown().children("ul").controller().getLast();
-				$(last).trigger("select");
-				return;
-			}
-
-			this.autocomplete(el.val());
 		},
+		/**
+		 * removes messages
+		 * @param {Object} val
+		 */
 		autocomplete: function( val ) {
-			// does autocomplete if it's enabled
-			if ( this.options.filterEnabled ) {
-				// and if item has a text attribute
-				if ( this.modelList && this.modelList[0] && this.modelList[0].text ) {
-					var isAutocompleteData = true, 
-						noItemsMsg = this.dropdown().find('.noItemsMsg');;
-					var matches = $.grep(this.modelList, function( item ) {
-						return item.text.indexOf(val) > -1;
-					});
-					if (!val || $.trim(val) === "" ) {
-						isAutocompleteData = false;
-					}
-					this.dropdown().controller().draw(matches, isAutocompleteData);
-					if (!this.dropdown().is(":visible") ) {
-						this.dropdown().controller().show();
-					}
-					if(!matches.length){
-						if (!noItemsMsg.length) {
-							this.dropdown().append("<div class='noItemsMsg'>"+this.options.noItemsMsg+"</div>");
-						}
-					} else {
-						if(noItemsMsg.length){
-							noItemsMsg.remove();
-						}
-					}
+			// do nothing if we don't have text based list
+			if (!this.modelList || !this.modelList[0] || !this.modelList[0].text) {
+				return;
+			}
+			
+			var isAutocompleteData = true,
+				
+				
+				noItemsMsg = this.dropdown().find('.noItemsMsg'),
+				
+				// list of matches
+				matches = $.grep(this.modelList, function( item ) {
+					return item.text.indexOf(val) > -1;
+				});
+			
+
+			
+			this.dropdown().controller().draw(matches, val);
+			
+			if (!this.dropdown().is(":visible") ) {
+				this.dropdown().controller().show();
+			}
+			if (!matches.length ) {
+				if (!noItemsMsg.length ) {
+					this.dropdown().append("<div class='noItemsMsg'>" + this.options.noItemsMsg + "</div>");
+				}
+			} else {
+				if ( noItemsMsg.length ) {
+					noItemsMsg.remove();
 				}
 			}
+			
+			
 		},
 		"input focusin": function( el, ev ) {
 			this.focusInputAndShowDropdown(el);
@@ -257,8 +310,9 @@ steal.plugins('jquery/controller',
 				// select all text
 				el[0].focus();
 				if (!this.dropdown().is(":visible") && this.dropdown().controller().canOpen ) {
-					if(this.options.overrideDropdown) {
-						el.trigger("show:dropdown", this);	
+					
+					if ( this.options.overrideDropdown ) {
+						el.trigger("show:dropdown", this);
 					} else {
 						this.dropdown().controller().show();
 					}
@@ -268,38 +322,14 @@ steal.plugins('jquery/controller',
 				}
 			}
 		},
-/*
-             * Trick to make dropdown close when combobox looses focus
-             * Bug: input looses focus on scroll bar click in IE, Chrome and Safari
-             * Fix inspired in:
-             * http://stackoverflow.com/questions/2284541/form-input-loses-focus-on-scroll-bar-click-in-ie
-             */
-		focusin: function( el, ev ) {
-			// trick to make dropdown close when combobox looses focus            
-			if ( this.closeDropdownOnBlurTimeout ) {
-				clearTimeout(this.closeDropdownOnBlurTimeout);
-			}
-		},
-		focusout: function( el, ev ) {
-			if ( this.dropdown().is(":hidden") ) {
-				return;
-			}
-			// trick to make dropdown close when combobox looses focus
-			var self = this;
-			this.closeDropdownOnBlurTimeout = setTimeout(function() {
-				if ( self.dropdown().controller().hasFocus ) {
-					self.element.trigger("focusin");
-				} else {
-					if ( self.currentItem.item ) {
-						// update viewbox with current item html
-						self._setViewboxHtmlAndShow(self.options.render.itemTemplate(self.currentItem.item));
-					}
-					self.dropdown().controller().hide();
-				}
-			}, 250);
-		},
+		
+		/**
+		 * Why does this happen?
+		 */
 		mouseleave: function( el, ev ) {
+			
 			if ( this.dropdown().is(":visible") ) {
+				console.log('focus')
 				this.find("input[type='text']").focus();
 			}
 		},
@@ -329,6 +359,36 @@ steal.plugins('jquery/controller',
 			}
 		},
 		/*
+         * Trick to make dropdown close when combobox looses focus
+         * Bug: input looses focus on scroll bar click in IE, Chrome and Safari
+         * Fix inspired in:
+         * http://stackoverflow.com/questions/2284541/form-input-loses-focus-on-scroll-bar-click-in-ie
+         */
+		focusin: function( el, ev ) {
+			// trick to make dropdown close when combobox looses focus            
+			clearTimeout(this.closeDropdownOnBlurTimeout);
+		},
+		/**
+		 * If someone clicks somewhere else, lets close ourselves
+		 * @param {Object} el
+		 * @param {Object} ev
+		 */
+		focusout: function( el, ev ) {
+			if ( this.dropdown().is(":hidden") ) {
+				return;
+			}
+			// trick to make dropdown close when combobox looses focus
+			this.closeDropdownOnBlurTimeout = setTimeout(this.callback('blurred'), 100);
+		},
+		blurred : function(){
+			//set current item as content / value
+			if ( this.currentItem.item ) {
+				// update viewbox with current item html
+				this._setViewboxHtmlAndShow(this.options.render.itemTemplate(this.currentItem.item));
+			}
+			this.dropdown().controller().hide();
+		},
+		/*
 	     * Internet Explorer interprets two fast clicks in a row as one single-click, 
 	     * followed by one double-click, while the other browsers interpret it as 
 	     * two single-clicks and a double-click.
@@ -349,8 +409,8 @@ steal.plugins('jquery/controller',
 			me.replaceWith(this.oldElement); //replace with old
 			this.oldElement = null; //make sure we can't touch old            
 		},
-		
-		
+
+
 		/********************************
 		 *		Combobox Public API		*
 		 ********************************/
@@ -388,20 +448,20 @@ steal.plugins('jquery/controller',
 					this._setViewboxHtmlAndShow(html);
 				}
 
-             	// bind values to the hidden input
-             	if (this.options.storeSerializedItem) {
-                 	// (clone current item so we can remove fields  
-                 	// that are not relevant for the postback)
-                 	var clone = $.extend({}, this.currentItem.item);
-                 	for (var field in clone) {
-                     	if ($.inArray(field, this.options.nonSerializedAttrs) > -1) {
-                         	delete clone[field];
-                     	}
-                 	}
-                 	this.find("input[type=hidden]")[0].value = $.toJSON(clone);
-             	} else { // just store the value
-                 	this.find("input[type=hidden]")[0].value = this.currentItem.value;
-             	}
+				// bind values to the hidden input
+				if ( this.options.storeSerializedItem ) {
+					// (clone current item so we can remove fields  
+					// that are not relevant for the postback)
+					var clone = $.extend({}, this.currentItem.item);
+					for ( var field in clone ) {
+						if ( $.inArray(field, this.options.nonSerializedAttrs) > -1 ) {
+							delete clone[field];
+						}
+					}
+					this.find("input[type=hidden]")[0].value = $.toJSON(clone);
+				} else { // just store the value
+					this.find("input[type=hidden]")[0].value = this.currentItem.value;
+				}
 
 				//if we have a dropdown ... update it
 				if ( this._dropdown ) {
@@ -422,12 +482,12 @@ steal.plugins('jquery/controller',
 			if ( item ) {
 				item.forceHidden = false;
 				// delegate item selection on dropdown				
-				this.dropdown().controller().select(item);
+				this.dropdown().controller().selectItem(item);
 			}
 		},
 		/**
 		 * Clears combobox current selection.
-		 */		
+		 */
 		clearSelection: function() {
 			if ( this.currentItem.item ) {
 				this.find("input[type='text']").val("");
@@ -443,36 +503,36 @@ steal.plugins('jquery/controller',
 		},
 		/**
 		 * @param {String} value value of the item to be returned.
-	 	 * @return {Object} returns the item with the value passed as a parameter.	
+		 * @return {Object} returns the item with the value passed as a parameter.	
 		 * Returns the item with the value passed as a parameter.
 		 */
 		getItem: function( value ) {
 			var item = this.modelListMatches("value", value)[0];
-			if (item) {
+			if ( item ) {
 				return item;
 			}
 			return null;
 		},
 		/**
-	 	 * @return {Array} returns the list of items loaded into combobox	
+		 * @return {Array} returns the list of items loaded into combobox	
 		 * Returns the list of items loaded into combobox.
 		 */
 		getItems: function() {
 			return this.modelList || [];
 		},
 		/**
-	 	 * @param {Function} callback to be triggered after items are loaded into combobox	
+		 * @param {Function} callback to be triggered after items are loaded into combobox	
 		 * Forces the ajax combobox to fetch data from the server. 
 		 * This method should probably be under phui/combobox/ajax.
-		 */		
+		 */
 		populateItems: function( callback ) {
 			this.find("input[type='text']").trigger("show:dropdown", [this, callback]);
 		},
 		/**
-	 	 * @param {String} text query string to serve as filter for autocomplete.
-	 	 * @return {Array} returns the list of filtered items. 	
+		 * @param {String} text query string to serve as filter for autocomplete.
+		 * @return {Array} returns the list of filtered items. 	
 		 * API to return filtered data from combobox's autocomplete. 
-		 */		
+		 */
 		query: function( text ) {
 			var matches = $.grep(this.modelList, function( item ) {
 				return item.text.indexOf(text) > -1;
@@ -484,33 +544,32 @@ steal.plugins('jquery/controller',
 			return results;
 		},
 		/**
-	 	 * @param {String} value value of the item that will be made visible.
+		 * @param {String} value value of the item that will be made visible.
 		 * Show an item.
-		 */				
+		 */
 		showItem: function( value ) {
 			var item = this.modelListMatches("value", value)[0];
 			if ( item ) {
 				// delegate show/hide items on dropdown_controller				
-				this.dropdown().controller().showItem( item );
-				item.forceHidden = false;		
-			}	
+				this.dropdown().controller().showItem(item);
+				item.forceHidden = false;
+			}
 		},
 		/**
-	 	 * @param {String} value value of the item that will be hidden.
+		 * @param {String} value value of the item that will be hidden.
 		 * Hides an item.
-		 */			
+		 */
 		hideItem: function( value ) {
 			var item = this.modelListMatches("value", value)[0];
 			if ( item ) {
-				if ( this.currentItem.item && 
-						item.value === this.currentItem.item.value ) {
+				if ( this.currentItem.item && item.value === this.currentItem.item.value ) {
 					this.clearSelection();
 				}
 				// delegate show/hide items on dropdown_controller					
-				this.dropdown().controller().hideItem( item );
+				this.dropdown().controller().hideItem(item);
 				item.forceHidden = true;
-			}						
-		},		
+			}
+		},
 		enable: function( value ) {
 			var item = this.modelListMatches("value", value)[0];
 			if ( item ) {

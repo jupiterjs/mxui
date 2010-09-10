@@ -10,7 +10,7 @@ steal.plugins('jquery/controller', 'phui/keycode')
         {
             init: function() {
                 this.selectableEls = this.find( "." + 
-				     this.options.selectableClassName + "[tabindex]" );
+				     this.options.selectableClassName  );
             },
             ".{selectableClassName} mouseenter": function(el, ev){
                 el.trigger("select")
@@ -51,16 +51,15 @@ steal.plugins('jquery/controller', 'phui/keycode')
             },
             ".{selectableClassName} keydown": function(el, ev){
                 var key = $.keyname(ev)
-                if(key == "down")
-                    this.focusNext(el);
-                if(key == "up")
-                    this.focusPrev(el);
-                if(key == "enter")
-                    el.trigger("activate")
-                
-                // this is a trick to fix issue with 
-                // key navigation in large overflowed lists
-                if(!$.browser.mozilla) ev.preventDefault();
+                if(key == "down"){
+					this.focusNext(el);
+					ev.preventDefault()
+				}else if(key == "up") {
+					this.focusPrev(el);
+					ev.preventDefault()
+				}else  if(key == "enter") {
+					el.trigger("activate")
+				}
             },
             focusNext: function(el){
                 var els = this.selectableEls.filter(":visible");

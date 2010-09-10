@@ -4,7 +4,7 @@
     <head>
         <title>combobox</title>
         <style type='text/css'>
-            body {font-family: verdana}
+            body {font-family: verdana; margin: 0px; padding: 0px;}
             .error {border: solid 1px red;}
             .error_text { color: red; font-size: 10px;}
             td {padding: 3px;}
@@ -14,12 +14,42 @@
 			.color4 { background-color: #aabbbb; padding-left: 10px; margin: 1px; }
 			.color5 { background-color: #778877; padding-left: 10px; margin: 1px; }
 			.text { margin-left: 5px; }
+			.item-match {
+				font-weight: bold;
+			}
+			#selectable {
+				overflow: auto;
+				height: 100px;
+				width: 200px;
+			}
+			.selectable {
+				display: block;
+				width: 100%;
+				margin:0;
+				padding: 3px 0;
+				border-bottom: 1px solid #cccccc;
+			    cursor: pointer;
+			}
+			.selected {
+				background-color: orange;
+			}
         </style>    
         <link type="text/css" href="combobox.css" rel="stylesheet" />
 		<!--<link type="text/css" href="StyleResourceHandler.css" rel="stylesheet" /> -->
     </head>
     <body>
-    	
+    	<h3>Selectable</h3>
+		<a href="javascript://" id='select_next'>select next</a>
+		<a href="javascript://" id='select_prev'>select prev</a>
+		<div id='selectable'>
+			<ul>
+				<li class='selectable'>First</li><li class='selectable'>First</li><li class='selectable'>First</li>
+				<li class='selectable'>First</li><li class='selectable'>First</li><li class='selectable'>First</li>
+				<li class='selectable'>First</li><li class='selectable'>First</li><li class='selectable'>First</li>
+				<li class='selectable'>First</li><li class='selectable'>First</li><li class='selectable'>First</li>
+				<li class='selectable'>First</li><li class='selectable'>First</li><li class='selectable'>First</li>
+			</ul>
+		</div>
 		<h3>Select Combobox Demo</h3>
         <select id='expirationBehavior' name='forum[expirationBehavior]'>
 			<option value='0' selected='true'>archive</option>
@@ -385,8 +415,15 @@
                $("#preloaded_ajax_demo").phui_combobox_ajax({
 			   		items: [{ value: "0", text: "dir0", selected: true}],
                     url: "/Archer/Service/DiscussionForumServiceJS.svc/GetForumsForCommunity"
-                });							
-											
+                });		
+				
+				$("#selectable").phui_combobox_selectable()					
+				$("#select_next").click(function(){
+					$("#selectable").phui_combobox_selectable("selectNext")
+				})
+				$("#select_prev").click(function(){
+					$("#selectable").phui_combobox_selectable("selectPrev")
+				})
             });
 			
 			

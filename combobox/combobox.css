@@ -92,8 +92,14 @@
 
 .phui_combobox_dropdown .disabled .text {
 	color: #bbbbbb !important;
-}
 
+}
+.phui_combobox_dropdown .disabled {
+	border-bottom: 1px solid #cccccc;
+	padding: 3px 0;
+	display: block;
+	width: 100%;
+}
 .phui_combobox_dropdown .selectable {
 	display: block;
 	width: 100%;
