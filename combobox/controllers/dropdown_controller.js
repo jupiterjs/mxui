@@ -25,7 +25,10 @@ steal.then(function() {
 		},
 		style: function() {
 			
-			this.element.css("width", this.options.parentElement.width());
+			this.element.css({
+				'opacity': 1, // used because IE7 doesn't show the updated contents of the combobox without it
+				'width': this.options.parentElement.width()
+			});
 			if ( this.options.maxHeight ) {
 				var h = this.element.height(),
 					maxh = this.options.maxHeight;
@@ -136,6 +139,7 @@ steal.then(function() {
 		
 		// gets an element from an item .... what
 		_getEl: function( item ) {
+			if(!item || !item.id) return $([])
 			return this.find(".dropdown_" + item.id);
 		},
 		/**

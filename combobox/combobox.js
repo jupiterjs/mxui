@@ -313,7 +313,9 @@ steal.plugins('jquery/controller', 'jquery/lang/json', 'phui/positionable', 'phu
 		focusInputAndShowDropdown: function( el ) {
 
 			// select all text
-			el[0].focus();
+			if(el.is(":visible")){ // IE won't let you focus an invisible input
+				el[0].focus();
+			}
 			if (!this.dropdown().is(":visible") ) {
 				
 				if ( this.options.overrideDropdown ) {
