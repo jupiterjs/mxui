@@ -121,16 +121,7 @@ steal.plugins('jquery/controller', 'jquery/lang/json', 'phui/scrollbar_width', '
 				if ( this.options.items ) {
 					this.dropdown().controller().draw(this.modelList);
 				}
-				this.dropdown().controller().show();
-				
-				// position the dropdown bellow the combobox input				
-				//this._dropdown.phui_positionable({
-				//	my: 'left top',
-				//	at: 'left bottom',
-				//	collision: 'none flip'
-				//}).css("opacity", 0).show().trigger("move", this.element).hide().css("opacity", 1);
-				
-				//this._dropdown.controller().style();
+				this.dropdown().hide();
 			}
 
 			return this._dropdown;
