@@ -24,7 +24,7 @@ steal.plugins('jquery/controller', 'jquery/lang/json', 'phui/scrollbar_width', '
 					}
 				}
 			},
-			maxHeight: 320,
+			/*maxHeight: 320,*/
 			filterEnabled: true,
 			/**
 			 * Values to select aren't text but html.  This changes from an input to a 
@@ -80,9 +80,9 @@ steal.plugins('jquery/controller', 'jquery/lang/json', 'phui/scrollbar_width', '
 				this.element.width(this.options.width);
 			}
 			// force default max height
-			if (!this.options.maxHeight ) {
+			/*if (!this.options.maxHeight ) {
 				this.options.maxHeight = this.Class.defaults.maxHeight;
-			}
+			}*/
 			this.currentItem = {
 				"value": null
 			};

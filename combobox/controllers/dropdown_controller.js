@@ -215,7 +215,6 @@ steal.plugins('phui/fittable').then(function() {
 		 */
 		mousedown : function(el, ev){
 			ev.preventDefault();
-			console.log('down');
 			var el = this.options.parentElement.find("input[type=text]")[0];
 			setTimeout(function(){
 				el.focus();
@@ -286,11 +285,13 @@ steal.plugins('phui/fittable').then(function() {
 
 			this.element.fit({
 				within:300,
-				of:this.options.parentElement
+				of:this.options.parentElement,
+				maxHeight:this.options.maxHeight 
 			})
 			.slideDown("fast", this.callback("_shown", callback));
 		},
 		_shown: function(callback) {
+			
 			var self = this;
 			setTimeout(function() {
 				
