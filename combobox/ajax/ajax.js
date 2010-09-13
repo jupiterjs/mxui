@@ -40,6 +40,9 @@ steal.plugins('phui/combobox')
             if ( !this.notFirstFocus )
             {
 				combobox.dropdown().html("<span class='loadingText'>" + this.options.loadingMessage + "</span>");
+				combobox.dropdown().controller().isfirstPass = false;
+				combobox.dropdown().show();
+				combobox.dropdown().controller().style();
                 this.loadDataFromServer( combobox, callback );
                 this.notFirstFocus = true;
             }
@@ -61,6 +64,9 @@ steal.plugins('phui/combobox')
         showData: function (combobox, isAutocompleteData, callback, data)
         {
             data = data.d;
+			
+			// hide the loading message
+			combobox.dropdown().hide();
 			
 			// lets check if ajax combobox was preloaded with a default value
 			var oldSelectedValue = combobox.currentItem.value,
