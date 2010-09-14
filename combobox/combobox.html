@@ -89,7 +89,7 @@
 		
 		<br/>
 		<h3>Ajax Combobox Demo</h3>
-		<div id="ajax_container" style="width:1000px">
+		<div id="ajax_container" style="width:1000px;height:100px;overflow:auto;">
 			<input id="ajax_someValue" style="float:right" />
 			<button id="populateItems" style="float:right">Populate Items</button>
             <button id="ajax_showItem" style="float:right">Show Item</button>
@@ -287,7 +287,7 @@
 				
 				// AJAX COMBOBOX DEMO
                 // fixture that simulate nested data sent by the server
-                $.fixture.make(["items", "item"], 200, function(num, items) {
+                $.fixture.make(["items", "item"], 100, function(num, items) {
                    
                         var itemId = parseInt(Math.random() * num);
                         var item = items[itemId];
