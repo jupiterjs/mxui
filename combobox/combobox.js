@@ -24,7 +24,7 @@ steal.plugins('jquery/controller', 'jquery/lang/json', 'phui/scrollbar_width', '
 					}
 				}
 			},
-			maxHeight: 320,
+			/*maxHeight: 320,*/
 			filterEnabled: true,
 			/**
 			 * Values to select aren't text but html.  This changes from an input to a 
@@ -80,9 +80,9 @@ steal.plugins('jquery/controller', 'jquery/lang/json', 'phui/scrollbar_width', '
 				this.element.width(this.options.width);
 			}
 			// force default max height
-			if (!this.options.maxHeight ) {
+			/*if (!this.options.maxHeight ) {
 				this.options.maxHeight = this.Class.defaults.maxHeight;
-			}
+			}*/
 			this.currentItem = {
 				"value": null
 			};
@@ -95,7 +95,8 @@ steal.plugins('jquery/controller', 'jquery/lang/json', 'phui/scrollbar_width', '
 		 * Set the watermark if there's no text
 		 */
 		resetWatermark: function() {
-			if (!this.val() ) {
+			// zero is a valid value
+			if (this.val() === null || this.val() === "") {
 				this.find("input[type='text']").val(this.options.watermarkText);
 			}
 		},
@@ -298,6 +299,14 @@ steal.plugins('jquery/controller', 'jquery/lang/json', 'phui/scrollbar_width', '
 			}
 			
 			
+		},
+		// this is necessary because we want to be able
+		// to open the dropdown by clicking the input
+		// after an item was selected which means
+		// input has focus and dropdown is hidden
+		// input focusin doesn't work in this case 
+		"input click": function( el, ev ) {
+			this.focusInputAndShowDropdown(el);
 		},
 		"input focusin": function( el, ev ) {
 			this.focusInputAndShowDropdown(el);

@@ -108,3 +108,9 @@
 	border-bottom: 1px solid #cccccc;
     cursor: pointer;
 }
+.phui_combobox_dropdown .loadingText
+{
+	font-size:9px;
+    padding:4px;
+    display:block;	
+}

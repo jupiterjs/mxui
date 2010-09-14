@@ -139,7 +139,8 @@ steal.plugins('phui/fittable').then(function() {
 		
 		// gets an element from an item .... what
 		_getEl: function( item ) {
-			if(!item || !item.id) return $([])
+			// id = 0 can be a valid value
+			if(!item || item.id === undefined) return $([])
 			return this.find(".dropdown_" + item.id);
 		},
 		/**
@@ -215,7 +216,6 @@ steal.plugins('phui/fittable').then(function() {
 		 */
 		mousedown : function(el, ev){
 			ev.preventDefault();
-			console.log('down');
 			var el = this.options.parentElement.find("input[type=text]")[0];
 			setTimeout(function(){
 				el.focus();
@@ -248,7 +248,7 @@ steal.plugins('phui/fittable').then(function() {
 		// when item is selected through the api simulate click  
 		// to let phui/selectable manage element's activation  
 		selectItem: function( item ) {
-			this._getEl(item).trigger("activate");
+			this.selectElement( this._getEl(item) );
 		},
 		showItem: function( item ) {
 			this._getEl(item).show();
@@ -272,9 +272,22 @@ steal.plugins('phui/fittable').then(function() {
 		},
 		hide: function() {
 			this.options.parentElement.controller().resetWatermark();
-			this.element.slideUp("fast");
+			if (this.element.data().fitAbove) {
+				var offTop = this.options.parentElement.offset().top;
+				this.element.animate({
+					top: offTop,
+					height: 1
+				}, "fast", this.callback("_hidden"));				
+			} else {
+				this.element.slideUp("fast");				
+			}
 
 		},
+		
+		_hidden: function() {
+			this.element.hide();
+		},
+		
 		/**
 		 * Show will always show the selected element so make sure you have
 		 * it set before you call this.
@@ -286,11 +299,27 @@ steal.plugins('phui/fittable').then(function() {
 
 			this.element.fit({
 				within:300,
-				of:this.options.parentElement
-			})
-			.slideDown("fast", this.callback("_shown", callback));
+				of:this.options.parentElement,
+				maxHeight:this.options.maxHeight 
+			});
+			
+			if( this.element.data().fitAbove ) {
+				var h = this.element.height(),
+					offTop = this.options.parentElement.offset().top;
+					
+				this.element.css({top: offTop})
+				this.element.height(1);
+				this.element.show();
+
+				this.element.animate({
+					top: offTop - h,
+					height: h+"px"
+				}, "fast", this.callback("_shown", callback))
+			} else {
+				this.element.slideDown("fast", this.callback("_shown", callback));	
+			}
 		},
-		_shown: function(callback) {
+		_shown: function(callback) {			
 			var self = this;
 			setTimeout(function() {
 				

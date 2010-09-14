@@ -40,6 +40,9 @@ steal.plugins('phui/combobox')
             if ( !this.notFirstFocus )
             {
 				combobox.dropdown().html("<span class='loadingText'>" + this.options.loadingMessage + "</span>");
+				combobox.dropdown().controller().isfirstPass = false;
+				combobox.dropdown().show();
+				combobox.dropdown().controller().style();
                 this.loadDataFromServer( combobox, callback );
                 this.notFirstFocus = true;
             }
@@ -61,6 +64,9 @@ steal.plugins('phui/combobox')
         showData: function (combobox, isAutocompleteData, callback, data)
         {
             data = data.d;
+			
+			// hide the loading message
+			combobox.dropdown().hide();
 			
 			// lets check if ajax combobox was preloaded with a default value
 			var oldSelectedValue = combobox.currentItem.value,
@@ -86,17 +92,7 @@ steal.plugins('phui/combobox')
 				}
 			}
 
-			combobox.dropdown().css("opacity", 0)
-			combobox.dropdown().show()
-			combobox.dropdown().css("height", "auto");
-			var h = combobox.dropdown().height(),
-				maxh = combobox.options.maxHeight;
-
-			combobox.dropdown().height( h > maxh ? maxh : h);			
-			combobox.dropdown().trigger("move", this.element)
-			combobox.dropdown().hide()
-			combobox.dropdown().css("opacity", 1);
-			combobox.showDropdown();
+			combobox.dropdown().controller().show();
 			combobox.options.overrideDropdown = false;
 		
             this.dataAlreadyLoaded = true;
