@@ -271,9 +271,22 @@ steal.plugins('phui/fittable').then(function() {
 		},
 		hide: function() {
 			this.options.parentElement.controller().resetWatermark();
-			this.element.slideUp("fast");
+			if (this.element.data().fitAbove) {
+				var offTop = this.options.parentElement.offset().top;
+				this.element.animate({
+					top: offTop,
+					height: 1
+				}, "fast", this.callback("_hidden"));				
+			} else {
+				this.element.slideUp("fast");				
+			}
 
 		},
+		
+		_hidden: function() {
+			this.element.hide();
+		},
+		
 		/**
 		 * Show will always show the selected element so make sure you have
 		 * it set before you call this.
@@ -287,11 +300,25 @@ steal.plugins('phui/fittable').then(function() {
 				within:300,
 				of:this.options.parentElement,
 				maxHeight:this.options.maxHeight 
-			})
-			.slideDown("fast", this.callback("_shown", callback));
-		},
-		_shown: function(callback) {
+			});
 			
+			if( this.element.data().fitAbove ) {
+				var h = this.element.height(),
+					offTop = this.options.parentElement.offset().top;
+					
+				this.element.css({top: offTop})
+				this.element.height(1);
+				this.element.show();
+
+				this.element.animate({
+					top: offTop - h,
+					height: h+"px"
+				}, "fast", this.callback("_shown", callback))
+			} else {
+				this.element.slideDown("fast", this.callback("_shown", callback));	
+			}
+		},
+		_shown: function(callback) {			
 			var self = this;
 			setTimeout(function() {
 				

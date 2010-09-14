@@ -9,19 +9,7 @@ steal.plugins('jquery/dom/dimensions').then(function($){
 		}
 	}
 	
-	var fakeWindow = { 
-		offset: function() { 
-			return { left:0, top:0} 
-		},
-		outerHeight: function(){
-			return $(window).height()
-		},
-		scrollTop: function() {
-			return $(window).scrollTop()
-		}
-	};
-	
-	var	fit = function( dropdown, combobox, within ){
+	var	fit = function( dropdown, combobox, within, maxHeight ){
 			dropdown.css({
 				"opacity": 0,
 				"height": "",
@@ -32,11 +20,15 @@ steal.plugins('jquery/dom/dimensions').then(function($){
 				spaceAvailableAbove,
 				spaceAvailableBelow,
 				belowPosition,
+				fitAbove = false,
 				
 				comboOff = combobox.offset(),
 				comboHeight = combobox.outerHeight(),
 				
 				dropHeight = dropdown.outerHeight();
+				if (maxHeight) {
+					dropHeight = dropHeight > maxHeight ? maxHeight : dropHeight;
+				}
 			
 			if(scrollableParent) {
 				var scrollStyles = scrollableParent.curStyles(
@@ -91,6 +83,7 @@ steal.plugins('jquery/dom/dimensions').then(function($){
 						left: comboOff.left+"px"
 					});
 				}
+				fitAbove = true;
 			} else if (true) { 
 				//  If the space above is less than the space below, draw it to fit in the space remaining
 				dropdown.outerHeight( spaceAvailableBelow );
@@ -101,12 +94,15 @@ steal.plugins('jquery/dom/dimensions').then(function($){
 				});				
 			}
 			dropdown.css("opacity",1);
+			
+			return fitAbove;
 	}	
 	
 	$.fn.fit = function(options){
 			// check if we have all necessary data before doing the work
 			var of = options.of,
-				within = options.within;
+				within = options.within,
+				maxHeight = options.maxHeight;
 				
 			if( !of || !within ) {
 				return;
@@ -115,7 +111,9 @@ steal.plugins('jquery/dom/dimensions').then(function($){
 			// make element absolute positioned	
 	
 			
-			fit( $(this), of, within );
+			var fitAbove = fit( this, of, within, maxHeight );
+			
+			$.data( this[0], 'fitAbove', fitAbove);
 				
 			return this;	
 		};
