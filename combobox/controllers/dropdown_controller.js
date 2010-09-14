@@ -139,7 +139,8 @@ steal.plugins('phui/fittable').then(function() {
 		
 		// gets an element from an item .... what
 		_getEl: function( item ) {
-			if(!item || !item.id) return $([])
+			// id = 0 can be a valid value
+			if(!item || item.id === undefined) return $([])
 			return this.find(".dropdown_" + item.id);
 		},
 		/**
@@ -247,7 +248,7 @@ steal.plugins('phui/fittable').then(function() {
 		// when item is selected through the api simulate click  
 		// to let phui/selectable manage element's activation  
 		selectItem: function( item ) {
-			this._getEl(item).trigger("activate");
+			this.selectElement( this._getEl(item) );
 		},
 		showItem: function( item ) {
 			this._getEl(item).show();

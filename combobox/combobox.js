@@ -95,7 +95,8 @@ steal.plugins('jquery/controller', 'jquery/lang/json', 'phui/scrollbar_width', '
 		 * Set the watermark if there's no text
 		 */
 		resetWatermark: function() {
-			if (!this.val() ) {
+			// zero is a valid value
+			if (this.val() === null || this.val() === "") {
 				this.find("input[type='text']").val(this.options.watermarkText);
 			}
 		},
