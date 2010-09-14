@@ -300,6 +300,14 @@ steal.plugins('jquery/controller', 'jquery/lang/json', 'phui/scrollbar_width', '
 			
 			
 		},
+		// this is necessary because we want to be able
+		// to open the dropdown by clicking the input
+		// after an item was selected which means
+		// input has focus and dropdown is hidden
+		// input focusin doesn't work in this case 
+		"input click": function( el, ev ) {
+			this.focusInputAndShowDropdown(el);
+		},
 		"input focusin": function( el, ev ) {
 			this.focusInputAndShowDropdown(el);
 		},
