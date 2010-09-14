@@ -1,9 +1,9 @@
 steal.plugins('jquery/dom/dimensions').then(function($){
 	
-	$.fn.scrollableParent = function(){
+	$.fn.scrollableParent2 = function(){
 		var el = this[0], parent = el;
 		while ((parent = parent.parentNode) && parent != document.body) {
-			if (parent.scrollHeight != parent.offsetHeight) {
+			if (parent.scrollHeight > parent.clientHeight) {
 				return $(parent);
 			}
 		}
@@ -16,7 +16,7 @@ steal.plugins('jquery/dom/dimensions').then(function($){
 				"top" : "0px",
 				"left" : "0px"
 			});
-			var scrollableParent = combobox.scrollableParent(),
+			var scrollableParent = combobox.scrollableParent2(),
 				spaceAvailableAbove,
 				spaceAvailableBelow,
 				belowPosition,
