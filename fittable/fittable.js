@@ -28,6 +28,7 @@ steal.plugins('jquery/dom/dimensions').then(function($){
 				dropHeight = dropdown.outerHeight();
 				if (maxHeight) {
 					dropHeight = dropHeight > maxHeight ? maxHeight : dropHeight;
+					dropdown.height(dropHeight);
 				}
 			
 			if(scrollableParent) {
@@ -37,8 +38,16 @@ steal.plugins('jquery/dom/dimensions').then(function($){
 					"paddingBottom"
 					)
 				
+				var borderNormalizer = {
+						"thin": 1,
+						"medium": 2,
+						"thick": 4
+					},
+					borderTopWidth = parseInt( scrollStyles.borderTopWidth ) || 
+									borderNormalizer[ scrollStyles.borderTopWidth ]; 
+				
 				var scrollableOff = scrollableParent.offset(),
-					scrollTop = scrollableOff.top + parseInt(scrollStyles.borderTopWidth);// + 
+					scrollTop = scrollableOff.top + borderTopWidth;// + 
 									//parseInt(scrollStyles.paddingTop);
 							
 					scrollBottom = scrollTop + scrollableParent.height() + parseInt(scrollStyles.paddingTop) +
