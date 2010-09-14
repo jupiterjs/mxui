@@ -73,7 +73,7 @@ steal.plugins('phui/fittable').then(function() {
 		},
 		draw: function( modelList, val ) {
 			// if this is the first time we are drawing
-			// make the content
+			// make the content			
 			if ( this.isFirstPass ) {
 				
 				var html = modelList.length ?
@@ -95,6 +95,7 @@ steal.plugins('phui/fittable').then(function() {
 
 				
 			}
+						
 			// fill hash for quick lookup of the instance
 			var modelHash = {};
 			for ( var i = 0; i < modelList.length; i++ ) {
@@ -107,7 +108,6 @@ steal.plugins('phui/fittable').then(function() {
 				first = false;
 			
 			//select the first one
-
 			for ( var j = 0; j < itemEls.length; j++ ) {
 				
 				var el = $(itemEls[j]),
@@ -129,12 +129,17 @@ steal.plugins('phui/fittable').then(function() {
 					el.show();
 				}
 			}
-			
+						
 			//saves the model hash
 			this.modelHash = modelHash;
 			this.isFirstPass = false;
-
+			
+			// this is here because ie7 renders an incorrect height
+			// not sure why this works, probably because it forces a reflow
+			this.element.height()
+			
 			this.style();
+			
 		},
 		
 		// gets an element from an item .... what
@@ -302,7 +307,7 @@ steal.plugins('phui/fittable').then(function() {
 				of:this.options.parentElement,
 				maxHeight:this.options.maxHeight 
 			});
-			
+
 			if( this.element.data().fitAbove ) {
 				var h = this.element.height(),
 					offTop = this.options.parentElement.offset().top;
@@ -321,9 +326,8 @@ steal.plugins('phui/fittable').then(function() {
 		},
 		_shown: function(callback) {			
 			var self = this;
-			setTimeout(function() {
-				
-				self.style();
+			setTimeout(function() {				
+				self.style();				
 				self.element.children("ul").controller().showSelected();
 				callback && callback()
 			}, 1);
