@@ -480,7 +480,7 @@ steal.plugins('jquery/controller', 'jquery/lang/json', 'phui/scrollbar_width', '
 					this.dropdown().controller().draw(this.modelList);
 				}
 
-				if ( this.valueSet ) {
+	            if (this.valueSet) {
 					this.element.trigger("change", this.currentItem.value);
 				}
 			}
