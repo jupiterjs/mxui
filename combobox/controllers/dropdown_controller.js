@@ -76,39 +76,39 @@ steal.plugins('phui/fittable').then(function () {
 
             }
 
-            // fill hash for quick lookup of the instance
+            
             var modelHash = {};
-            for (var i = 0; i < modelList.length; i++) {
-                var inst = modelList[i];
-                modelHash[inst.identity ? inst.identity() : "dropdown_" + inst.id] = inst;
-            }
-
-            // hide the elements that do not match the item list
-            var itemEls = this.list.find(".item"),
-				first = false;
-
-            //select the first one
-            for (var j = 0; j < itemEls.length; j++) {
-
-                var el = $(itemEls[j]),
-					identity = el[0].className.match(/(dropdown_\d*)/)[0],
-					item = identity && modelHash[identity];
-
-                if (!item || item.forceHidden) {
-
-                    el.hide()
-
-                } else {
-                    // if we have an autosuggest, pick the first one
-                    if (!first && val) {
-                        this.list.controller().selected(el, false);
-                        first = true
-                    }
-                    el.find('.item-content')
-						.html(this.options.render.itemTemplate(item, val));
-                    el.show();
-                }
-            }
+			if (modelList.length) {
+				// fill hash for quick lookup of the instance
+				for (var i = 0; i < modelList.length; i++) {
+					var inst = modelList[i];
+					modelHash[inst.identity ? inst.identity() : "dropdown_" + inst.id] = inst;
+				}
+				
+				// hide the elements that do not match the item list
+				var itemEls = this.list.find(".item"), first = false;
+				
+				//select the first one
+				for (var j = 0; j < itemEls.length; j++) {
+				
+					var el = $(itemEls[j]), identity = el[0].className.match(/(dropdown_\d*)/)[0], item = identity && modelHash[identity];
+					
+					if (!item || item.forceHidden) {
+					
+						el.hide()
+						
+					}
+					else {
+						// if we have an autosuggest, pick the first one
+						if (!first && val) {
+							this.list.controller().selected(el, false);
+							first = true
+						}
+						el.find('.item-content').html(this.options.render.itemTemplate(item, val));
+						el.show();
+					}
+				}
+			}
 
             //saves the model hash
             this.modelHash = modelHash;
