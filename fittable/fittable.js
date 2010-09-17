@@ -4,6 +4,12 @@ steal.plugins('jquery/dom/dimensions').then(function ($) {
         var el = this[0], parent = el;
         while ((parent = parent.parentNode) && parent != document.body) {
             var $p = $(parent);
+			/*
+			 * To find the closest scrollable container
+			 * we have to take into account not only if the the container 
+			 * is scrollable but also if the overflow css property is not
+			 * visible or hidden. We also must check if height is not zero.
+			 */
             if (parent.scrollHeight > parent.offsetHeight &&
                    $p.height() > 0 &&
                    $.inArray( $p.css("overflow"), ["hidden","visible"]  ) === -1) {
@@ -19,6 +25,11 @@ steal.plugins('jquery/dom/dimensions').then(function ($) {
             "top": "0px",
             "left": "0px"
         });
+		/*
+		 * After setting opacity to zero we must make
+		 * make sure dropdown display property is not "none"
+		 * so the offset methods work properly.
+		 */		
         dropdown.show();
 
         var scrollableParent = combobox.scrollableParent2(),
@@ -38,6 +49,12 @@ steal.plugins('jquery/dom/dimensions').then(function ($) {
         }
 
         if (scrollableParent) {
+            /*
+             * If keep option is true dropdown is appended to the scrollable 
+             * container. This is because when the dropdown is left next
+             * to the combobox, sometimes when it opens it goes off bellow 
+             * its container's border.
+             */		
             if (keep) {
                 dropdown[0].parentNode.removeChild(dropdown[0]);
                 scrollableParent.append(dropdown);
@@ -49,6 +66,10 @@ steal.plugins('jquery/dom/dimensions').then(function ($) {
 					"paddingBottom"
 					)
 
+			/*
+			 * We must take into account the fact that border
+			 * may not be a number.
+			 */
             var borderNormalizer = {
                 "thin": 1,
                 "medium": 2,
@@ -68,6 +89,12 @@ steal.plugins('jquery/dom/dimensions').then(function ($) {
             spaceAvailableAbove = comboOff.top - scrollTop;
             spaceAvailableBelow = scrollBottom - (comboOff.top + comboHeight);
         } else {
+            /*
+            * If keep option is true dropdown is appended to the scrollable 
+            * container. This is because when the dropdown is left next
+            * to the combobox, sometimes when it opens it goes off bellow 
+            * its container's border.
+            */		
             if (keep) {
                 dropdown[0].parentNode.removeChild(dropdown[0]);
                 document.body.appendChild(dropdown[0]);
@@ -78,39 +105,77 @@ steal.plugins('jquery/dom/dimensions').then(function ($) {
         }
         belowPosition = { top: comboOff.top + comboHeight, left: comboOff.left }
 
-        // If the element can be positioned without scrolling below target, draw it
+        /* 
+         * If the element can be positioned without scrolling below target, draw it.
+         * 
+		 * We use dropdown.offset(top, left) because dropdown.css(top, left) doesn't position 
+		 * the element relative to the document when there are positioned elements
+		 * between the dropdown and the document.
+		 * 
+		 * We use dropdown.css(top,left) if the scrollable parent is the document because 
+		 * dropdown.offset(top, left) uses getBoundingClientRect()
+		 * and in ie7 this native API returns absurd values sometimes.
+		 */
         if (spaceAvailableBelow >= dropHeight) {
-            dropdown.offset({
-                top: belowPosition.top,
-                left: belowPosition.left
-            });
+			if (!scrollableParent) { // scrollable parent is the document	
+				dropdown.css({
+					top: belowPosition.top + "px",
+					left: belowPosition.left + "px"
+				});
+			} else {
+				dropdown.offset({
+					top: belowPosition.top,
+					left: belowPosition.left
+				});
+			}
         } else if (spaceAvailableBelow >= within) {
             // If the element can be positioned with scrolling greater than min height, draw it
             dropdown.outerHeight(spaceAvailableBelow);
             dropdown.css({
                 overflow: "auto"
             });
-            dropdown.offset({
-                top: belowPosition.top ,
-                left: belowPosition.left
-            });
+			if (!scrollableParent) { // scrollable parent is the document	
+				dropdown.css({
+					top: belowPosition.top + "px",
+					left: belowPosition.left + "px"
+				});
+			} else {
+				dropdown.offset({
+					top: belowPosition.top,
+					left: belowPosition.left
+				});
+			}
         } else if (spaceAvailableAbove > spaceAvailableBelow) {
             // If the space above is greater than the space below, draw it above
             if (spaceAvailableAbove >= dropHeight) {
-                dropdown.offset({
-                    top: (comboOff.top - dropHeight),
-                    left: comboOff.left
-                });
+				if (!scrollableParent) { // scrollable parent is the document	
+					dropdown.css({
+						top: (comboOff.top - dropHeight) + "px",
+						left: comboOff.left + "px"
+					});
+				} else {
+					dropdown.offset({
+						top: (comboOff.top - dropHeight),
+						left: comboOff.left
+					});
+				}
             } else {
                 //we have to shrink it
                 dropdown.outerHeight(spaceAvailableAbove);
                 dropdown.css({
                     overflow: "auto"
                 });
-                dropdown.offset({
-                    top: (comboOff.top - spaceAvailableAbove),
-                    left: comboOff.left
-                });
+				if (!scrollableParent) { // scrollable parent is the document	
+					dropdown.css({
+						top: (comboOff.top - spaceAvailableAbove) + "px",
+						left: comboOff.left + "px"
+					});
+				} else {
+					dropdown.offset({
+						top: (comboOff.top - spaceAvailableAbove),
+						left: comboOff.left
+					});
+				}
             }
             fitAbove = true;
         } else if (true) {
@@ -119,10 +184,17 @@ steal.plugins('jquery/dom/dimensions').then(function ($) {
             dropdown.css({
                 overflow: "auto"
             });
-            dropdown.offset({
-                top: belowPosition.top,
-                left: belowPosition.left
-            });
+			if (!scrollableParent) { // scrollable parent is the document	
+				dropdown.css({
+					top: belowPosition.top + "px",
+					left: belowPosition.left + "px"
+				});
+			} else {
+				dropdown.offset({
+					top: belowPosition.top,
+					left: belowPosition.left
+				});
+			}
         }
         dropdown.css("opacity", 1);
 
@@ -144,6 +216,10 @@ steal.plugins('jquery/dom/dimensions').then(function ($) {
 
         var fitAbove = fit(this, of, within, maxHeight, keep);
 
+		/*
+		 * Allow fittable user to detect the dropdown direction
+		 * by looking up for "fitAbove" in its $.data. 
+		 */
         $.data(this[0], 'fitAbove', fitAbove);
 
         return this;
