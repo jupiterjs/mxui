@@ -89,15 +89,15 @@
 		
 		<br/>
 		<h3>Ajax Combobox Demo</h3>
-		<div id="ajax_container" style="width:1000px">
-			<input id="ajax_someValue" style="float:right" />
-			<button id="populateItems" style="float:right">Populate Items</button>
-            <button id="ajax_showItem" style="float:right">Show Item</button>
-            <button id="ajax_hideItem" style="float:right">Hide Item</button>   			   
-			<button id="ajax_select" style="float:right">Select</button>                     
-			<button id="ajax_clearSelection" style="float:right">Clear Selection</button>
-			<button id="ajax_getItems" style="float:right">Get Items</button>			                			
-        	<input id="ajax_demo" style="float:left" name="ajax_demo" />
+		<div id="ajax_container" style="width:400px;height:100px;overflow:auto;">
+			<input id="ajax_someValue" />
+			<button id="populateItems" >Populate Items</button>
+            <button id="ajax_showItem" >Show Item</button>
+            <button id="ajax_hideItem" >Hide Item</button>   			   
+			<button id="ajax_select" >Select</button>                     
+			<button id="ajax_clearSelection" >Clear Selection</button>
+			<button id="ajax_getItems">Get Items</button>			                			
+        	<input id="ajax_demo"  name="ajax_demo" />
 		</div>
 					
 
@@ -287,7 +287,7 @@
 				
 				// AJAX COMBOBOX DEMO
                 // fixture that simulate nested data sent by the server
-                $.fixture.make(["items", "item"], 200, function(num, items) {
+                $.fixture.make(["items", "item"], 100, function(num, items) {
                    
                         var itemId = parseInt(Math.random() * num);
                         var item = items[itemId];

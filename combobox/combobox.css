@@ -108,3 +108,22 @@
 	border-bottom: 1px solid #cccccc;
     cursor: pointer;
 }
+*+html .phui_combobox_dropdown ul {
+    width:auto !important; /*IE7*/
+}
+
+*+html .phui_combobox_dropdown li {
+	display: inline;
+}
+
+*+html .phui_combobox_dropdown ul .item { /*IE7*/
+    display:block; 
+    width:auto;
+}
+
+.phui_combobox_dropdown .loadingText
+{
+	font-size:9px;
+    padding:4px;
+    display:block;	
+}

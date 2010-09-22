@@ -108,20 +108,20 @@
 					})
 				});
 				
-				$("#fittable3").css("opacity",0).html( items(30));				
+				$("#fittable3").html( items(30));				
 				$("#target3").click(function(ev){
 					$("#fittable3").fit({
 						within:300,
 						of:$("#target3")
-					}).css("opacity",1);
+					});
 				});
 				
-				$("#fittable4").css("opacity",0).html( items(20));				
+				$("#fittable4").html( items(20));				
 				$("#target4").click(function(ev){
 					$("#fittable4").fit({
 						within:300,
 						of:$("#target4")
-					}).css("opacity",1);
+					});
 				});								
 			});
 			steal.start();
