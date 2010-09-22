@@ -90,7 +90,7 @@ steal.plugins('jquery/dom/dimensions','jquery/event/resize').then(function($){
 			if(!isBleeder){
 				//temporarily add a small div to use to figure out the 'bleed-through' margin
 				//of the last element
-				last = $('<div style="height: 0px; line-height:0px;overflow:hidden"/>')
+				last = $('<div style="height: 0px; line-height:0px;overflow:hidden;clear: both;"/>')
 					.appendTo(container);
 			}
 
