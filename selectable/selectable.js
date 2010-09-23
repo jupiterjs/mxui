@@ -4,31 +4,99 @@ steal.plugins('jquery/controller', 'phui/keycode')
             defaults : {
                 selectableClassName: "selectable",
                 selectedClassName : "selected",
-                activatedClassName : "activated"
+                activatedClassName : "activated",
+				multiActivate: true,
+				cache : false
             }
         },
         {
             init: function() {
-                this.selectableEls = this.find( "." + 
-				     this.options.selectableClassName  );
+                
+				this.lastSelected = null;
             },
             ".{selectableClassName} mouseenter": function(el, ev){
-                el.trigger("select")
+                this.selecting(el, false);
             },
+			selecting : function(el, autoFocus){
+				var oldSelected = 
+					this._selected && this._selected.hasClass(this.options.selectedClassName) ?
+					this._selected :
+					(this._selected = this.element.find("."+this.options.selectedClassName) )
+				
+				if(!el){
+					return oldSelected;
+				}else{
+					el = $(el)
+					oldSelected.trigger("deselect");
+					this._selected = el.addClass( this.options.selectedClassName );
+					
+					if(autoFocus !== false){
+						this.showSelected(el)
+					}
+					
+					
+					
+					el.trigger("select");
+				}
+			},
+			showSelected : function(el){
+				el[0].focus()
+			},
+			activating : function(el, ev){
+				if(!this.options.multiActivate || (!ev.shiftKey && !ev.ctrlKey)){
+					this.element
+						.find("." + this.options.activatedClassName)
+						.trigger('deactivate');
+					el.trigger("activate");
+				}else if(ev.ctrlKey){
+					if(el.hasClass(this.options.activatedClassName)){
+						el.trigger("deactivate");
+					}else{
+						el.trigger("activate");
+					}
+				}else if(ev.shiftKey){
+					
+					var selectable = this.element.find("." + this.options.selectableClassName),
+						found = false,
+						lastSelected= this.lastSelected;
+						
+					if(lastSelected.length && lastSelected[0] != el[0]){
+						for(var i =0; i < selectable.length;i++){
+							var select = selectable[i];
+							if( select ===  lastSelected[0] || select == el[0] ){
+								if(!found){
+									found = true;
+								}else{
+									break;
+								}
+							}else{
+								
+								if(found){
+									var $select = $(select);
+									if(!$select.hasClass(this.options.activatedClassName)){
+										$(select).trigger("activate");
+									}
+								}
+							}
+						}
+					}
+					el.trigger("activate");
+					
+				}
+				
+			},
             ".{selectableClassName} click": function(el, ev){
-                el.trigger("activate");
+				this.activating(el, ev);
+				
             },
             ".{selectableClassName} focusin": function(el, ev){
-                el.addClass( this.options.selectedClassName );
+                this.selecting(el, false);
             },
-            ".{selectableClassName} activate": function(el, ev){
+            ".{selectableClassName} activate": function(el, ev, keys){
                 // if event is synthetic (not IE native activate event)
-                if (!ev.originalEvent) {
-					var activated = this.element.find("." + this.options.activatedClassName);
-					if (activated.length) 
-						activated.trigger('deactivate');
-					el.addClass(this.options.activatedClassName);
-				}
+				el.addClass(this.options.activatedClassName);
+				this.lastSelected = el;
+				
             },
             ".{selectableClassName} deactivate": function(el, ev){
                 // if event is synthetic (not IE native deactivate event)
@@ -37,14 +105,12 @@ steal.plugins('jquery/controller', 'phui/keycode')
 				}
             },
             ".{selectableClassName} select": function(el, ev){
-                var selected = this.element.find( "."+this.options.selectedClassName );
+               
+				var selected = this.element.find( "."+this.options.selectedClassName );
                 if (selected.length) {
                     selected.trigger('deselect');
                 }
-                if ($.browser.msie) {
-                    el.trigger("focusin");
-                }
-                el.focus();
+                el.addClass( this.options.selectedClassName );
             },
             ".{selectableClassName} deselect": function(el, ev){
                 el.removeClass( this.options.selectedClassName );
@@ -52,56 +118,70 @@ steal.plugins('jquery/controller', 'phui/keycode')
             ".{selectableClassName} keydown": function(el, ev){
                 var key = $.keyname(ev)
                 if(key == "down"){
-					this.focusNext(el);
+					this.selectNext(el);
 					ev.preventDefault()
 				}else if(key == "up") {
-					this.focusPrev(el);
+					this.selectPrev(el);
 					ev.preventDefault()
 				}else  if(key == "enter") {
-					el.trigger("activate")
+					this.activating(el, ev);
 				}
             },
-            focusNext: function(el){
-                var els = this.selectableEls.filter(":visible");
-                var first = els.eq(0),
-                    last = els.eq(-1);
-                
-                if (el[0] == last[0]) {
-                    return first.trigger("select");
-                }
-                    
-                var nextEl;
-                for(var i=0;i<els.length;i++) {
-                    if(el[0] == els[i]) {
-                        nextEl =  els[i + 1];
-                        break;
-                    }
-                }
-                $(nextEl).trigger("select");
-            },
-            focusPrev: function(el){
-                var els = this.selectableEls.filter(":visible");
-                var first = els.eq(0),
-                    last = els.eq(-1);
-                
-                if (el[0] == first[0]) {
-                    return last.trigger("select");
-                }
-
-                var prevEl;
-                for(var i=0;i<els.length;i++) {
-                    if(el[0] == els[i]) {
-                        prevEl = els[i - 1];
-                        break;
-                    }
-                }
-                $(prevEl).trigger("select");                    
-            },
-            getFirst: function() {
-                return this.selectableEls.filter(":visible").get(0);
-            },
-            getLast: function() { 
-                return this.selectableEls.filter(":visible").get(-1);
-            }
+			cache : function(){
+				this._cache = this.element.find("."+this.options.selectableClassName);
+			},
+			selectable : function(){
+				return this._cache ?
+						this._cache.filter(":visible") :
+						this.element.find("."+this.options.selectableClassName+":visible")
+			},
+			
+            /**
+			 * Selects the next element
+			 * if an element is provided, select the first after the element
+			 * if an element is not provided, selects after the current.  If
+			 * there is no current, selects the first.
+			 * @param {Object} el
+			 */
+		    selectNext: function(el){
+		        var els = this.selectable(),
+					first = els.eq(0),
+		            last = els.eq(-1);
+		        el = el && el.length ? el : this.selected();
+				
+		        if (!el.length || el[0] == last[0]) {
+		            return this.selected(first);
+		        }
+		            
+		        var nextEl;
+		        for(var i=0;i<els.length;i++) {
+		            if(el[0] == els[i]) {
+		                nextEl =  els[i + 1];
+		                break;
+		            }
+		        }
+				this.selecting(nextEl || first, true);
+				return nextEl;
+		    },
+		    selectPrev: function(el){
+		        var els = this.selectable(),
+					first = els.eq(0),
+		            last = els.eq(-1);
+		        el = el && el.length ? el : this.selected();
+				
+		        if (!el.length && el[0] == last[0]) {
+		            return this.selected(last);
+		        }
+		
+		        var prevEl;
+		        for(var i=0;i<els.length;i++) {
+		            if(el[0] == els[i]) {
+		                prevEl = els[i - 1];
+		                break;
+		            }
+		        }
+				this.selecting(prevEl || last, true); 
+				return prevEl;                 
+		    }
         })
      })

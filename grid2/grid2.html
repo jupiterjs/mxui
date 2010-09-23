@@ -1,0 +1,68 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
+            "http://www.w3.org/TR/html4/strict.dtd">
+<html lang="en">
+	<head>
+		<title>resizer</title>
+<style type='text/css'>
+            body {font-family: verdana}
+            .error {border: solid 1px red;}
+            .error_text { color: red; font-size: 10px;}
+            td {padding: 3px;}
+
+			body {
+				padding: 0px;
+				margin: 0px;
+			}
+        </style>
+		<link type="text/css" href="grid.css" rel="stylesheet" />
+	</head>
+	<body>
+		<div id='grid'></div>
+		<script type='text/javascript' 
+                src='../../steal/steal.js?phui/grid2,development'>   
+        </script>
+		<script type='text/javascript'>
+			//create content
+			var html = [],
+				cols = 8,
+				head = ["<th>HereIsALongColumnName</th>"],
+				randomString = function(){
+					var len = parseInt( Math.random()*20 ), 
+						str = []
+					for(var i =0; i < len; i++){
+						var rand = parseInt( Math.random()*60 )
+						str.push(String.fromCharCode(32+ (rand > 40 ? 0 : rand )  ))
+					}
+					return str.join("")
+				};
+			
+			
+			for(var c = 1;  c< cols; c++){
+					head.push("<th>col ",c,"</th>")
+			}
+			
+			
+			for(var r=0; r < 100; r++){
+				html.push("<tr>")
+				for(var c = 0 ;  c< cols; c++){
+					html.push("<td>", randomString() ,"</td>")
+				}
+				html.push("</tr>")
+			}
+			
+			
+			
+			//want this as simple as possible
+			//provide it titles and 
+			// table contents
+			$(function(){
+				$("#grid").phui_grid2({
+					thead : "<tr>"+head.join('')+"</tr>",
+					tbody : html.join('')
+				}).phui_filler();
+				
+			})
+			
+		</script>
+	</body>
+</html>

@@ -28,20 +28,40 @@ steal.plugins('jquery/dom/dimensions','jquery/event/resize').then(function($){
 	offsetTop = function(el){
 		return el[0].offsetTop;
 	},
-	
+	inFloat  = function(el, parent){
+		while(el && el != parent){
+			var flt = $(el).css('float')
+			if( flt == 'left' || flt == 'right'){
+				return flt;
+			}
+			el = el.parentNode
+		}
+	},
 	filler = $.fn.phui_filler = function(options){
 		options || (options = {});
 		options.parent || (options.parent = $(this).parent())
 		options.parent = $(options.parent)
-		if(isThePage(options.parent[0])){
+		var thePage =  isThePage(options.parent[0])
+		if(thePage){
 			options.parent = $(window)
 		}
-		$(options.parent).bind('resize',{filler: this},filler.parentResize);
+		var evData = {
+			filler: this,
+			inFloat : inFloat(this[0], thePage ? document.body : options.parent[0] )
+		};
+		$(options.parent).bind('resize',evData,filler.parentResize);
 		//if this element is removed, take it out
-		this.bind('destroyed',{filler: this}, function(ev){
-			ev.filler.removeClass('phui_filler')
-			$(options.parent).unbind('resize', filler.parentResize)
-		})
+		
+		
+		
+		this.bind(
+			'destroyed',
+			evData, 
+			function(ev){
+				ev.filler.removeClass('phui_filler')
+				$(options.parent).unbind('resize', filler.parentResize)
+			});
+		
 		this.addClass('phui_filler')
 		//add a resize to get things going
 		var func = function(){
@@ -59,15 +79,18 @@ steal.plugins('jquery/dom/dimensions','jquery/event/resize').then(function($){
 	};
 	$.extend(filler,{
 		parentResize : function(ev){
+
 			var parent = $(this),
 				isWindow = this == window,
-				container = (isWindow ? $(document.body) : parent)
+				container = (isWindow ? $(document.body) : parent),
 				
 				//if the parent bleeds margins, we don't care what the last element's margin is
 				isBleeder = bleeder(parent),
 				children = container.children().filter(function(){
-					if (matches.test(this.nodeName.toLowerCase()))
+					if (matches.test(this.nodeName.toLowerCase())){
 						return false;
+					}
+						
 					var get = $.curStyles(this, ['position','display']);
 					return get.position !== "absolute" && get.position !== "fixed" &&
 						   get.display !== "none" && !jQuery.expr.filters.hidden(this)
@@ -87,27 +110,30 @@ steal.plugins('jquery/dom/dimensions','jquery/event/resize').then(function($){
 								offset(container),
 				parentHeight = parent.height();
 				
-			if(!isBleeder){
+			if(isBleeder){
 				//temporarily add a small div to use to figure out the 'bleed-through' margin
 				//of the last element
-				last = $('<div style="height: 0px; line-height:0px;overflow:hidden"/>')
+				last = $('<div style="height: 0px; line-height:0px;overflow:hidden;'
+					+(ev.data.inFloat ? 'clear: both':'')+';"/>')
+				
+				
+
 					.appendTo(container);
 			}
 
 			// the current size the content is taking up
-			var currentSize = (bottom(last, offset) -0)- firstOffset;
+			var currentSize = (bottom(last, offset) -0)- firstOffset,
 
-			
 			// what the difference between the parent height and what we are going to take up is
-			var	delta = parentHeight - currentSize,
+				delta = parentHeight - currentSize,
 			// the current height of the object
 				fillerHeight = ev.data.filler.height();
-			
+
 			//adjust the height
 			ev.data.filler.height(fillerHeight + delta)
 			
 			//remove the temporary element
-			if (!isBleeder) {
+			if (isBleeder) {
 				last.remove();
 			}
 			ev.data.filler.triggerHandler('resize');
