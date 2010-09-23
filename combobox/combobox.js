@@ -485,6 +485,10 @@ steal.plugins('jquery/controller', 'jquery/lang/json', 'phui/scrollbar_width', '
 				}
 			}
 		},
+		// prevent IE's default change event
+		'input change': function(el, ev){
+			ev.stopImmediatePropagation();
+		},
 		/**
 		 * @param {String} value the new combobox value
 		 * Simulates the user clicking on an item.

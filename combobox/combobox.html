@@ -56,7 +56,8 @@
 			<option value='1'>delete</option>
 			<option value='2'>none</option>
 		</select>
-			
+		<h4>Change Event Counter</h4>
+		<div class='change_count'>0</div>
 		<br/>				
         <h3>Nested Data Demo (Text Mode)</h3>
         <input id="combobox_demo" type="text" name="myname" />
@@ -155,6 +156,12 @@
                 // SELECT COMBOBOX DEMO								
 			    $("#expirationBehavior").phui_combobox_select();                 
 				 
+				 $("#expirationBehavior").change(function(){
+				 	var el = $('.change_count'),
+						num = parseInt(el.text(), 10);
+						
+					el.html(num+1)
+				 })
 				
 				var data = [];
 				for(var i =0; i < 1000; i++){
@@ -244,7 +251,8 @@
                 
                 // event API for when a value is selected demo
                 $("#combobox_demo").bind("change", function(ev, value) {
-                    $("#log3").text(value);
+                    console.log("changed "+value)
+					$("#log3").text(value);
                 });   
                 
                 // event API for when the dropdown is opened
