@@ -116,8 +116,8 @@ test("Tests if dropdown opens in the correct position - combobox appended to &lt
 });
 
 /*
- *  6. Combobox appended to <div> inside iframe if
- *  it append to <div> and <div> is positioned (absolute).
+ *  6. Tests if dropdowns opens in correct position if
+ *  it appends to <div> and <div> is positioned (absolute).
  */
 test("Tests if dropdown opens in the correct position - combobox appended to &lt;div&gt; inside an iframe - &lt;div&gt; is not positioned.", function() {
 	
