@@ -202,7 +202,7 @@ steal.plugins('jquery/controller', 'jquery/lang/json', 'phui/scrollbar_width', '
             var noSelectionText = this.options.noSelectionMsg;
             var noSelectionEnabled = this.options.showNoSelectionOption;
 
-            var item = $.extend({
+            var item = {
 				id: 0,
 				enabled: true,
 				children: [],
@@ -210,7 +210,7 @@ steal.plugins('jquery/controller', 'jquery/lang/json', 'phui/scrollbar_width', '
                 value: null,
                 text: noSelectionText,
                 forceHidden: !noSelectionEnabled
-			});
+			};
 
             //add the item as the first always
             if(!list || list.length > 0)
@@ -330,15 +330,18 @@ steal.plugins('jquery/controller', 'jquery/lang/json', 'phui/scrollbar_width', '
 			
 			var isAutocompleteData = true,
 				
+			noItemsMsg = this.dropdown().find('.noItemsMsg'), 
+                matches = this.modelList;
 				
-				noItemsMsg = this.dropdown().find('.noItemsMsg'),
-				
-				// list of matches
-				matches = $.grep(this.modelList, function( item ) {
-					return item.text.indexOf(val) > -1;
-				});
-			
-
+            //skip if the value is null or empty string
+            if(val && val != "")
+            {
+			    // list of matches to val & no "No Selection"
+			    matches = $.grep(this.modelList, function(item) 
+                {
+				    return (item.text.indexOf(val) > -1) && item.value;
+			    });
+            }
 			
 			this.dropdown().controller().draw(matches, val);
 			
@@ -510,7 +513,14 @@ steal.plugins('jquery/controller', 'jquery/lang/json', 'phui/scrollbar_width', '
 					"html": html
 				};
 				item.activated = true;
-				this.oldElement[0].value = item.text;
+                
+				// value can ve null (No Select item) and in that
+				// case input box must be empty
+				if(item.value) {
+				    this.oldElement[0].value = item.text;
+                } else {
+				    this.oldElement[0].value = "";
+                }
 
 				if ( this.options.displayHTML ) {
 					this._setViewboxHtmlAndShow(html);
