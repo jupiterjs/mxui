@@ -35,10 +35,26 @@ steal.plugins('jquery/controller', 'jquery/lang/json', 'phui/scrollbar_width', '
 			activatedClassName: "activated",
 			disabledClassName: "disabled",
 			width: null,
-			emptyItemsText: "No items in the combobox",
 			
-			//text that shows up if nothing has been selected
+            /**
+			 * Text that displays when no items are in a combo box's drop down.
+			 */
+			emptyItemsText: "No items available.",
+			
+			/**
+			 * Text that appears if nothing is selected.
+			 */
 			watermarkText: "Click for options",
+
+			/**
+			 * Allows a "No Selection" item to be added to the collection.
+			 */
+			showNoSelectionOption: false,
+            
+			/**
+			 * When 'showNoSelectionOption' is enabled, you need to give the item a name.
+			 */
+            noSelectionMsg: "No Selection",
 			
 			storeSerializedItem: true,
 			nonSerializedAttrs: ["id", "activated", "children", "level", "parentId", "forceHidden", "__type"],
@@ -153,6 +169,9 @@ steal.plugins('jquery/controller', 'jquery/lang/json', 'phui/scrollbar_width', '
 			var data = this.flattenEls(items.slice(0), 0),
 				selectedItem, instances = [],
 				item;
+				
+            this.createNoSelectionItem(instances);
+							
 			for ( var i = 0; i < data.length; i++ ) {
 				item = data[i];
 				//item.value = parseInt(item.value, 10); CANT DO THIS, VALUES ARENT ALWAYS INTS
@@ -174,6 +193,43 @@ steal.plugins('jquery/controller', 'jquery/lang/json', 'phui/scrollbar_width', '
 			this.modelList = instances;
 			return selectedItem;
 		},
+        /**
+         * Adds the "No Selection" entry to the model list
+         * @param {Array} model list
+        */
+        createNoSelectionItem:function(list)
+        {
+            var noSelectionText = this.options.noSelectionMsg;
+            var noSelectionEnabled = this.options.showNoSelectionOption;
+
+            var item = $.extend({
+				id: 0,
+				enabled: true,
+				children: [],
+				level: 0,
+                value: null,
+                text: noSelectionText,
+                forceHidden: !noSelectionEnabled
+			});
+
+            //add the item as the first always
+            if(!list || list.length > 0)
+            {
+                var newList = [];
+                newList.push(item);
+
+                $.each(list, function(item)
+                {
+                    newList.push(item);
+                });
+
+                list = newList;
+            }
+            else
+            {
+                list.push(item);
+            }
+        },		
 		/**
 		 * Flattens a list of nested object
 		 * @param {Object} list
@@ -559,6 +615,27 @@ steal.plugins('jquery/controller', 'jquery/lang/json', 'phui/scrollbar_width', '
 			}
 			return results;
 		},
+         /**
+		 * @param {String} value = value of the item to set.
+		 * Shows/Hides "No Selection" option in the drop down list.
+		 */
+         enableNoSelection: function(value)
+         {
+            this.options.showNoSelectionOption = value;
+
+            //AJAX scenario might not have the list yet so we wouldn't need to add or remove it then
+            if(this.modelList && this.modelList.length > 0)
+            {
+                if(value)
+                {
+                    this.showItem(null);
+                }
+                else
+                {
+                    this.hideItem(null);
+                }
+            }
+         },		
 		/**
 		 * @param {String} value value of the item that will be made visible.
 		 * Show an item.
