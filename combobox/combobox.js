@@ -13,15 +13,16 @@ steal.plugins('jquery/controller', 'jquery/lang/json', 'phui/scrollbar_width', '
 					if(!val){
 						return "<span class='text'>" + item.text + "</span>";
 					}else{
-						/*
-						 * We have to make sure autocomplete hightlight
-						 * is case insensitive.
-						 */
-						var lcVal = val.toLowerCase(),
-							lcText = item.text.toLowerCase(),
-							pos = lcText.indexOf(lcVal),
-							start = lcText.substr(0, pos),
-							end = lcText.substr(pos+lcVal.length);
+                        /*
+                        * We have to make sure autocomplete hightlight
+                        * is case insensitive and only highligts words
+                        * starting from the first character.
+                        */
+	                    //var pos = item.text.indexOf(val),
+                        var	re = new RegExp( '\\b' + val, 'i' ),
+                            pos = item.text.search( re ),
+							start = item.text.substr(0, pos),
+							end = item.text.substr(pos + val.length);
 						return "<span class='text'>" +
 							start + "<span class='item-match'>"+
 							item.text.substr(pos, val.length)+
@@ -334,26 +335,25 @@ steal.plugins('jquery/controller', 'jquery/lang/json', 'phui/scrollbar_width', '
 				return;
 			}
 			
-			var isAutocompleteData = true,
-				
-			noItemsMsg = this.dropdown().find('.noItemsMsg'), 
+			var self = this,
+				isAutocompleteData = true,	
+				noItemsMsg = this.dropdown().find('.noItemsMsg'), 
                 matches = this.modelList;
 				
             //skip if the value is null or empty string
             if(val && val != "")
             {
 			    // list of matches to val & no "No Selection"
-			    matches = $.grep(this.modelList, function(item) 
-                {
+                matches = $.grep(this.modelList, function (item) {
 					/*
-					 * 1. searches should be case insensitive.
-					 * 2. searches should start with the first letter, 
-					 * not look for anything in the string
-					 * so typing B should only bring up something that starts with B.
-					 */
-					var re = new RegExp( '^' + val, 'i' );
-					return re.test(item.text) && item.value;
-			    });
+        			 * 1. searches should be case insensitive.
+        			 * 2. searches should start with the first letter, 
+        			 * not look for anything in the string
+        			 * so typing B should only bring up something that starts with B.
+        			 */
+					var re = new RegExp('\\b' + val, 'i');
+                    return (item.text.search(re) > -1) && item.value;
+                });
             }
 			
 			this.dropdown().controller().draw(matches, val);
@@ -371,7 +371,7 @@ steal.plugins('jquery/controller', 'jquery/lang/json', 'phui/scrollbar_width', '
 			}
 			
 			
-		},
+		},	
 		// this is necessary because we want to be able
 		// to open the dropdown by clicking the input
 		// after an item was selected which means

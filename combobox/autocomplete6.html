@@ -31,8 +31,8 @@
     	<!-- 6. Combobox autocomplete tests:
  			 
  			 6a Tests that if item with lowercase text is searched by keying the first character capitalized, the item shows up in the filtered list.
-  			 6b Tests that if capitalized item is searched by keying item's first character, the item shows up in the filtered list.
-  			 6c Tests that if capitalized item is searched by keying item's character other than first, the item does not show on the filtered list. -->
+  			 6b Tests that if capitalized item is searched by keying item's character other than first, the item does not show on the filtered list. 
+			 6c Tests that if the item's text is more than one word, and if the second word's first character is typed, the item shows on the filtered list. -->
 
 		<!-- 6a Tests that if item with lowercase text is searched by keying the first character capitalized, the item shows up in the filtered list. -->
 		<h5>6a Tests that if item with lowercase text is searched by keying the first character capitalized, the item shows up in the filtered list.</h3>
@@ -55,7 +55,7 @@
 					for (var i = 0; i < n; i++) {
 						data.push({
 							value: i,
-							text: "item" + i
+							text: "item" + i + " text" + i
 						})
 					}
 					data[0].selected = true;
