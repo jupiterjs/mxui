@@ -1,0 +1,84 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
+            "http://www.w3.org/TR/html4/strict.dtd">
+<html lang="en">
+    <head>
+        <title>combobox</title>
+        <style type='text/css'>
+            body {font-family: verdana; margin: 0px; padding: 0px;}
+			h5 {
+				/*width:400px;*/
+			}
+			.padding10 {
+				height:10px;
+				width:1px;
+			}
+			.padding25 {
+				height:25px;
+				width:1px;
+			}
+			.padding100 {
+				height:100px;
+				width:1px;
+			}			
+			.combobox {
+				margin:0 0 10px 0;
+			}
+        </style>    
+        <link type="text/css" href="combobox.css" rel="stylesheet" />
+    </head>
+    <body>
+    	<h3>6. Combobox autocomplete tests</h3>
+    	<!-- 6. Combobox autocomplete tests:
+ 			 
+ 			 6a Tests that if item with lowercase text is searched by keying the first character capitalized, the item shows up in the filtered list.
+  			 6b Tests that if capitalized item is searched by keying item's first character, the item shows up in the filtered list.
+  			 6c Tests that if capitalized item is searched by keying item's character other than first, the item does not show on the filtered list. -->
+
+		<!-- 6a Tests that if item with lowercase text is searched by keying the first character capitalized, the item shows up in the filtered list. -->
+		<h5>6a Tests that if item with lowercase text is searched by keying the first character capitalized, the item shows up in the filtered list.</h3>
+		<div id="combobox6a_log"></div>
+    	<input id="combobox6a" class="combobox" type="text" name="name6a" />		
+				
+        <script type='text/javascript' 
+                src='../../steal/steal.js'>   
+        </script>
+        <script type='text/javascript'>
+            steal.plugins("phui/combobox/select",
+			              "phui/combobox/ajax",
+			              "jquery/dom/fixture").then(function($){
+            
+				/*
+				 * Utility functions.
+				 */
+				var createItems = function(n){
+					var data = [];
+					for (var i = 0; i < n; i++) {
+						data.push({
+							value: i,
+							text: "item" + i
+						})
+					}
+					data[0].selected = true;
+					return data;
+				}	
+				
+				// maximize window so that autocomplete tests execute correctly.
+				function maximize() {
+				  window.moveTo(0, 0);
+				  window.resizeTo(screen.width, screen.height);
+				}
+				maximize();				
+					
+				/*
+				 *  6a Tests that if item with lowercase text is searched by keying the first character capitalized, 
+				 *  the item shows up in the filtered list. 
+				 */					
+                $("#combobox6a").phui_combobox({
+                    	items: createItems(6)
+					});					
+			                    
+			});
+     		steal.start();            
+        </script>
+    </body>
+</html>

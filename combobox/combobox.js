@@ -13,9 +13,15 @@ steal.plugins('jquery/controller', 'jquery/lang/json', 'phui/scrollbar_width', '
 					if(!val){
 						return "<span class='text'>" + item.text + "</span>";
 					}else{
-						var pos = item.text.indexOf(val),
-							start = item.text.substr(0, pos),
-							end = item.text.substr(pos+val.length);
+						/*
+						 * We have to make sure autocomplete hightlight
+						 * is case insensitive.
+						 */
+						var lcVal = val.toLowerCase(),
+							lcText = item.text.toLowerCase(),
+							pos = lcText.indexOf(lcVal),
+							start = lcText.substr(0, pos),
+							end = lcText.substr(pos+lcVal.length);
 						return "<span class='text'>" +
 							start + "<span class='item-match'>"+
 							item.text.substr(pos, val.length)+
@@ -339,7 +345,14 @@ steal.plugins('jquery/controller', 'jquery/lang/json', 'phui/scrollbar_width', '
 			    // list of matches to val & no "No Selection"
 			    matches = $.grep(this.modelList, function(item) 
                 {
-				    return (item.text.indexOf(val) > -1) && item.value;
+					/*
+					 * 1. searches should be case insensitive.
+					 * 2. searches should start with the first letter, 
+					 * not look for anything in the string
+					 * so typing B should only bring up something that starts with B.
+					 */
+					var re = new RegExp( '^' + val, 'i' );
+					return re.test(item.text) && item.value;
 			    });
             }
 			
