@@ -5,4 +5,5 @@ steal
  	   "positioning4b_tests",
 	   "positioning4c_tests",
 	   "positioning4d_tests",
+	   "positioning4e_tests",
 	   "autocomplete6_tests")
