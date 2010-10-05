@@ -1,4 +1,4 @@
-module("combobox4 test", { 
+module("autocomplete6 test", { 
 	setup: function(){
         S.open("//phui/combobox/autocomplete6.html");
 	}
@@ -22,7 +22,7 @@ test("6a Tests that if item with lowercase text is searched by keying the first 
 	
 	S("#combobox6a").visible();
 		
-	S("#combobox6a").find("input[type=text]").type("Item3");
+	S("#combobox6a").find("input[type=text]").type("[home]Item3");
 	
 	S("#combobox6a_dropdown").visible();
 	
@@ -42,7 +42,7 @@ test("6b Tests that if item is searched by keying an item's character other than
 	
 	S("#combobox6a").visible();
 		
-	S("#combobox6a").find("input[type=text]").type("tem0");
+	S("#combobox6a").find("input[type=text]").type("[home]tem0");
 	
 	S("#combobox6a_dropdown").visible();
 	
@@ -63,7 +63,7 @@ test("6c Tests that if the item's text is more than one word, and if the second 
 	
 	S("#combobox6a").visible();
 		
-	S("#combobox6a").find("input[type=text]").type("Text3");
+	S("#combobox6a").find("input[type=text]").type("[home]Text3");
 	
 	S("#combobox6a_dropdown").visible();
 	

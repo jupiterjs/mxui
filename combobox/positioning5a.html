@@ -19,24 +19,30 @@
 			.combobox {
 				margin:0 0 10px 0;
 			}
+			#container {
+				position:absolute;
+				top:150px;
+				left:150px;
+			}
         </style>    
         <link type="text/css" href="combobox.css" rel="stylesheet" />
     </head>
     <body>
-    	<h3>4. Combobox positioning tests - Combobox appended to documentElement</h3>
-    	<!-- 4. Combobox positioning tests - Combobox appended to documentElement:
+    	<h3>5. Combobox positioning tests - Combobox appended to positioned element</h3>
+    	<!-- 5. Combobox positioning tests - Combobox appended to positioned element:
  			 
-			 4a Tests that if the element can be positioned without scrolling below target, the dropdown opens bellow the target with full height.
-			 4b Tests that if the element can be positioned with scrolling greater than min height, the dropdown opens bellow with height equal the space available.
-			 4c Tests if the space above is greater than the space below and  dropdown fits in space above, the dropdown opens above with full height.
-			 4d Tests if the space above is greater than the space below and  dropdown doesnt fit in space above, the dropdown opens to fit space avaialble above. 
-			 4e Tests if the space above is less than the space below and the dropdown doesnt fit the space available the dropdown opens bellow to fit the space avaialble. -->
+			 5a Tests that if the element can be positioned without scrolling below target, the dropdown opens bellow the target with full height.
+			 5b Tests that if the element can be positioned with scrolling greater than min height, the dropdown opens bellow with height equal the space available.
+			 5c Tests if the space above is greater than the space below and  dropdown fits in space above, the dropdown opens above with full height.
+			 5d Tests if the space above is greater than the space below and  dropdown doesnt fit in space above, the dropdown opens to fit space avaialble above. 
+			 5e Tests if the space above is less than the space below and the dropdown doesnt fit the space available the dropdown opens bellow to fit the space avaialble. -->
 		
-		<!-- 4a Tests that if the element can be positioned without scrolling below target, the dropdown opens bellow the target with full height. --> 
-		<h5>4a Tests that if the element can be positioned without scrolling below target, the dropdown opens bellow the target with full height.</h3>
-		<div id="combobox4a_log"></div>
-    	<input id="combobox4a" class="combobox" type="text" name="name4a" />
-		
+		<!-- 5a Tests that if the element can be positioned without scrolling below target, the dropdown opens bellow the target with full height. --> 
+		<h5>5a Tests that if the element can be positioned without scrolling below target, the dropdown opens bellow the target with full height.</h3>
+		<div id="combobox5a_log"></div>
+		<div id="container">
+    		<input id="combobox5a" class="combobox" type="text" name="name5a" />
+		</div>
 			
         <script type='text/javascript' 
                 src='../../steal/steal.js'>   
@@ -68,11 +74,11 @@
 				  window.resizeTo("1366", "768");
 				}
 				maximize();											
-
+					
 				/*
 				 *  4a Tests that if the element can be positioned without scrolling below target, the dropdown opens bellow the target with full height.
 				 */					
-                $("#combobox4a").phui_combobox({
+                $("#combobox5a").phui_combobox({
                     	items: createItems(6)
 					});	
 			                    
