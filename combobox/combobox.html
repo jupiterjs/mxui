@@ -113,6 +113,11 @@
 		<h3>Slow</h3>
 		<input id="combobox_slow" type="text" name="myname" />
 		
+		<h3>No Selection</h3>
+		<button id="enableNoSelection" >Enable No Selection</button>
+		<button id="disableNoSelection" >Disable No Selection</button>
+		<input id="combobox_no_selection" type="text" name="no_selection" />
+		
 		<div>abc</div>
 		<br/>
 		<div>abc</div>
@@ -163,14 +168,36 @@
 					el.html(num+1)
 				 })
 				
-				var data = [];
-				for(var i =0; i < 1000; i++){
-					data.push({value: i, text: "item"+i})
+				// Utility function - allows you to create item lists.
+				var createItems = function(n){
+					var data = [];
+					for (var i = 0; i < n; i++) {
+						data.push({
+							value: i,
+							text: "item" + i
+						})
+					}
+					data[0].selected = true;
+					return data;
 				}
-				data[0].selected = true;
+				/* Combobox "No Selection" demo */
+                $("#combobox_no_selection").phui_combobox({
+                    items: createItems(10),
+					showNoSelectionOption:true });
+				
+                $("#enableNoSelection").click( function(ev) {
+					var value = 1;
+                    $("#combobox_no_selection").controller().enableNoSelection( value );
+                });		
+                $("#disableNoSelection").click( function(ev) {
+					var value = null;
+                    $("#combobox_no_selection").controller().enableNoSelection( value );
+                });										
+							
 				 
+				/* Combobox slow demo */
                 $("#combobox_slow").phui_combobox({
-                    items: data,
+                    items: createItems(1000),
 					maxHeight: 300 });
 
 

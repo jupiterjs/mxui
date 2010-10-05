@@ -13,9 +13,16 @@ steal.plugins('jquery/controller', 'jquery/lang/json', 'phui/scrollbar_width', '
 					if(!val){
 						return "<span class='text'>" + item.text + "</span>";
 					}else{
-						var pos = item.text.indexOf(val),
+                        /*
+                        * We have to make sure autocomplete hightlight
+                        * is case insensitive and only highligts words
+                        * starting from the first character.
+                        */
+	                    //var pos = item.text.indexOf(val),
+                        var	re = new RegExp( '\\b' + val, 'i' ),
+                            pos = item.text.search( re ),
 							start = item.text.substr(0, pos),
-							end = item.text.substr(pos+val.length);
+							end = item.text.substr(pos + val.length);
 						return "<span class='text'>" +
 							start + "<span class='item-match'>"+
 							item.text.substr(pos, val.length)+
@@ -35,10 +42,26 @@ steal.plugins('jquery/controller', 'jquery/lang/json', 'phui/scrollbar_width', '
 			activatedClassName: "activated",
 			disabledClassName: "disabled",
 			width: null,
-			emptyItemsText: "No items in the combobox",
 			
-			//text that shows up if nothing has been selected
+            /**
+			 * Text that displays when no items are in a combo box's drop down.
+			 */
+			emptyItemsText: "No items available.",
+			
+			/**
+			 * Text that appears if nothing is selected.
+			 */
 			watermarkText: "Click for options",
+
+			/**
+			 * Allows a "No Selection" item to be added to the collection.
+			 */
+			showNoSelectionOption: false,
+            
+			/**
+			 * When 'showNoSelectionOption' is enabled, you need to give the item a name.
+			 */
+            noSelectionMsg: "No Selection",
 			
 			storeSerializedItem: true,
 			nonSerializedAttrs: ["id", "activated", "children", "level", "parentId", "forceHidden", "__type"],
@@ -153,6 +176,9 @@ steal.plugins('jquery/controller', 'jquery/lang/json', 'phui/scrollbar_width', '
 			var data = this.flattenEls(items.slice(0), 0),
 				selectedItem, instances = [],
 				item;
+				
+            this.createNoSelectionItem(instances);
+							
 			for ( var i = 0; i < data.length; i++ ) {
 				item = data[i];
 				//item.value = parseInt(item.value, 10); CANT DO THIS, VALUES ARENT ALWAYS INTS
@@ -174,6 +200,43 @@ steal.plugins('jquery/controller', 'jquery/lang/json', 'phui/scrollbar_width', '
 			this.modelList = instances;
 			return selectedItem;
 		},
+        /**
+         * Adds the "No Selection" entry to the model list
+         * @param {Array} model list
+        */
+        createNoSelectionItem:function(list)
+        {
+            var noSelectionText = this.options.noSelectionMsg;
+            var noSelectionEnabled = this.options.showNoSelectionOption;
+
+            var item = {
+				id: 0,
+				enabled: true,
+				children: [],
+				level: 0,
+                value: null,
+                text: noSelectionText,
+                forceHidden: !noSelectionEnabled
+			};
+
+            //add the item as the first always
+            if(!list || list.length > 0)
+            {
+                var newList = [];
+                newList.push(item);
+
+                $.each(list, function(item)
+                {
+                    newList.push(item);
+                });
+
+                list = newList;
+            }
+            else
+            {
+                list.push(item);
+            }
+        },		
 		/**
 		 * Flattens a list of nested object
 		 * @param {Object} list
@@ -272,17 +335,26 @@ steal.plugins('jquery/controller', 'jquery/lang/json', 'phui/scrollbar_width', '
 				return;
 			}
 			
-			var isAutocompleteData = true,
+			var self = this,
+				isAutocompleteData = true,	
+				noItemsMsg = this.dropdown().find('.noItemsMsg'), 
+                matches = this.modelList;
 				
-				
-				noItemsMsg = this.dropdown().find('.noItemsMsg'),
-				
-				// list of matches
-				matches = $.grep(this.modelList, function( item ) {
-					return item.text.indexOf(val) > -1;
-				});
-			
-
+            //skip if the value is null or empty string
+            if(val && val != "")
+            {
+			    // list of matches to val & no "No Selection"
+                matches = $.grep(this.modelList, function (item) {
+					/*
+        			 * 1. searches should be case insensitive.
+        			 * 2. searches should start with the first letter, 
+        			 * not look for anything in the string
+        			 * so typing B should only bring up something that starts with B.
+        			 */
+					var re = new RegExp('\\b' + val, 'i');
+                    return (item.text.search(re) > -1) && item.value;
+                });
+            }
 			
 			this.dropdown().controller().draw(matches, val);
 			
@@ -299,7 +371,7 @@ steal.plugins('jquery/controller', 'jquery/lang/json', 'phui/scrollbar_width', '
 			}
 			
 			
-		},
+		},	
 		// this is necessary because we want to be able
 		// to open the dropdown by clicking the input
 		// after an item was selected which means
@@ -454,7 +526,14 @@ steal.plugins('jquery/controller', 'jquery/lang/json', 'phui/scrollbar_width', '
 					"html": html
 				};
 				item.activated = true;
-				this.oldElement[0].value = item.text;
+                
+				// value can ve null (No Select item) and in that
+				// case input box must be empty
+				if(item.value) {
+				    this.oldElement[0].value = item.text;
+                } else {
+				    this.oldElement[0].value = "";
+                }
 
 				if ( this.options.displayHTML ) {
 					this._setViewboxHtmlAndShow(html);
@@ -559,6 +638,27 @@ steal.plugins('jquery/controller', 'jquery/lang/json', 'phui/scrollbar_width', '
 			}
 			return results;
 		},
+         /**
+		 * @param {String} value = value of the item to set.
+		 * Shows/Hides "No Selection" option in the drop down list.
+		 */
+         enableNoSelection: function(value)
+         {
+            this.options.showNoSelectionOption = value;
+
+            //AJAX scenario might not have the list yet so we wouldn't need to add or remove it then
+            if(this.modelList && this.modelList.length > 0)
+            {
+                if(value)
+                {
+                    this.showItem(null);
+                }
+                else
+                {
+                    this.hideItem(null);
+                }
+            }
+         },		
 		/**
 		 * @param {String} value value of the item that will be made visible.
 		 * Show an item.
