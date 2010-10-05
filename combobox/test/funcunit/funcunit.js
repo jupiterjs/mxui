@@ -11,4 +11,9 @@ steal
 	   "positioning5c_tests",
 	   "positioning5d_tests",
 	   "positioning5e_tests",
-	   "autocomplete6_tests")
+	   "positioning6a_tests",
+	   "positioning6b_tests",
+	   "positioning6c_tests",
+	   "positioning6d_tests",
+	   "positioning6e_tests",
+	   "autocomplete7_tests")
