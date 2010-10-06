@@ -45,7 +45,7 @@ steal.plugins('jquery/controller','phui/keycode').then(function(){
 			//can be a regexp or a function
 			test : /.*/,
 			//add a default text
-			defaultText : null,
+			defaultText : "",
 			//overwrite next character with current
 			overwrite : false,
 			//if you move the curor to the left of the
