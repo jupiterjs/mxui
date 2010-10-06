@@ -1,6 +1,5 @@
 steal
  .plugins("funcunit")
- //.then("combobox_tests","combobox2_tests", "combobox3_tests")
  .then("smoke_tests",
   	   "positioning4a_tests",
  	   "positioning4b_tests",
@@ -18,4 +17,5 @@ steal
 	   "positioning6d_tests",
 	   "positioning6e_tests",
 	   "autocomplete7_tests",
-	   "api8a_tests")
+	   "api8a_tests",
+	   "api8b_tests")
