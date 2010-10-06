@@ -255,7 +255,7 @@
                 });				
                 $("#select").bind("click", function(ev) {
                     var value = $("input#someValue").val();
-                    $("#combobox_demo").controller().select( value );
+                    $("#combobox_demo").controller().selectItem( value );
                 });
                 $("#getItem").bind("click", function(ev) {
                     var value = $("input#someValue").val();
@@ -278,7 +278,7 @@
                 
                 // event API for when a value is selected demo
                 $("#combobox_demo").bind("change", function(ev, value) {
-                    console.log("changed "+value)
+                    //console.log("changed "+value)
 					$("#log3").text(value);
                 });   
                 

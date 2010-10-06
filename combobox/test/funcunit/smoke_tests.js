@@ -70,11 +70,11 @@ test("Test that change event is triggered when the combobox value is changed.", 
 	
 		
 	S(".phui_combobox_dropdown .dropdown_3").exists();
-	S(".phui_combobox_dropdown .dropdown_3").click(function(){
-		ok(/kansas/.test(S("#combobox_demo input[type=text]").val()), "Item #3 (nuevo) was selected.");	
-		 ok( S("#log3").text() === "6", "Change event was triggered as expected.");	
-	});
+	S(".phui_combobox_dropdown .dropdown_3").click();
 	
+	S("#combobox_demo input[type=text]").val(/kansas/);
+	
+	S("#log3").text("6");
 });
 
 /* Combobox API Test Cases */
