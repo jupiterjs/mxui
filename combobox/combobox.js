@@ -2,8 +2,24 @@ steal.plugins('jquery/controller', 'jquery/lang/json', 'phui/scrollbar_width', '
 	.controllers('dropdown','selectable').then(function() {
 
 	/**
+	 * @tag phui
+	 * @plugin phui/combobox
+	 * @test phui/combobox/funcunit.html
+	 *
+	 * Defines a set of UI elements for displaying selectable options to a user.
 	 * 
-	 * @param {Object} item
+	 * <p>Combobox replaces the functionality of a standard browser &lt;select&gt; element.  It supports rich content for selectable options, loading options via AJAX, and hierarchical option nesting.</p>
+	 * @codestart
+	 *    $("select").phui_combobox_select();
+	 * @codeend
+	 *
+	 * @codestart
+	 *   $("input[type='text']").phui_combobox({
+	 *                         items: createItems(1000),
+	 * 	                       maxHeight: 300 });
+	 * @codeend
+	 * @demo phui/combobox/combobox.html
+	 * @param {Object} options Options used to customize the Combobox
 	 */
 	$.Controller.extend("Phui.Combobox", {
 		defaults: {
@@ -134,7 +150,7 @@ steal.plugins('jquery/controller', 'jquery/lang/json', 'phui/scrollbar_width', '
 		},
 		
 		/**
-		 * Creates and cache's a dropdown controller
+		 * Creates and caches a dropdown controller
 		 */
 		dropdown: function() {
 			if (!this._dropdown ) {
@@ -238,7 +254,7 @@ steal.plugins('jquery/controller', 'jquery/lang/json', 'phui/scrollbar_width', '
             }
         },		
 		/**
-		 * Flattens a list of nested object
+		 * Takes a nested hierarchy of inputted list items, de-nests them, and stores them internally (with a linear structure) with a record of the nested state.
 		 * @param {Object} list
 		 * @param {Object} currentLevel
 		 * @param {Object} items
