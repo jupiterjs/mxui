@@ -545,7 +545,7 @@ steal.plugins('jquery/controller', 'jquery/lang/json', 'phui/scrollbar_width', '
                 
 				// value can ve null (No Select item) and in that
 				// case input box must be empty
-				if(item.value) {
+				if (item.value != null) {
 				    this.oldElement[0].value = item.text;
                 } else {
 				    this.oldElement[0].value = "";
