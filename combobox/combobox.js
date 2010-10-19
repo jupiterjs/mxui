@@ -2,13 +2,21 @@ steal.plugins('jquery/controller', 'jquery/lang/json', 'phui/scrollbar_width', '
 	.controllers('dropdown','selectable').then(function() {
 
 	/**
-	 * @tag phui
+	 * @tag home
+	 * @class Combobox
 	 * @plugin phui/combobox
 	 * @test phui/combobox/funcunit.html
-	 *
-	 * Defines a set of UI elements for displaying selectable options to a user.
 	 * 
-	 * <p>Combobox replaces the functionality of a standard browser &lt;select&gt; element.  It supports rich content for selectable options, loading options via AJAX, and hierarchical option nesting.</p>
+	 * This is the base Combobox class.  Controllers such as dropdown_controller and selectable_controller inherit from this.
+	 * 
+	 * Combobox replaces the functionality of a standard browser &lt;select&gt; element.  It supports rich content for 
+	 * selectable options, loading options via AJAX, and hierarchical option nesting.
+	 * 
+	 * Combobox works by replacing the supplied element with generated Combobox HTML.  Combobox creates selectable dropdown 
+	 * options that animate in and out of the page (this is done with dropdown_controller), and gives the user control of the 
+	 * selections (done with selectable_controller).
+	 * 
+	 * 
 	 * @codestart
 	 *    $("select").phui_combobox_select();
 	 * @codeend
@@ -21,7 +29,32 @@ steal.plugins('jquery/controller', 'jquery/lang/json', 'phui/scrollbar_width', '
 	 * @demo phui/combobox/combobox.html
 	 * @param {Object} options Options used to customize the Combobox
 	 */
-	$.Controller.extend("Phui.Combobox", {
+	$.Controller.extend("Phui.Combobox", 
+	/* @static */		
+	{
+		/**
+		 * Default setttings for the Combobox.  These can all be overridden.
+		 *
+		 *   * __classNames__: _String._ When phui_combobox is called on an element, it is wrapped in a div.  The element is given the class that is defined by `classNames`.
+		 *   * __render__: _Object._ Defines the HTML that will wrap each item in the Combobox.
+		 *   * __filterEnabled__: _Boolean._ Controls whether autocompletion is enabled on the combobox.
+		 *   * __displayHTML__: _Boolean._ If true, show the contents of a list item as rich HTML.  If false, show it as plain text.  Like so:
+		 *    
+		 *   @demo phui/combobox/combobox.html#htmlmode 400
+		 *   
+		 *   * __selectedClassName__: _String._ The class that will be assigned to options that the user focuses on.
+		 *   * __activatedClassName__: _String._ The class that will be assigned to options that the user clicks. 
+		 *   * __disabledClassName__: _String._ The class that will be assigned to options that are disabled and the user cannot select.
+		 *   * __width__: _Number/null._ The width of the Combobox.
+		 *   * __emptyItemsText__: _String._ The text that is shown when the Combobox has no items to display.
+		 *   * __watermarkText__: _String._ The text to display if there is no option selected.
+		 *   * __showNoSelectionOption__: _Boolean._ Lets the user choose to make no selection. 
+		 *   * __noSelectionMsg__: _String._ The text to show for a non-selection. 
+		 *   * __storeSerializedItem__: _Boolean._ If true, store the attributes of the currently selected item as JSON in a hidden input.  If false, just store the item's &lt;option&gt; value in the hidden input.
+		 *   * __nonSerializedAttrs__: _String[]._ A blacklist array of attributes to not store, assuming `storeSerializedItem` is true.
+		 *   * __overrideDropdown__: _Boolean._ Determines whether to use the standard Combobox dropdown animation, or the animation function bound to the 'show:dropdown' event.
+		 *   * __noItemsMsg__: _String._ Text to show when no items are available in an autocomplete-enabled field.
+		 */
 		defaults: {
 			classNames: "phui_combobox_wrapper",
 			render: {
@@ -84,7 +117,9 @@ steal.plugins('jquery/controller', 'jquery/lang/json', 'phui/scrollbar_width', '
 			overrideDropdown: false,
 			noItemsMsg: "No items available"
 		}
-	}, {
+	}, 
+	/* @prototype */
+	{
 		/**
 		 * Setup re-arranges this input's html
 		 * @param {Object} el

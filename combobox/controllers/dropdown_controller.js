@@ -58,7 +58,7 @@ steal.plugins('phui/fittable').then(function () {
 
                 var html = modelList.length ?
 					this.getHTML(modelList) :
-					"<li><span class='item'>No items in the combobox</span></li>";
+					"<li><span class='item'>" + this.options.emptyItemsText + "</span></li>";
 
                 // if starts with <li> wrap under <ul>
                 // so selectable as something to attach to
