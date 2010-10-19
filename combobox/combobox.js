@@ -122,8 +122,11 @@ steal.plugins('jquery/controller', 'jquery/lang/json', 'phui/scrollbar_width', '
 	{
 		/**
 		 * Setup re-arranges this input's html
-		 * @param {Object} el
-		 * @param {Object} options
+		 * 
+		 * Replace `el` with the HTML needed to make Combobox function.  The original DOM element is saved.
+		 * 
+		 * @param {Object} el The element that Combobox is called upon.
+		 * @param {Object} options The options to set on the Controller instance.
 		 */
 		setup: function( el, options ) {
 			el = $(el);
@@ -148,6 +151,10 @@ steal.plugins('jquery/controller', 'jquery/lang/json', 'phui/scrollbar_width', '
 				this.find(".viewbox").show();
 			}
 		},
+		
+		/**
+		 * Initialize the width and initial value of the Combobox, and any values that were passed in `options.items`.
+		 */
 		init: function() {
 			this.element.addClass(this.options.classNames);
 			if ( this.options.width ) {
@@ -166,7 +173,7 @@ steal.plugins('jquery/controller', 'jquery/lang/json', 'phui/scrollbar_width', '
 			this.valueSet = true;
 		},
 		/**
-		 * Set the watermark if there's no text
+		 * Set the watermark if there is no text.
 		 */
 		resetWatermark: function() {
 			// zero is a valid value
@@ -175,7 +182,7 @@ steal.plugins('jquery/controller', 'jquery/lang/json', 'phui/scrollbar_width', '
 			}
 		},
 		/**
-		 * Only remove the text if it's the watermarkText
+		 * Only remove the text if it is the watermarkText.
 		 */
 		clearWatermark: function() {
 			var input = this.find("input[type='text']");
@@ -185,7 +192,7 @@ steal.plugins('jquery/controller', 'jquery/lang/json', 'phui/scrollbar_width', '
 		},
 		
 		/**
-		 * Creates and caches a dropdown controller
+		 * Creates and caches a phui_combobox_dropdown.
 		 */
 		dropdown: function() {
 			if (!this._dropdown ) {
