@@ -38,10 +38,7 @@ steal.plugins('jquery/controller', 'jquery/lang/json', 'phui/scrollbar_width', '
 		 *   * __classNames__: _String._ When phui_combobox is called on an element, it is wrapped in a div.  The element is given the class that is defined by `classNames`.
 		 *   * __render__: _Object._ Defines the HTML that will wrap each item in the Combobox.
 		 *   * __filterEnabled__: _Boolean._ Controls whether autocompletion is enabled on the combobox.
-		 *   * __displayHTML__: _Boolean._ If true, show the contents of a list item as rich HTML.  If false, show it as plain text.  Like so:
-		 *    
-		 *   @demo phui/combobox/combobox.html#htmlmode 400
-		 *   
+		 *   * __displayHTML__: _Boolean._ If true, show the contents of a list item as rich HTML.  If false, show it as plain text.
 		 *   * __selectedClassName__: _String._ The class that will be assigned to options that the user focuses on.
 		 *   * __activatedClassName__: _String._ The class that will be assigned to options that the user clicks. 
 		 *   * __disabledClassName__: _String._ The class that will be assigned to options that are disabled and the user cannot select.
@@ -58,6 +55,12 @@ steal.plugins('jquery/controller', 'jquery/lang/json', 'phui/scrollbar_width', '
 		defaults: {
 			classNames: "phui_combobox_wrapper",
 			render: {
+				/**
+				 * This method defines how a Combobox item is drawn.
+				 * 
+				 * @param {Object} item The item to draw.
+				 * @param {Object} val The value that the item represents.
+				 */
 				"itemTemplate": function( item , val) {
 					if(!val){
 						return "<span class='text'>" + item.text + "</span>";
@@ -85,6 +88,7 @@ steal.plugins('jquery/controller', 'jquery/lang/json', 'phui/scrollbar_width', '
 			 * maxHeight: 320,*/
 			filterEnabled: true,
 			/**
+			 * @hide
 			 * Values to select aren't text but html.  This changes from an input to a 
 			 * 'viewbox' element.
 			 */
@@ -95,21 +99,25 @@ steal.plugins('jquery/controller', 'jquery/lang/json', 'phui/scrollbar_width', '
 			width: null,
 			
             /**
+             * @hide
 			 * Text that displays when no items are in a combo box's drop down.
 			 */
 			emptyItemsText: "No items available.",
 			
 			/**
+			 * @hide
 			 * Text that appears if nothing is selected.
 			 */
 			watermarkText: "Click for options",
 
 			/**
+			 * @hide
 			 * Allows a "No Selection" item to be added to the collection.
 			 */
 			showNoSelectionOption: false,
             
 			/**
+			 * @hide
 			 * When 'showNoSelectionOption' is enabled, you need to give the item a name.
 			 */
             noSelectionMsg: "No Selection",
@@ -453,7 +461,7 @@ steal.plugins('jquery/controller', 'jquery/lang/json', 'phui/scrollbar_width', '
             {
 			    // list of matches to val & no "No Selection"
                 matches = $.grep(this.modelList, function (item) {
-					/*
+					/* @hide
         			 * 1. searches should be case insensitive.
         			 * 2. searches should start with the first letter, 
         			 * not look for anything in the string
@@ -598,7 +606,7 @@ steal.plugins('jquery/controller', 'jquery/lang/json', 'phui/scrollbar_width', '
 			if ( this.dropdown().is(":hidden") ) {
 				return;
 			}
-			/*
+			/* @hide
 	         * Trick to make dropdown close when combobox looses focus
 	         * Bug: input looses focus on scroll bar click in IE, Chrome and Safari
 	         * Fix inspired in:
