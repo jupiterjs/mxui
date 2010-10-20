@@ -7,19 +7,7 @@ steal.plugins('jquery/controller', 'jquery/lang/json', 'phui/scrollbar_width', '
 	 * @plugin phui/combobox
 	 * @test phui/combobox/funcunit.html
 	 * 
-	 * This is the base Combobox class.  Controllers such as dropdown_controller and selectable_controller inherit from this.
-	 * 
-	 * Combobox replaces the functionality of a standard browser &lt;select&gt; element.  It supports rich content for 
-	 * selectable options, loading options via AJAX, and hierarchical option nesting.
-	 * 
-	 * Combobox works by replacing the supplied element with generated Combobox HTML.  Combobox creates selectable dropdown 
-	 * options that animate in and out of the page (this is done with dropdown_controller), and gives the user control of the 
-	 * selections (done with selectable_controller).
-	 * 
-	 * 
-	 * @codestart
-	 *    $("select").phui_combobox_select();
-	 * @codeend
+	 * Combobox progressively enhances an &lt;input&gt; field with rich content, autocompletion, and loading data via AJAX.
 	 *
 	 * @codestart
 	 *   $("input[type='text']").phui_combobox({
@@ -56,6 +44,8 @@ steal.plugins('jquery/controller', 'jquery/lang/json', 'phui/scrollbar_width', '
 			classNames: "phui_combobox_wrapper",
 			render: {
 				/**
+				 * @hide
+				 * 
 				 * This method defines how a Combobox item is drawn.
 				 * 
 				 * @param {Object} item The item to draw.
@@ -131,6 +121,8 @@ steal.plugins('jquery/controller', 'jquery/lang/json', 'phui/scrollbar_width', '
 	/* @prototype */
 	{
 		/**
+		 * @hide
+		 * 
 		 * Setup re-arranges this input's html
 		 * 
 		 * Replace `el` with the HTML needed to make Combobox function.  The original DOM element is saved.
@@ -163,6 +155,8 @@ steal.plugins('jquery/controller', 'jquery/lang/json', 'phui/scrollbar_width', '
 		},
 		
 		/**
+		 * @hide
+		 * 
 		 * Initialize the width and initial value of the Combobox, and any values that were passed in `options.items`.
 		 */
 		init: function() {
@@ -203,7 +197,7 @@ steal.plugins('jquery/controller', 'jquery/lang/json', 'phui/scrollbar_width', '
 		},
 		
 		/**
-		 * Creates and caches a phui_combobox_dropdown.
+		 * Creates and caches a phui\_combobox\_dropdown.
 		 * 
 		 * @return This Controller's instance of phui_combobox_dropdown.
 		 */
@@ -242,9 +236,12 @@ steal.plugins('jquery/controller', 'jquery/lang/json', 'phui/scrollbar_width', '
 		 * Initializes/empties this Controller's modelList.
 		 */
 		cleanData: function() {
+			// TODO:  Build a test for this.
 			this.modeList = []; // TODO: Is this a typo?  Should this be: this.modelList = []; 
 		},
 		/**
+		 * @hide
+		 * 
 		 * Creates Model instances from an array of `items`.
 		 * @param {Array} items The list of items to generate models from.
 		 * @return The currently selected item.
@@ -283,6 +280,8 @@ steal.plugins('jquery/controller', 'jquery/lang/json', 'phui/scrollbar_width', '
 			return selectedItem;
 		},
         /**
+         * @hide
+         * 
          * Adds the "No Selection" entry to the model list
          * @param {Array} list The list of Models.
         */
@@ -320,6 +319,8 @@ steal.plugins('jquery/controller', 'jquery/lang/json', 'phui/scrollbar_width', '
             }
         },		
 		/**
+		 * @hide
+		 * 
 		 * Takes a nested hierarchy of inputted list items, de-nests them, and store them internally (as a linear structure) with a record of the nested state.
 		 * @param {Object} list
 		 * @param {Object} currentLevel
@@ -342,6 +343,8 @@ steal.plugins('jquery/controller', 'jquery/lang/json', 'phui/scrollbar_width', '
 			return items;
 		},
 		/**
+		 * @hide
+		 * 
 		 * Called when the Combobox's .viewbox is given focus.
 		 * 
 		 * @param {HTMLElement} el The element that was focused (`.viewbox`).
@@ -352,6 +355,8 @@ steal.plugins('jquery/controller', 'jquery/lang/json', 'phui/scrollbar_width', '
 		},
 		
 		/**
+		 * @hide
+		 * 
 		 * Hides `el` and shows this Combobox's DOM input.
 		 * 
 		 * @param {HTMLElement} el The element to hide (`.viewbox`).
@@ -386,6 +391,8 @@ steal.plugins('jquery/controller', 'jquery/lang/json', 'phui/scrollbar_width', '
 			}
 		},
 		/**
+		 * @hide
+		 * 
 		 * Event that is fired whenever the user releases a key while typing in this Combobox's `input`.
 		 * 
 		 * Button actions:
@@ -441,7 +448,7 @@ steal.plugins('jquery/controller', 'jquery/lang/json', 'phui/scrollbar_width', '
 			}
 		},
 		/**
-		 * Determines what values should be shown in the dropdown box (based on `val`) and then draws them in the list.
+		 * Filters the items in a dropdown based on the what user has typed into the input box.
 		 * 
 		 * @param {Object} val The value top find matches for.
 		 */
@@ -487,14 +494,11 @@ steal.plugins('jquery/controller', 'jquery/lang/json', 'phui/scrollbar_width', '
 			}
 			
 		},	
-		// this is necessary because we want to be able
-		// to open the dropdown by clicking the input
-		// after an item was selected which means
-		// input has focus and dropdown is hidden
-		// input focusin doesn't work in this case
 		
 		/**
-		 * Fallback event for "`input focusin`".  It is called when `input` is clicked but already has focus.
+		 * @hide
+		 * 
+		 * this is necessary because we want to be able to open the dropdown by clicking the input after an item was selected which means input has focus and dropdown is hidden input focusin doesn't work in this case
 		 * 
 		 * Calls `focusInputAndShowDropdown`.
 		 * 
@@ -506,6 +510,8 @@ steal.plugins('jquery/controller', 'jquery/lang/json', 'phui/scrollbar_width', '
 		},
 		
 		/**
+		 * @hide
+		 * 
 		 * Calls `focusInputAndShowDropdown`.
 		 * 
 		 * @param {HTMLInputElement} el The `input` element that `focusin` was fired on.
@@ -548,7 +554,7 @@ steal.plugins('jquery/controller', 'jquery/lang/json', 'phui/scrollbar_width', '
 		},
 		
 		/**
-		 * 	Fetches all of the `modelList` elements based on key-value pairs, where `attr` is the key and `value` is the value.
+		 * Fetches all of the `modelList` elements based on key-value pairs, where `attr` is the key and `value` is the value.
 		 * 
 		 * @param {String} attr The key to inspect the value of.
 		 * @param {String} value The value to test `attr` against.
@@ -562,6 +568,7 @@ steal.plugins('jquery/controller', 'jquery/lang/json', 'phui/scrollbar_width', '
 		},
 		
 		/**
+		 * @hide
 		 * Hides the standard DOM `input` element and shows the `.viewbox` element.  Also fills `.viewbox`.
 		 * 
 		 * @param {HTML} The HTML code to fill `.viewbox` with.
@@ -587,6 +594,8 @@ steal.plugins('jquery/controller', 'jquery/lang/json', 'phui/scrollbar_width', '
 		},
 		
 		/**
+		 * @hide
+		 * 
 		 * Clears the blur timeout that was set in `focusout`.
 		 * 
 		 * @param {HTMLInputElement} el The element that was focused
@@ -597,6 +606,8 @@ steal.plugins('jquery/controller', 'jquery/lang/json', 'phui/scrollbar_width', '
 			clearTimeout(this.closeDropdownOnBlurTimeout);
 		},
 		/**
+		 * @hide
+		 * 
 		 * If the user clicks outside of this element, set a timeout to blur it.  A timeout is used because it ensures that the input isn't blurred if the user clicks on a window scrollbar.
 		 * 
 		 * @param {HTMLElement} el The element that was blurred
@@ -616,6 +627,8 @@ steal.plugins('jquery/controller', 'jquery/lang/json', 'phui/scrollbar_width', '
 		},
 		
 		/**
+		 * @hide
+		 * 
 		 * Set the viewbox with the currently selected item's content.
 		 */
 		blurred : function(){
@@ -627,18 +640,17 @@ steal.plugins('jquery/controller', 'jquery/lang/json', 'phui/scrollbar_width', '
 			this.dropdown().controller().hide();
 		},
 		/**
-		 * Used to prevent inadvertant `dblclick`s in IE.
+		 * @hide
+		 * 
+		 * Internet Explorer interprets two fast clicks in a row as one single-click, 
+	     * followed by one double-click, while the other browsers interpret it as 
+	     * two single-clicks and a double-click.
+	     * And, IE has a very long time that it will count 2 clicks as a dblclick.
+	     * Taken together, the user might click the toggle twice and not really be dblclicking.
 		 * 
 		 * @param {HTMLInputElement} el The element that was `dblclick`ed.
 		 */
 		".toggle dblclick": function( el ) {
-			/*
-		     * Internet Explorer interprets two fast clicks in a row as one single-click, 
-		     * followed by one double-click, while the other browsers interpret it as 
-		     * two single-clicks and a double-click.
-		     * And, IE has a very long time that it will count 2 clicks as a dblclick.
-		     * Taken together, the user might click the toggle twice and not really be dblclicking.
-		     */
 			if ( $.browser.msie ) {
 				if(this.dropdown().is(":visible")){
 					this.dropdown().controller().hide()
@@ -650,6 +662,8 @@ steal.plugins('jquery/controller', 'jquery/lang/json', 'phui/scrollbar_width', '
 		},
 		
 		/**
+		 * @hide
+		 * 
 		 * Remove the Combobox from the DOM and replace it with the original DOM element and unbind all events.
 		 */
 		destroy: function() {
@@ -676,11 +690,12 @@ steal.plugins('jquery/controller', 'jquery/lang/json', 'phui/scrollbar_width', '
 			return this.find("input[type=text]").val();
 		},
 		/**
-		 * @param {String} value the new combobox value
-		 * @return {Object} if no input parameter returns the current item value
 		 * Sets combobox value. This does not simulate a user click, which means
 		 * the selected item won't get highlighted in the dropdown.
-		 * For that, use 'select'.
+		 * For that, use `selectItem`.
+		 * 
+		 * @param {String} value the new combobox value
+		 * @return {Object} if no input parameter returns the current item value
 		 */
 		val: function( value ) {
 			if ( value === undefined ) {
@@ -738,6 +753,8 @@ steal.plugins('jquery/controller', 'jquery/lang/json', 'phui/scrollbar_width', '
 			}
 		},
 		/**
+		 * @hide
+		 * 
 		 * Prevent IE's default change event.
 		 * 
 		 * @param {HTMLInputElement} el The element the event was fired upon.
@@ -747,8 +764,9 @@ steal.plugins('jquery/controller', 'jquery/lang/json', 'phui/scrollbar_width', '
 			ev.stopImmediatePropagation();
 		},
 		/**
-		 * @param {String} value The new combobox value
 		 * Simulate the user clicking on an item.
+		 * 
+		 * @param {String} value The new combobox value
 		 */
 		selectItem: function( value ) {
 			var item = this.modelListMatches("value", value)[0];
@@ -775,9 +793,10 @@ steal.plugins('jquery/controller', 'jquery/lang/json', 'phui/scrollbar_width', '
 			}
 		},
 		/**
+		 * Retrieves the item with the value passed as a parameter.
+		 * 
 		 * @param {String} value Value of the item to be returned.
 		 * @return {Object} returns the item with the value passed as a parameter.	
-		 * Retrieves the item with the value passed as a parameter.
 		 */
 		getItem: function( value ) {
 			var item = this.modelListMatches("value", value)[0];
@@ -787,16 +806,18 @@ steal.plugins('jquery/controller', 'jquery/lang/json', 'phui/scrollbar_width', '
 			return null;
 		},
 		/**
-		 * @return {Array} Returns the list of items loaded into combobox	
 		 * Returns the list of items loaded into combobox.
+		 * 
+		 * @return {Array} Returns the list of items loaded into combobox	
 		 */
 		getItems: function() {
 			return this.modelList || [];
 		},
 		// This method should probably be under phui/combobox/ajax.
 		/**
-		 * @param {Function} callback to be triggered after items are loaded into combobox	
-		 * Forces the Ajax Combobox to fetch data from the server. 
+		 * Forces the Ajax Combobox to fetch data from the server.
+		 * 
+		 * @param {Function} callback to be triggered after items are loaded into Combobox. 
 		 */
 		populateItems: function( callback ) {
 			this.find("input[type='text']").trigger("show:dropdown", [this, callback]);
@@ -836,6 +857,8 @@ steal.plugins('jquery/controller', 'jquery/lang/json', 'phui/scrollbar_width', '
 			return results;
 		},
          /**
+          * @hide
+          * 
           * Shows/Hides "No Selection" option in the dropdown list.
 		  * @param {Boolean} value Whether to show the noSelectionOption or not.
 		  */
