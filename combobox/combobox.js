@@ -8,13 +8,8 @@ steal.plugins('jquery/controller', 'jquery/lang/json', 'phui/scrollbar_width', '
 	 * @test phui/combobox/funcunit.html
 	 * 
 	 * Combobox progressively enhances an &lt;input&gt; field with rich content, autocompletion, and loading data via AJAX.
-	 *
-	 * @codestart
-	 *   $("input[type='text']").phui_combobox({
-	 *                         items: createItems(1000),
-	 * 	                       maxHeight: 300 });
-	 * @codeend
-	 * @demo phui/combobox/combobox.html
+	 * 
+	 * @demo phui/combobox/comboboxdemo1.html
 	 * @param {Object} options Options used to customize the Combobox
 	 */
 	$.Controller.extend("Phui.Combobox", 
@@ -178,6 +173,8 @@ steal.plugins('jquery/controller', 'jquery/lang/json', 'phui/scrollbar_width', '
 			this.valueSet = true;
 		},
 		/**
+		 * @hide
+		 * 
 		 * Set the watermark if there is no text.
 		 */
 		resetWatermark: function() {
@@ -187,6 +184,8 @@ steal.plugins('jquery/controller', 'jquery/lang/json', 'phui/scrollbar_width', '
 			}
 		},
 		/**
+		 * @hide
+		 * 
 		 * Only remove the text if it is the watermarkText.
 		 */
 		clearWatermark: function() {
@@ -197,6 +196,7 @@ steal.plugins('jquery/controller', 'jquery/lang/json', 'phui/scrollbar_width', '
 		},
 		
 		/**
+		 * 
 		 * Creates and caches a phui\_combobox\_dropdown.
 		 * 
 		 * @return This Controller's instance of phui_combobox_dropdown.
@@ -233,6 +233,8 @@ steal.plugins('jquery/controller', 'jquery/lang/json', 'phui/scrollbar_width', '
 		},
 		
 		/**
+		 * @hide
+		 * 
 		 * Initializes/empties this Controller's modelList.
 		 */
 		cleanData: function() {
@@ -378,6 +380,8 @@ steal.plugins('jquery/controller', 'jquery/lang/json', 'phui/scrollbar_width', '
 			this.dropdown().controller().show(callback);
 		},
 		/**
+		 * @hide
+		 * 
 		 * If the dropdown is currently hidden, show it and then execute the callback.  If it is not hidden, just execute the callback.
 		 * 
 		 * @param {Function} callback The callback function to execute.
@@ -522,6 +526,8 @@ steal.plugins('jquery/controller', 'jquery/lang/json', 'phui/scrollbar_width', '
 		},
 
 		/**
+		 * @hide
+		 * 
 		 * Gives focus to `el` if possible, and shows this Combobox's dropdown.  Also focuses on the first element.
 		 * 
 		 * @param {HTMLInputElement} el The input to focus and show the dropdown for.
@@ -559,7 +565,7 @@ steal.plugins('jquery/controller', 'jquery/lang/json', 'phui/scrollbar_width', '
 		 * @param {String} attr The key to inspect the value of.
 		 * @param {String} value The value to test `attr` against.
 		 * 
-		 *  @return {Array}
+		 * @return {Array} A collection of Objects that match `value` for `attr`.
 		 */
 		modelListMatches: function( attr, value ) {
 			return $.grep(this.modelList, function( item ) {
@@ -764,7 +770,7 @@ steal.plugins('jquery/controller', 'jquery/lang/json', 'phui/scrollbar_width', '
 			ev.stopImmediatePropagation();
 		},
 		/**
-		 * Simulate the user clicking on an item.
+		 * Programmatically selects an item (also highlights it).
 		 * 
 		 * @param {String} value The new combobox value
 		 */
@@ -793,10 +799,10 @@ steal.plugins('jquery/controller', 'jquery/lang/json', 'phui/scrollbar_width', '
 			}
 		},
 		/**
-		 * Retrieves the item with the value passed as a parameter.
+		 * Looks up the item that matches `value`.
 		 * 
 		 * @param {String} value Value of the item to be returned.
-		 * @return {Object} returns the item with the value passed as a parameter.	
+		 * @return {Object} returns the item with a `value` attribute that matches the parameter `value`.	
 		 */
 		getItem: function( value ) {
 			var item = this.modelListMatches("value", value)[0];
@@ -880,7 +886,7 @@ steal.plugins('jquery/controller', 'jquery/lang/json', 'phui/scrollbar_width', '
             }
          },		
 		/**
-		 * Show an item.
+		 * Show the item who's `value` attribute matches the parameter `value`.
 		 * 
 		 * @param {String} value Value of the item that will be made visible.
 		 */
@@ -893,7 +899,7 @@ steal.plugins('jquery/controller', 'jquery/lang/json', 'phui/scrollbar_width', '
 			}
 		},
 		/**
-		 * Hides an item.
+		 * Hides an item from view.
 		 * 
 		 * @param {String} value Value of the item that will be hidden.
 		 */
@@ -910,7 +916,7 @@ steal.plugins('jquery/controller', 'jquery/lang/json', 'phui/scrollbar_width', '
 		},
 		
 		/**
-		 * Sets the state of a dropdown item to "enabled."
+		 * Sets the state of a dropdown item to "enabled."  This allows the user to select it.
 		 * 
 		 * @param {String} value Value of the item that will be enabled.
 		 */
@@ -923,7 +929,7 @@ steal.plugins('jquery/controller', 'jquery/lang/json', 'phui/scrollbar_width', '
 		},
 		
 		/**
-		 * Sets the state of a dropdown item to "disabled."
+		 * Sets the state of a dropdown item to "disabled."  This prevents the user from selecting it.
 		 * 
 		 * @param {String} value Value of the item that will be disabled.
 		 */

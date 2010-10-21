@@ -20,13 +20,15 @@ steal.plugins('phui/fittable').then(function () {
 	{}, 
 	/* @prototype */
 	{
-		// Dropdown has the following responsibilities:
-		// - drawing a list of items
-		// - positioning itself (will mostly be handled by Alex's fit plugin)
-		// - creating a selectable (it has it's own api)
-
 		/**
+		 * @hide
+		 * 
 		 * Initializes the Dropdown.  Positioning is determined, as is the Dropdown's DOM ID.
+		 * 
+		 * Dropdown has the following responsibilities:
+		 *  - drawing a list of items
+		 *  - positioning itself (will mostly be handled by Alex's fit plugin)
+		 *  - creating a selectable (it has it's own api)
 		 * 
 		 * @param {Object} el
 		 * @param {Object} options
@@ -43,6 +45,8 @@ steal.plugins('phui/fittable').then(function () {
             this.element.css("position", "absolute")
         },
 		/**
+		 * @hide
+		 * 
 		 * Remove the list of the models from this Controller to prevent memory leaks.
 		 */
         destroy: function() {
@@ -51,6 +55,8 @@ steal.plugins('phui/fittable').then(function () {
         },
 		
 		/**
+		 * @hide
+		 * 
 		 * Set up the CSS styling and dimensions to make the dropdown appear correctly.
 		 */
         style: function() {
@@ -83,9 +89,8 @@ steal.plugins('phui/fittable').then(function () {
         },
 		
 		/**
-		 * Draw the Dropdown and all of the Model instances it contains.  This method also saves a hash (Object) of all of the models in `modelList`.
 		 * 
-		 * If this is being called for the first time, it creates a phui_combobox_selectable to contain the items in `modelList`. 
+		 * Receives a list of JavaScript objects.  If `draw` is being called for the first time, these objects are rendered as HTML and inserted into the DOM.  If `draw` is called again, it simply shows the items (if they are hidden). 
 		 * 
 		 * @param {Object} modelList The items to draw in the Dropdown
 		 * @param {Object} val The value of the item to be pre-selected.
@@ -160,6 +165,8 @@ steal.plugins('phui/fittable').then(function () {
         // gets an element from an item .... what
 		
 		/**
+		 * @hide
+		 * 
 		 * Retrieves the jQuery object that represents `item`.
 		 * @param {Object} item
 		 * 
@@ -171,10 +178,9 @@ steal.plugins('phui/fittable').then(function () {
             return this.find(".dropdown_" + item.id);
         },
         /**
-        * returns the html for a list
-        */
-		
-		/**
+         * @hide
+         * 
+         * returns the html for a list
 		 * Constructs the HTML representation of the items in `list`.
 		 * @param {Array} list The list of items to convert
 		 * @return {String} The string oh HTML that represents `list`.
@@ -199,6 +205,8 @@ steal.plugins('phui/fittable').then(function () {
             return html.join("");
         },
         /**
+         * @hide
+         * 
          * Converts a single item in the dropdown to HTML.
          * 
 		 * returns the content for a single item
@@ -225,6 +233,8 @@ steal.plugins('phui/fittable').then(function () {
         },
         // gets an instance from the model hash
 		/**
+		 * @hide
+		 * 
 		 * Searches the internal Model collection for the Model matching `el`, if any.
 		 * @param {Object} el
 		 * @return {Object|null} The Model that matches `el` or `null`.
@@ -235,6 +245,8 @@ steal.plugins('phui/fittable').then(function () {
 					this.modelHash[el[0].className.match(/(dropdown_\d*)/)[0]];
         },
         /**
+         * @hide
+         * 
          * Selects the clicked Dropdown item. 
          */
         ".selectable click": function(el, ev) {
@@ -242,6 +254,8 @@ steal.plugins('phui/fittable').then(function () {
         },
 		
 		/**
+		 * @hide
+		 * 
 		 * Set `el`'s parent's val.
 		 * @param {Object} el
 		 */
@@ -256,10 +270,12 @@ steal.plugins('phui/fittable').then(function () {
             }
         },
         /**
-        * Prevent focusing on this element, send focus back to the input element.
-        * @param {Object} el
-        * @param {Object} ev
-        */
+         * @hide
+         * 
+         * Prevent focusing on this element, send focus back to the input element.
+         * @param {Object} el
+         * @param {Object} ev
+         */
         mousedown: function(el, ev) {
             ev.preventDefault();
             var el = this.options.parentElement.find("input[type=text]")[0];
@@ -268,6 +284,8 @@ steal.plugins('phui/fittable').then(function () {
             }, 1);
         },
 		/**
+		 * @hide
+		 * 
 		 * Refits the Dropdown when the screen dimensions change.
 		 * @param {Object} el
 		 * @param {Object} ev
@@ -362,6 +380,8 @@ steal.plugins('phui/fittable').then(function () {
         },
 
 		/**
+		 * @hide
+		 * 
 		 * Hide the DOM node that represents this controller.
 		 */
         _hidden: function() {
@@ -393,6 +413,8 @@ steal.plugins('phui/fittable').then(function () {
         },
 		
 		/**
+		 * @hide
+		 * 
 		 * Internal function to animate the Dropdown out of view.
 		 * 
 		 * @param {Object} el
@@ -440,6 +462,8 @@ steal.plugins('phui/fittable').then(function () {
         },
 		
 		/**
+		 * @hide
+		 * 
 		 * Internal method that is called when the DOM node representing this controller is shown.  Updates the styling information for the node. 
 		 * @param {Object} callback
 		 */
