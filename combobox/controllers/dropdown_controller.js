@@ -2,11 +2,11 @@ steal.plugins('phui/fittable').then(function () {
 
 	
 	/**
-	 * @tag home
+	 * @hide
 	 * @class DropdownController
 	 * @plugin phui/combobox/dropdown_controller
 	 * 
-	 * This class creates a dropdown UI component.  It manages the dropdown by animating and drawing it.
+	 * This class creates a dropdown UI component.  Used internally by `Combobox`.  It manages the dropdown by animating and drawing it.
 	 * 
 	 * @codestart
 	 *    $("&lt;div&gt;").phui_combobox_dropdown();
@@ -89,6 +89,7 @@ steal.plugins('phui/fittable').then(function () {
         },
 		
 		/**
+		 * @hide
 		 * 
 		 * Receives a list of JavaScript objects.  If `draw` is being called for the first time, these objects are rendered as HTML and inserted into the DOM.  If `draw` is called again, it simply shows the items (if they are hidden). 
 		 * 
@@ -311,7 +312,7 @@ steal.plugins('phui/fittable').then(function () {
         // to let phui/selectable manage element's activation
 		
 		/**
-		 * Selects the Dropdown item represented by `item`.
+		 * Programmatcally select the Dropdown item represented by `item`.
 		 * @param {Object} item
 		 */
         selectItem: function(item) {
@@ -319,14 +320,14 @@ steal.plugins('phui/fittable').then(function () {
         },
 		
 		/**
-		 * Shows the Dropdown item represented by `item`.
+		 * Show the Dropdown item represented by `item`.
 		 * @param {Object} item
 		 */
         showItem: function(item) {
             this._getEl(item).show();
         },
 		/**
-		 * Hides the Dropdown item represented by `item`.
+		 * Hide the Dropdown item represented by `item`.
 		 * @param {Object} item
 		 */
         hideItem: function(item) {
@@ -334,7 +335,9 @@ steal.plugins('phui/fittable').then(function () {
         },
 		
 		/**
-		 * Remove the `activatedClassName` from `currentItem`.
+		 * #hide
+		 * Clear out the currently selected option for the Dropdown.
+		 * 
 		 * @param {Object} currentItem
 		 */
         clearSelection: function(currentItem) {
@@ -343,7 +346,9 @@ steal.plugins('phui/fittable').then(function () {
         },
 		
 		/**
-		 * Remove the `disabledClassName` from `item`.
+		 * @hide
+		 * Enable the user to select `item` in the Dropdown.
+		 * 
 		 * @param {Object} item
 		 */
         enable: function(item) {
@@ -352,7 +357,8 @@ steal.plugins('phui/fittable').then(function () {
             el.removeClass(this.options.disabledClassName);
         },
 		/**
-		 * Add the `disabledClassName` to `item`.
+		 * @hide
+		 * Prevent the user from selecting `item` in the Dropdown.
 		 * @param {Object} item
 		 */
         disable: function(item) {
@@ -389,6 +395,7 @@ steal.plugins('phui/fittable').then(function () {
         },
 
         /**
+         * @hide
          * Show the currently selected element.
          * 
          * Show will always show the selected element, so make sure you have it set before you call this.

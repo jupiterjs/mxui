@@ -7,7 +7,16 @@ steal.plugins('jquery/controller', 'jquery/lang/json', 'phui/scrollbar_width', '
 	 * @plugin phui/combobox
 	 * @test phui/combobox/funcunit.html
 	 * 
-	 * Combobox progressively enhances an &lt;input&gt; field with rich content, autocompletion, and loading data via AJAX.
+	 * Combobox progressively enhances an &lt;input&gt; field.  This constructor accepts an Object of [Phui.Combobox.static.defaults | options] used to customize the Combobox.
+	 * 
+	 * Features:
+	 * 
+	 *   * Supports autocompletion filtering.
+	 *   * Supports both rich HTML as item content and plain text.
+	 *   * Support loading of items via AJAX.
+	 *   * Supports "watermark" text - text that is shown as a placeholder until a user makes a selection.
+	 *   * Allows the user to make a non-selection.
+	 *   * Customizable show/hide animations.
 	 * 
 	 * @demo phui/combobox/comboboxdemo1.html
 	 * @param {Object} options Options used to customize the Combobox
@@ -19,7 +28,6 @@ steal.plugins('jquery/controller', 'jquery/lang/json', 'phui/scrollbar_width', '
 		 * Default setttings for the Combobox.  These can all be overridden.
 		 *
 		 *   * __classNames__: _String._ When phui_combobox is called on an element, it is wrapped in a div.  The element is given the class that is defined by `classNames`.
-		 *   * __render__: _Object._ Defines the HTML that will wrap each item in the Combobox.
 		 *   * __filterEnabled__: _Boolean._ Controls whether autocompletion is enabled on the combobox.
 		 *   * __displayHTML__: _Boolean._ If true, show the contents of a list item as rich HTML.  If false, show it as plain text.
 		 *   * __selectedClassName__: _String._ The class that will be assigned to options that the user focuses on.
@@ -34,18 +42,24 @@ steal.plugins('jquery/controller', 'jquery/lang/json', 'phui/scrollbar_width', '
 		 *   * __nonSerializedAttrs__: _String[]._ A blacklist array of attributes to not store, assuming `storeSerializedItem` is true.
 		 *   * __overrideDropdown__: _Boolean._ Determines whether to use the standard Combobox dropdown animation, or the animation function bound to the 'show:dropdown' event.
 		 *   * __noItemsMsg__: _String._ Text to show when no items are available in an autocomplete-enabled field.
+		 *   * __render__: _Object._ This method defines the HTML that wraps a Combobox item.  To override, initialize the Combobox with a function like so:
+		 *   @codestart
+		 * 
+		 * $("input").phui_combobox({ render : {
+		 * 	  'itemTemplate': function(item, val){
+		 *      // HTML wrapping logic goes here
+		 *    } 
+		 * });
+		 * 
+		 * @codeend
+		 * 
+		 * Where `item` is the item being drawn, and `val` is the value that the item represents internally. 
+		 *   
 		 */
 		defaults: {
 			classNames: "phui_combobox_wrapper",
+			
 			render: {
-				/**
-				 * @hide
-				 * 
-				 * This method defines how a Combobox item is drawn.
-				 * 
-				 * @param {Object} item The item to draw.
-				 * @param {Object} val The value that the item represents.
-				 */
 				"itemTemplate": function( item , val) {
 					if(!val){
 						return "<span class='text'>" + item.text + "</span>";
@@ -196,8 +210,9 @@ steal.plugins('jquery/controller', 'jquery/lang/json', 'phui/scrollbar_width', '
 		},
 		
 		/**
+		 * Turn the Combobox into a Dropdown.
 		 * 
-		 * Creates and caches a phui\_combobox\_dropdown.
+		 * Internally, this creates and caches a phui\_combobox\_dropdown.
 		 * 
 		 * @return This Controller's instance of phui_combobox_dropdown.
 		 */
@@ -217,7 +232,7 @@ steal.plugins('jquery/controller', 'jquery/lang/json', 'phui/scrollbar_width', '
 		},
 		
 		/**
-		 * Calls `modelList` upon and stores `items`.
+		 * Store `items` into the Combobox so that the user can access to them.
 		 * 
 		 * @param {Object} items The object containing the Combobox items to store.
 		 */
@@ -286,7 +301,7 @@ steal.plugins('jquery/controller', 'jquery/lang/json', 'phui/scrollbar_width', '
          * 
          * Adds the "No Selection" entry to the model list
          * @param {Array} list The list of Models.
-        */
+         */
         createNoSelectionItem:function(list)
         {
             var noSelectionText = this.options.noSelectionMsg;
@@ -371,7 +386,7 @@ steal.plugins('jquery/controller', 'jquery/lang/json', 'phui/scrollbar_width', '
 			input[0].select();
 		},
 		/**
-		 * Remove the Combobox's watermark and show the dropdown
+		 * Animate the dropdown into view.
 		 * 
 		 * @param {Function} callback The function to execute when the dropdown animation has completed. 
 		 */
@@ -560,7 +575,7 @@ steal.plugins('jquery/controller', 'jquery/lang/json', 'phui/scrollbar_width', '
 		},
 		
 		/**
-		 * Fetches all of the `modelList` elements based on key-value pairs, where `attr` is the key and `value` is the value.
+		 * Fetches all items based on matching key-value pairs, where `attr` is the key and `value` is the value.
 		 * 
 		 * @param {String} attr The key to inspect the value of.
 		 * @param {String} value The value to test `attr` against.
@@ -688,20 +703,21 @@ steal.plugins('jquery/controller', 'jquery/lang/json', 'phui/scrollbar_width', '
 		 *		Combobox Public API		*
 		 ********************************/
 		/**
-		 * Retrieves the text value of the currently selected item
+		 * Retrieves the text value of the currently selected item.
 		 * 
-		 * @return The currently selected value.
+		 * @return {String} The currently selected value.
 		 */
 		textVal: function() {
 			return this.find("input[type=text]").val();
 		},
 		/**
-		 * Sets combobox value. This does not simulate a user click, which means
-		 * the selected item won't get highlighted in the dropdown.
-		 * For that, use `selectItem`.
+		 * 
+		 * If `value` is not supplied, the current value of the Combobox is returned.  If `value` is supplied, the new value is set (assuming the Combobox contains it).
+		 * 
+		 * This does not simulate a user click, which means the selected item won't get highlighted in the dropdown.  For that, use `selectItem`.
 		 * 
 		 * @param {String} value the new combobox value
-		 * @return {Object} if no input parameter returns the current item value
+		 * @return {Object} If no input parameter this returns the current item value
 		 */
 		val: function( value ) {
 			if ( value === undefined ) {
@@ -770,7 +786,7 @@ steal.plugins('jquery/controller', 'jquery/lang/json', 'phui/scrollbar_width', '
 			ev.stopImmediatePropagation();
 		},
 		/**
-		 * Programmatically selects an item (also highlights it).
+		 * Programmatically selects and highlights an item.
 		 * 
 		 * @param {String} value The new combobox value
 		 */
@@ -802,7 +818,7 @@ steal.plugins('jquery/controller', 'jquery/lang/json', 'phui/scrollbar_width', '
 		 * Looks up the item that matches `value`.
 		 * 
 		 * @param {String} value Value of the item to be returned.
-		 * @return {Object} returns the item with a `value` attribute that matches the parameter `value`.	
+		 * @return {Object|null} Returns the first item with a `value` attribute that matches the parameter `value`.  If the item is not found, this returns `null`.	
 		 */
 		getItem: function( value ) {
 			var item = this.modelListMatches("value", value)[0];
@@ -814,7 +830,7 @@ steal.plugins('jquery/controller', 'jquery/lang/json', 'phui/scrollbar_width', '
 		/**
 		 * Returns the list of items loaded into combobox.
 		 * 
-		 * @return {Array} Returns the list of items loaded into combobox	
+		 * @return {Array} Returns the Object list of items loaded into combobox, or a new Array if nothing was loaded.
 		 */
 		getItems: function() {
 			return this.modelList || [];
@@ -823,7 +839,7 @@ steal.plugins('jquery/controller', 'jquery/lang/json', 'phui/scrollbar_width', '
 		/**
 		 * Forces the Ajax Combobox to fetch data from the server.
 		 * 
-		 * @param {Function} callback to be triggered after items are loaded into Combobox. 
+		 * @param {Function} callback The callback to be triggered after items are loaded into Combobox. 
 		 */
 		populateItems: function( callback ) {
 			this.find("input[type='text']").trigger("show:dropdown", [this, callback]);
