@@ -298,13 +298,15 @@
                     render: {
                         "itemTemplate" : function(item) {
                             var html = [];
-							for (var i = 0; i < item.colors.length; i++) {
-								var color = item.colors[i];
+							if (item.colors) {
+								for (var i = 0; i < item.colors.length; i++) {
+									var color = item.colors[i];
 									
-								html.push("<span class='color"+color+"'>&nbsp;</span>");
-																																					
+									html.push("<span class='color" + color + "'>&nbsp;</span>");
+									
+								}
+								html.push("<span class='text'>" + item.text + "</span>");
 							}
-							html.push("<span class='text'>" + item.text + "</span>");
                             return html.join(" ");
                         }
                     },                    
