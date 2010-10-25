@@ -193,7 +193,9 @@ steal.plugins('jquery/controller', 'jquery/lang/json', 'phui/scrollbar_width', '
 		 */
 		resetWatermark: function() {
 			// zero is a valid value
-			if (this.val() === null || this.val() === "") {
+        	var value = this.val();
+            if ((value === null || value === "") &&
+             !this.options.showNoSelectionOption && this.options.watermarkText) {
 				this.find("input[type='text']").val(this.options.watermarkText);
 			}
 		},
