@@ -152,8 +152,18 @@ steal.plugins('jquery','jquery/controller').then(function($){
 				}
 			});
 	
-
-			elem.offset( $.extend( position, { using: options.using } ) );
+			// if elem is hidden, show it before setting offset
+			var visible = elem.is(":visible")
+			if(!visible){
+				elem.css("opacity", 0)
+					.toggle()
+				
+			}
+			elem.offset( $.extend( position, { using: options.using } ) )
+			if(!visible){
+				elem.css("opacity", 1)
+					.toggle();
+			}
 	   }
    })
    
