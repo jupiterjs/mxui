@@ -2,22 +2,74 @@ steal.plugins('jquery/controller', 'jquery/lang/json', 'phui/scrollbar_width', '
 	.controllers('dropdown','selectable').then(function() {
 
 	/**
+	 * @tag home
+	 * @class Combobox
+	 * @plugin phui/combobox
+	 * @test phui/combobox/funcunit.html
 	 * 
-	 * @param {Object} item
+	 * Combobox progressively enhances an &lt;input&gt; field.  This constructor accepts an Object of [Phui.Combobox.static.defaults | options] used to customize the Combobox.
+	 * 
+	 * Features:
+	 * 
+	 *   * Supports autocompletion filtering.
+	 *   * Supports both rich HTML as item content and plain text.
+	 *   * Support loading of items via AJAX.
+	 *   * Supports "watermark" text - text that is shown as a placeholder until a user makes a selection.
+	 *   * Allows the user to make a non-selection.
+	 *   * Customizable show/hide animations.
+	 * 
+	 * @demo phui/combobox/comboboxdemo1.html
+	 * @param {Object} options Options used to customize the Combobox
 	 */
-	$.Controller.extend("Phui.Combobox", {
+	$.Controller.extend("Phui.Combobox", 
+	/* @static */		
+	{
+		/**
+		 * Default setttings for the Combobox.  These can all be overridden.
+		 *
+		 *   * __classNames__: _String._ When phui_combobox is called on an element, it is wrapped in a div.  The element is given the class that is defined by `classNames`.
+		 *   * __filterEnabled__: _Boolean._ Controls whether autocompletion is enabled on the combobox.
+		 *   * __displayHTML__: _Boolean._ If true, show the contents of a list item as rich HTML.  If false, show it as plain text.
+		 *   * __selectedClassName__: _String._ The class that will be assigned to options that the user focuses on.
+		 *   * __activatedClassName__: _String._ The class that will be assigned to options that the user clicks. 
+		 *   * __disabledClassName__: _String._ The class that will be assigned to options that are disabled and the user cannot select.
+		 *   * __width__: _Number/null._ The width of the Combobox.
+		 *   * __emptyItemsText__: _String._ The text that is shown when the Combobox has no items to display.
+		 *   * __watermarkText__: _String._ The text to display if there is no option selected.
+		 *   * __showNoSelectionOption__: _Boolean._ Lets the user choose to make no selection. 
+		 *   * __noSelectionMsg__: _String._ The text to show for a non-selection. 
+		 *   * __storeSerializedItem__: _Boolean._ If true, store the attributes of the currently selected item as JSON in a hidden input.  If false, just store the item's &lt;option&gt; value in the hidden input.
+		 *   * __nonSerializedAttrs__: _String[]._ A blacklist array of attributes to not store, assuming `storeSerializedItem` is true.
+		 *   * __overrideDropdown__: _Boolean._ Determines whether to use the standard Combobox dropdown animation, or the animation function bound to the 'show:dropdown' event.
+		 *   * __noItemsMsg__: _String._ Text to show when no items are available in an autocomplete-enabled field.
+		 *   * __render__: _Object._ This method defines the HTML that wraps a Combobox item.  To override, initialize the Combobox with a function like so:
+		 *   @codestart
+		 * 
+		 * $("input").phui_combobox({ render : {
+		 * 	  'itemTemplate': function(item, val){
+		 *      // HTML wrapping logic goes here
+		 *    } 
+		 * });
+		 * 
+		 * @codeend
+		 * 
+		 * Where `item` is the item being drawn, and `val` is the value that the item represents internally. 
+		 *   
+		 */
 		defaults: {
 			classNames: "phui_combobox_wrapper",
+			
 			render: {
 				"itemTemplate": function( item , val) {
 					if(!val){
 						return "<span class='text'>" + item.text + "</span>";
 					}else{
                         /*
-                        * We have to make sure autocomplete hightlight
-                        * is case insensitive and only highligts words
-                        * starting from the first character.
-                        */
+                         * @hide
+                         * We have to make sure autocomplete hightlight
+                         * is case insensitive and only highligts words
+                         * starting from the first character.
+                         */
 	                    //var pos = item.text.indexOf(val),
                         var	re = new RegExp( '\\b' + val, 'i' ),
                             pos = item.text.search( re ),
@@ -31,9 +83,11 @@ steal.plugins('jquery/controller', 'jquery/lang/json', 'phui/scrollbar_width', '
 					}
 				}
 			},
-			/*maxHeight: 320,*/
+			/* @hide
+			 * maxHeight: 320,*/
 			filterEnabled: true,
 			/**
+			 * @hide
 			 * Values to select aren't text but html.  This changes from an input to a 
 			 * 'viewbox' element.
 			 */
@@ -44,21 +98,25 @@ steal.plugins('jquery/controller', 'jquery/lang/json', 'phui/scrollbar_width', '
 			width: null,
 			
             /**
+             * @hide
 			 * Text that displays when no items are in a combo box's drop down.
 			 */
 			emptyItemsText: "No items available.",
 			
 			/**
+			 * @hide
 			 * Text that appears if nothing is selected.
 			 */
 			watermarkText: "Click for options",
 
 			/**
+			 * @hide
 			 * Allows a "No Selection" item to be added to the collection.
 			 */
 			showNoSelectionOption: false,
             
 			/**
+			 * @hide
 			 * When 'showNoSelectionOption' is enabled, you need to give the item a name.
 			 */
             noSelectionMsg: "No Selection",
@@ -68,11 +126,18 @@ steal.plugins('jquery/controller', 'jquery/lang/json', 'phui/scrollbar_width', '
 			overrideDropdown: false,
 			noItemsMsg: "No items available"
 		}
-	}, {
+	}, 
+	/* @prototype */
+	{
 		/**
+		 * @hide
+		 * 
 		 * Setup re-arranges this input's html
-		 * @param {Object} el
-		 * @param {Object} options
+		 * 
+		 * Replace `el` with the HTML needed to make Combobox function.  The original DOM element is saved.
+		 * 
+		 * @param {Object} el The element that Combobox is called upon.
+		 * @param {Object} options The options to set on the Controller instance.
 		 */
 		setup: function( el, options ) {
 			el = $(el);
@@ -97,13 +162,20 @@ steal.plugins('jquery/controller', 'jquery/lang/json', 'phui/scrollbar_width', '
 				this.find(".viewbox").show();
 			}
 		},
+		
+		/**
+		 * @hide
+		 * 
+		 * Initialize the width and initial value of the Combobox, and any values that were passed in `options.items`.
+		 */
 		init: function() {
 			this.element.addClass(this.options.classNames);
 			if ( this.options.width ) {
 				this.element.width(this.options.width);
 			}
 			// force default max height
-			/*if (!this.options.maxHeight ) {
+			/* @hide 
+			 * if (!this.options.maxHeight ) {
 				this.options.maxHeight = this.Class.defaults.maxHeight;
 			}*/
 			this.currentItem = {
@@ -115,16 +187,22 @@ steal.plugins('jquery/controller', 'jquery/lang/json', 'phui/scrollbar_width', '
 			this.valueSet = true;
 		},
 		/**
-		 * Set the watermark if there's no text
+		 * @hide
+		 * 
+		 * Set the watermark if there is no text.
 		 */
 		resetWatermark: function() {
 			// zero is a valid value
-			if (this.val() === null || this.val() === "") {
+        	var value = this.val();
+            if ((value === null || value === "") &&
+             !this.options.showNoSelectionOption && this.options.watermarkText) {
 				this.find("input[type='text']").val(this.options.watermarkText);
 			}
 		},
 		/**
-		 * Only remove the text if it's the watermarkText
+		 * @hide
+		 * 
+		 * Only remove the text if it is the watermarkText.
 		 */
 		clearWatermark: function() {
 			var input = this.find("input[type='text']");
@@ -134,7 +212,11 @@ steal.plugins('jquery/controller', 'jquery/lang/json', 'phui/scrollbar_width', '
 		},
 		
 		/**
-		 * Creates and cache's a dropdown controller
+		 * Turn the Combobox into a Dropdown.
+		 * 
+		 * Internally, this creates and caches a phui\_combobox\_dropdown.
+		 * 
+		 * @return This Controller's instance of phui_combobox_dropdown.
 		 */
 		dropdown: function() {
 			if (!this._dropdown ) {
@@ -150,6 +232,12 @@ steal.plugins('jquery/controller', 'jquery/lang/json', 'phui/scrollbar_width', '
 
 			return this._dropdown;
 		},
+		
+		/**
+		 * Store `items` into the Combobox so that the user can access to them.
+		 * 
+		 * @param {Object} items The object containing the Combobox items to store.
+		 */
 		loadData: function( items ) {
 			if (!items ) {
 				return;
@@ -160,12 +248,22 @@ steal.plugins('jquery/controller', 'jquery/lang/json', 'phui/scrollbar_width', '
 				this.val(selected.value);
 			}
 		},
+		
+		/**
+		 * @hide
+		 * 
+		 * Initializes/empties this Controller's modelList.
+		 */
 		cleanData: function() {
-			this.modeList = [];
+			// TODO:  Build a test for this.
+			this.modeList = []; // TODO: Is this a typo?  Should this be: this.modelList = []; 
 		},
 		/**
-		 * Makes modelList and returns the selectedItem
-		 * @param {Object} items
+		 * @hide
+		 * 
+		 * Creates Model instances from an array of `items`.
+		 * @param {Array} items The list of items to generate models from.
+		 * @return The currently selected item.
 		 */
 		makeModelList: function( items ) {
 			if (!items || items.length === 0 ) {
@@ -191,7 +289,7 @@ steal.plugins('jquery/controller', 'jquery/lang/json', 'phui/scrollbar_width', '
 					text: item
 				} : item);
 
-				// pick inital combobox value
+				// pick initial combobox value
 				if ( item.selected ) {
 					selectedItem = item;
 				}
@@ -201,9 +299,11 @@ steal.plugins('jquery/controller', 'jquery/lang/json', 'phui/scrollbar_width', '
 			return selectedItem;
 		},
         /**
+         * @hide
+         * 
          * Adds the "No Selection" entry to the model list
-         * @param {Array} model list
-        */
+         * @param {Array} list The list of Models.
+         */
         createNoSelectionItem:function(list)
         {
             var noSelectionText = this.options.noSelectionMsg;
@@ -238,7 +338,9 @@ steal.plugins('jquery/controller', 'jquery/lang/json', 'phui/scrollbar_width', '
             }
         },		
 		/**
-		 * Flattens a list of nested object
+		 * @hide
+		 * 
+		 * Takes a nested hierarchy of inputted list items, de-nests them, and store them internally (as a linear structure) with a record of the nested state.
 		 * @param {Object} list
 		 * @param {Object} currentLevel
 		 * @param {Object} items
@@ -259,9 +361,25 @@ steal.plugins('jquery/controller', 'jquery/lang/json', 'phui/scrollbar_width', '
 			this.flattenEls(list, currentLevel, items);
 			return items;
 		},
+		/**
+		 * @hide
+		 * 
+		 * Called when the Combobox's .viewbox is given focus.
+		 * 
+		 * @param {HTMLElement} el The element that was focused (`.viewbox`).
+		 * @param {Focus Event} ev The event that was fired.
+		 */
 		".viewbox focusin": function( el, ev ) {
 			this._toggleComboboxView(el);
 		},
+		
+		/**
+		 * @hide
+		 * 
+		 * Hides `el` and shows this Combobox's DOM input.
+		 * 
+		 * @param {HTMLElement} el The element to hide (`.viewbox`).
+		 */
 		_toggleComboboxView: function( el ) {
 			el.hide();
 			var input = this.find("input[type='text']");
@@ -269,10 +387,22 @@ steal.plugins('jquery/controller', 'jquery/lang/json', 'phui/scrollbar_width', '
 			input[0].focus();
 			input[0].select();
 		},
+		/**
+		 * Animate the dropdown into view.
+		 * 
+		 * @param {Function} callback The function to execute when the dropdown animation has completed. 
+		 */
 		showDropdown : function(callback){
 			this.clearWatermark()
 			this.dropdown().controller().show(callback);
 		},
+		/**
+		 * @hide
+		 * 
+		 * If the dropdown is currently hidden, show it and then execute the callback.  If it is not hidden, just execute the callback.
+		 * 
+		 * @param {Function} callback The callback function to execute.
+		 */
 		showDropdownIfHidden : function(callback){
 			if (!this.dropdown().is(":visible") ) {
 				this.showDropdown(callback);
@@ -281,6 +411,21 @@ steal.plugins('jquery/controller', 'jquery/lang/json', 'phui/scrollbar_width', '
 				callback && callback();
 			}
 		},
+		/**
+		 * @hide
+		 * 
+		 * Event that is fired whenever the user releases a key while typing in this Combobox's `input`.
+		 * 
+		 * Button actions:
+		 * 
+		 *   * __Esc__: Hides the dropdown.
+		 *   * __Down__: Selects the next selectable item.
+		 *   * __Up__: Selects the previous selectable item.
+		 *   * __Enter__: If the dropdown is visible, select the currently "focused" list item.  If the dropdown is not visible, show it.
+		 * 
+		 * @param {HTMLInputElement} el The `input` element.
+		 * @param {Keyup Event} ev The event that was fired.
+		 */
 		"input keyup": function( el, ev ) {
 			var key = $.keyname(ev),
 				selectable = this.dropdown().children("ul").controller();
@@ -321,13 +466,12 @@ steal.plugins('jquery/controller', 'jquery/lang/json', 'phui/scrollbar_width', '
 					if(this.options.filterEnabled){
 						this.autocomplete(el.val());
 					}
-					
-				
 			}
 		},
 		/**
-		 * removes messages
-		 * @param {Object} val
+		 * Filters the items in a dropdown based on the what user has typed into the input box.
+		 * 
+		 * @param {Object} val The value top find matches for.
 		 */
 		autocomplete: function( val ) {
 			// do nothing if we don't have text based list
@@ -345,7 +489,7 @@ steal.plugins('jquery/controller', 'jquery/lang/json', 'phui/scrollbar_width', '
             {
 			    // list of matches to val & no "No Selection"
                 matches = $.grep(this.modelList, function (item) {
-					/*
+					/* @hide
         			 * 1. searches should be case insensitive.
         			 * 2. searches should start with the first letter, 
         			 * not look for anything in the string
@@ -370,20 +514,41 @@ steal.plugins('jquery/controller', 'jquery/lang/json', 'phui/scrollbar_width', '
 				}
 			}
 			
-			
 		},	
-		// this is necessary because we want to be able
-		// to open the dropdown by clicking the input
-		// after an item was selected which means
-		// input has focus and dropdown is hidden
-		// input focusin doesn't work in this case 
+		
+		/**
+		 * @hide
+		 * 
+		 * this is necessary because we want to be able to open the dropdown by clicking the input after an item was selected which means input has focus and dropdown is hidden input focusin doesn't work in this case
+		 * 
+		 * Calls `focusInputAndShowDropdown`.
+		 * 
+		 * @param {HTMLInputElement} el The `input` element that `click` was fired on.
+		 * @param {Click event} ev The click event that was fired.
+		 */
 		"input click": function( el, ev ) {
 			this.focusInputAndShowDropdown(el);
 		},
+		
+		/**
+		 * @hide
+		 * 
+		 * Calls `focusInputAndShowDropdown`.
+		 * 
+		 * @param {HTMLInputElement} el The `input` element that `focusin` was fired on.
+		 * @param {Click event} ev The `focusin` event that was fired.
+		 */
 		"input focusin": function( el, ev ) {
 			this.focusInputAndShowDropdown(el);
 		},
 
+		/**
+		 * @hide
+		 * 
+		 * Gives focus to `el` if possible, and shows this Combobox's dropdown.  Also focuses on the first element.
+		 * 
+		 * @param {HTMLInputElement} el The input to focus and show the dropdown for.
+		 */
 		focusInputAndShowDropdown: function( el ) {
 
 			// select all text
@@ -411,17 +576,31 @@ steal.plugins('jquery/controller', 'jquery/lang/json', 'phui/scrollbar_width', '
 			
 		},
 		
+		/**
+		 * Fetches all items based on matching key-value pairs, where `attr` is the key and `value` is the value.
+		 * 
+		 * @param {String} attr The key to inspect the value of.
+		 * @param {String} value The value to test `attr` against.
+		 * 
+		 * @return {Array} A collection of Objects that match `value` for `attr`.
+		 */
 		modelListMatches: function( attr, value ) {
 			return $.grep(this.modelList, function( item ) {
 				return item[attr] == value;
 			});
 		},
+		
+		/**
+		 * @hide
+		 * Hides the standard DOM `input` element and shows the `.viewbox` element.  Also fills `.viewbox`.
+		 * 
+		 * @param {HTML} The HTML code to fill `.viewbox` with.
+		 */
 		_setViewboxHtmlAndShow: function( html ) {
 
 			if ( this.options.displayHTML ) {
 				this.find("input[type=text]").hide();
 				this.find(".viewbox").show().html(html || "");
-
 			}
 		},
 		".toggle click": function( el, ev ) {
@@ -436,28 +615,45 @@ steal.plugins('jquery/controller', 'jquery/lang/json', 'phui/scrollbar_width', '
 				this._toggleComboboxView(viewbox);
 			}
 		},
-		/*
-         * Trick to make dropdown close when combobox looses focus
-         * Bug: input looses focus on scroll bar click in IE, Chrome and Safari
-         * Fix inspired in:
-         * http://stackoverflow.com/questions/2284541/form-input-loses-focus-on-scroll-bar-click-in-ie
-         */
-		focusin: function( el, ev ) {
-			// trick to make dropdown close when combobox looses focus            
+		
+		/**
+		 * @hide
+		 * 
+		 * Clears the blur timeout that was set in `focusout`.
+		 * 
+		 * @param {HTMLInputElement} el The element that was focused
+		 * @param {focusEvent} ev The focus event that was fired.
+		 * 
+		 */
+		focusin: function( el, ev ) {            
 			clearTimeout(this.closeDropdownOnBlurTimeout);
 		},
 		/**
-		 * If someone clicks somewhere else, lets close ourselves
-		 * @param {Object} el
-		 * @param {Object} ev
+		 * @hide
+		 * 
+		 * If the user clicks outside of this element, set a timeout to blur it.  A timeout is used because it ensures that the input isn't blurred if the user clicks on a window scrollbar.
+		 * 
+		 * @param {HTMLElement} el The element that was blurred
+		 * @param {focusoutEvent} ev The `focusout` event that was fired.
 		 */
 		focusout: function( el, ev ) {
 			if ( this.dropdown().is(":hidden") ) {
 				return;
 			}
-			// trick to make dropdown close when combobox looses focus
+			/* @hide
+	         * Trick to make dropdown close when combobox looses focus
+	         * Bug: input looses focus on scroll bar click in IE, Chrome and Safari
+	         * Fix inspired in:
+	         * http://stackoverflow.com/questions/2284541/form-input-loses-focus-on-scroll-bar-click-in-ie
+	         */
 			this.closeDropdownOnBlurTimeout = setTimeout(this.callback('blurred'), 100);
 		},
+		
+		/**
+		 * @hide
+		 * 
+		 * Set the viewbox with the currently selected item's content.
+		 */
 		blurred : function(){
 			//set current item as content / value
 			if ( this.currentItem.item ) {
@@ -466,13 +662,17 @@ steal.plugins('jquery/controller', 'jquery/lang/json', 'phui/scrollbar_width', '
 			}
 			this.dropdown().controller().hide();
 		},
-		/*
-	     * Internet Explorer interprets two fast clicks in a row as one single-click, 
+		/**
+		 * @hide
+		 * 
+		 * Internet Explorer interprets two fast clicks in a row as one single-click, 
 	     * followed by one double-click, while the other browsers interpret it as 
 	     * two single-clicks and a double-click.
 	     * And, IE has a very long time that it will count 2 clicks as a dblclick.
 	     * Taken together, the user might click the toggle twice and not really be dblclicking.
-	     */
+		 * 
+		 * @param {HTMLInputElement} el The element that was `dblclick`ed.
+		 */
 		".toggle dblclick": function( el ) {
 			if ( $.browser.msie ) {
 				if(this.dropdown().is(":visible")){
@@ -483,6 +683,12 @@ steal.plugins('jquery/controller', 'jquery/lang/json', 'phui/scrollbar_width', '
 				this.focusInputAndShowDropdown(this.find("input[type=text]"));
 			}
 		},
+		
+		/**
+		 * @hide
+		 * 
+		 * Remove the Combobox from the DOM and replace it with the original DOM element and unbind all events.
+		 */
 		destroy: function() {
 			this.dropdown().remove();
 			this._dropdown = null;
@@ -498,16 +704,22 @@ steal.plugins('jquery/controller', 'jquery/lang/json', 'phui/scrollbar_width', '
 		/********************************
 		 *		Combobox Public API		*
 		 ********************************/
-		// returns the text value of the currently selected item
+		/**
+		 * Retrieves the text value of the currently selected item.
+		 * 
+		 * @return {String} The currently selected value.
+		 */
 		textVal: function() {
 			return this.find("input[type=text]").val();
 		},
 		/**
+		 * 
+		 * If `value` is not supplied, the current value of the Combobox is returned.  If `value` is supplied, the new value is set (assuming the Combobox contains it).
+		 * 
+		 * This does not simulate a user click, which means the selected item won't get highlighted in the dropdown.  For that, use `selectItem`.
+		 * 
 		 * @param {String} value the new combobox value
-		 * @return {Object} if no input parameter returns the current item value
-		 * Sets combobox value. This does not simulate a user click, which means
-		 * the selected item won't get highlighted on the dropdown.
-		 * For that use 'select'
+		 * @return {Object} If no input parameter this returns the current item value
 		 */
 		val: function( value ) {
 			if ( value === undefined ) {
@@ -564,13 +776,21 @@ steal.plugins('jquery/controller', 'jquery/lang/json', 'phui/scrollbar_width', '
 				}
 			}
 		},
-		// prevent IE's default change event
+		/**
+		 * @hide
+		 * 
+		 * Prevent IE's default change event.
+		 * 
+		 * @param {HTMLInputElement} el The element the event was fired upon.
+		 * @param {changeEvent} ev The event that was fired.
+		 */ 
 		'input change': function(el, ev){
 			ev.stopImmediatePropagation();
 		},
 		/**
-		 * @param {String} value the new combobox value
-		 * Simulates the user clicking on an item.
+		 * Programmatically selects and highlights an item.
+		 * 
+		 * @param {String} value The new combobox value
 		 */
 		selectItem: function( value ) {
 			var item = this.modelListMatches("value", value)[0];
@@ -581,7 +801,7 @@ steal.plugins('jquery/controller', 'jquery/lang/json', 'phui/scrollbar_width', '
 			}
 		},
 		/**
-		 * Clears combobox current selection.
+		 * Clears Combobox's current selection.
 		 */
 		clearSelection: function() {
 			if ( this.currentItem.item ) {
@@ -597,9 +817,10 @@ steal.plugins('jquery/controller', 'jquery/lang/json', 'phui/scrollbar_width', '
 			}
 		},
 		/**
-		 * @param {String} value value of the item to be returned.
-		 * @return {Object} returns the item with the value passed as a parameter.	
-		 * Returns the item with the value passed as a parameter.
+		 * Looks up the item that matches `value`.
+		 * 
+		 * @param {String} value Value of the item to be returned.
+		 * @return {Object|null} Returns the first item with a `value` attribute that matches the parameter `value`.  If the item is not found, this returns `null`.	
 		 */
 		getItem: function( value ) {
 			var item = this.modelListMatches("value", value)[0];
@@ -609,24 +830,45 @@ steal.plugins('jquery/controller', 'jquery/lang/json', 'phui/scrollbar_width', '
 			return null;
 		},
 		/**
-		 * @return {Array} returns the list of items loaded into combobox	
 		 * Returns the list of items loaded into combobox.
+		 * 
+		 * @return {Array} Returns the Object list of items loaded into combobox, or a new Array if nothing was loaded.
 		 */
 		getItems: function() {
 			return this.modelList || [];
 		},
+		// This method should probably be under phui/combobox/ajax.
 		/**
-		 * @param {Function} callback to be triggered after items are loaded into combobox	
-		 * Forces the ajax combobox to fetch data from the server. 
-		 * This method should probably be under phui/combobox/ajax.
+		 * Forces the Ajax Combobox to fetch data from the server.
+		 * 
+		 * @param {Function} callback The callback to be triggered after items are loaded into Combobox. 
 		 */
 		populateItems: function( callback ) {
 			this.find("input[type='text']").trigger("show:dropdown", [this, callback]);
 		},
 		/**
-		 * @param {String} text query string to serve as filter for autocomplete.
-		 * @return {Array} returns the list of filtered items. 	
-		 * API to return filtered data from combobox's autocomplete. 
+		 * Finds an array of Combobox item `value`s where the `text` property contains the string defined in the `text` argument.
+		 * 
+		 * This is an API to return filtered data from Combobox's autocomplete.
+		 * 
+		 * @param {String} text Query string to serve as filter for autocomplete.
+		 * @return {Array} An array of strings. 	
+		 * 
+		 * @codestart
+		 * $("#combobox_demo").phui_combobox({
+
+			items: [{ value: "1", text: "hola", enabled: "true", selected: true,
+				children: [  { value: "5", text: "chicago", enabled: "true", children: [] },
+					{ value: "6", text: "kansas", enabled: "true", 
+						children: [ { value: "7", text: "losangeles", enabled: "true", children: [] } ] } ] }
+					
+					] });
+					
+			var result = $("#combobox_demo").controller().query('los');
+			
+			// result is "7"
+			
+		 * @codeend
 		 */
 		query: function( text ) {
 			var matches = $.grep(this.modelList, function( item ) {
@@ -639,9 +881,11 @@ steal.plugins('jquery/controller', 'jquery/lang/json', 'phui/scrollbar_width', '
 			return results;
 		},
          /**
-		 * @param {String} value = value of the item to set.
-		 * Shows/Hides "No Selection" option in the drop down list.
-		 */
+          * @hide
+          * 
+          * Shows/Hides "No Selection" option in the dropdown list.
+		  * @param {Boolean} value Whether to show the noSelectionOption or not.
+		  */
          enableNoSelection: function(value)
          {
             this.options.showNoSelectionOption = value;
@@ -660,8 +904,9 @@ steal.plugins('jquery/controller', 'jquery/lang/json', 'phui/scrollbar_width', '
             }
          },		
 		/**
-		 * @param {String} value value of the item that will be made visible.
-		 * Show an item.
+		 * Show the item who's `value` attribute matches the parameter `value`.
+		 * 
+		 * @param {String} value Value of the item that will be made visible.
 		 */
 		showItem: function( value ) {
 			var item = this.modelListMatches("value", value)[0];
@@ -672,8 +917,9 @@ steal.plugins('jquery/controller', 'jquery/lang/json', 'phui/scrollbar_width', '
 			}
 		},
 		/**
-		 * @param {String} value value of the item that will be hidden.
-		 * Hides an item.
+		 * Hides an item from view.
+		 * 
+		 * @param {String} value Value of the item that will be hidden.
 		 */
 		hideItem: function( value ) {
 			var item = this.modelListMatches("value", value)[0];
@@ -686,6 +932,12 @@ steal.plugins('jquery/controller', 'jquery/lang/json', 'phui/scrollbar_width', '
 				item.forceHidden = true;
 			}
 		},
+		
+		/**
+		 * Sets the state of a dropdown item to "enabled."  This allows the user to select it.
+		 * 
+		 * @param {String} value Value of the item that will be enabled.
+		 */
 		enable: function( value ) {
 			var item = this.modelListMatches("value", value)[0];
 			if ( item ) {
@@ -693,6 +945,12 @@ steal.plugins('jquery/controller', 'jquery/lang/json', 'phui/scrollbar_width', '
 				this.dropdown().controller().enable(item);
 			}
 		},
+		
+		/**
+		 * Sets the state of a dropdown item to "disabled."  This prevents the user from selecting it.
+		 * 
+		 * @param {String} value Value of the item that will be disabled.
+		 */
 		disable: function( value ) {
 			var item = this.modelListMatches("value", value)[0];
 			if ( item ) {
@@ -702,6 +960,4 @@ steal.plugins('jquery/controller', 'jquery/lang/json', 'phui/scrollbar_width', '
 			}
 		}
 	});
-
-
 });

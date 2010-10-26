@@ -77,7 +77,6 @@ test("Test that change event is triggered when the combobox value is changed.", 
 	S("#log3").text("6");
 });
 
-/* Combobox API Test Cases */
 test("Testing populateItems.", function() {
 	S("#ajax_demo").exists();
 	S("#populateItems").exists();
@@ -86,3 +85,13 @@ test("Testing populateItems.", function() {
 		ok(/dir0,/.test(S("#ajax_demo_output").text()), "populateItems successfully called.");
 	} );
 });
+
+/*
+ * Make this test work
+ *test("Test that if options.watermarkText is empty, a value is typed that doesn't exist and combobox is blurred then if the user clicks the combobox again the input box shows the previously typed text.", function() {
+	S("#combobox_demo").exists();
+	S("#combobox_demo input[type=text]").type("[ctrl]a[up]0");
+	S("#log3").click();
+	S("#combobox_demo input[type=text]").click();
+	S("#combobox_demo input[type=text]").val("0");
+})*/

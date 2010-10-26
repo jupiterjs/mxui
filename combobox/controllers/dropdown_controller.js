@@ -1,14 +1,39 @@
 steal.plugins('phui/fittable').then(function () {
 
-    /**
-    * Dropdown has the following responsibilities:
-    * - drawing a list of items
-    * - positioning itself (will mostly be handled by Alex's fit plugin)
-    * - creating a selectable (it has it's own api)
-    * 
-    */
-    $.Controller.extend("Phui.Combobox.DropdownController", {}, {
-        init: function (el, options) {
+	
+	/**
+	 * @hide
+	 * @class DropdownController
+	 * @plugin phui/combobox/dropdown_controller
+	 * 
+	 * This class creates a dropdown UI component.  Used internally by `Combobox`.  It manages the dropdown by animating and drawing it.
+	 * 
+	 * @codestart
+	 *    $("&lt;div&gt;").phui_combobox_dropdown();
+	 * @codeend
+	 *
+	 * @param {Object} options Options used to customize the Dropdown
+	 */
+	
+    $.Controller.extend("Phui.Combobox.DropdownController", 
+	/* @static */
+	{}, 
+	/* @prototype */
+	{
+		/**
+		 * @hide
+		 * 
+		 * Initializes the Dropdown.  Positioning is determined, as is the Dropdown's DOM ID.
+		 * 
+		 * Dropdown has the following responsibilities:
+		 *  - drawing a list of items
+		 *  - positioning itself (will mostly be handled by Alex's fit plugin)
+		 *  - creating a selectable (it has it's own api)
+		 * 
+		 * @param {Object} el
+		 * @param {Object} options
+		 */
+        init: function(el, options) {
 
             this.isFirstPass = true;
 
@@ -19,11 +44,22 @@ steal.plugins('phui/fittable').then(function () {
             //add ul
             this.element.css("position", "absolute")
         },
-        destroy: function () {
+		/**
+		 * @hide
+		 * 
+		 * Remove the list of the models from this Controller to prevent memory leaks.
+		 */
+        destroy: function() {
             this.list = null;
             this._super();
         },
-        style: function () {
+		
+		/**
+		 * @hide
+		 * 
+		 * Set up the CSS styling and dimensions to make the dropdown appear correctly.
+		 */
+        style: function() {
             this.element.css({
                 'opacity': 1, // used because IE7 doesn't show the updated contents of the combobox without it
                 'width': this.options.parentElement.width()
@@ -51,17 +87,26 @@ steal.plugins('phui/fittable').then(function () {
                 });
             }
         },
-        draw: function (modelList, val) {
+		
+		/**
+		 * @hide
+		 * 
+		 * Receives a list of JavaScript objects.  If `draw` is being called for the first time, these objects are rendered as HTML and inserted into the DOM.  If `draw` is called again, it simply shows the items (if they are hidden). 
+		 * 
+		 * @param {Object} modelList The items to draw in the Dropdown
+		 * @param {Object} val The value of the item to be pre-selected.
+		 */
+        draw: function(modelList, val) {
             // if this is the first time we are drawing
             // make the content			
             if (this.isFirstPass) {
 
                 var html = modelList.length ?
 					this.getHTML(modelList) :
-					"<li><span class='item'>No items in the combobox</span></li>";
+					"<li><span class='item'>" + this.options.emptyItemsText + "</span></li>";
 
                 // if starts with <li> wrap under <ul>
-                // so selectable as something to attach to
+                // so selectable has something to attach to
                 if (html.indexOf("<li") === 0) {
                     html = "<ul>" + html + "</ul>";
                 }
@@ -71,11 +116,7 @@ steal.plugins('phui/fittable').then(function () {
 					    selectedClassName: "selected"
 					})
 					.phui_combobox_selectable("cache");
-
-
-
             }
-
             
             var modelHash = {};
 			if (modelList.length) {
@@ -123,15 +164,29 @@ steal.plugins('phui/fittable').then(function () {
         },
 
         // gets an element from an item .... what
-        _getEl: function (item) {
+		
+		/**
+		 * @hide
+		 * 
+		 * Retrieves the jQuery object that represents `item`.
+		 * @param {Object} item
+		 * 
+		 * @return {jQueryObject} The jQuery object that represents `item`
+		 */
+        _getEl: function(item) {
             // id = 0 can be a valid value
             if (!item || item.id === undefined) return $([])
             return this.find(".dropdown_" + item.id);
         },
         /**
-        * returns the html for a list
-        */
-        getHTML: function (list) {
+         * @hide
+         * 
+         * returns the html for a list
+		 * Constructs the HTML representation of the items in `list`.
+		 * @param {Array} list The list of items to convert
+		 * @return {String} The string oh HTML that represents `list`.
+		 */
+        getHTML: function(list) {
             if (!list.length) {
                 return [];
             }
@@ -151,10 +206,15 @@ steal.plugins('phui/fittable').then(function () {
             return html.join("");
         },
         /**
-        * returns the content for a single item
-        * @param {String} item
-        */
-        drawItemHtml: function (item) {
+         * @hide
+         * 
+         * Converts a single item in the dropdown to HTML.
+         * 
+		 * returns the content for a single item
+		 * @param {Object} item The dropdown item to convert.
+		 * @return {String} The HTML representation of `item`.
+		 */
+        drawItemHtml: function(item) {
             return [
 				"<span class='item ",
 				item.identity ?
@@ -173,18 +233,34 @@ steal.plugins('phui/fittable').then(function () {
 			].join("");
         },
         // gets an instance from the model hash
-        _getModel: function (el) {
+		/**
+		 * @hide
+		 * 
+		 * Searches the internal Model collection for the Model matching `el`, if any.
+		 * @param {Object} el
+		 * @return {Object|null} The Model that matches `el` or `null`.
+		 */
+        _getModel: function(el) {
 
             return el && el.length &&
 					this.modelHash[el[0].className.match(/(dropdown_\d*)/)[0]];
         },
         /**
-        * On activate (clicking or pressing enter) set our parent's val.
-        */
-        ".selectable click": function (el, ev) {
+         * @hide
+         * 
+         * Selects the clicked Dropdown item. 
+         */
+        ".selectable click": function(el, ev) {
             this.selectElement(el);
         },
-        selectElement: function (el) {
+		
+		/**
+		 * @hide
+		 * 
+		 * Set `el`'s parent's val.
+		 * @param {Object} el
+		 */
+        selectElement: function(el) {
             var item = this._getModel(el);
             if (item) {
                 // set combobox new value
@@ -195,18 +271,27 @@ steal.plugins('phui/fittable').then(function () {
             }
         },
         /**
-        * Prevent focusing on this element, send focus back to the input element
-        * @param {Object} el
-        * @param {Object} ev
-        */
-        mousedown: function (el, ev) {
+         * @hide
+         * 
+         * Prevent focusing on this element, send focus back to the input element.
+         * @param {Object} el
+         * @param {Object} ev
+         */
+        mousedown: function(el, ev) {
             ev.preventDefault();
             var el = this.options.parentElement.find("input[type=text]")[0];
             setTimeout(function () {
                 el.focus();
             }, 1);
         },
-        windowresize: function (el, ev) {
+		/**
+		 * @hide
+		 * 
+		 * Refits the Dropdown when the screen dimensions change.
+		 * @param {Object} el
+		 * @param {Object} ev
+		 */
+        windowresize: function(el, ev) {
             // only adjust dimensions if its visible
             // (we don't want all hidden dropdowns on the page to suddenly open on resize)
             if (this.element.is(":visible")) {
@@ -224,31 +309,68 @@ steal.plugins('phui/fittable').then(function () {
         *		 Dropdown Public API		*
         ************************************/
         // when item is selected through the api simulate click  
-        // to let phui/selectable manage element's activation  
-        selectItem: function (item) {
+        // to let phui/selectable manage element's activation
+		
+		/**
+		 * Programmatcally select the Dropdown item represented by `item`.
+		 * @param {Object} item
+		 */
+        selectItem: function(item) {
             this.selectElement(this._getEl(item));
         },
-        showItem: function (item) {
+		
+		/**
+		 * Show the Dropdown item represented by `item`.
+		 * @param {Object} item
+		 */
+        showItem: function(item) {
             this._getEl(item).show();
         },
-        hideItem: function (item) {
+		/**
+		 * Hide the Dropdown item represented by `item`.
+		 * @param {Object} item
+		 */
+        hideItem: function(item) {
             this._getEl(item).hide();
         },
-        clearSelection: function (currentItem) {
+		
+		/**
+		 * #hide
+		 * Clear out the currently selected option for the Dropdown.
+		 * 
+		 * @param {Object} currentItem
+		 */
+        clearSelection: function(currentItem) {
             // TODO: this cleanup should probably be a feature of phui/selectable
             this._getEl(currentItem).removeClass(this.options.activatedClassName);
         },
-        enable: function (item) {
+		
+		/**
+		 * @hide
+		 * Enable the user to select `item` in the Dropdown.
+		 * 
+		 * @param {Object} item
+		 */
+        enable: function(item) {
             //var el = this.getElementFor(item);
             var el = this._getEl(item);
             el.removeClass(this.options.disabledClassName);
         },
-        disable: function (item) {
+		/**
+		 * @hide
+		 * Prevent the user from selecting `item` in the Dropdown.
+		 * @param {Object} item
+		 */
+        disable: function(item) {
             //var el = this.getElementFor(item);
             var el = this._getEl(item);
             el.addClass(this.options.disabledClassName);
         },
-        hide: function () {
+		
+		/**
+		 * Animate the Dropdown out of view and reset the watermark.
+		 */
+        hide: function() {
             this.options.parentElement.controller().resetWatermark();
             if (this.element.data().fitAbove) {
                 var offTop = this.options.parentElement.offset().top;
@@ -263,16 +385,23 @@ steal.plugins('phui/fittable').then(function () {
 
         },
 
-        _hidden: function () {
+		/**
+		 * @hide
+		 * 
+		 * Hide the DOM node that represents this controller.
+		 */
+        _hidden: function() {
             this.element.hide();
         },
 
         /**
-        * Show will always show the selected element so make sure you have
-        * it set before you call this.
-        * @param {Function} callback
-        */
-        show: function (callback) {
+         * @hide
+         * Show the currently selected element.
+         * 
+         * Show will always show the selected element, so make sure you have it set before you call this.
+         * @param {Function} callback
+         */
+        show: function(callback) {
 
             // knows WAY too much
 
@@ -289,7 +418,16 @@ steal.plugins('phui/fittable').then(function () {
                 this.element.hide().slideDown("fast", this.callback("_shown", callback));
             }
         },
-        _slideUp: function (el, callback) {
+		
+		/**
+		 * @hide
+		 * 
+		 * Internal function to animate the Dropdown out of view.
+		 * 
+		 * @param {Object} el
+		 * @param {Object} callback
+		 */
+        _slideUp: function(el, callback) {
             el.css("opacity", 0).show();
 
             var time = 0,
@@ -308,7 +446,7 @@ steal.plugins('phui/fittable').then(function () {
             var initOff = el.offset().top,
                 initHeight = 1;
 
-            var step = function () {
+            var step = function() {
                 //  simple linear tweening - no easing, no acceleration
                 //nextOff = -offInc * time / duration + initOff;
                 //nextHeight = heightInc * time / duration + initHeight;
@@ -329,7 +467,14 @@ steal.plugins('phui/fittable').then(function () {
             }
             setTimeout(step, 10);
         },
-        _shown: function (callback) {
+		
+		/**
+		 * @hide
+		 * 
+		 * Internal method that is called when the DOM node representing this controller is shown.  Updates the styling information for the node. 
+		 * @param {Object} callback
+		 */
+        _shown: function(callback) {
             var self = this;
             setTimeout(function () {
                 self.style();
