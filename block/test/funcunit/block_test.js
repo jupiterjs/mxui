@@ -1,6 +1,6 @@
-module("phui/block test",{ 
+module("mxui/block test",{ 
 	setup: function(){
-        S.open("//phui/block/block.html");
+        S.open("//mxui/block/block.html");
 		S("#blocker").exists();
 	}
 })

@@ -1,6 +1,6 @@
-module("phui/menu test",{ 
+module("mxui/menu test",{ 
 	setup: function(){
-        S.open("//phui/menu/menu.html");
+        S.open("//mxui/menu/menu.html");
 		S("#menu1").exists();
 		S("#menu2").exists();		
 	}

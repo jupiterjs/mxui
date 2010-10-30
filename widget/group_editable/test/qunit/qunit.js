@@ -1,6 +1,6 @@
 //we probably have to have this only describing where the tests are
 steal
- .plugins("phui/widget/group_editable")  //load your app
+ .plugins("mxui/widget/group_editable")  //load your app
  .plugins('funcunit/qunit')  //load qunit
  .then("group_editable_test")
  

@@ -1,6 +1,6 @@
 //we probably have to have this only describing where the tests are
 steal
- .plugins("phui/modal")  //load your app
+ .plugins("mxui/modal")  //load your app
  .plugins('funcunit/qunit')  //load qunit
  .then("modal_test")
  

@@ -24,8 +24,8 @@
                 src='../steal/steal.js'>   
         </script>
 		<script type='text/javascript'>
-			steal.plugins("phui/grid",
-							"phui/filler",
+			steal.plugins("mxui/grid",
+							"mxui/filler",
 							"jquery/model",
 							"jquery/dom/fixture").then(function($){
 				$.fixture["make"](["resources","resource"],100,function(num){
@@ -68,7 +68,7 @@
 				},{})
 				
 				
-				$(".grid").phui_filler().phui_grid({
+				$(".grid").mxui_filler().mxui_grid({
 					model: Resource,
 					limit: 100,
 					offset: 0,

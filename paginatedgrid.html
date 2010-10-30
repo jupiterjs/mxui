@@ -25,7 +25,7 @@
                 src='../steal/steal.js'>   
         </script>
 		<script type='text/javascript'>
-			steal.plugins("phui/grid/paginated",
+			steal.plugins("mxui/grid/paginated",
 							"jquery/model",
 							"jquery/dom/fixture").then(function($){
 				$.fixture["make"](["resources","resource"],1000,function(num){
@@ -68,7 +68,7 @@
 				},{})
 				
 				
-				$(".grid").phui_filler().phui_grid_paginated({
+				$(".grid").mxui_filler().mxui_grid_paginated({
 					model: Resource,
 					limit: 100,
 					offset: 0,

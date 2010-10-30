@@ -1,6 +1,6 @@
-module("phui/grid/groupable test",{ 
+module("mxui/grid/groupable test",{ 
 	setup: function(){
-        S.open("//phui/groupablegrid.html");
+        S.open("//mxui/groupablegrid.html");
 		S(".resource_1").exists();
 	}
 })

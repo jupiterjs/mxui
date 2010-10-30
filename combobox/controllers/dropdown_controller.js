@@ -1,15 +1,15 @@
-steal.plugins('phui/fittable').then(function () {
+steal.plugins('mxui/fittable').then(function () {
 
 	
 	/**
 	 * @hide
 	 * @class DropdownController
-	 * @plugin phui/combobox/dropdown_controller
+	 * @plugin mxui/combobox/dropdown_controller
 	 * 
 	 * This class creates a dropdown UI component.  Used internally by `Combobox`.  It manages the dropdown by animating and drawing it.
 	 * 
 	 * @codestart
-	 *    $("&lt;div&gt;").phui_combobox_dropdown();
+	 *    $("&lt;div&gt;").mxui_combobox_dropdown();
 	 * @codeend
 	 *
 	 * @param {Object} options Options used to customize the Dropdown
@@ -112,10 +112,10 @@ steal.plugins('phui/fittable').then(function () {
                 }
                 this.list = this.element.html(html)
 					.children("ul")
-					.phui_combobox_selectable({
+					.mxui_combobox_selectable({
 					    selectedClassName: "selected"
 					})
-					.phui_combobox_selectable("cache");
+					.mxui_combobox_selectable("cache");
             }
             
             var modelHash = {};
@@ -309,7 +309,7 @@ steal.plugins('phui/fittable').then(function () {
         *		 Dropdown Public API		*
         ************************************/
         // when item is selected through the api simulate click  
-        // to let phui/selectable manage element's activation
+        // to let mxui/selectable manage element's activation
 		
 		/**
 		 * Programmatcally select the Dropdown item represented by `item`.
@@ -341,7 +341,7 @@ steal.plugins('phui/fittable').then(function () {
 		 * @param {Object} currentItem
 		 */
         clearSelection: function(currentItem) {
-            // TODO: this cleanup should probably be a feature of phui/selectable
+            // TODO: this cleanup should probably be a feature of mxui/selectable
             this._getEl(currentItem).removeClass(this.options.activatedClassName);
         },
 		

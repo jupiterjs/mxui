@@ -1,4 +1,4 @@
-steal.plugins('phui/combobox')
+steal.plugins('mxui/combobox')
     .then(function ($)
     {
 
@@ -31,7 +31,7 @@ steal.plugins('phui/combobox')
                 el.remove();
 				
 				$.extend(options, {overrideDropdown: true});
-                input.phui_combobox(options);
+                input.mxui_combobox(options);
                 this._super(input[0], options);
             }
         },

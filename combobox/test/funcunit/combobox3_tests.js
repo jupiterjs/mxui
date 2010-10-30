@@ -1,6 +1,6 @@
 module("combobox3 test", { 
 	setup: function(){
-        S.open("//phui/combobox/combobox3.html");
+        S.open("//mxui/combobox/combobox3.html");
 	}
 })
 

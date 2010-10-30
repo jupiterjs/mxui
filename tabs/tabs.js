@@ -1,4 +1,4 @@
-steal.plugins('phui/menuable').then(function($){
+steal.plugins('mxui/menuable').then(function($){
 	//problem with this is it will search and find everything ...
 	Phui.Menuable.extend("Phui.Tabable",
 	{

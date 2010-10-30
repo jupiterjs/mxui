@@ -1,6 +1,6 @@
-module("phui/sortable", { 
+module("mxui/sortable", { 
 	setup: function(){
-        S.open("//phui/sortable/sortable.html");
+        S.open("//mxui/sortable/sortable.html");
 	}
 })
 

@@ -1,14 +1,14 @@
 module("combobox test", { 
 	setup: function(){
-        S.open("//phui/combobox/combobox.html");
+        S.open("//mxui/combobox/combobox.html");
 	}
 })
 
 
 test("Test change is only called once.", function() {
-	S("#expirationBehavior .phui_combobox_select").click();
-	S(".phui_combobox_dropdown .dropdown_2").visible();
-	S(".phui_combobox_dropdown .dropdown_2").click();
+	S("#expirationBehavior .mxui_combobox_select").click();
+	S(".mxui_combobox_dropdown .dropdown_2").visible();
+	S(".mxui_combobox_dropdown .dropdown_2").click();
 	
 	S("#populateItems").click(function(){
 		equals("1", S('.change_count').text())
@@ -16,7 +16,7 @@ test("Test change is only called once.", function() {
 });
 
 test("Test clicking combobox view in text mode and verify the dropdown opens.", function() {
-	S("#expirationBehavior .phui_combobox_select").exists(function(){
+	S("#expirationBehavior .mxui_combobox_select").exists(function(){
 		var val = S("#expirationBehavior input[type=text]").val();
 		ok(/archive/.test(val), "Item #1 (archive) is selected by default.");	
 		var hiddenVal = S("#expirationBehavior input[type=hidden]").val();
@@ -26,19 +26,19 @@ test("Test clicking combobox view in text mode and verify the dropdown opens.", 
 	
 	
 	// checks if dropdown is now visible	
-	S("#expirationBehavior .phui_combobox_select").click( function(){
-		var display = S(".phui_combobox_dropdown").css("display");
+	S("#expirationBehavior .mxui_combobox_select").click( function(){
+		var display = S(".mxui_combobox_dropdown").css("display");
 		ok(/block/.test(display), "Dropdown is visible.");	
 	});
 	
 });
 
 test("Test clicking item 2 and check it was selected.", function() {
-	S(".phui_combobox .phui_combobox_select").click();
+	S(".mxui_combobox .mxui_combobox_select").click();
 	
-	S(".phui_combobox_dropdown .dropdown_2").visible();
+	S(".mxui_combobox_dropdown .dropdown_2").visible();
 	
-	S(".phui_combobox_dropdown .dropdown_2").click(function(){
+	S(".mxui_combobox_dropdown .dropdown_2").click(function(){
 		// check delete (item #2) was selected
 		ok(/delete/.test(S("#expirationBehavior input[type=text]").val()), "Item #2 was selected.");	
 	});
@@ -46,7 +46,7 @@ test("Test clicking item 2 and check it was selected.", function() {
 });
 
 test("Test that change event isn't triggered when combobox is loaded.", function() {
-	S("#expirationBehavior .phui_combobox_select").exists(function(){
+	S("#expirationBehavior .mxui_combobox_select").exists(function(){
 		// check if the visible input gets the correct value
 		ok( S("#log3").val() === "", "Change event was not triggered when combobox was loaded as expected.");	
 	});
@@ -66,11 +66,11 @@ test("Test that change event is triggered when the combobox value is changed.", 
 	
 	// checks if dropdown is now visible	
 	S("#combobox_demo input[type=text]").click();
-	S(".phui_combobox_dropdown").visible();	
+	S(".mxui_combobox_dropdown").visible();	
 	
 		
-	S(".phui_combobox_dropdown .dropdown_3").exists();
-	S(".phui_combobox_dropdown .dropdown_3").click();
+	S(".mxui_combobox_dropdown .dropdown_3").exists();
+	S(".mxui_combobox_dropdown .dropdown_3").click();
 	
 	S("#combobox_demo input[type=text]").val(/kansas/);
 	

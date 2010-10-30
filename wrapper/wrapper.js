@@ -3,7 +3,7 @@ steal.plugins('jquery').then(function($){
 	 * Wraps an element with another element .. returns new element
 	 */
 	var tags = /canvas|textarea|input|select|button|img/i
-	$.fn.phui_wrapper = function(){
+	$.fn.mxui_wrapper = function(){
 		var ret = [];
 		this.each(function(){
 			if(this.nodeName.match(tags)) {

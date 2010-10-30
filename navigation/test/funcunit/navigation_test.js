@@ -1,6 +1,6 @@
-module("phui/navigation test",{ 
+module("mxui/navigation test",{ 
 	setup: function(){
-        S.open("//phui/navigation/navigation.html");
+        S.open("//mxui/navigation/navigation.html");
 	}
 })
 

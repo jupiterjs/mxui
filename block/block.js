@@ -1,8 +1,8 @@
-steal.plugins('jquery/controller','phui/positionable','phui/bgiframe','phui/filler').then(function($){
+steal.plugins('jquery/controller','mxui/positionable','mxui/bgiframe','mxui/filler').then(function($){
 	/**
-	 * @tag phui
-	 * @plugin phui/block
-	 * @test phui/block/funcunit.html
+	 * @tag mxui
+	 * @plugin mxui/block
+	 * @test mxui/block/funcunit.html
 	 * Blocks the browser screen from user interaction.
 	 * <p>
 	 * Sometimes it is necessary to block the browser from user interaction such as when a spinner image
@@ -12,9 +12,9 @@ steal.plugins('jquery/controller','phui/positionable','phui/bgiframe','phui/fill
 	 * </p>
 	 * <p>To block the browser screen just attach Phui.Block to an element and trigger 'show'.</p>
 	 * @codestart
-	 * 		$("#blocker").phui_block().trigger('show')	
+	 * 		$("#blocker").mxui_block().trigger('show')	
 	 * @codeend
-	 * @demo phui/block/block.html
+	 * @demo mxui/block/block.html
 	 */	
 	$.Controller.extend("Phui.Block", 
 	{
@@ -26,7 +26,7 @@ steal.plugins('jquery/controller','phui/positionable','phui/bgiframe','phui/fill
 	},{
 		init : function(){
 			this.element.show().mixin.apply(this.element, this.options.types)
-			    .phui_filler(({all: true, parent: $(window)}));
+			    .mxui_filler(({all: true, parent: $(window)}));
 			if(!this.element.is(":visible")){
 				this.element.css({height: "1px", width: "1px"})
 			}

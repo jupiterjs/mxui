@@ -29,10 +29,10 @@
 	<body>
 	   <div id='paginator'></div>
 		<script type='text/javascript' 
-                src='../../../steal/steal.js?steal[app]=phui/paginator/page&steal[env]=development'>   
+                src='../../../steal/steal.js?steal[app]=mxui/paginator/page&steal[env]=development'>   
         </script>
 		<script type='text/javascript'>
-			$("#paginator").phui_paginator_page({offset: 0, limit: 100, count: 1000})
+			$("#paginator").mxui_paginator_page({offset: 0, limit: 100, count: 1000})
 						   .bind("paginate", function(ev, data){
 						   		console.log(ev, data)
 							

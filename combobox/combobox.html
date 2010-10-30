@@ -153,13 +153,13 @@
                 src='../../steal/steal.js'>   
         </script>
         <script type='text/javascript'>
-            steal.plugins("phui/combobox/select",
-			              "phui/combobox/ajax",
+            steal.plugins("mxui/combobox/select",
+			              "mxui/combobox/ajax",
 			              "jquery/dom/fixture").then(function($){
                                 
 
                 // SELECT COMBOBOX DEMO								
-			    $("#expirationBehavior").phui_combobox_select();                 
+			    $("#expirationBehavior").mxui_combobox_select();                 
 				 
 				 $("#expirationBehavior").change(function(){
 				 	var el = $('.change_count'),
@@ -181,7 +181,7 @@
 					return data;
 				}
 				/* Combobox "No Selection" demo */
-                $("#combobox_no_selection").phui_combobox({
+                $("#combobox_no_selection").mxui_combobox({
                     items: createItems(10),
 					showNoSelectionOption:true });
 				
@@ -196,14 +196,14 @@
 							
 				 
 				/* Combobox slow demo */
-                $("#combobox_slow").phui_combobox({
+                $("#combobox_slow").mxui_combobox({
                     items: createItems(1000),
 					maxHeight: 300 });
 
 
 
                 // NESTED COMBOBOX DEMO (TEXT MODE)
-                $("#combobox_demo").phui_combobox({
+                $("#combobox_demo").mxui_combobox({
                     items: [{ value: "1", text: "hola", enabled: "true", selected: true,
                                 children: [  { value: "5", text: "chicago", enabled: "true", children: [] },
                                               { value: "6", text: "kansas", enabled: "true", 
@@ -294,7 +294,7 @@
 				
 				
 				// NESTED COMBOBOX DEMO (HTML MODE)            
-                $("#color_picker").phui_combobox({
+                $("#color_picker").mxui_combobox({
                     render: {
                         "itemTemplate" : function(item) {
                             var html = [];
@@ -403,7 +403,7 @@
                 }
                 
  
-                $("#ajax_demo").phui_combobox_ajax({
+                $("#ajax_demo").mxui_combobox_ajax({
                     url: "/Archer/Service/DiscussionForumServiceJS.svc/GetForumsForCommunity"
                 });	
 				
@@ -449,17 +449,17 @@
 				/*
 				 *  Pre-loaded Ajax Demo
 				 */
-               $("#preloaded_ajax_demo").phui_combobox_ajax({
+               $("#preloaded_ajax_demo").mxui_combobox_ajax({
 			   		items: [{ value: "0", text: "dir0", selected: true}],
                     url: "/Archer/Service/DiscussionForumServiceJS.svc/GetForumsForCommunity"
                 });		
 				
-				$("#selectable").phui_combobox_selectable()					
+				$("#selectable").mxui_combobox_selectable()					
 				$("#select_next").click(function(){
-					$("#selectable").phui_combobox_selectable("selectNext")
+					$("#selectable").mxui_combobox_selectable("selectNext")
 				})
 				$("#select_prev").click(function(){
-					$("#selectable").phui_combobox_selectable("selectPrev")
+					$("#selectable").mxui_combobox_selectable("selectPrev")
 				})
             });
 			

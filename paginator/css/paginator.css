@@ -1,7 +1,7 @@
-.phui_paginator {
+.mxui_paginator {
 	font-size: 11px;
 }
-.phui_paginator .toolbar_button {
+.mxui_paginator .toolbar_button {
 	position:relative;
 	top:0px;
 	float: left;
@@ -13,16 +13,16 @@
 	background-repeat: no-repeat;
 	background-position: center 2px;
 }
-.phui_paginator .active{
+.mxui_paginator .active{
 		cursor: pointer;
 }
-.phui_paginator .toolbar_range {
+.mxui_paginator .toolbar_range {
 	height: 14px;
 	padding: 21px 7px 0px 5px;
 	float: left;
 }
 
-.phui_paginator .first_record {background-image: url(../images/first.png)}
-.phui_paginator .previous_record {background-image: url(../images/previous.png)}
-.phui_paginator .next_record {background-image: url(../images/next.png)}
-.phui_paginator .last_record {background-image: url(../images/last.png)}
+.mxui_paginator .first_record {background-image: url(../images/first.png)}
+.mxui_paginator .previous_record {background-image: url(../images/previous.png)}
+.mxui_paginator .next_record {background-image: url(../images/next.png)}
+.mxui_paginator .last_record {background-image: url(../images/last.png)}

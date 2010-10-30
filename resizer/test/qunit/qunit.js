@@ -1,3 +1,3 @@
 steal
-  .plugins("funcunit/qunit", "phui/resizer")
+  .plugins("funcunit/qunit", "mxui/resizer")
   .then("resizer_test")

@@ -1,3 +1,3 @@
-//steal/js phui/combobox/select/scripts/compress.js
+//steal/js mxui/combobox/select/scripts/compress.js
 load("steal/compress/compress.js")
-new steal.Compress(['phui/combobox/select/select.html','phui/combobox/select']);
+new steal.Compress(['mxui/combobox/select/select.html','mxui/combobox/select']);

@@ -1,3 +1,3 @@
 steal
-  .plugins("funcunit/qunit", "phui/grid/tree")
+  .plugins("funcunit/qunit", "mxui/grid/tree")
   .then("basic_test")

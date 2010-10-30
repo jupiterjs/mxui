@@ -1,4 +1,4 @@
-steal.plugins('phui/widget/textbox','phui/widget/show','jquery/dom/compare','jquery/event/default','jquery/event/select').then(function($){
+steal.plugins('mxui/widget/textbox','mxui/widget/show','jquery/dom/compare','jquery/event/default','jquery/event/select').then(function($){
         
 
     Phui.Widget.extend("Phui.Widget.Editable",

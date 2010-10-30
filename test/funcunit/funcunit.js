@@ -1,14 +1,14 @@
 steal
  .plugins("funcunit",
  
- "phui/menuable/test/funcunit",
- "phui/sortable/test/funcunit",
- "phui/grid/test/funcunit",
+ "mxui/menuable/test/funcunit",
+ "mxui/sortable/test/funcunit",
+ "mxui/grid/test/funcunit",
  
- 	"phui/grid/groupable/funcunit",
+ 	"mxui/grid/groupable/funcunit",
 	
-	"phui/scrollable_table/test/funcunit",
+	"mxui/scrollable_table/test/funcunit",
 	
-	"phui/filler/test/funcunit" //,
-	//"phui/block/test/funcunit"
+	"mxui/filler/test/funcunit" //,
+	//"mxui/block/test/funcunit"
  )

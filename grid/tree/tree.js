@@ -1,4 +1,4 @@
-steal.plugins('phui/grid')
+steal.plugins('mxui/grid')
      .resources()
      .models()
      .controllers()
@@ -48,7 +48,7 @@ steal.plugins('phui/grid')
                 return;
             }
             
-            tr.after("//phui/grid/tree/views/rows.ejs", {
+            tr.after("//mxui/grid/tree/views/rows.ejs", {
                 options: this.options,
                 children: children,
                 parent: tr.model()
@@ -92,7 +92,7 @@ steal.plugins('phui/grid')
                 if(!child.depth) child.depth = depth;
             })
              
-            tr.after("//phui/grid/tree/views/rows.ejs", {
+            tr.after("//mxui/grid/tree/views/rows.ejs", {
                 options: this.options,
                 children: children,
                 parent: tr.model()

@@ -1,6 +1,6 @@
 module("autocomplete7 test", { 
 	setup: function(){
-        S.open("//phui/combobox/autocomplete7.html");
+        S.open("//mxui/combobox/autocomplete7.html");
 	}
 })
 

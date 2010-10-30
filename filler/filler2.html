@@ -23,7 +23,7 @@
 	</head>
 	<body>
 		
-<div class="grid phui_grid">
+<div class="grid mxui_grid">
 	<div class="header">
 		<table>
 			<thead>
@@ -41,7 +41,7 @@
 	<tbody>
 		<tr>
 		<td class="pagelisting"><label>Page 1 of 1 (50 records)</label></td>
-		<td class="gridpages phui_paginator_page"><div class="toolbar_button first_record ">
+		<td class="gridpages mxui_paginator_page"><div class="toolbar_button first_record ">
 	First
 </div>
 <div class="toolbar_button previous_record ">
@@ -84,11 +84,11 @@
 				$("#clear").after("<pre>"+text+"</pre>")
 			}
 			
-			steal.plugins('phui/filler').then(function(){
+			steal.plugins('mxui/filler').then(function(){
 				$("#fill").click(function(){
 					$(function(){
-						$(".grid").phui_filler();
-						$(".body").phui_filler();
+						$(".grid").mxui_filler();
+						$(".body").mxui_filler();
 					})
 				})
 				

@@ -37,7 +37,7 @@ steal.plugins('jquery/dom/dimensions','jquery/event/resize').then(function($){
 			el = el.parentNode
 		}
 	},
-	filler = $.fn.phui_filler = function(options){
+	filler = $.fn.mxui_filler = function(options){
 		options || (options = {});
 		options.parent || (options.parent = $(this).parent())
 		options.parent = $(options.parent)
@@ -58,11 +58,11 @@ steal.plugins('jquery/dom/dimensions','jquery/event/resize').then(function($){
 			'destroyed',
 			evData, 
 			function(ev){
-				ev.filler.removeClass('phui_filler')
+				ev.filler.removeClass('mxui_filler')
 				$(options.parent).unbind('resize', filler.parentResize)
 			});
 		
-		this.addClass('phui_filler')
+		this.addClass('mxui_filler')
 		//add a resize to get things going
 		var func = function(){
 			//logg("triggering ..")

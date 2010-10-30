@@ -1,4 +1,4 @@
-steal.plugins('phui/toolbar').then(function(){
+steal.plugins('mxui/toolbar').then(function(){
 	
 	var J = Phui;
 	$.Controller.extend("Phui.Shiftable",{listensTo: ["shift"]},

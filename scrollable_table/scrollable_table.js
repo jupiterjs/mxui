@@ -1,4 +1,4 @@
-steal.plugins('jquery/controller','phui/filler','phui/scrollbar_width').then(function($){
+steal.plugins('jquery/controller','mxui/filler','mxui/scrollbar_width').then(function($){
 	
 //needs to work from a table, but also if there is no table ...
 //	
@@ -58,10 +58,10 @@ $.Controller.extend("Phui.ScrollableTable",{
 		
 		
 		// fill up the parent
-		this.element.phui_filler();
+		this.element.mxui_filler();
 		
 		//make the scroll body fill up all other space
-		this.cache.scrollBody.phui_filler({ parent: this.element })
+		this.cache.scrollBody.mxui_filler({ parent: this.element })
 		//this.element.parent().triggerHandler('resize')
 		
 		//make a quick resize

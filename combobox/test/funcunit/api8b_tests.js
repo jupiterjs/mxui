@@ -1,6 +1,6 @@
 module("api8b test", { 
 	setup: function(){
-        S.open("//phui/combobox/api8b.html");
+        S.open("//mxui/combobox/api8b.html");
 	}
 })
 

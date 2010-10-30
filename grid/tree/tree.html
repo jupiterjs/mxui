@@ -20,8 +20,8 @@
                 src='../../../steal/steal.js'>   
         </script>
         <script type='text/javascript'>
-            steal.plugins("phui/grid/tree",
-                            "phui/filler",
+            steal.plugins("mxui/grid/tree",
+                            "mxui/filler",
                             "jquery/model",
                             "jquery/dom/fixtures").then(function($){
                 
@@ -78,7 +78,7 @@
                     hasChildren : function(){ return true }
                 })
                 
-                $(".grid").phui_filler().phui_grid_tree({
+                $(".grid").mxui_filler().mxui_grid_tree({
                     model: Resource,
                     limit: 100,
                     offset: 0,

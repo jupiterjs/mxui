@@ -1,4 +1,4 @@
-.phui_spinner {
+.mxui_spinner {
 	width: 20px;
 	height: 40px;
 }
@@ -9,10 +9,10 @@
 	background-color: gray;
 	outline: none;
 }
-.phui_spinner .enabledUp {
+.mxui_spinner .enabledUp {
 	background-color: green;
 }
-.phui_spinner .enabledDown {
+.mxui_spinner .enabledDown {
 	background-color: red;
 }
 

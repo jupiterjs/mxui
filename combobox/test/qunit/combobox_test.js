@@ -1,4 +1,4 @@
-module("phui/combobox");
+module("mxui/combobox");
 
 test("Test hideItem(1)->select(2)->1 is visible again.", function() {
 		var d = $("#ajax_demo_dropdown"),

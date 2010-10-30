@@ -1,4 +1,4 @@
-//js phui/combobox/select/scripts/doc.js
+//js mxui/combobox/select/scripts/doc.js
 
-_args = ['phui/combobox/select/select.html']
+_args = ['mxui/combobox/select/select.html']
 load("documentjs/document");

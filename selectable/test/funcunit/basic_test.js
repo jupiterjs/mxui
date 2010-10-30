@@ -1,6 +1,6 @@
 module("selectable test", { 
 	setup: function(){
-        S.open("//phui/selectable/selectable.html");
+        S.open("//mxui/selectable/selectable.html");
 	}
 })
 

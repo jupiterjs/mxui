@@ -1,6 +1,6 @@
-module("phui/grid", { 
+module("mxui/grid", { 
 	setup: function(){
-        S.open("//phui/grid.html");
+        S.open("//mxui/grid.html");
 		S(".resource_1").exists();
 	}
 })

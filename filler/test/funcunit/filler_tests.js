@@ -1,6 +1,6 @@
-module("phui/filler test",{ 
+module("mxui/filler test",{ 
 	setup: function(){
-        S.open("//phui/filler/filler.html");
+        S.open("//mxui/filler/filler.html");
 	}
 })
 

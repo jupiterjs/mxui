@@ -1,6 +1,6 @@
 module("combobox4 test", { 
 	setup: function(){
-        S.open("//phui/combobox/api8a.html");
+        S.open("//mxui/combobox/api8a.html");
 	}
 })
 

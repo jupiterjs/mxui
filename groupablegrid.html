@@ -23,8 +23,8 @@
                 src='../steal/steal.js'>   
         </script>
 		<script type='text/javascript'>
-			steal.plugins("phui/grid/groupable",
-							"phui/filler",
+			steal.plugins("mxui/grid/groupable",
+							"mxui/filler",
 							"jquery/model",
 							"jquery/dom/fixture").then(function($){
 				$.fixture["make"](["resources","resource"],50,function(num){
@@ -67,7 +67,7 @@
 				},{})
 				
 				
-				$(".grid").phui_filler().phui_grid_groupable({
+				$(".grid").mxui_filler().mxui_grid_groupable({
 					model: Resource,
 					limit: 100,
 					offset: 0,

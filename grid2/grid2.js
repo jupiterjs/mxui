@@ -1,4 +1,4 @@
-steal.plugins('phui/scrollable_table','phui/resizer').then(function($){
+steal.plugins('mxui/scrollable_table','mxui/resizer').then(function($){
 	
 	
 	$.Controller.extend("Phui.Grid2",{},
@@ -12,15 +12,15 @@ steal.plugins('phui/scrollable_table','phui/resizer').then(function($){
 					this.options.tbody,
 					"</tbody>"].join(''))
 			
-			this.element.children('table').phui_scrollable_table()
+			this.element.children('table').mxui_scrollable_table()
 			this.scrollable = this.element.children(":first").controller(Phui.ScrollableTable);
 			
-			this.scrollable.cache.thead.phui_resizer({selector: "th"});
+			this.scrollable.cache.thead.mxui_resizer({selector: "th"});
 			this.element.addClass("grid");
 			this.callback('setFixedAndColumns')
 		},
 		"th resize:start" : function(el, ev){
-			$("#phui_resizer")
+			$("#mxui_resizer")
 				.outerWidth(el.outerWidth())
 				.height(this.element.outerHeight());
 			ev.preventDefault();

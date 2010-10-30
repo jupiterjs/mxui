@@ -19,7 +19,7 @@
 	<body>
 		<div id='grid'></div>
 		<script type='text/javascript' 
-                src='../../steal/steal.js?phui/grid2,development'>   
+                src='../../steal/steal.js?mxui/grid2,development'>   
         </script>
 		<script type='text/javascript'>
 			//create content
@@ -56,10 +56,10 @@
 			//provide it titles and 
 			// table contents
 			$(function(){
-				$("#grid").phui_grid2({
+				$("#grid").mxui_grid2({
 					thead : "<tr>"+head.join('')+"</tr>",
 					tbody : html.join('')
-				}).phui_filler();
+				}).mxui_filler();
 				
 			})
 			

@@ -47,7 +47,7 @@
                 src='../../steal/steal.js'>   
         </script>
 		<script type='text/javascript'>
-			steal.plugins('phui/scrollable_table','phui/resizable').start();
+			steal.plugins('mxui/scrollable_table','mxui/resizable').start();
 		</script>
 		<script type='text/javascript'>
 			var body = $('tbody'),
@@ -79,11 +79,11 @@
 			}
 			body.html(html.join(''))
 			$('#scrollable').click(function(){
-				$('#table').phui_scrollable_table();
+				$('#table').mxui_scrollable_table();
 			})
 			
 			$('#resize').click(function(){
-				$('#container').css("overflow","hidden").phui_resizable();
+				$('#container').css("overflow","hidden").mxui_resizable();
 			})
 			
 		</script>

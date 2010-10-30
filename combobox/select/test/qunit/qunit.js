@@ -1,3 +1,3 @@
 steal
-  .plugins("funcunit/qunit", "phui/combobox/select")
+  .plugins("funcunit/qunit", "mxui/combobox/select")
   .then("select_test")

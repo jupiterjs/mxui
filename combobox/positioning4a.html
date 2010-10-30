@@ -42,8 +42,8 @@
                 src='../../steal/steal.js'>   
         </script>
         <script type='text/javascript'>
-            steal.plugins("phui/combobox/select",
-			              "phui/combobox/ajax",
+            steal.plugins("mxui/combobox/select",
+			              "mxui/combobox/ajax",
 			              "jquery/dom/fixture").then(function($){
             
 				/*
@@ -72,7 +72,7 @@
 				/*
 				 *  4a Tests that if the element can be positioned without scrolling below target, the dropdown opens bellow the target with full height.
 				 */					
-                $("#combobox4a").phui_combobox({
+                $("#combobox4a").mxui_combobox({
                     	items: createItems(6)
 					});	
 			                    

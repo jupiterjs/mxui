@@ -1,4 +1,4 @@
 steal
   .plugins("funcunit/qunit")
-  .apps("phui/datatable")
+  .apps("mxui/datatable")
   .then("tests/basic")

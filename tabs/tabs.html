@@ -115,12 +115,12 @@
 		</div>	
 		
 		<script type='text/javascript' 
-                src='../../steal/steal.js?steal[app]=phui/tabs&steal[env]=development'
+                src='../../steal/steal.js?steal[app]=mxui/tabs&steal[env]=development'
                 package='main.js'
                 compress='false'>   
         </script>
 		<script type='text/javascript'>
-			$("#tabable").phui_tabable().find("li").click(function(ev){
+			$("#tabable").mxui_tabable().find("li").click(function(ev){
 				ev.preventDefault();
 				ev.stopPropagation();
 				$(this).trigger("activate")
@@ -131,8 +131,8 @@
 				if(ev.keyCode == 13)
 					$(this).trigger("active")
 			});
-			$("#tabs").phui_tabs()
-			$("#uitabs, #uitabs2").phui_ui_tabs()
+			$("#tabs").mxui_tabs()
+			$("#uitabs, #uitabs2").mxui_ui_tabs()
 		</script>
 	</body>
 </html>

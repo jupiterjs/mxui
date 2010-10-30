@@ -1,4 +1,4 @@
-steal.plugins('phui/combobox').then(function(){
+steal.plugins('mxui/combobox').then(function(){
 
     $.Controller.extend("Phui.Combobox.Select", {
     },
@@ -28,7 +28,7 @@ steal.plugins('phui/combobox').then(function(){
 				})
 				el.after(input);
 				el.remove();
-				input.phui_combobox(
+				input.mxui_combobox(
 					 $.extend( options, { items: items } )               
 				 );
 

@@ -3,7 +3,7 @@ module("datatable test")
 test("Sortable Test", function(){
     S.open("datatable.html");
 	
-	S(".phui_datatable").exists();	
+	S(".mxui_datatable").exists();	
 	
 	S("tbody tr:eq(0) td:eq(1)").text(function(text){
 		ok(text.indexOf("89197") != -1, "First row id is 89197.")
@@ -183,21 +183,21 @@ test("Sortable Test", function(){
 test("Filterable Test", function(){
     S.open("datatable.html");
 	
-	S(".phui_datatable").exists();	
+	S(".mxui_datatable").exists();	
 	
-	S(".phui_datatable .search_box input").type('957');
+	S(".mxui_datatable .search_box input").type('957');
 	S("tbody tr:visible td:eq(1)").text(function(text){
 		ok(text.indexOf("95746") != -1, "Only row with id 95746 is visible.")
 	})			
 	
-	S(".phui_datatable .search_box input").val('');	
-	S(".phui_datatable .search_box input").type('default');
+	S(".mxui_datatable .search_box input").val('');	
+	S(".mxui_datatable .search_box input").type('default');
 	S("tbody tr:visible td:eq(3)").text(function(text){
 		ok(text.indexOf("in_default") != -1, "Only rows with status in_default are visible.")
 	})			
 	
-	S(".phui_datatable .search_box input").val('');	
-	S(".phui_datatable .search_box input").type('06-15');
+	S(".mxui_datatable .search_box input").val('');	
+	S(".mxui_datatable .search_box input").type('06-15');
 	S("tbody tr:eq(0) td:eq(6)").text(function(text){
 		ok(text.indexOf("06-15") != -1, "Only rows with date 06-15 are visible.")
 	})			

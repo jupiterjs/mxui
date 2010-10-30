@@ -1,4 +1,4 @@
-steal.plugins('phui/widget').then(function($){
+steal.plugins('mxui/widget').then(function($){
 	
 	
 	Phui.Widget.extend("Phui.Widget.Textarea",

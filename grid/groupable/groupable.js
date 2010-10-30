@@ -1,4 +1,4 @@
-steal.plugins('phui/grid','jquery/event/drop','phui/sortable').then(function($){
+steal.plugins('mxui/grid','jquery/event/drop','mxui/sortable').then(function($){
 
 	//creates a grid inside
 	$.Controller.extend("Phui.Grid.Groupable",{
@@ -7,18 +7,18 @@ steal.plugins('phui/grid','jquery/event/drop','phui/sortable').then(function($){
 		}
 	},{
 		init : function(){
-			this.element.html("//phui/grid/groupable/views/init",this.options);
+			this.element.html("//mxui/grid/groupable/views/init",this.options);
 			this.groups = [];
 			
 			
-			this.element.children(".gridarea").phui_filler().phui_grid($.extend({
+			this.element.children(".gridarea").mxui_filler().mxui_grid($.extend({
 				renderer : this.callback('renderRows')
 			},this.options));
 			
 			
 			
 			
-			var da = this.element.children(".droparea").phui_sortable({
+			var da = this.element.children(".droparea").mxui_sortable({
 				makePlaceHolder : function(el){
 					//check that we haven't already added
 					return $("<div class='groupDrag'>"+
@@ -35,7 +35,7 @@ steal.plugins('phui/grid','jquery/event/drop','phui/sortable').then(function($){
 			//which group are we comparing?
 			var numGroups = options.group ? options.group.length : 0
 			if(numGroups == 0){
-				return $.View("//phui/grid/views/row",{item: item, options: options, i: itemNum, items: items})
+				return $.View("//mxui/grid/views/row",{item: item, options: options, i: itemNum, items: items})
 			}
 			//column we are matching ....
 			var group,html = [], colsNum = 0;
@@ -69,7 +69,7 @@ steal.plugins('phui/grid','jquery/event/drop','phui/sortable').then(function($){
 					}
 				}
 			}
-            html.push($.View("//phui/grid/views/row", { item: item, options: options, i: itemNum, items: items }))
+            html.push($.View("//mxui/grid/views/row", { item: item, options: options, i: itemNum, items: items }))
 			return html.join('')
 			//is it the same as the previous?
 			//deal with groups
@@ -84,7 +84,7 @@ steal.plugins('phui/grid','jquery/event/drop','phui/sortable').then(function($){
 			this.element.children(".droparea").children(".sortable").each(function(){
 				groupOrder.push(this.className.match(/([\w_]+)\-column\-header/)[1]);
 			})
-			this.element.children(".gridarea").phui_grid({group: groupOrder})
+			this.element.children(".gridarea").mxui_grid({group: groupOrder})
 		},
 		".groupDrag .remove click" : function(el){
 			var droparea = this.element.children(".droparea");
@@ -124,4 +124,4 @@ steal.plugins('phui/grid','jquery/event/drop','phui/sortable').then(function($){
 	})
 
 })
-.views("//phui/grid/groupable/views/init.ejs");
+.views("//mxui/grid/groupable/views/init.ejs");

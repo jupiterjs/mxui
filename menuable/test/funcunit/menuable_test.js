@@ -1,6 +1,6 @@
-module("phui/menuable", { 
+module("mxui/menuable", { 
 	setup: function(){
-        S.open("//phui/menuable/menuable.html");
+        S.open("//mxui/menuable/menuable.html");
 	}
 })
 

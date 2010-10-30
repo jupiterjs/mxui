@@ -125,24 +125,24 @@
             <li><span class="selectable">eighty</span></li>
 		</div>
 		<script type='text/javascript' 
-                src='../../steal/steal.js?phui/selectable,development'>   
+                src='../../steal/steal.js?mxui/selectable,development'>   
         </script>
 		<script type='text/javascript'>
 			$(function(){
-				$('#menu').phui_selectable();
+				$('#menu').mxui_selectable();
 				/*var els = $('#menu').find('.selectable[tabindex]');
                 els.each(function(i, el){
 					$('#menu').append(el.tagName);
 				});*/				
 			})
 			$(function(){
-				$('#nested_menu').phui_selectable()
+				$('#nested_menu').mxui_selectable()
 			});
 			$(function(){
 				$('#overflow_menu .selectable').each(function(i, el){
 					$(el).attr("tabindex", "0");
 				});
-				$('#overflow_menu').phui_selectable()
+				$('#overflow_menu').mxui_selectable()
 			});
         </script>
 	</body>

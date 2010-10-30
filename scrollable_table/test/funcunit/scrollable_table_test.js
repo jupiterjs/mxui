@@ -1,6 +1,6 @@
-module("phui/scrollable_test", { 
+module("mxui/scrollable_test", { 
 	setup: function(){
-        S.open("//phui/scrollable_table/scrollable_table.html");
+        S.open("//mxui/scrollable_table/scrollable_table.html");
 		
 		// helps compare columns
 		this.compareCols = function(i, size){

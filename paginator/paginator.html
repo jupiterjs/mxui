@@ -8,10 +8,10 @@
 	<body>
 	    <div id='paginator'></div>
 		<script type='text/javascript' 
-                src='../../steal/steal.js?steal[app]=phui/paginator&steal[env]=development'>   
+                src='../../steal/steal.js?steal[app]=mxui/paginator&steal[env]=development'>   
         </script>
 		<script type='text/javascript'>
-			$("#paginator").phui_paginator({offset: 0, limit: 100, count: 1000})
+			$("#paginator").mxui_paginator({offset: 0, limit: 100, count: 1000})
 						   .bind("paginate", function(ev, data){
 						   		console.log(ev, data)
 							

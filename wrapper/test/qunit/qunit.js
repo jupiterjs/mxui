@@ -1,6 +1,6 @@
 //we probably have to have this only describing where the tests are
 steal
- .plugins("phui/wrapper")  //load your app
+ .plugins("mxui/wrapper")  //load your app
  .plugins('funcunit/qunit')  //load qunit
  .then("wrapper_test")
  

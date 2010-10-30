@@ -77,8 +77,8 @@
                 src='../../steal/steal.js'>   
         </script>
         <script type='text/javascript'>
-            steal.plugins("phui/combobox/select",
-			              "phui/combobox/ajax",
+            steal.plugins("mxui/combobox/select",
+			              "mxui/combobox/ajax",
 			              "jquery/dom/fixture").then(function($){
             
 				/*
@@ -99,7 +99,7 @@
 				/*
 				 *  1. Combobox appended to <div> - <div> is not positioned
 				 */					
-                $("#combobox1").phui_combobox({
+                $("#combobox1").mxui_combobox({
                     	items: createItems(6)
 					});
 				// get the dropdown's height and store in input[id=combobox1_dropdown_height]
@@ -113,7 +113,7 @@
 				/*
 				 * 2. Combobox appended to <div> - <div> is positioned (absolute)
 				 */
-                $("#combobox2").phui_combobox({
+                $("#combobox2").mxui_combobox({
                     	items: createItems(15)
 					});
 				// get the dropdown's height and store in input[id=combobox2_dropdown_height]

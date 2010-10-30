@@ -14,7 +14,7 @@ $.Controller.extend("Phui.Resizer",
 {
 	"{selector} dragdown": function (el, ev, drag) {
 		if (this.isMouseOnRight(el, ev, 2)) {
-			var resize = $("<div id='phui_resizer' class='column-resizer'/>")
+			var resize = $("<div id='mxui_resizer' class='column-resizer'/>")
 							.css("position","absolute")
 							.appendTo(document.body)
 							.css(el.offset())
@@ -28,7 +28,7 @@ $.Controller.extend("Phui.Resizer",
 	},
 	//overwrite to size
 	"{selector} default.resize:start" : function(el){
-		$("#phui_resizer")
+		$("#mxui_resizer")
 			.outerWidth(el.outerWidth())
 			.height(el.outerHeight());
 	},
@@ -38,13 +38,13 @@ $.Controller.extend("Phui.Resizer",
 		
 		//we want to keep it from moving smaller than the text
 		if (width > el.find("span.minWidth").outerWidth())
-			$("#phui_resizer").width(width)
+			$("#mxui_resizer").width(width)
 	},
 	"{selector} dragend": function (el, ev, drag) {
 		ev.preventDefault();
 		el.trigger("resize:end")
 		
-		$("#phui_resizer").remove();
+		$("#mxui_resizer").remove();
 	},
 	//make sure this is really fast
 	"{selector} mousemove": function (el, ev) {

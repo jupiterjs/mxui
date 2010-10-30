@@ -133,20 +133,20 @@
         src='../../steal/steal.js'>   
 </script>
 <script type='text/javascript' id="demo-source">
-	steal.plugins('phui/filler','phui/resizable').then(function(){
+	steal.plugins('mxui/filler','mxui/resizable').then(function(){
 		$(function(){
 			var out = [], affects= jQuery.support.containerSizeAdjustments;
 			for (var part in affects) {
 				out.push(part+"="+affects[part])
 			}
 			$(".container").each(function(){
-				$(this).phui_resizable()
+				$(this).mxui_resizable()
 			})
 			$("#log").html(out.join(", "))
 		});
 		$("#run").click(function(){
 			$(".container").each(function(){
-				$(this).find(".fill").phui_filler({
+				$(this).find(".fill").mxui_filler({
 					parent: $(this),
 					adjust: true
 				})
@@ -157,25 +157,25 @@
 			//$("#myloggin")[0].scrollTop = $("#myloggin")[0].scrollHeight
 		}
 		/**/
-		/*$("#nestedFiller2").phui_filler({
-			parent: $("#resize2").phui_resizable(),
+		/*$("#nestedFiller2").mxui_filler({
+			parent: $("#resize2").mxui_resizable(),
 			cache: true
 		});*/
 		
-		//$("#content").phui_filler();
+		//$("#content").mxui_filler();
 		/*$("#modal").css({
 			opacity: 0.5
 		})
 		$("#expand").click(function(){
-			$("#modal").phui_filler({width: true, parent: $([window, document.documentElement]), all: true})
+			$("#modal").mxui_filler({width: true, parent: $([window, document.documentElement]), all: true})
 			
 		})	
-		$("#nestedFiller").phui_filler({
-			parent: $("#resize1").phui_resizable()
+		$("#nestedFiller").mxui_filler({
+			parent: $("#resize1").mxui_resizable()
 		});*/
 		
-		/*$("#nestedFiller2").phui_filler({
-			parent: $("#resize2").phui_resizable(),
+		/*$("#nestedFiller2").mxui_filler({
+			parent: $("#resize2").mxui_resizable(),
 			cache: true
 		});
 		$("#changeme").click(function(){

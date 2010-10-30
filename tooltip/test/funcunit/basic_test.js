@@ -1,6 +1,6 @@
 module("tooltip test", { 
 	setup: function(){
-        S.open("//phui/tooltip/tooltip.html");
+        S.open("//mxui/tooltip/tooltip.html");
 	}
 })
 

@@ -1,6 +1,6 @@
 module("combobox4 test", { 
 	setup: function(){
-        S.open("//phui/combobox/positioning6a.html");
+        S.open("//mxui/combobox/positioning6a.html");
 	}
 })
 

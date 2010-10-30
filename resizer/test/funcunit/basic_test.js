@@ -1,6 +1,6 @@
 module("resizer test", { 
 	setup: function(){
-        S.open("//phui/resizer/resizer.html");
+        S.open("//mxui/resizer/resizer.html");
 	}
 })
 

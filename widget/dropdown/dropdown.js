@@ -1,4 +1,4 @@
-steal.plugins('phui/widget').then(function($){
+steal.plugins('mxui/widget').then(function($){
     
     
     Phui.Widget.extend("Phui.Widget.Dropdown",
@@ -16,7 +16,7 @@ steal.plugins('phui/widget').then(function($){
             }                 
         },
         init : function(el, options){
-            this.element.children('select').html( this.view('//phui/widget/dropdown/options.ejs') );
+            this.element.children('select').html( this.view('//mxui/widget/dropdown/options.ejs') );
             this.element.addClass(this.options.class_names);
         },
         value : function(){

@@ -1,4 +1,4 @@
-steal.plugins('jquery/controller', 'phui/keycode')
+steal.plugins('jquery/controller', 'mxui/keycode')
      .then(function(){
          $.Controller.extend('Phui.Selectable',{
             defaults : {

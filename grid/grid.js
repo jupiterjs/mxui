@@ -1,10 +1,10 @@
 steal.plugins('jquery/controller',
 			  'jquery/view/ejs',
 			  'jquery/event/drag',
-//'phui/paginator/page', 
+//'mxui/paginator/page', 
 			  "jquery/dom/dimensions",
-			  "phui/filler",
-			  "phui/scrollbar_width").then(function ($) {
+			  "mxui/filler",
+			  "mxui/scrollbar_width").then(function ($) {
   $.Controller.extend("Phui.Grid", {
 	  defaults: {
 		  columns: null,
@@ -18,7 +18,7 @@ steal.plugins('jquery/controller',
 		  display: {},
 		  //paginatorType: Phui.Paginator.Page,
 		  renderer: function (inst, options, i, items) {
-			  return $.View("//phui/grid/views/row", { item: inst, options: options, i: i, items: items })
+			  return $.View("//mxui/grid/views/row", { item: inst, options: options, i: i, items: items })
 		  },
 		  noItems: "No Items Found."
 	  },
@@ -29,7 +29,7 @@ steal.plugins('jquery/controller',
 		  //make the request ....
 		  //this.options.model.findAll(this.params(), this.callback('found'));
 		  this.element.addClass("grid")
-		  this.element.html("//phui/grid/views/init", this);
+		  this.element.html("//mxui/grid/views/init", this);
 
 		  //save references to important internals to avoid queries
 		  this.cached = {
@@ -40,7 +40,7 @@ steal.plugins('jquery/controller',
 		  this.cached.innerBody = this.cached.body.find('div.innerBody');
 		  this.cached.table = this.cached.body.find('table');
 		  this.cached.tbody = this.cached.body.find('tbody');
-		  this.cached.innerBody.phui_filler({ parent: this.element })
+		  this.cached.innerBody.mxui_filler({ parent: this.element })
 		  this.findAll();
 		  //draw basic....
 		  this.widths = {};
@@ -138,12 +138,12 @@ steal.plugins('jquery/controller',
 			  tbody = this.cached.tbody;
 		  table.children("col").remove();
 		  //draw column with set widths
-		  table.prepend('//phui/grid/views/columns', {
+		  table.prepend('//mxui/grid/views/columns', {
 			  columns: this.options.columns,
 			  widths: this.widths,
 			  group: this.group
 		  })
-		  var tbody = tbody.html('//phui/grid/views/body', {
+		  var tbody = tbody.html('//mxui/grid/views/body', {
 			  options: this.options,
 			  items: items
 		  })
@@ -159,7 +159,7 @@ steal.plugins('jquery/controller',
 		  this.element.trigger("updated", { params: this.params(), items: items })
 
 		  //do columns ...
-		  this.cached.header.find("tr").html('//phui/grid/views/header', this);
+		  this.cached.header.find("tr").html('//mxui/grid/views/header', this);
 		  tbody.trigger("resize")
 		  setTimeout(this.callback('sizeTitle'), 1)
 	  },
@@ -283,7 +283,7 @@ steal.plugins('jquery/controller',
 		  var noitems = this.find('.noitems')
 		  if (noitems.length) {
 			  noitems.remove();
-		  	  this.cached.header.find("tr").html('//phui/grid/views/header', this);
+		  	  this.cached.header.find("tr").html('//mxui/grid/views/header', this);
 			  var tbl = this.find('.innerBody table').show();
 			  return this.found(messages)
 		  }
@@ -327,9 +327,9 @@ steal.plugins('jquery/controller',
   })
 
 			  })
-/*.views("//phui/grid/views/body.ejs",
-	   "//phui/grid/views/columns.ejs",
-	   "//phui/grid/views/header.ejs",
-	   "//phui/grid/views/init.ejs",
-	   "//phui/grid/views/row.ejs"
+/*.views("//mxui/grid/views/body.ejs",
+	   "//mxui/grid/views/columns.ejs",
+	   "//mxui/grid/views/header.ejs",
+	   "//mxui/grid/views/init.ejs",
+	   "//mxui/grid/views/row.ejs"
 	   )*/

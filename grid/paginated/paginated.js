@@ -1,4 +1,4 @@
-steal.plugins('phui/grid','phui/paginator/page').then(function($){
+steal.plugins('mxui/grid','mxui/paginator/page').then(function($){
 	$.Controller.extend("Phui.Grid.Paginated",
 	{
 		defaults : {
@@ -14,9 +14,9 @@ steal.plugins('phui/grid','phui/paginator/page').then(function($){
 	},
 	{
 		init : function(){
-			$.View("//phui/grid/paginated/views/footer");
+			$.View("//mxui/grid/paginated/views/footer");
 			new this.options.gridType(this.element[0],this.options);
-			this.element.find(".footer").html("//phui/grid/paginated/views/footer",{});
+			this.element.find(".footer").html("//mxui/grid/paginated/views/footer",{});
 			new this.options.paginatorType(this.element.find(".gridpages")[0],this.options.paginatorOptions);
 		},
 		updated : function(el, ev, params){
@@ -50,4 +50,4 @@ steal.plugins('phui/grid','phui/paginator/page').then(function($){
         }
 	})
 })
-.views("//phui/grid/paginated/views/footer.ejs");
+.views("//mxui/grid/paginated/views/footer.ejs");

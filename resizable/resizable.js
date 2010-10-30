@@ -1,4 +1,4 @@
-steal.plugins('jquery/controller','phui/wrapper','jquery/event/drag','jquery/dom/dimensions','phui/filler')
+steal.plugins('jquery/controller','mxui/wrapper','jquery/event/drag','jquery/dom/dimensions','mxui/filler')
      .then(function(){
 	 	//we need to check we aren't evil and have overflow size our container
 		
@@ -24,10 +24,10 @@ steal.plugins('jquery/controller','phui/wrapper','jquery/event/drag','jquery/dom
 		},
 		{
 			setup : function(el, options){
-				var diff = $(el).phui_wrapper()[0]
+				var diff = $(el).mxui_wrapper()[0]
 				this._super(diff, options)
 				if(diff != el){
-					this.original = $(el).phui_filler({width: true}); //set to fill
+					this.original = $(el).mxui_filler({width: true}); //set to fill
 				}
 			},
 			directionInfo: {

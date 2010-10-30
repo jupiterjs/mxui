@@ -8,19 +8,19 @@
 	<body>
 		<div id='val'></div>
 		<div id='spinner'></div>
-		<script type='text/javascript' src='../../steal/steal.js?phui/spinner/spinner.js'></script>
+		<script type='text/javascript' src='../../steal/steal.js?mxui/spinner/spinner.js'></script>
 		<script type='text/javascript'>
 			var COUNT = 5;
-			$('#spinner').phui_spinner().bind("increment", function(){
+			$('#spinner').mxui_spinner().bind("increment", function(){
 				COUNT++;
 				if(COUNT == 1){
-					$(this).phui_spinner("downEnabled", true)
+					$(this).mxui_spinner("downEnabled", true)
 				}
 				set();
 			}).bind("decrement", function(){
 				COUNT--;
 				if(COUNT == 0){
-					$(this).phui_spinner("downEnabled", false)
+					$(this).mxui_spinner("downEnabled", false)
 				}
 				set();
 			});

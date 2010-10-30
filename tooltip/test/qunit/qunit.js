@@ -1,3 +1,3 @@
 steal
-  .plugins("funcunit/qunit", "phui/tooltip")
+  .plugins("funcunit/qunit", "mxui/tooltip")
   .then("tooltip_test")

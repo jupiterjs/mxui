@@ -1,3 +1,3 @@
 steal
-  .plugins("funcunit/qunit", "phui/selectable")
+  .plugins("funcunit/qunit", "mxui/selectable")
   .then("selectable_test")

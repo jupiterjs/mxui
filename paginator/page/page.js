@@ -1,4 +1,4 @@
-steal.plugins('phui/paginator').then(function($){
+steal.plugins('mxui/paginator').then(function($){
 	Phui.Paginator.extend("Phui.Paginator.Page",{
 		defaults : {
 			pageClass: "pages",
@@ -41,4 +41,4 @@ steal.plugins('phui/paginator').then(function($){
 		
 	})
 })
-.views("//phui/paginator/page/views/init.ejs");
+.views("//mxui/paginator/page/views/init.ejs");

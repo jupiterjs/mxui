@@ -1,5 +1,5 @@
 var path = new java.io.File(".").getCanonicalPath();
-var browserURL = "file:///"+path.replace("\\", "/")+"/phui/datatable/";
+var browserURL = "file:///"+path.replace("\\", "/")+"/mxui/datatable/";
 
 SeleniumDefaults = {
 	// the domain where selenium will run

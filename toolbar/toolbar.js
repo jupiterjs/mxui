@@ -1,4 +1,4 @@
-steal.plugins('phui/menu','jquery/event/default').then(function(){
+steal.plugins('mxui/menu','jquery/event/default').then(function(){
    Phui.Menu.extend("Phui.Toolbar",
    {
 		defaults: {

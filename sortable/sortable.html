@@ -53,10 +53,10 @@
 		<div class='somethingElse' id='drag'>SOMETHING ELSE</div>
 		<div id='away'>away</div>
 		<script type='text/javascript' 
-                src='../../steal/steal.js?steal[app]=phui/sortable&steal[env]=development'>   
+                src='../../steal/steal.js?steal[app]=mxui/sortable&steal[env]=development'>   
         </script>
 		<script type='text/javascript'>
-			$("#sortable").phui_sortable().bind("sortable:addPlaceholder", function(){
+			$("#sortable").mxui_sortable().bind("sortable:addPlaceholder", function(){
 				$(document.body).append("<p>added placeholder</p>")
 			})
 			$(".somethingElse").bind("draginit",function(){})

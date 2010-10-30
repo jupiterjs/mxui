@@ -1,6 +1,6 @@
 steal.plugins('jquery/controller',
 			  'jquery/view/ejs',
-			  'phui/positionable',
+			  'mxui/positionable',
 			  'jquery/event/hover')
 	 .then( function($){
 	 	
@@ -13,7 +13,7 @@ steal.plugins('jquery/controller',
 					.css("zIndex",9998)
 					.hide()
 					.appendTo( $(document.body) )
-					.phui_positionable( {
+					.mxui_positionable( {
 						my: 'left top',
 						at: 'left bottom',
 						offset: '10 10',

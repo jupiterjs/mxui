@@ -1,11 +1,11 @@
-steal.plugins('jquery/controller', 'jquery/lang/json', 'phui/scrollbar_width', 'phui/keycode')
+steal.plugins('jquery/controller', 'jquery/lang/json', 'mxui/scrollbar_width', 'mxui/keycode')
 	.controllers('dropdown','selectable').then(function() {
 
 	/**
 	 * @tag home
 	 * @class Combobox
-	 * @plugin phui/combobox
-	 * @test phui/combobox/funcunit.html
+	 * @plugin mxui/combobox
+	 * @test mxui/combobox/funcunit.html
 	 * 
 	 * Combobox progressively enhances an &lt;input&gt; field.  This constructor accepts an Object of [Phui.Combobox.static.defaults | options] used to customize the Combobox.
 	 * 
@@ -18,7 +18,7 @@ steal.plugins('jquery/controller', 'jquery/lang/json', 'phui/scrollbar_width', '
 	 *   * Allows the user to make a non-selection.
 	 *   * Customizable show/hide animations.
 	 * 
-	 * @demo phui/combobox/comboboxdemo1.html
+	 * @demo mxui/combobox/comboboxdemo1.html
 	 * @param {Object} options Options used to customize the Combobox
 	 */
 	$.Controller.extend("Phui.Combobox", 
@@ -27,7 +27,7 @@ steal.plugins('jquery/controller', 'jquery/lang/json', 'phui/scrollbar_width', '
 		/**
 		 * Default setttings for the Combobox.  These can all be overridden.
 		 *
-		 *   * __classNames__: _String._ When phui_combobox is called on an element, it is wrapped in a div.  The element is given the class that is defined by `classNames`.
+		 *   * __classNames__: _String._ When mxui_combobox is called on an element, it is wrapped in a div.  The element is given the class that is defined by `classNames`.
 		 *   * __filterEnabled__: _Boolean._ Controls whether autocompletion is enabled on the combobox.
 		 *   * __displayHTML__: _Boolean._ If true, show the contents of a list item as rich HTML.  If false, show it as plain text.
 		 *   * __selectedClassName__: _String._ The class that will be assigned to options that the user focuses on.
@@ -45,7 +45,7 @@ steal.plugins('jquery/controller', 'jquery/lang/json', 'phui/scrollbar_width', '
 		 *   * __render__: _Object._ This method defines the HTML that wraps a Combobox item.  To override, initialize the Combobox with a function like so:
 		 *   @codestart
 		 * 
-		 * $("input").phui_combobox({ render : {
+		 * $("input").mxui_combobox({ render : {
 		 * 	  'itemTemplate': function(item, val){
 		 *      // HTML wrapping logic goes here
 		 *    } 
@@ -57,7 +57,7 @@ steal.plugins('jquery/controller', 'jquery/lang/json', 'phui/scrollbar_width', '
 		 *   
 		 */
 		defaults: {
-			classNames: "phui_combobox_wrapper",
+			classNames: "mxui_combobox_wrapper",
 			
 			render: {
 				"itemTemplate": function( item , val) {
@@ -215,13 +215,13 @@ steal.plugins('jquery/controller', 'jquery/lang/json', 'phui/scrollbar_width', '
 		/**
 		 * Turn the Combobox into a Dropdown.
 		 * 
-		 * Internally, this creates and caches a phui\_combobox\_dropdown.
+		 * Internally, this creates and caches a mxui\_combobox\_dropdown.
 		 * 
-		 * @return This Controller's instance of phui_combobox_dropdown.
+		 * @return This Controller's instance of mxui_combobox_dropdown.
 		 */
 		dropdown: function() {
 			if (!this._dropdown ) {
-				this._dropdown = $("<div/>").phui_combobox_dropdown($.extend({parentElement : this.element}, this.options)).hide();
+				this._dropdown = $("<div/>").mxui_combobox_dropdown($.extend({parentElement : this.element}, this.options)).hide();
 				this.element.after(this._dropdown[0]);
 
 				//if there are items, load
@@ -838,7 +838,7 @@ steal.plugins('jquery/controller', 'jquery/lang/json', 'phui/scrollbar_width', '
 		getItems: function() {
 			return this.modelList || [];
 		},
-		// This method should probably be under phui/combobox/ajax.
+		// This method should probably be under mxui/combobox/ajax.
 		/**
 		 * Forces the Ajax Combobox to fetch data from the server.
 		 * 
@@ -856,7 +856,7 @@ steal.plugins('jquery/controller', 'jquery/lang/json', 'phui/scrollbar_width', '
 		 * @return {Array} An array of strings. 	
 		 * 
 		 * @codestart
-		 * $("#combobox_demo").phui_combobox({
+		 * $("#combobox_demo").mxui_combobox({
 
 			items: [{ value: "1", text: "hola", enabled: "true", selected: true,
 				children: [  { value: "5", text: "chicago", enabled: "true", children: [] },

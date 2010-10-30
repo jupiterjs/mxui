@@ -1,3 +1,3 @@
 steal
-  .plugins("funcunit/qunit", "phui/combobox/ajax")
+  .plugins("funcunit/qunit", "mxui/combobox/ajax")
   .then("ajax_test")

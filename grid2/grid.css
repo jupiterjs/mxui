@@ -1,7 +1,7 @@
 body .grid {
 	overflow: auto;
 }
-.phui_filler {
+.mxui_filler {
 	overflow: hidden;
 }
 
@@ -68,18 +68,18 @@ div {
 .pagenumber {
 	font-size: 10px;
 }
-.phui_paginator_page {
+.mxui_paginator_page {
 
 }
-.phui_paginator_page .toolbar_button {
+.mxui_paginator_page .toolbar_button {
 	display:inline;
 	cursor: pointer;
 	margin: 0px 2px;
 }
-.phui_paginator_page .active{
+.mxui_paginator_page .active{
 		cursor: pointer;
 }
-.phui_paginator_page .toolbar_range {
+.mxui_paginator_page .toolbar_range {
 	
 }
 .pages{

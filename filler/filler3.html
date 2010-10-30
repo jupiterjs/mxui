@@ -48,7 +48,7 @@
                 src='../../steal/steal.js'>   
         </script>
 		<script type='text/javascript'>
-			steal.plugins('phui/filler').then(function($){
+			steal.plugins('mxui/filler').then(function($){
 				$("button[name=adjustWidth]").click(function(ev) {
 					var w = $("#containerH").width();
 					w == 320 ? $("#containerH").width(480) : $("#containerH").width(320);
@@ -59,10 +59,10 @@
 					h == 320 ? $("#containerV").height(480) : $("#containerV").height(320);
 					$("#containerV").trigger("resize");
 				});				
-				$("#contentV").phui_filler();
+				$("#contentV").mxui_filler();
 				//$("#containerV").trigger("resize");	
 				
-				$("#contentH").phui_filler( { width: true } );
+				$("#contentH").mxui_filler( { width: true } );
 				$("#containerH").trigger("resize");				
 								
 			})

@@ -1,6 +1,6 @@
 module("ajax test", { 
 	setup: function(){
-        S.open("//phui/combobox/ajax/ajax.html");
+        S.open("//mxui/combobox/ajax/ajax.html");
 	}
 })
 

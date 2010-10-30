@@ -10,7 +10,7 @@ steal.plugins('jquery/controller','jquery/view/ejs').then(function($){
 	$.Controller.extend('Phui.Datatable',
 	{
 		defaults : {
-			content: '//phui/datatable/table.ejs'
+			content: '//mxui/datatable/table.ejs'
 		},
 		listensTo : []
 	},
