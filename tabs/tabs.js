@@ -1,6 +1,6 @@
 steal.plugins('mxui/menuable').then(function($){
 	//problem with this is it will search and find everything ...
-	Phui.Menuable.extend("Phui.Tabable",
+	Mxui.Menuable.extend("Mxui.Tabable",
 	{
 		defaults: {
 			tab_class_names : "",
@@ -59,7 +59,7 @@ steal.plugins('mxui/menuable').then(function($){
 		
 		}
 	})
-	Phui.Tabable.extend("Phui.Tabs",{},{
+	Mxui.Tabable.extend("Mxui.Tabs",{},{
 	   "{child_selector} click" : function(el, ev){
 			ev.preventDefault();
 			el.trigger("activate")	  
@@ -77,7 +77,7 @@ steal.plugins('mxui/menuable').then(function($){
 	})
 	
 	
-	Phui.Tabable.extend("Phui.UI.Tabs", {
+	Mxui.Tabable.extend("Mxui.UI.Tabs", {
 		defaults: {
 			tabs_container_class: "ui-tabs ui-widget ui-widget-content ui-corner-all",
 			tab_class_names: "ui-tabs-panel ui-widget-content ui-corner-bottom",

@@ -20,5 +20,5 @@ steal.plugins('jquery').then(function($){
 			w2 = inner[0].offsetWidth;
 		}
 		div.remove();
-		(window.Phui || (window.Phui = {}) ).scrollbarWidth = w1 - w2;
+		(window.Mxui || (window.Mxui = {}) ).scrollbarWidth = w1 - w2;
 })

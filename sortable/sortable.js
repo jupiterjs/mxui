@@ -1,5 +1,5 @@
 steal.plugins('jquery/controller','jquery/event/drop','jquery/event/drag/limit','jquery/event/default').then(function($){
-	$.Controller.extend("Phui.Sortable",{
+	$.Controller.extend("Mxui.Sortable",{
 		defaults:{
 			//makes a placeholder for the element dragged over
 			makePlaceHolder : function(el){

@@ -7,7 +7,7 @@ steal.plugins('jquery/controller', 'jquery/lang/json', 'mxui/scrollbar_width', '
 	 * @plugin mxui/combobox
 	 * @test mxui/combobox/funcunit.html
 	 * 
-	 * Combobox progressively enhances an &lt;input&gt; field.  This constructor accepts an Object of [Phui.Combobox.static.defaults | options] used to customize the Combobox.
+	 * Combobox progressively enhances an &lt;input&gt; field.  This constructor accepts an Object of [Mxui.Combobox.static.defaults | options] used to customize the Combobox.
 	 * 
 	 * Features:
 	 * 
@@ -21,7 +21,7 @@ steal.plugins('jquery/controller', 'jquery/lang/json', 'mxui/scrollbar_width', '
 	 * @demo mxui/combobox/comboboxdemo1.html
 	 * @param {Object} options Options used to customize the Combobox
 	 */
-	$.Controller.extend("Phui.Combobox", 
+	$.Controller.extend("Mxui.Combobox", 
 	/* @static */		
 	{
 		/**

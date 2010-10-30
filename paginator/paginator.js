@@ -1,5 +1,5 @@
 steal.plugins('jquery/controller','jquery/view/ejs','jquery/event/default').then(function(){
-	$.Controller.extend("Phui.Paginator",{
+	$.Controller.extend("Mxui.Paginator",{
 		defaults : {
 			buttonClass: "toolbar_button",
 			rangeClass: "toolbar_range",

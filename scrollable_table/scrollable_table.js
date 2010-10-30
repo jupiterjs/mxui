@@ -3,7 +3,7 @@ steal.plugins('jquery/controller','mxui/filler','mxui/scrollbar_width').then(fun
 //needs to work from a table, but also if there is no table ...
 //	
 
-$.Controller.extend("Phui.ScrollableTable",{
+$.Controller.extend("Mxui.ScrollableTable",{
 	setup : function(el, options){
 		//remove the header and put in another table
 		
@@ -93,7 +93,7 @@ $.Controller.extend("Phui.ScrollableTable",{
 			header.hide();
 		}
 		var footer = this.cache.footer.width(),
-			scrollbarWidth = Phui.scrollbarWidth,
+			scrollbarWidth = Mxui.scrollbarWidth,
 			table = this.cache.table.width(footer  > scrollbarWidth ? footer - scrollbarWidth : scrollbarWidth);
 		
 
@@ -117,7 +117,7 @@ $.Controller.extend("Phui.ScrollableTable",{
 		for (var i = 0; i < title.length -1 ; i++) {
 			 title.eq(i).outerWidth(firstWidths[i]);
 		}
-		header.find("table").width(this.cache.table.width() + Phui.scrollbarWidth) 
+		header.find("table").width(this.cache.table.width() + Mxui.scrollbarWidth) 
 		this.cache.head.css('visibility','visible')
 		this.titleSized = true;
 	},

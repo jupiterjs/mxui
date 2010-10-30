@@ -6,20 +6,20 @@ steal.plugins('jquery/controller','mxui/positionable','mxui/bgiframe','mxui/fill
 	 * Blocks the browser screen from user interaction.
 	 * <p>
 	 * Sometimes it is necessary to block the browser from user interaction such as when a spinner image
-	 * is giving the user feedback that a request for data is taking place. Phui.Block attaches to an 
+	 * is giving the user feedback that a request for data is taking place. Mxui.Block attaches to an 
 	 * element sets its width and height to the window's width and height and sets its z-index to a 
 	 * configurable value (default is 9999).
 	 * </p>
-	 * <p>To block the browser screen just attach Phui.Block to an element and trigger 'show'.</p>
+	 * <p>To block the browser screen just attach Mxui.Block to an element and trigger 'show'.</p>
 	 * @codestart
 	 * 		$("#blocker").mxui_block().trigger('show')	
 	 * @codeend
 	 * @demo mxui/block/block.html
 	 */	
-	$.Controller.extend("Phui.Block", 
+	$.Controller.extend("Mxui.Block", 
 	{
 		defaults : {
-			types : [Phui.Positionable, Phui.Bgiframe],
+			types : [Mxui.Positionable, Mxui.Bgiframe],
 			zIndex: 9999
 		},
 		listensTo: ['show','hide']

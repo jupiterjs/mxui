@@ -1,7 +1,7 @@
 steal.plugins('mxui/widget').then(function($){
 	
 	
-	Phui.Widget.extend("Phui.Widget.Textarea",
+	Mxui.Widget.extend("Mxui.Widget.Textarea",
 	{
 		listensTo: ["select"]
 	},

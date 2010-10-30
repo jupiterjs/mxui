@@ -1,6 +1,6 @@
 steal.plugins('jquery/controller')
      .then(function(){
-         $.Controller.extend("Phui.ModelHookup",{
+         $.Controller.extend("Mxui.ModelHookup",{
         },
         {
             init : function(){

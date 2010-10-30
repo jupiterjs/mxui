@@ -1,7 +1,7 @@
 steal.plugins('jquery/controller','jquery/event/drag/limit','jquery/dom/dimensions').then(function($){
 	
 	
-	$.Controller.extend("Phui.Splitter",
+	$.Controller.extend("Mxui.Splitter",
 	{
 		defaults : {
 			child_class_names : "split",

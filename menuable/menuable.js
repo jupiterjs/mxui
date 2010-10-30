@@ -18,7 +18,7 @@ steal.plugins('jquery/controller','jquery/event/default','jquery/event/livehack'
 	 * "hide" -> hides the menu
 	 * "show" -> shows the menu
 	 */
-	$.Controller.extend('Phui.Menuable',
+	$.Controller.extend('Mxui.Menuable',
 	{
 		defaults : {
 			/**

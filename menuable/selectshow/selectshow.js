@@ -1,5 +1,5 @@
 steal.plugins('mxui/menuable', 'jquery/event/hover').then(function(){
-	Phui.Menuable.extend("Phui.Menuable.SelectShow",
+	Mxui.Menuable.extend("Mxui.Menuable.SelectShow",
 	{
 		">{child_selector} default.activate" : function(el, ev){
 			if(el.hasClass(this.options.active))

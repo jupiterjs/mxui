@@ -15,7 +15,7 @@ steal.plugins('mxui/fittable').then(function () {
 	 * @param {Object} options Options used to customize the Dropdown
 	 */
 	
-    $.Controller.extend("Phui.Combobox.DropdownController", 
+    $.Controller.extend("Mxui.Combobox.DropdownController", 
 	/* @static */
 	{}, 
 	/* @prototype */

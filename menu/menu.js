@@ -18,7 +18,7 @@ steal.plugins('mxui/positionable','mxui/menuable','jquery/event/hover').then(fun
 	 * "show" -> shows the menu
 	 */
 	
-	Phui.Menuable.extend("Phui.Menu",
+	Mxui.Menuable.extend("Mxui.Menu",
 	{
 		defaults : {
 			/**
@@ -116,7 +116,7 @@ steal.plugins('mxui/positionable','mxui/menuable','jquery/event/hover').then(fun
    /**
     * Adds basic higlighting.
     */
-   $.Controller.extend("Phui.Highlight",
+   $.Controller.extend("Mxui.Highlight",
    {
 	   defaults: {
 		   child_selector : "li",
@@ -134,17 +134,17 @@ steal.plugins('mxui/positionable','mxui/menuable','jquery/event/hover').then(fun
    /**
     * jQuery.UI themed highlighting
     */
-   Phui.Highlight.extend("Phui.UI.Highlight",{
+   Mxui.Highlight.extend("Mxui.UI.Highlight",{
    		defaults: {hover_class : "ui-state-hover"}
    },{})
    
    /**
-    * Phui.UI.Menu is a jQuery.UI themed menu.
+    * Mxui.UI.Menu is a jQuery.UI themed menu.
     */
-   Phui.Menu.extend("Phui.UI.Menu",{
+   Mxui.Menu.extend("Mxui.UI.Menu",{
    		defaults: {
-			types : [Phui.Positionable.extend("Phui.UI.TopLeft",{defaults: {my: "left top",at: "right top"}},{}), 
-					 Phui.UI.Highlight],
+			types : [Mxui.Positionable.extend("Mxui.UI.TopLeft",{defaults: {my: "left top",at: "right top"}},{}), 
+					 Mxui.UI.Highlight],
 			select_event : "hoverenter",
 			child_selector : "li",
 			class_names : "ui-widget-content ui-menu ui-widget ui-corner-all",

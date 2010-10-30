@@ -1,5 +1,5 @@
 steal.plugins('mxui/paginator').then(function($){
-	Phui.Paginator.extend("Phui.Paginator.Page",{
+	Mxui.Paginator.extend("Mxui.Paginator.Page",{
 		defaults : {
 			pageClass: "pages",
 			pageCount: 5,

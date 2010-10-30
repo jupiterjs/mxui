@@ -1,7 +1,7 @@
 steal.plugins('mxui/widget').then(function($){
     
     
-    Phui.Widget.extend("Phui.Widget.Textbox",
+    Mxui.Widget.extend("Mxui.Widget.Textbox",
     {
         defaults : {
             class_names : ""

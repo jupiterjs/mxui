@@ -1,5 +1,5 @@
 steal.plugins('jquery/controller','mxui/positionable').then(function($){
-	Phui.Positionable.extend("Phui.Modal", {
+	Mxui.Positionable.extend("Mxui.Modal", {
 		defaults: {
 			my: 'center center',
 			at: 'center center',

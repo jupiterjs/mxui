@@ -1,12 +1,12 @@
 steal.plugins('mxui/grid','mxui/paginator/page').then(function($){
-	$.Controller.extend("Phui.Grid.Paginated",
+	$.Controller.extend("Mxui.Grid.Paginated",
 	{
 		defaults : {
-			paginatorType : Phui.Paginator.Page,
+			paginatorType : Mxui.Paginator.Page,
 			paginatorOptions : {},
-			gridType :  Phui.Grid,
+			gridType :  Mxui.Grid,
 			pageListingText : function(params){
-				var data = Phui.Paginator.pageData(params.params)
+				var data = Mxui.Paginator.pageData(params.params)
 				return "<label>page " + (data.page + 1) + " of " + data.totalPages + " (" + params.params.count + " records)</label>"
 			}
 		},
@@ -26,7 +26,7 @@ steal.plugins('mxui/grid','mxui/paginator/page').then(function($){
 				this.options.pageListingText(params)
 			)
 			footer.find(".pagenumber").val(
-				Phui.Paginator.pageData(params.params).page+1
+				Mxui.Paginator.pageData(params.params).page+1
 			)
 			//update paginator
 			this.element.find(".gridpages").controller().update(params.params)

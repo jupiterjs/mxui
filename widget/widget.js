@@ -4,7 +4,7 @@ steal.plugins('jquery/controller',
 	
 	
 	
-	$.Controller.extend("Phui.Widget",{
+	$.Controller.extend("Mxui.Widget",{
 		view : function(options){
 			var folder = this.getFolder(), self = this;
 			var id = $.View.hookup(function(el){

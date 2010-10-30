@@ -1,6 +1,6 @@
 steal.plugins('jquery/controller')
      .then(function(){
-         $.Controller.extend("Phui.StateIndicator",{
+         $.Controller.extend("Mxui.StateIndicator",{
             listensTo : ['dirty','clean']
         },
         {

@@ -5,7 +5,7 @@ steal.plugins('mxui/grid')
      .views()
      .then(function($){
 
-    Phui.Grid.extend("Phui.Grid.Tree",{
+    Mxui.Grid.extend("Mxui.Grid.Tree",{
         defaults: {
             indentedColumn: null
         }

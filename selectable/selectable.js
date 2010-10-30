@@ -1,6 +1,6 @@
 steal.plugins('jquery/controller', 'mxui/keycode')
      .then(function(){
-         $.Controller.extend('Phui.Selectable',{
+         $.Controller.extend('Mxui.Selectable',{
             defaults : {
                 selectableClassName: "selectable",
                 selectedClassName : "selected",

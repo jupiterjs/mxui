@@ -1,6 +1,6 @@
 steal.plugins('mxui/combobox').then(function(){
 
-    $.Controller.extend("Phui.Combobox.Select", {
+    $.Controller.extend("Mxui.Combobox.Select", {
     },
 	{
         setup: function(el, options){

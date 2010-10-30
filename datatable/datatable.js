@@ -7,7 +7,7 @@ steal.plugins('jquery/controller','jquery/view/ejs').then(function($){
 	/**
 	 * Basic datatable widget.
 	 */
-	$.Controller.extend('Phui.Datatable',
+	$.Controller.extend('Mxui.Datatable',
 	{
 		defaults : {
 			content: '//mxui/datatable/table.ejs'

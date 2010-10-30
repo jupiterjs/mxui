@@ -11,7 +11,7 @@ $.fn.scrollableParent = function(){
 /**
  * Maintains a selectable behavior
  */
-$.Controller.extend("Phui.Combobox.Controllers.Selectable",{
+$.Controller.extend("Mxui.Combobox.Controllers.Selectable",{
     defaults : {
         selectableClassName: "selectable",
         selectedClassName : "selected",

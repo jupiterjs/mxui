@@ -1,5 +1,5 @@
 steal.plugins('jquery/controller').then(function($){
-	$.Controller.extend("Phui.Tree",
+	$.Controller.extend("Mxui.Tree",
 	{
 		defaults : {
 			lastNode: "last-child",

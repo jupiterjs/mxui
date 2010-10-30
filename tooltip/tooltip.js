@@ -4,7 +4,7 @@ steal.plugins('jquery/controller',
 			  'jquery/event/hover')
 	 .then( function($){
 	 	
-		$.Controller.extend("Phui.Tooltip",
+		$.Controller.extend("Mxui.Tooltip",
 		{
 			init : function(){
 				this._super()

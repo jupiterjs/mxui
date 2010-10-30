@@ -1,7 +1,7 @@
 steal.plugins('mxui/toolbar').then(function(){
 	
-	var J = Phui;
-	$.Controller.extend("Phui.Shiftable",{listensTo: ["shift"]},
+	var J = Mxui;
+	$.Controller.extend("Mxui.Shiftable",{listensTo: ["shift"]},
 	{
         "li shift" : function(el){
 			//move this guy to the first ... shift everything else around
@@ -53,7 +53,7 @@ steal.plugins('mxui/toolbar').then(function(){
 		}
 	})
 	
-	$.Controller.extend("Phui.FadeInable",{
+	$.Controller.extend("Mxui.FadeInable",{
 		listensTo: ["show:before","hide:before"]
 	}, {
 	   ">show:before" : function(el, ev){
@@ -76,9 +76,9 @@ steal.plugins('mxui/toolbar').then(function(){
 	J.Menu.extend("ClickMenu",{
 		defaults : {
 			 types: [  J.Positionable.extend("LeftTop", {defaults: {my: "left top",at: "right top"}},{}), 
-				 Phui.Shiftable, 
+				 Mxui.Shiftable, 
 				 J.FadeInable, 
-				 Phui.Highlight],
+				 Mxui.Highlight],
 			 class_names: "menu",
 			 apply_types_to_top : true
 		},
@@ -114,7 +114,7 @@ steal.plugins('mxui/toolbar').then(function(){
 		">hide": function(){} // TODO figure out the right way to make hide appear to be triggered
 	})
 	//({menu_type: ClickMenu})
-	J.Toolbar.extend("Phui.Navigation",
+	J.Toolbar.extend("Mxui.Navigation",
 	{
 		defaults: {menu_type: ClickMenu, child_class_names: "menu"},
 		listensTo: ["shifted"]
@@ -122,7 +122,7 @@ steal.plugins('mxui/toolbar').then(function(){
 	{
 		init : function(){
 			this._super.apply(this, arguments)
-			this.element.mixin(Phui.Shiftable, Phui.Highlight)
+			this.element.mixin(Mxui.Shiftable, Mxui.Highlight)
             this.element.css("position","relative")
 		},
 		"li select:before" : function(el, ev){

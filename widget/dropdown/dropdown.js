@@ -1,7 +1,7 @@
 steal.plugins('mxui/widget').then(function($){
     
     
-    Phui.Widget.extend("Phui.Widget.Dropdown",
+    Mxui.Widget.extend("Mxui.Widget.Dropdown",
     {
         defaults : {
             class_names : ""

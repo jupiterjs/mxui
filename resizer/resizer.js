@@ -7,7 +7,7 @@ steal.plugins(
 //Resizer resizes a bunch of elements by listening to drag/drop
 //for performance reasons, this shouldn't be used on elements covering most of the dom.
 
-$.Controller.extend("Phui.Resizer",
+$.Controller.extend("Mxui.Resizer",
 {
 	
 },

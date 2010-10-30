@@ -15,7 +15,7 @@ steal.plugins('jquery/controller','mxui/wrapper','jquery/event/drag','jquery/dom
 		
 		
 		
-		$.Controller.extend("Phui.Resizable",{
+		$.Controller.extend("Mxui.Resizable",{
 			defaults : {
 				minHeight: 10,
 				minWidth: 10,

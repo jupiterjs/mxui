@@ -40,7 +40,7 @@ steal.plugins('jquery/controller','mxui/keycode').then(function(){
 	/**
 	 * Only allows what matches the regexp.
 	 */
-	$.Controller.extend("Phui.KeyValidator",{
+	$.Controller.extend("Mxui.KeyValidator",{
 		defaults : {
 			//can be a regexp or a function
 			test : /.*/,

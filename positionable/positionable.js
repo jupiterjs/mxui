@@ -1,5 +1,5 @@
 steal.plugins('jquery','jquery/controller').then(function($){
-    $.Controller.extend("Phui.Positionable",
+    $.Controller.extend("Mxui.Positionable",
     {
 		listensTo : ["show",'move'],
 		iframe: false,

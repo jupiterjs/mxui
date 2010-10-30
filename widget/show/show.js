@@ -1,6 +1,6 @@
 steal.plugins('mxui/widget').then(function($){
     
-    Phui.Widget.extend("Phui.Widget.Show",{
+    Mxui.Widget.extend("Mxui.Widget.Show",{
         defaults : {
             class_names : ""
         }

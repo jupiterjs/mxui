@@ -5,7 +5,7 @@ steal.plugins('jquery/controller',
 			  "jquery/dom/dimensions",
 			  "mxui/filler",
 			  "mxui/scrollbar_width").then(function ($) {
-  $.Controller.extend("Phui.Grid", {
+  $.Controller.extend("Mxui.Grid", {
 	  defaults: {
 		  columns: null,
 		  limit: null,
@@ -16,7 +16,7 @@ steal.plugins('jquery/controller',
 		  model: null,
 		  hoverClass: "hover",
 		  display: {},
-		  //paginatorType: Phui.Paginator.Page,
+		  //paginatorType: Mxui.Paginator.Page,
 		  renderer: function (inst, options, i, items) {
 			  return $.View("//mxui/grid/views/row", { item: inst, options: options, i: i, items: items })
 		  },
@@ -63,7 +63,7 @@ steal.plugins('jquery/controller',
 			  header.hide();
 		  }
 		  var footer = this.cached.footer.width(),
-		  	  scrollbarWidth = Phui.scrollbarWidth;
+		  	  scrollbarWidth = Mxui.scrollbarWidth;
 		  var table = body.find('table').width(footer  > scrollbarWidth ? footer - scrollbarWidth : scrollbarWidth);
 		  body.children().eq(0).width(footer > scrollbarWidth ? footer : scrollbarWidth);
 		  header.width(footer > scrollbarWidth ? footer : scrollbarWidth);

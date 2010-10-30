@@ -1,5 +1,5 @@
 steal.plugins('jquery/controller').then(function($){
-    $.Controller.extend("Phui.Spinner", {
+    $.Controller.extend("Mxui.Spinner", {
         defaults: {
             enableUp: true,
             enableDown: true

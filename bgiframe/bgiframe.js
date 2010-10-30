@@ -71,7 +71,7 @@ steal(function($){
  */
 
 
-$.Controller.extend("Phui.Bgiframe",{
+$.Controller.extend("Mxui.Bgiframe",{
 	init : function(s){
 		if ( $.browser.msie && /6.0/.test(navigator.userAgent) ) {
 			s = $.extend({

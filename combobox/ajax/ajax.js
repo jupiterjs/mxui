@@ -3,7 +3,7 @@ steal.plugins('mxui/combobox')
     {
 
 
-        $.Controller.extend("Phui.Combobox.Ajax", {
+        $.Controller.extend("Mxui.Combobox.Ajax", {
             defaults: {
                 loadingMessage: "Loading ...",
                 process: function (data)

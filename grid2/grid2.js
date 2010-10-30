@@ -1,7 +1,7 @@
 steal.plugins('mxui/scrollable_table','mxui/resizer').then(function($){
 	
 	
-	$.Controller.extend("Phui.Grid2",{},
+	$.Controller.extend("Mxui.Grid2",{},
 	{
 		init : function(){
 			//create the scrollable table
@@ -13,7 +13,7 @@ steal.plugins('mxui/scrollable_table','mxui/resizer').then(function($){
 					"</tbody>"].join(''))
 			
 			this.element.children('table').mxui_scrollable_table()
-			this.scrollable = this.element.children(":first").controller(Phui.ScrollableTable);
+			this.scrollable = this.element.children(":first").controller(Mxui.ScrollableTable);
 			
 			this.scrollable.cache.thead.mxui_resizer({selector: "th"});
 			this.element.addClass("grid");

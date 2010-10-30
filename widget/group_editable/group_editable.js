@@ -1,6 +1,6 @@
 steal.plugins('jquery/controller')
      .then(function(){
-         $.Controller.extend("Phui.GroupEditable",{
+         $.Controller.extend("Mxui.GroupEditable",{
             listensTo : ['selectin','selectout']
         },
         {

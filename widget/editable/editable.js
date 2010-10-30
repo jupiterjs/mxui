@@ -1,11 +1,11 @@
 steal.plugins('mxui/widget/textbox','mxui/widget/show','jquery/dom/compare','jquery/event/default','jquery/event/select').then(function($){
         
 
-    Phui.Widget.extend("Phui.Widget.Editable",
+    Mxui.Widget.extend("Mxui.Widget.Editable",
     {
         defaults : {
-            show_type : Phui.Widget.Show,
-            edit_type : Phui.Widget.Textbox
+            show_type : Mxui.Widget.Show,
+            edit_type : Mxui.Widget.Textbox
         },
         listensTo : ['selectin','default.selectout','selectout']
     },

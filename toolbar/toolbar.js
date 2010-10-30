@@ -1,9 +1,9 @@
 steal.plugins('mxui/menu','jquery/event/default').then(function(){
-   Phui.Menu.extend("Phui.Toolbar",
+   Mxui.Menu.extend("Mxui.Toolbar",
    {
 		defaults: {
 			child_selector : "li",
-			menu_type: Phui.Menu,
+			menu_type: Mxui.Menu,
             apply_types_to_top : false,
             select_event : "click",
             button_class_names : "button"
@@ -29,10 +29,10 @@ steal.plugins('mxui/menu','jquery/event/default').then(function(){
 	   }
    })
    
-   Phui.Toolbar.extend("Phui.UI.Toolbar",{
+   Mxui.Toolbar.extend("Mxui.UI.Toolbar",{
    	defaults: {
 	   class_names: "ui-tabs ui-widget ui-widget-content ui-corner-all",
-       menu_type: Phui.UI.Menu,
+       menu_type: Mxui.UI.Menu,
        child_class_names: "ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all ui-toolbar",
        button_class_names: "ui-state-default ui-corner-all"
 	}
