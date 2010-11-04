@@ -140,7 +140,8 @@ steal.plugins('jquery/controller', 'jquery/lang/json', 'mxui/scrollbar_width', '
 		 * @param {Object} options The options to set on the Controller instance.
 		 */
 		setup: function( el, options ) {
-			if(!el.length) throw "Combobox initialized without an element"
+			//if(!el.length) throw "Combobox initialized without an element"
+			if(!el) throw "Combobox initialized without an element"
 			el = $(el);
 			var name = el.attr("name"),
 				id = el.attr("id"),
