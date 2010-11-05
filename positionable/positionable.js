@@ -3,7 +3,7 @@ steal.plugins('jquery','jquery/controller').then(function($){
     {
 		listensTo : ["show",'move'],
 		iframe: false,
-		keep : false
+		keep : false //keeps it where it belongs
     },
     {
        /**
@@ -59,7 +59,7 @@ steal.plugins('jquery','jquery/controller').then(function($){
 			}else {
 				targetWidth = target.outerWidth();
 				targetHeight = target.outerHeight();
-				if(this.options.keep){
+				if(false){
 					var to = target.offset();
 					
 					var eo =this.element.parent().children(":first").offset();
@@ -156,13 +156,13 @@ steal.plugins('jquery','jquery/controller').then(function($){
 			var visible = elem.is(":visible")
 			if(!visible){
 				elem.css("opacity", 0)
-					.toggle()
+					.show()
 				
 			}
 			elem.offset( $.extend( position, { using: options.using } ) )
 			if(!visible){
 				elem.css("opacity", 1)
-					.toggle();
+					.hide();
 			}
 	   }
    })
