@@ -8,7 +8,13 @@
 		<input id='validate'>
 		<script type='text/javascript' src='../../steal/steal.js?mxui/key_validator/key_validator.js'></script>
 		<script type='text/javascript'>
-			$('#validate').mxui_key_validator({test: /^[-+]?[0-9]*\.?([0-9]+)?$/});
+			$(function(){
+				$('#validate')
+					.mxui_key_validator({
+						test: /^[\-+]?[0-9]*\.?([0-9]+)?$/
+					})
+					.focus();
+			});
 		</script>
 	</body>
 </html>

@@ -49,12 +49,26 @@ steal.plugins('jquery').then(function(){
 	for(var name in $.keycode.keycodes){
 		$.keycode.reverseKeycodes[$.keycode.keycodes[name]] = name;
 	}
+	
 	$.keyname  = function(event){
+		var keycode;
+	
 		//if IE
-		if(event.type == 'keypress' && $.browser.msie){
-			return event.keyCode ? String.fromCharCode(event.keyCode) : String.fromCharCode(event.which)
+		if ($.browser.msie){
+			if (event.type == 'keypress'){
+				return event.keyCode ? String.fromCharCode(event.keyCode) : String.fromCharCode(event.which)
+			} else if (event.type == 'keydown') {
+				// IE only recognizes the backspace and delete keys in the keydown event, not keypress
+				keycode = $.keycode.reverseKeycodes[event.keyCode];
+				
+				if (keycode === 'backspace' || keycode === 'delete'){
+					return keycode;
+				}
+			}
 		}
-        if (!event.keyCode && event.which) {
+		
+		
+		if (!event.keyCode && event.which) {
 			return String.fromCharCode(event.which)
 		}
 
