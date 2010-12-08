@@ -3,6 +3,11 @@ steal.plugins('jquery/controller',
 			  'jquery/event/drag/step').then(function($){
 
 	$.Controller("Mxui.Slider",{
+		defaults : {
+			min: 0,
+			max: 10
+		}
+	},{
 		init : function(){
 			this.element.css({
 				position: 'relative'
@@ -27,18 +32,18 @@ steal.plugins('jquery/controller',
 		"dragend" : function(el, ev, drag){
 			var left =  this.element.offset().left - this.spaceLeft;
 			var spot = Math.round( left / this.widthOfSpot );
-			this.element.trigger("change", spot)
+			this.element.trigger("change", spot+this.options.min)
 		},
 		val : function(value){
 			this.getDimensions();
 			if(value){
 				//move slider into place
 				this.element.offset({
-					left: this.element.parent().offset().left+this.spaceLeft+Math.round( value*this.widthOfSpot )
+					left: this.element.parent().offset().left+this.spaceLeft+Math.round( (value-this.options.min)*this.widthOfSpot )
 				})
 			}else{
 				var left =  this.element.offset().left - this.spaceLeft;
-				return Math.round( left / this.widthOfSpot );
+				return Math.round( left / this.widthOfSpot )+this.options.min;
 			}
 		}
 	})
