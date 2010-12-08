@@ -692,7 +692,10 @@ steal.plugins('jquery/controller', 'jquery/lang/json', 'mxui/scrollbar_width', '
 		 * Remove the Combobox from the DOM and replace it with the original DOM element and unbind all events.
 		 */
 		destroy: function() {
-			this.dropdown().remove();
+			this.dropdown()
+				.stop()
+				.remove();
+				
 			this._dropdown = null;
 			this.modelList = null;
 			this.oldElementName = null;

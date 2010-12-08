@@ -52,8 +52,33 @@ steal.plugins('jquery/controller','mxui/keycode').then(function(){
 			hop : null
 		}
 	},{	
+	
+	"keydown" : function(el, ev){
+
+			// Listen on keydown for backspace and delete, since those keys
+			// don't register keyCodes in IE's keypress event.
+			var key = $.keyname(ev);
+			
+			if ((key === "backspace" || key === "delete")){
+				
+				ev.stopImmediatePropagation();
+				
+				this.skip = false;
+				this.keypress(el, $.extend(ev, {keyCode : ev.keyCode}));
+				this.skip = true;
+			}
+		},
+		
 		"keypress" : function(el, ev){
-			var key = $.keyname(ev)
+			
+			var key = $.keyname(ev);
+			
+			if (this.skip && (key == "backspace" || key == "delete") ){
+				return;
+			}
+			
+			this.skip = false;
+			
 			if(key.length > 1 && 
 				  key!= "backspace" &&
 				  key != "delete"
@@ -73,7 +98,8 @@ steal.plugins('jquery/controller','mxui/keycode').then(function(){
 				end = this.element.selectionEnd();
 			
 			//move to the next character
-			if(this.options.hop && start == end && current.substr(end,1) == this.options.hop){
+			if(this.options.hop && start == end && current.substr(end,1) == this.options.hop
+				&& key == 'backspace' && current.substr(end - 1,1) == this.options.hop){
 				start++;
 				end++;
 			}
@@ -83,7 +109,8 @@ steal.plugins('jquery/controller','mxui/keycode').then(function(){
 				afterMinus = after.length ? after.substr(1) : "",
 				moveSelection = 0,
 				first,
-				second;
+				second,
+				prev;
 				
 			//try twice, first normal, second to overwrite
 			
@@ -109,6 +136,7 @@ steal.plugins('jquery/controller','mxui/keycode').then(function(){
 			
 			if (!this.passes(first)) {
 				if(this.passes(second)){
+					
 					ev.preventDefault();
 					if(moveSelection >0 &&
 						 this.options.hop && 
