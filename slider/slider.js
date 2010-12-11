@@ -12,17 +12,18 @@ steal.plugins('jquery/controller',
 			this.element.css({
 				position: 'relative'
 			})
-			this.options.spots = this.options.max - this.options.min + 1;
 			if(this.options.val){
 				this.val(this.options.val)
 			}
 		},
 		getDimensions : function(){
-			var parent = this.element.parent();
+			var spots = this.options.max - this.options.min,
+				parent = this.element.parent();
 			this.widthToMove = parent.width() - this.element.outerWidth();
-			this.widthOfSpot = this.widthToMove  / this.options.spots;
-			var styles = parent.curStyles("borderLeftWidth","paddingLeft");
-			this.spaceLeft = parseInt( styles.borderLeftWidth ) + parseInt( styles.paddingLeft )|| 0;
+			this.widthOfSpot = this.widthToMove  / spots;
+			var styles = parent.curStyles("borderLeftWidth","paddingLeft"),
+				leftSpace = parseInt( styles.borderLeftWidth ) + parseInt( styles.paddingLeft )|| 0
+			this.leftStart = parent.offset().left + spaceLeft ;
 		},
 		"draginit" : function(el, ev, drag){
 			this.getDimensions();
@@ -30,7 +31,7 @@ steal.plugins('jquery/controller',
 				.step(this.widthOfSpot, this.element.parent());
 		},
 		"dragend" : function(el, ev, drag){
-			var left =  this.element.offset().left - this.spaceLeft;
+			var left =  this.element.offset().left - this.leftStart;
 			var spot = Math.round( left / this.widthOfSpot );
 			this.element.trigger("change", spot+this.options.min)
 		},
@@ -39,11 +40,12 @@ steal.plugins('jquery/controller',
 			if(value){
 				//move slider into place
 				this.element.offset({
-					left: this.element.parent().offset().left+this.spaceLeft+Math.round( (value-this.options.min)*this.widthOfSpot )
+					left: this.leftStart+Math.round( (value-this.options.min)*this.widthOfSpot )
 				})
+				this.element.trigger("change", value)
 			}else{
 				var left =  this.element.offset().left - this.spaceLeft;
-				return Math.round( left / this.widthOfSpot )+this.options.min;
+				return Math.round( this.leftStart / this.widthOfSpot )+this.options.min;
 			}
 		}
 	})

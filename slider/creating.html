@@ -1,0 +1,251 @@
+<style>body {font-family: verdana}</style>
+<h1>Creating a JavaScriptMVC widget.</h1>
+
+<p>JavaScriptMVC is all about making it easier to 
+write and organize copious amounts of JavaScript code.  
+And although it usually means working among its 
+Model-View-Controller layers to create something amazing; 
+often, you find yourself wanting to make a lightweight, reusable 
+UI widget that meets your needs.  This demo walks you 
+through creating a basic slider widget.</p>
+
+<h2>Demo</h2>
+
+Mxui slider
+
+<h2>Step 1:  Creating a widget play-place.</h2>
+<p>For the vast majority of apps we build, we have 2 main folders: the application folder and the widget folder.</p>
+</p>
+
+<p>The application folder has all the files and tests specific to the application - models, business related controllers, and views used to customize the output of reusable widgets.
+
+
+<p>The widget folder has all the potentially reusable widgets.  These are things that can be used outside a specific application. For Jupiter, we've been putting all of these in mxui, the jQueryMX UI library.
+</p>
+<p>So the first step of creating our widget is creating the folder and files our widget needs.  Fortunately, the jquery/generate/plugin generator does this for us:
+</p>
+<pre><code>js jquery/generate/plugin mxui/slider.js</code></pre>
+
+
+<h2>Step 2: Creating the API and demo/test page.</h2>
+
+
+<p>I believe test driven development is a misnomer.  You can't test anything before you know how to call it.  
+So my first step is creating a demo page (which we will later use to test), with the API for my slider.
+</p>
+
+<p>I like my widgets as minimal as possible because I can easily extend them later.  
+Ask yourself, what is a slider fundamentally?  The answer for me is a draggable 
+element in some container that's value is determined by where it is in relation to its parent.</p>
+
+
+<p>Notice: a draggable isn't the container and the draggable element inside; instead, 
+it is just the draggable element and it changes its behavior based on it's container.  
+This will make things a lot more simple and a lot more flexible.</p>
+
+<p>So, the first thing I do is make an HTML structure for the slider, add some css, and an element to show me the value of the slider:
+</p>
+<pre><code class='xml'>&lt;div id='container'>
+	&lt;div id='slider'>&lt;/div>
+&lt;/div>
+&lt;input id='value'/></code></pre>
+
+The css:
+<pre><code>#container {
+  width: 330px;
+  border: solid 1px black;
+}
+#slider {
+  width: 26px;
+  border: solid 2px green;
+  background-color: #008000;
+  height: 30px;
+}
+</code></pre>
+<p>Finally, I want to setup my slider and listen for changes on it.  So I add the following in a script tag:</p>
+
+<pre><code>$("#slider").mxui_slider({
+  min: 1, 
+  max: 10, 
+  val: 5
+}).change(function(ev, value){
+  $('#value').val(value)
+});</code></pre>
+<p>Now we have something we can test!</p>
+
+
+<h2>Step 3: Creating a test.</h2>
+
+<p>The generator produces a test script in mxui/slider/test/funcunit/slider_test.js.
+I'll add the following tests:</p>
+
+<pre><code>test("dragging changes value",function(){
+  S("#slider").drag("+30 +0", function(){
+    equals( S("#value").val(), 6);
+  }).drag("-60 +0",function(){
+    equals( S("#value").val(), 4);
+  });
+})</code></pre>
+
+<pre><code>test("dragging out of bounds", function(){
+  S("#slider").drag("+400 +0", function(){
+    equals( S("#value").val(), 10);
+  }).drag("-400 +0", function(){
+    equals( S("#value").val(), 1);
+  })
+})</code></pre>
+
+<p>FuncUnit's syntax is so awesome, I'm not going to explain what these do.
+   If I were making this slider for more than a demo, I'd also add quite a few more tests.  But
+   this is a good start.
+</p>
+
+<p>If we run these tests, it fails miserably.  So, lets move to building the slider!</p>
+
+<h2>Step 4: Creating the slider plugin:</h2>
+
+<p>I'm going to build the plugin in steps that paralleled how I actually built the widget.  
+The first thing I did was open slider.js and steal the two plugins I was certain I needed:</p>
+
+<pre><code>steal.plugins('jquery/controller','jquery/event/drag').then(function($){</code></pre>
+
+<p>then I define my slider widget:</p>
+
+<pre><code>$.Controller("Mxui.Slider",{})</code></pre>
+
+<p>I know that I want my element to be draggable, so I make a draginit function:</p>
+
+<pre><code>$.Controller("Mxui.Slider",{
+  "draginit" : function(el, ev, drag){}
+});</code></pre>
+
+<p>At this point, I can start dragging my element around on the page.  
+But, I want to keep the element in it's container.  The drag event 
+has a limit plugin that does exactly this.  So I make draginit look like:</p>
+
+<pre><code>"draginit" : function(el, ev, drag){
+  drag.limit(this.element.parent())
+}</code></pre>
+
+<p>At this point, my drag can't escape it's parent.  Yes, I've 
+gotten something that looks very much like a slider with the following 5 lines:</p>
+
+<pre><code>$.Controller("Mxui.Slider",{
+  "draginit" : function(el, ev, drag){
+    drag.limit(this.element.parent())
+  }
+});</code></pre>
+
+<p>But, I want my slider to snap to increments.  The jquery/event/drag/step plugin 
+limits a drag's position to every X pixels relative to some container.  
+This is perfect!  The only problem is that I need to know how many pixels wide I 
+should be limiting the slider.  To help, I'll create a getDimensions function 
+that gets and caches these values:</p>
+
+<pre><code>getDimensions : function(){
+  var spots = this.options.max - this.options.min,
+      parent = this.element.parent();
+  this.widthToMove = parent.width() - this.element.outerWidth();
+  this.widthOfSpot = this.widthToMove  / this.options.spots;
+}</code></pre>
+
+<p>For those who don't know, the first argument passed to the 
+jQuery plugin becomes this.options on the controller.  
+I use those values, the width of the container element, 
+and the width of the slider to calculate the width of one spot.  
+Now in draginit, I call getDimensions and use the value to set the step value:</p>
+
+<pre><code>  "draginit" : function(el, ev, drag){
+    drag.limit(this.element.parent())
+          .step(this.widthOfSpot, this.element.parent());
+  }</code></pre>
+
+<p>When the drag motion is complete, I want to trigger a change event 
+with the value of the slider.  To do this, I need to know where the draggable 
+is in relation to the inner left side of the container.  
+calculate one more value in getDimensions, the container's left border and padding.  
+This is the container's left offset plus it's left border width and padding.  
+I'll add this to getDimensions:</p>
+
+
+<pre><code>  var styles = parent.curStyles("borderLeftWidth",
+                                "paddingLeft"),
+      leftSpace = parseInt( styles.borderLeftWidth ) + 
+                  parseInt( styles.paddingLeft )|| 0;
+  this.leftStart = parent.offset().left + spaceLeft ;</code></pre>
+
+<p>Now, I can listen for dragend, calculate the value the 
+draggable, and trigger a change event with the value:</p>
+
+<pre><code>  "dragend" : function(el, ev, drag){
+    var left =  this.element.offset().left - this.leftStart;
+    var spot = Math.round( left / this.widthOfSpot );
+    this.element.trigger("change", spot+this.options.min)
+  }</code></pre>
+		
+<p>I also want to be able to get the value of the slider pragmatically like:</p>
+<pre><code>$('#slider').mxui_slider('val') -> '5'</code></pre>
+
+<p>And be able to set the value (and update the UI) like:</p>
+
+<pre><code>$('#slider').mxui_slider('val',7);</code></pre>
+
+<p>To do this, I'll add a val function to my controller like:</p>
+
+<pre><code>  val : function(value){
+    this.getDimensions();
+    if(value){
+      //move slider into place
+      this.element.offset({
+        left: this.leftStart+
+                Math.round( (value-this.options.min)
+                  *this.widthOfSpot )
+      })
+      this.element.trigger("change", value)
+    }else{
+      var left =  this.element.offset().left - this.spaceLeft;
+      return Math.round( this.leftStart / this.widthOfSpot )+
+        this.options.min;
+    }
+  }</code></pre>
+
+
+<p>As a quick side note, this plugin can now work with the 'tie' 
+plugin so you can have bi-directional binding between models 
+and sliders.  For example:</p>
+
+<pre><code>$.Model('Person')
+person  = new Person({age : 7})
+$('#slider').mxui_slider({min: 0, max: 10}).tie(person, "age")</code></pre>
+
+<p>This allows us to change the value of person and it will 
+automatically update the slider and vice versa.</p>
+
+<p>Finally, we want to be able to initialize our controller 
+with a value.  We will do by adding an init that sets our inital value:</p>
+
+<pre><code>  init : function(){
+    this.element.css({
+  	position: 'relative'
+    })
+    if(this.options.val){
+      this.val(this.options.val)
+    }
+  }</code></pre>
+
+
+<p>Finally, we want to make our plugin as easy to initalize as 
+possible so we give it default option values like:</p>
+
+<pre><code>$.Controller("Mxui.Slider",{
+  defaults : {
+    min: 0,
+    max: 10
+  }
+},
+{ ... });</code></pre>
+
+<h2>Conclusion</h2>
+<p>So there it is, in 53 lines, we've made a damn good slider.</p>
+
+
