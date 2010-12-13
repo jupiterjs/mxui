@@ -23,7 +23,7 @@ steal.plugins('jquery/controller',
 			this.widthOfSpot = this.widthToMove  / spots;
 			var styles = parent.curStyles("borderLeftWidth","paddingLeft"),
 				leftSpace = parseInt( styles.borderLeftWidth ) + parseInt( styles.paddingLeft )|| 0
-			this.leftStart = parent.offset().left + spaceLeft ;
+			this.leftStart = parent.offset().left + leftSpace ;
 		},
 		"draginit" : function(el, ev, drag){
 			this.getDimensions();
