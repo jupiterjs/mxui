@@ -114,12 +114,9 @@
 		    </div>
 		</div>	
 		
-		<script type='text/javascript' 
-                src='../../steal/steal.js?steal[app]=mxui/tabs&steal[env]=development'
-                package='main.js'
-                compress='false'>   
-        </script>
+		<script type='text/javascript' src='../../steal/steal.js?steal[app]=mxui/tabs'></script>
 		<script type='text/javascript'>
+steal.plugins('mxui/tabs').then(function(){
 			$("#tabable").mxui_tabable().find("li").click(function(ev){
 				ev.preventDefault();
 				ev.stopPropagation();
@@ -133,6 +130,7 @@
 			});
 			$("#tabs").mxui_tabs()
 			$("#uitabs, #uitabs2").mxui_ui_tabs()
+})
 		</script>
 	</body>
 </html>
