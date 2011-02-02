@@ -1724,1072 +1724,68 @@
 	};
 
 })(jQuery);
-(function( $ ) {
-
-	// converts to an ok dom id
-	var toId = function( src ) {
-		return src.replace(/^\/\//, "").replace(/[\/\.]/g, "_");
-	},
-		// used for hookup ids
-		id = 1;
-
+(function($){
 	/**
-	 * @class jQuery.View
-	 * @tag core
-	 * @plugin jquery/view
-	 * @test jquery/view/qunit.html
-	 * @download dist/jquery.view.js
-	 * 
-	 * View provides a uniform interface for using templates with 
-	 * jQuery. When template engines [jQuery.View.register register] 
-	 * themselves, you are able to:
-	 * 
-	 *  - Use views with jQuery extensions [jQuery.fn.after after], [jQuery.fn.append append],
-	 *   [jQuery.fn.before before], [jQuery.fn.html html], [jQuery.fn.prepend prepend],
-	 *      [jQuery.fn.replace replace], [jQuery.fn.replaceWith replaceWith], [jQuery.fn.text text].
-	 *  - Template loading from html elements and external files.
-	 *  - Synchronous and asynchronous template loading.
-	 *  - Template caching.
-	 *  - Bundling of processed templates in production builds.
-	 *  - Hookup jquery plugins directly in the template.
-	 *  
-	 * ## Use
-	 * 
-	 * 
-	 * When using views, you're almost always wanting to insert the results 
-	 * of a rendered template into the page. jQuery.View overwrites the 
-	 * jQuery modifiers so using a view is as easy as: 
-	 * 
-	 *     $("#foo").html('mytemplate.ejs',{message: 'hello world'})
-	 *
-	 * This code:
-	 * 
-	 *  - Loads the template a 'mytemplate.ejs'. It might look like:
-	 *    <pre><code>&lt;h2>&lt;%= message %>&lt;/h2></pre></code>
-	 *  
-	 *  - Renders it with {message: 'hello world'}, resulting in:
-	 *    <pre><code>&lt;div id='foo'>"&lt;h2>hello world&lt;/h2>&lt;/div></pre></code>
-	 *  
-	 *  - Inserts the result into the foo element. Foo might look like:
-	 *    <pre><code>&lt;div id='foo'>&lt;h2>hello world&lt;/h2>&lt;/div></pre></code>
-	 * 
-	 * ## jQuery Modifiers
-	 * 
-	 * You can use a template with the following jQuery modifiers:
-	 * 
-	 * <table>
-	 * <tr><td>[jQuery.fn.after after]</td><td> <code>$('#bar').after('temp.jaml',{});</code></td></tr>
-	 * <tr><td>[jQuery.fn.after append] </td><td>  <code>$('#bar').append('temp.jaml',{});</code></td></tr>
-	 * <tr><td>[jQuery.fn.after before] </td><td> <code>$('#bar').before('temp.jaml',{});</code></td></tr>
-	 * <tr><td>[jQuery.fn.after html] </td><td> <code>$('#bar').html('temp.jaml',{});</code></td></tr>
-	 * <tr><td>[jQuery.fn.after prepend] </td><td> <code>$('#bar').prepend('temp.jaml',{});</code></td></tr>
-	 * <tr><td>[jQuery.fn.after replace] </td><td> <code>$('#bar').replace('temp.jaml',{});</code></td></tr>
-	 * <tr><td>[jQuery.fn.after replaceWith] </td><td> <code>$('#bar').replaceWidth('temp.jaml',{});</code></td></tr>
-	 * <tr><td>[jQuery.fn.after text] </td><td> <code>$('#bar').text('temp.jaml',{});</code></td></tr>
-	 * </table>
-	 * 
-	 * You always have to pass a string and an object (or function) for the jQuery modifier 
-	 * to user a template.
-	 * 
-	 * ## Template Locations
-	 * 
-	 * View can load from script tags or from files. 
-	 * 
-	 * ## From Script Tags
-	 * 
-	 * To load from a script tag, create a script tag with your template and an id like: 
-	 * 
-	 * <pre><code>&lt;script type='text/ejs' id='recipes'>
-	 * &lt;% for(var i=0; i &lt; recipes.length; i++){ %>
-	 *   &lt;li>&lt;%=recipes[i].name %>&lt;/li>
-	 * &lt;%} %>
-	 * &lt;/script></code></pre>
-	 * 
-	 * Render with this template like: 
-	 * 
-	 * @codestart
-	 * $("#foo").html('recipes',recipeData)
-	 * @codeend
-	 * 
-	 * Notice we passed the id of the element we want to render.
-	 * 
-	 * ## From File
-	 * 
-	 * You can pass the path of a template file location like:
-	 * 
-	 *     $("#foo").html('templates/recipes.ejs',recipeData)
-	 * 
-	 * However, you typically want to make the template work from whatever page they 
-	 * are called from.  To do this, use // to look up templates from JMVC root:
-	 * 
-	 *     $("#foo").html('//app/views/recipes.ejs',recipeData)
-	 *     
-	 * Finally, the [jQuery.Controller.prototype.view controller/view] plugin can make looking
-	 * up a thread (and adding helpers) even easier:
-	 * 
-	 *     $("#foo").html( this.view('recipes', recipeData) )
-	 * 
-	 * ## Packaging Templates
-	 * 
-	 * If you're making heavy use of templates, you want to organize 
-	 * them in files so they can be reused between pages and applications.
-	 * 
-	 * But, this organization would come at a high price 
-	 * if the browser has to 
-	 * retrieve each template individually. The additional 
-	 * HTTP requests would slow down your app. 
-	 * 
-	 * Fortunately, [steal.static.views steal.views] can build templates 
-	 * into your production files. You just have to point to the view file like: 
-	 * 
-	 *     steal.views('path/to/the/view.ejs');
-     *
-	 * ## Asynchronous
-	 * 
-	 * By default, retrieving requests is done synchronously. This is 
-	 * fine because StealJS packages view templates with your JS download. 
-	 * 
-	 * However, some people might not be using StealJS or want to delay loading 
-	 * templates until necessary. If you have the need, you can 
-	 * provide a callback paramter like: 
-	 * 
-	 *     $("#foo").html('recipes',recipeData, function(result){
-	 *       this.fadeIn()
-	 *     });
-	 * 
-	 * The callback function will be called with the result of the 
-	 * rendered template and 'this' will be set to the original jQuery object.
-	 * 
-	 * ## Just Render Templates
-	 * 
-	 * Sometimes, you just want to get the result of a rendered 
-	 * template without inserting it, you can do this with $.View: 
-	 * 
-	 *     var out = $.View('path/to/template.jaml',{});
-	 *     
-     * ## Preloading Templates
-	 * 
-	 * You can preload templates asynchronously like:
-	 * 
-	 *     $.View('path/to/template.jaml',{}, function(){});
-	 * 
-	 * ## Supported Template Engines
-	 * 
-	 * JavaScriptMVC comes with the following template languages:
-	 * 
-	 *   - EmbeddedJS
-	 *     <pre><code>&lt;h2>&lt;%= message %>&lt;/h2></code></pre>
-	 *     
-	 *   - JAML
-	 *     <pre><code>h2(data.message);</code></pre>
-	 *     
-	 *   - Micro
-	 *     <pre><code>&lt;h2>{%= message %}&lt;/h2></code></pre>
-	 *     
-	 *   - jQuery.Tmpl
-	 *     <pre><code>&lt;h2>${message}&lt;/h2></code></pre>
-
-	 * 
-	 * The popular <a href='http://awardwinningfjords.com/2010/08/09/mustache-for-javascriptmvc-3.html'>Mustache</a> 
-	 * template engine is supported in a 2nd party plugin.
-	 * 
-	 * ## Using other Template Engines
-	 * 
-	 * It's easy to integrate your favorite template into $.View and Steal.  Read 
-	 * how in [jQuery.View.register].
-	 * 
-	 * @constructor
-	 * 
-	 * Looks up a template, processes it, caches it, then renders the template
-	 * with data and optional helpers.
-	 * 
-	 * With [stealjs StealJS], views are typically bundled in the production build.
-	 * This makes it ok to use views synchronously like:
-	 * 
-	 * @codestart
-	 * $.View("//myplugin/views/init.ejs",{message: "Hello World"})
-	 * @codeend
-	 * 
-	 * If you aren't using StealJS, it's best to use views asynchronously like:
-	 * 
-	 * @codestart
-	 * $.View("//myplugin/views/init.ejs",
-	 *        {message: "Hello World"}, function(result){
-	 *   // do something with result
-	 * })
-	 * @codeend
-	 * 
-	 * @param {String} view The url or id of an element to use as the template's source.
-	 * @param {Object} data The data to be passed to the view.
-	 * @param {Object} [helpers] Optional helper functions the view might use. Not all
-	 * templates support helpers.
-	 * @param {Object} [callback] Optional callback function.  If present, the template is 
-	 * retrieved asynchronously.  This is a good idea if you aren't compressing the templates
-	 * into your view.
-	 * @return {String} The rendered result of the view.
+	 * Wraps an element with another element .. returns new element
 	 */
-
-	var $view, render, checkText, get;
-
-	$view = $.View = function( view, data, helpers, callback ) {
-		var suffix = view.match(/\.[\w\d]+$/),
-			type, el, id, renderer, url = view;
-                // if we have an inline template, derive the suffix from the 'text/???' part
-                // this only supports '<script></script>' tags
-                if ( el = document.getElementById(view)) {
-                  suffix = el.type.match(/\/[\d\w]+$/)[0].replace(/^\//, '.');
-                }
-		if ( typeof helpers === 'function' ) {
-			callback = helpers;
-			helpers = undefined;
-		}
-		//if there is no suffix, add one
-		if (!suffix ) {
-			suffix = $view.ext;
-			url = url + $view.ext;
-		}
-
-		//convert to a unique and valid id
-		id = toId(url);
-
-		//if a absolute path, use steal to get it
-		if ( url.match(/^\/\//) ) {
-			if (typeof steal === "undefined") {
-				url = "/"+url.substr(2);
-			}
-			else {
-				url = steal.root.join(url.substr(2));
-			}
-		}
-
-		//get the template engine
-		type = $view.types[suffix];
-
-		//get the renderer function
-		renderer =
-		$view.cached[id] ? // is it cached?
-		$view.cached[id] : // use the cached version
-		((el = document.getElementById(view)) ? //is it in the document?
-		type.renderer(id, el.innerHTML) : //use the innerHTML of the elemnt
-		get(type, id, url, data, helpers, callback) //do an ajax request for it
-		);
-		// we won't always get a renderer (if async ajax)
-		return renderer && render(renderer, type, id, data, helpers, callback);
-	};
-	// caches the template, renders the content, and calls back if it should
-	render = function( renderer, type, id, data, helpers, callback ) {
-		var res, stub;
-		if ( $view.cache ) {
-			$view.cached[id] = renderer;
-		}
-		res = renderer.call(type, data, helpers);
-		stub = callback && callback(res);
-		return res;
-	};
-	// makes sure there's a template
-	checkText = function( text, url ) {
-		if (!text.match(/[^\s]/) ) {
-			throw "$.View ERROR: There is no template or an empty template at " + url;
-		}
-	};
-	// gets a template, if there's a callback, renders and calls back its;ef
-	get = function( type, id, url, data, helpers, callback ) {
-		if ( callback ) {
-			$.ajax({
-				url: url,
-				dataType: "text",
-				error: function() {
-					checkText("", url);
-				},
-				success: function( text ) {
-					checkText(text, url);
-					render(type.renderer(id, text), type, id, data, helpers, callback);
-				}
-			});
-		} else {
-			var text = $.ajax({
-				async: false,
-				url: url,
-				dataType: "text",
-				error: function() {
-					checkText("", url);
-				}
-			}).responseText;
-			checkText(text, url);
-			return type.renderer(id, text);
-		}
-
-	};
-
-
-	$.extend($view, {
-		/**
-		 * @attribute hookups
-		 * @hide
-		 * A list of pending 'hookups'
-		 */
-		hookups: {},
-		/**
-		 * @function hookup
-		 * Registers a hookup function that can be called back after the html is 
-		 * put on the page.  Typically this is handled by the template engine.  Currently
-		 * only EJS supports this functionality.
-		 * 
-		 *     var id = $.View.hookup(function(el){
-		 *            //do something with el
-		 *         }),
-		 *         html = "<div data-view-id='"+id+"'>"
-		 *     $('.foo').html(html);
-		 * 
-		 * 
-		 * @param {Function} cb a callback function to be called with the element
-		 * @param {Number} the hookup number
-		 */
-		hookup: function( cb ) {
-			var myid = ++id;
-			$view.hookups[myid] = cb;
-			return myid;
-		},
-		/**
-		 * @attribute cached
-		 * @hide
-		 * Cached are put in this object
-		 */
-		cached: {},
-		/**
-		 * @attribute cache
-		 * Should the views be cached or reloaded from the server. Defaults to true.
-		 */
-		cache: true,
-		/**
-		 * @function register
-		 * Registers a template engine to be used with 
-		 * view helpers and compression.  
-		 * 
-		 * ## Example
-		 * 
-		 * @codestart
-		 * $.View.register({
-		 * 	suffix : "tmpl",
-		 * 	renderer: function( id, text ) {
-		 * 		return function(data){
-		 * 			return jQuery.render( text, data );
-		 * 		}
-		 * 	},
-		 * 	script: function( id, text ) {
-		 * 		var tmpl = $.tmpl(text).toString();
-		 * 		return "function(data){return ("+
-		 * 		  	tmpl+
-		 * 			").call(jQuery, jQuery, data); }";
-		 * 	}
-		 * })
-		 * @codeend
-		 * Here's what each property does:
-		 * 
- 		 *    * suffix - files that use this suffix will be processed by this template engine
- 		 *    * renderer - returns a function that will render the template provided by text
- 		 *    * script - returns a string form of the processed template function.
-		 * 
-		 * @param {Object} info a object of method and properties 
-		 * 
-		 * that enable template integration:
-		 * <ul>
-		 *   <li>suffix - the view extension.  EX: 'ejs'</li>
-		 *   <li>script(id, src) - a function that returns a string that when evaluated returns a function that can be 
-		 *    used as the render (i.e. have func.call(data, data, helpers) called on it).</li>
-		 *   <li>renderer(id, text) - a function that takes the id of the template and the text of the template and
-		 *    returns a render function.</li>
-		 * </ul>
-		 */
-		register: function( info ) {
-			this.types["." + info.suffix] = info;
-		},
-		types: {},
-		/**
-		 * @attribute ext
-		 * The default suffix to use if none is provided in the view's url.  
-		 * This is set to .ejs by default.
-		 */
-		ext: ".ejs",
-		/**
-		 * Returns the text that 
-		 * @hide 
-		 * @param {Object} type
-		 * @param {Object} id
-		 * @param {Object} src
-		 */
-		registerScript: function( type, id, src ) {
-			return "$.View.preload('" + id + "'," + $view.types["." + type].script(id, src) + ");";
-		},
-		/**
-		 * @hide
-		 * Called by a production script to pre-load a renderer function
-		 * into the view cache.
-		 * @param {String} id
-		 * @param {Function} renderer
-		 */
-		preload: function( id, renderer ) {
-			$view.cached[id] = function( data, helpers ) {
-				return renderer.call(data, data, helpers);
-			};
-		}
-
-	});
-
-
-	//---- ADD jQUERY HELPERS -----
-	//converts jquery functions to use views	
-	var convert, modify, isTemplate, getCallback, hookupView, funcs;
-
-	convert = function( func_name ) {
-		var old = $.fn[func_name];
-
-		$.fn[func_name] = function() {
-			var args = $.makeArray(arguments),
-				callbackNum, callback, self = this;
-
-			//check if a template
-			if ( isTemplate(args) ) {
-
-				// if we should operate async
-				if ((callbackNum = getCallback(args))) {
-					callback = args[callbackNum];
-					args[callbackNum] = function( result ) {
-						modify.call(self, [result], old);
-						callback.call(self, result);
-					};
-					$view.apply($view, args);
-					return this;
-				}
-
-				//otherwise do the template now
-				args = [$view.apply($view, args)];
-			}
-
-			return modify.call(this, args, old);
-		};
-	};
-	// modifies the html of the element
-	modify = function( args, old ) {
-		var res, stub, hooks;
-
-		//check if there are new hookups
-		for ( var hasHookups in $view.hookups ) {
-			break;
-		}
-
-		//if there are hookups, get jQuery object
-		if ( hasHookups ) {
-			hooks = $view.hookups;
-			$view.hookups = {};
-			args[0] = $(args[0]);
-		}
-		res = old.apply(this, args);
-
-		//now hookup hookups
-		if ( hasHookups ) {
-			hookupView(args[0], hooks);
-		}
-		return res;
-	};
-
-	// returns true or false if the args indicate a template is being used
-	isTemplate = function( args ) {
-		var secArgType = typeof args[1];
-
-		return typeof args[0] == "string" && (secArgType == 'object' || secArgType == 'function') && !args[1].nodeType && !args[1].jquery;
-	};
-
-	//returns the callback if there is one (for async view use)
-	getCallback = function( args ) {
-		return typeof args[3] === 'function' ? 3 : typeof args[2] === 'function' && 2;
-	};
-
-	hookupView = function( els , hooks) {
-		//remove all hookups
-		var hookupEls, 
-			len, i = 0,
-			id, func;
-		els = els.filter(function(){
-			return this.nodeType != 3; //filter out text nodes
-		})
-		hookupEls = els.add("[data-view-id]", els);
-		len = hookupEls.length;
-		for (; i < len; i++ ) {
-			if ( hookupEls[i].getAttribute && (id = hookupEls[i].getAttribute('data-view-id')) && (func = hooks[id]) ) {
-				func(hookupEls[i], id);
-				delete hooks[id];
-				hookupEls[i].removeAttribute('data-view-id');
-			}
-		}
-		//copy remaining hooks back
-		$.extend($view.hookups, hooks);
-	};
-
-	/**
-	 *  @add jQuery.fn
-	 */
-	funcs = [
-	/**
-	 *  @function prepend
-	 *  @parent jQuery.View
-	 *  abc
-	 */
-	"prepend",
-	/**
-	 *  @function append
-	 *  @parent jQuery.View
-	 *  abc
-	 */
-	"append",
-	/**
-	 *  @function after
-	 *  @parent jQuery.View
-	 *  abc
-	 */
-	"after",
-	/**
-	 *  @function before
-	 *  @parent jQuery.View
-	 *  abc
-	 */
-	"before",
-	/**
-	 *  @function replace
-	 *  @parent jQuery.View
-	 *  abc
-	 */
-	"replace",
-	/**
-	 *  @function text
-	 *  @parent jQuery.View
-	 *  abc
-	 */
-	"text",
-	/**
-	 *  @function html
-	 *  @parent jQuery.View
-	 *  abc
-	 */
-	"html",
-	/**
-	 *  @function replaceWith
-	 *  @parent jQuery.View
-	 *  abc
-	 */
-	"replaceWith"];
-
-	//go through helper funcs and convert
-	for ( var i = 0; i < funcs.length; i++ ) {
-		convert(funcs[i]);
-	}
-
-})(jQuery);
-(function( $ ) {
-	/**
-	 * @add jQuery.String
-	 */
-	$.String.
-	/**
-	 * Splits a string with a regex correctly cross browser
-	 * @param {Object} string
-	 * @param {Object} regex
-	 */
-	rsplit = function( string, regex ) {
-		var result = regex.exec(string),
-			retArr = [],
-			first_idx, last_idx;
-		while ( result !== null ) {
-			first_idx = result.index;
-			last_idx = regex.lastIndex;
-			if ( first_idx !== 0 ) {
-				retArr.push(string.substring(0, first_idx));
-				string = string.slice(first_idx);
-			}
-			retArr.push(result[0]);
-			string = string.slice(result[0].length);
-			result = regex.exec(string);
-		}
-		if ( string !== '' ) {
-			retArr.push(string);
-		}
-		return retArr;
-	};
-})(jQuery);
-(function( $ ) {
-	var myEval = function(script){
-			eval(script);
-		},
-		chop = function( string ) {
-			return string.substr(0, string.length - 1);
-		},
-		rSplit = $.String.rsplit,
-		extend = $.extend,
-		isArray = $.isArray,
-		clean = function( content ) {
-				return content.replace(/\\/g, '\\\\').replace(/\n/g, '\\n').replace(/"/g, '\\"');
-		},
-		EJS = function( options ) {
-			//returns a renderer function
-			if ( this.constructor != EJS ) {
-				var ejs = new EJS(options);
-				return function( data, helpers ) {
-					return ejs.render(data, helpers);
-				};
-			}
-			//so we can set the processor
-			if ( typeof options == "function" ) {
-				this.template = {};
-				this.template.process = options;
-				return;
-			}
-			//set options on self
-			extend(this, EJS.options, options);
-			this.template = compile(this.text, this.type, this.name);
-		};
-	/**
-	 * @class jQuery.EJS
-	 * 
-	 * @plugin jquery/view/ejs
-	 * @parent jQuery.View
-	 * @download  http://jmvcsite.heroku.com/pluginify?plugins[]=jquery/view/ejs/ejs.js
-	 * @test jquery/view/ejs/qunit.html
-	 * 
-	 * 
-	 * Ejs provides <a href="http://www.ruby-doc.org/stdlib/libdoc/erb/rdoc/">ERB</a> 
-	 * style client side templates.  Use them with controllers to easily build html and inject
-	 * it into the DOM.
-	 * <h3>Example</h3>
-	 * The following generates a list of tasks:
-	 * @codestart html
-	 * &lt;ul>
-	 * &lt;% for(var i = 0; i < tasks.length; i++){ %>
-	 *     &lt;li class="task &lt;%= tasks[i].identity %>">&lt;%= tasks[i].name %>&lt;/li>
-	 * &lt;% } %>
-	 * &lt;/ul>
-	 * @codeend
-	 * For the following examples, we assume this view is in <i>'views\tasks\list.ejs'</i>
-	 * <h2>Use</h2>
-	 * There are 2 common ways to use Views: 
-	 * <ul>
-	 *     <li>Controller's [jQuery.Controller.prototype.view view function]</li>
-	 *     <li>The jQuery Helpers: [jQuery.fn.after after], 
-	 *                             [jQuery.fn.append append], 
-	 *                             [jQuery.fn.before before], 
-	 *                             [jQuery.fn.before html], 
-	 *                             [jQuery.fn.before prepend], 
-	 *                             [jQuery.fn.before replace], and 
-	 *                             [jQuery.fn.before text].</li>
-	 * </ul>
-	 * <h3>View</h3>
-	 * jQuery.Controller.prototype.view is the preferred way of rendering a view.  
-	 * You can find all the options for render in 
-	 * its [jQuery.Controller.prototype.view documentation], but here is a brief example of rendering the 
-	 * <i>list.ejs</i> view from a controller:
-	 * @codestart
-	 * $.Controller.extend("TasksController",{
-	 *     init: function( el ) {
-	 *         Task.findAll({},this.callback('list'))
-	 *     },
-	 *     list: function( tasks ) {
-	 *         this.element.html(
-	 *          this.view("list", {tasks: tasks})
-	 *        )
-	 *     }
-	 * })
-	 * @codeend
-	 * 
-	 * ## Hooking up controllers
-	 * 
-	 * After drawing some html, you often want to add other widgets and plugins inside that html.
-	 * View makes this easy.  You just have to return the Contoller class you want to be hooked up.
-	 * 
-	 * @codestart
-	 * &lt;ul &lt;%= Mxui.Tabs%>>...&lt;ul>
-	 * @codeend
-	 * 
-	 * You can even hook up multiple controllers:
-	 * 
-	 * @codestart
-	 * &lt;ul &lt;%= [Mxui.Tabs, Mxui.Filler]%>>...&lt;ul>
-	 * @codeend
-	 * 
-	 * <h2>View Helpers</h2>
-	 * View Helpers return html code.  View by default only comes with 
-	 * [jQuery.EJS.Helpers.prototype.view view] and [jQuery.EJS.Helpers.prototype.text text].
-	 * You can include more with the view/helpers plugin.  But, you can easily make your own!
-	 * Learn how in the [jQuery.EJS.Helpers Helpers] page.
-	 * 
-	 * @constructor Creates a new view
-	 * @param {Object} options A hash with the following options
-	 * <table class="options">
-	 *     <tbody><tr><th>Option</th><th>Default</th><th>Description</th></tr>
-	 *     <tr>
-	 *      <td>url</td>
-	 *      <td>&nbsp;</td>
-	 *      <td>loads the template from a file.  This path should be relative to <i>[jQuery.root]</i>.
-	 *      </td>
-	 *     </tr>
-	 *     <tr>
-	 *      <td>text</td>
-	 *      <td>&nbsp;</td>
-	 *      <td>uses the provided text as the template. Example:<br/><code>new View({text: '&lt;%=user%>'})</code>
-	 *      </td>
-	 *     </tr>
-	 *     <tr>
-	 *      <td>element</td>
-	 *      <td>&nbsp;</td>
-	 *      <td>loads a template from the innerHTML or value of the element.
-	 *      </td>
-	 *     </tr>
-	 *     <tr>
-	 *      <td>type</td>
-	 *      <td>'<'</td>
-	 *      <td>type of magic tags.  Options are '&lt;' or '['
-	 *      </td>
-	 *     </tr>
-	 *     <tr>
-	 *      <td>name</td>
-	 *      <td>the element ID or url </td>
-	 *      <td>an optional name that is used for caching.
-	 *      </td>
-	 *     </tr>
-	 *     <tr>
-	 *      <td>cache</td>
-	 *      <td>true in production mode, false in other modes</td>
-	 *      <td>true to cache template.
-	 *      </td>
-	 *     </tr>
-	 *     
-	 *    </tbody></table>
-	 */
-	$.EJS = EJS;
-	/** 
-	 * @Prototype
-	 */
-	EJS.prototype = {
-		constructor: EJS,
-		/**
-		 * Renders an object with extra view helpers attached to the view.
-		 * @param {Object} object data to be rendered
-		 * @param {Object} extra_helpers an object with additonal view helpers
-		 * @return {String} returns the result of the string
-		 */
-		render: function( object, extraHelpers ) {
-			object = object || {};
-			this._extra_helpers = extraHelpers;
-			var v = new EJS.Helpers(object, extraHelpers || {});
-			return this.template.process.call(object, object, v);
-		}
-	};
-	/* @Static */
-
-
-	EJS.
-	/**
-	 * Used to convert what's in &lt;%= %> magic tags to a string
-	 * to be inserted in the rendered output.
-	 * 
-	 * Typically, it's a string, and the string is just inserted.  However,
-	 * if it's a function or an object with a hookup method, it can potentially be 
-	 * be ran on the element after it's inserted into the page.
-	 * 
-	 * This is a very nice way of adding functionality through the view.
-	 * Usually this is done with [jQuery.EJS.Helpers.prototype.plugin]
-	 * but the following fades in the div element after it has been inserted:
-	 * 
-	 * @codestart
-	 * &lt;%= function(el){$(el).fadeIn()} %>
-	 * @codeend
-	 * 
-	 * @param {String|Object|Function} input the value in between the
-	 * write majic tags: &lt;%= %>
-	 * @return {String} returns the content to be added to the rendered
-	 * output.  The content is different depending on the type:
-	 * 
-	 *   * string - a bac
-	 *   * foo - bar
-	 */
-	text = function( input ) {
-		if ( typeof input == 'string' ) {
-			return input;
-		}
-		if ( input === null || input === undefined ) {
-			return '';
-		}
-		var hook = 
-			(input.hookup && function( el, id ) {
-				input.hookup.call(input, el, id);
-			}) 
-			||
-			(typeof input == 'function' && input)
-			||
-			(isArray(input) && function( el, id ) {
-				for ( var i = 0; i < input.length; i++ ) {
-					var stub;
-					stub = input[i].hookup ? input[i].hookup(el, id) : input[i](el, id);
-				}
-			});
-		if(hook){
-			return "data-view-id='" + $.View.hookup(hook) + "'";
-		}
-		return input.toString ? input.toString() : "";
-	};
-
-	//returns something you can call scan on
-	var scan = function(scanner, source, block ) {
-		var source_split = rSplit(source, /\n/),
-			i=0;
-		for (; i < source_split.length; i++ ) {
-			scanline(scanner,  source_split[i], block);
-		}
-		
-	},
-	scanline= function(scanner,  line, block ) {
-		scanner.lines++;
-		var line_split = rSplit(line, scanner.splitter),
-			token;
-		for ( var i = 0; i < line_split.length; i++ ) {
-			token = line_split[i];
-			if ( token !== null ) {
-				block(token, scanner);
-			}
-		}
-	},
-	makeScanner = function(left, right){
-		var scanner = {};
-		extend(scanner, {
-			left: left + '%',
-			right: '%' + right,
-			dLeft: left + '%%',
-			dRight: '%%' + right,
-			eLeft: left + '%=',
-			cmnt: left + '%#',
-			scan : scan,
-			lines : 0
-		});
-		scanner.splitter = new RegExp("(" + [scanner.dLeft, scanner.dRight, scanner.eLeft, 
-		scanner.cmnt, scanner.left, scanner.right + '\n', scanner.right, '\n'].join(")|(").
-			replace(/\[/g,"\\[").replace(/\]/g,"\\]") + ")");
-		return scanner;
-	},
-	// compiles a template
-	compile = function( source, left, name ) {
-		source = source.replace(/\r\n/g, "\n").replace(/\r/g, "\n");
-		//normalize line endings
-		left = left || '<';
-		var put_cmd = "___v1ew.push(",
-			insert_cmd = put_cmd,
-			buff = new EJS.Buffer(['var ___v1ew = [];'], []),
-			content = '',
-			put = function( content ) {
-				buff.push(put_cmd, '"', clean(content), '");');
-			},
-			startTag = null,
-			empty = function(){
-				content = ''
-			};
-		
-		scan( makeScanner(left, left === '[' ? ']' : '>') , 
-			source||"", 
-			function( token, scanner ) {
-				// if we don't have a start pair
-				if ( startTag === null ) {
-					switch ( token ) {
-					case '\n':
-						content = content + "\n";
-						put(content);
-						buff.cr();
-						empty();
-						break;
-					case scanner.left:
-					case scanner.eLeft:
-					case scanner.cmnt:
-						startTag = token;
-						if ( content.length > 0 ) {
-							put(content);
-						}
-						empty();
-						break;
-
-						// replace <%% with <%
-					case scanner.dLeft:
-						content += scanner.left;
-						break;
-					default:
-						content +=  token;
-						break;
-					}
-				}
-				else {
-					switch ( token ) {
-					case scanner.right:
-						switch ( startTag ) {
-						case scanner.left:
-							if ( content[content.length - 1] == '\n' ) {
-								content = chop(content);
-								buff.push(content, ";");
-								buff.cr();
-							}
-							else {
-								buff.push(content, ";");
-							}
-							break;
-						case scanner.eLeft:
-							buff.push(insert_cmd, "(jQuery.EJS.text(", content, ")));");
-							break;
-						}
-						startTag = null;
-						empty();
-						break;
-					case scanner.dRight:
-						content += scanner.right;
-						break;
-					default:
-						content += token;
-						break;
-					}
-				}
-			})
-		if ( content.length > 0 ) {
-			// Should be content.dump in Ruby
-			buff.push(put_cmd, '"', clean(content) + '");');
-		}
-		var template = buff.close(),
-			out = {
-				out : 'try { with(_VIEW) { with (_CONTEXT) {' + template + " return ___v1ew.join('');}}}catch(e){e.lineNumber=null;throw e;}"
-			};
-		//use eval instead of creating a function, b/c it is easier to debug
-		myEval.call(out,'this.process = (function(_CONTEXT,_VIEW){' + out.out + '});\r\n//@ sourceURL='+name+".js");
-		return out;
-	};
-
-
-	// a line and script buffer
-	// we use this so we know line numbers when there
-	// is an error.  
-	// pre and post are setup and teardown for the buffer
-	EJS.Buffer = function( pre_cmd, post ) {
-		this.line = [];
-		this.script = [];
-		this.post = post;
-
-		// add the pre commands to the first line
-		this.push.apply(this, pre_cmd);
-	};
-	EJS.Buffer.prototype = {
-		//need to maintain your own semi-colons (for performance)
-		push: function() {
-			this.line.push.apply(this.line, arguments);
-		},
-
-		cr: function() {
-			this.script.push(this.line.join(''), "\n");
-			this.line = [];
-		},
-		//returns the script too
-		close: function() {
-			var stub;
-
-			if ( this.line.length > 0 ) {
-				this.script.push(this.line.join(''));
-				this.line = [];
-			}
-
-			stub = this.post.length && this.push.apply(this, this.post);
-
-			this.script.push(";"); //makes sure we always have an ending /
-			return this.script.join("");
-		}
-
-	};
+	var tags = /canvas|textarea|input|select|button|img/i
+	$.fn.mxui_wrapper = function(){
+		var ret = [];
+		this.each(function(){
+			if(this.nodeName.match(tags)) {
+				var $el = $(this),
+				    $org =  $el
+				//Opera fix for relative positioning
+				if (/relative/.test($el.css('position')) && $.browser.opera)
+					$el.css({ position: 'relative', top: 'auto', left: 'auto' });
 	
-
-	//type, cache, folder
-	/**
-	 * @attribute options
-	 * Sets default options for all views
-	 * <table class="options">
-	 * <tbody><tr><th>Option</th><th>Default</th><th>Description</th></tr>
-	 * <tr>
-	 * <td>type</td>
-	 * <td>'<'</td>
-	 * <td>type of magic tags.  Options are '&lt;' or '['
-	 * </td>
-	 * </tr>
-	 * <tr>
-	 * <td>cache</td>
-	 * <td>true in production mode, false in other modes</td>
-	 * <td>true to cache template.
-	 * </td>
-	 * </tr>
-	 * </tbody></table>
-	 * 
-	 */
-	EJS.options = {
-		type: '<',
-		ext: '.ejs'
-	};
-
-
-
-
-	/**
-	 * @class jQuery.EJS.Helpers
-	 * @parent jQuery.EJS
-	 * By adding functions to jQuery.EJS.Helpers.prototype, those functions will be available in the 
-	 * views.
-	 * @constructor Creates a view helper.  This function is called internally.  You should never call it.
-	 * @param {Object} data The data passed to the view.  Helpers have access to it through this._data
-	 */
-	EJS.Helpers = function( data, extras ) {
-		this._data = data;
-		this._extras = extras;
-		extend(this, extras);
-	};
-	/* @prototype*/
-	EJS.Helpers.prototype = {
-		/**
-		 * Makes a plugin
-		 * @param {String} name the plugin name
-		 */
-		plugin: function( name ) {
-			var args = $.makeArray(arguments),
-				widget = args.shift();
-			return function( el ) {
-				var jq = $(el);
-				jq[widget].apply(jq, args);
-			};
-		},
-		/**
-		 * Renders a partial view.  This is deprecated in favor of <code>$.View()</code>.
-		 */
-		view: function( url, data, helpers ) {
-			helpers = helpers || this._extras;
-			data = data || this._data;
-			return $.View(url, data, helpers); //new EJS(options).render(data, helpers);
-		}
-	};
-
-
-	$.View.register({
-		suffix: "ejs",
-		//returns a function that renders the view
-		script: function( id, src ) {
-			return "jQuery.EJS(function(_CONTEXT,_VIEW) { " + new EJS({
-				text: src
-			}).template.out + " })";
-		},
-		renderer: function( id, text ) {
-			var ejs = new EJS({
-				text: text,
-				name: id
-			});
-			return function( data, helpers ) {
-				return ejs.render.call(ejs, data, helpers);
-			};
-		}
-	});
+				//Create a wrapper element and set the wrapper to the new current internal element
+				var position = $el.css('position')
+				$el.wrap(
+					$('<div class="ui-wrapper"></div>').css({
+						position: position == 'static' ? "relative" : position,
+						width: $el.outerWidth(),
+						height: $el.outerHeight(),
+						top: $el.css('top'),
+						left: $el.css('left')
+					})
+				);
+			
+				//Overwrite the original $el
+				$el = $el.parent()
+	
+				$elIsWrapper = true;
+	
+				//Move margins to the wrapper
+				$el.css({ marginLeft: $org.css("marginLeft"), marginTop: $org.css("marginTop"), marginRight: $org.css("marginRight"), marginBottom: $org.css("marginBottom") });
+				$org.css({ marginLeft: 0, marginTop: 0, marginRight: 0, marginBottom: 0});
+	
+				//Prevent Safari textarea resize
+				//this.originalResizeStyle = $org.css('resize');
+				//$org.css('resize', 'none');
+	
+				//Push the actual element to our proportionallyResize internal array
+				//$org.css({ position: 'static', zoom: 1, display: 'block' })
+				//this._proportionallyResizeElements.push();
+	
+				// avoid IE jump (hard set the margin)
+				$org.css({ margin: $org.css('margin') });
+	
+				// fix handlers offset
+				//this._proportionallyResize();
+				ret.push($el)
+			}else{
+				ret.push(this)
+			}
+			
+		})
+		
+		return $(ret);
+		
+		
+		
+	}
+	
 })(jQuery);
 (function( $ ) {
 	var getSetZero = function( v ) {
@@ -4047,397 +3043,107 @@ height:
 	});
 
 })(jQuery);
-(function($){
-		var div = $('<div id="out"><div style="height:200px;"></div></div>').css({
-				position: "absolute",
-				top: "0px",
-				left: "0px",
-				visibility: "hidden",
-				width: "100px",
-				height: "100px",
-				overflow: "hidden"
-			}).appendTo(document.body),
-			inner = $(div[0].childNodes[0]),
-			w1 = inner[0].offsetWidth,
-			w2;
-
-		div.css("overflow","scroll");
-		//inner.css("width","100%"); //have to set this here for chrome
-		var w2 = inner[0].offsetWidth;		
-		if (w2 == w1) {
-			inner.css("width", "100%"); //have to set this here for chrome
-			w2 = inner[0].offsetWidth;
-		}
-		div.remove();
-		(window.Mxui || (window.Mxui = {}) ).scrollbarWidth = w1 - w2;
-})(jQuery);
-(function( $ ) {
-	/** 
-	 * Grid is a plugin that provides a configurable data grid.  It accepts a 
-	 * JavaScriptMVC Model as a parameter, using the Model API to get the data 
-	 * that fills in the grid.  It supports paging through limit/offset parameters, 
-	 * sorting, grouping, and customizeable layout.
-	 * 
-	 * # Params
-	 *  
-	 * Grid accepts an object of optional parameters.  
-	 * 
-	 * - *columns* A list of column headers that will be displayed in this grid:
-	 *     columns: {
-	 *      id: "ID",
-	 *      title: "Title",
-	 *      collection: "Collection",
-	 *      mediaType: "Media Type"
-	 *  }
-	 *  The key of the key-value pair determines the internal name of the column, and the name of the attribute 
-	 *  used from the model instances displayed (each model instance should have a mediaType attribute in the 
-	 *  example above).  The value of the key-value is the column title displayed. 
-	 *  
-	 * - limit
-	 * - offset
-	 * - types
-	 * - order
-	 * - group
-	 * - model
-	 * - hoverClass
-	 * - display
-	 * - rendered
-	 * - noItems
-	 *  
-	 */
-	$.Controller.extend("Mxui.Grid", {
-		defaults: {
-			columns: null,
-			limit: null,
-			offset: null,
-			types: [],
-			order: [],
-			group: [],
-			model: null,
-			hoverClass: "hover",
-			display: {},
-			//paginatorType: Mxui.Paginator.Page,
-			renderer: function( inst, options, i, items ) {
-				return $.View("//mxui/grid/views/row", {
-					item: inst,
-					options: options,
-					i: i,
-					items: items
-				})
+(function(){
+	 	//we need to check we aren't evil and have overflow size our container
+		
+		$.support.correctOverflow = false;
+		
+		
+		
+		$(function(){
+			var container =$("<div style='height: 18px; padding: 0; margin: 0'><div style='height: 20px; padding: 0; margin: 0'></div></div>").appendTo(document.body)
+			$.support.correctOverflow = container.height() == 18;
+			container.remove();
+			container = null;
+		})
+		
+		
+		
+		$.Controller.extend("Mxui.Resizable",{
+			defaults : {
+				minHeight: 10,
+				minWidth: 10,
+				handles : 'e, s, se'
+			}
+		},
+		{
+			setup : function(el, options){
+				var diff = $(el).mxui_wrapper()[0]
+				this._super(diff, options)
+				if(diff != el){
+					this.original = $(el).mxui_filler({width: true}); //set to fill
+				}
 			},
-			noItems: "No Items Found."
-		},
-		listensTo: ["paginate"]
+			directionInfo: {
+				"s" : {
+					limit : "vertical",
+					dim :  "height"
+				},
+				"e" : {
+					limit : "horizontal",
+					dim :  "width"
+				},
+				"se" : {
+					
+				}
+			},
+			init : function(el, options){
+				//draw in resizeable
+				this.element.height(this.element.height())
+				this.element.prepend("<div class='ui-resizable-e ui-resizable-handle'/><div class='ui-resizable-s ui-resizable-handle'/><div class='ui-resizable-se ui-resizable-handle'/>")
+			},
+			getDirection : function(el){
+				return el[0].className.match(/ui-resizable-(se|s|e)/)[1]
+			},
+			".ui-resizable-handle draginit" : function(el, ev, drag){
+				//get direction
+				//how far is top corner 
+				this.margin = this.element.offsetv().plus(this.element.dimensionsv()).minus(  el.offsetv()  ) 
+				this.overflow = $.curCSS(this.element[0], "overflow")
+				if(!$.support.correctOverflow && this.overflow == "visible"){
+					this.element.css("overflow","hidden")
+				}
+				var direction = this.getDirection(el)
+				ev.stopPropagation();
+				if(this.directionInfo[direction].limit)
+					drag[this.directionInfo[direction].limit]()
+			},
+			".ui-resizable-handle dragmove" : function(el, ev, drag){
 
-	}, {
-		init: function() {
-			//make the request ....
-			//this.options.model.findAll(this.params(), this.callback('found'));
-			this.element.addClass("grid")
-			this.element.html("//mxui/grid/views/init", this);
+				ev.preventDefault(); //prevent from drawing .. 
+				var direction = this.getDirection(el);
 
-			//save references to important internals to avoid queries
-			this.cached = {
-				body: this.element.children('.body'),
-				header: this.element.children(".header"),
-				footer: this.element.children(".footer")
-			}
-			this.cached.innerBody = this.cached.body.find('div.innerBody');
-			this.cached.table = this.cached.body.find('table');
-			this.cached.tbody = this.cached.body.find('tbody');
-			this.cached.innerBody.mxui_filler({
-				parent: this.element
-			})
-			this.findAll();
-			//draw basic....
-			this.widths = {};
+				if(direction.indexOf("s") > -1){
+					var top = drag.location.y();
+				
+					var start = this.element.offset().top;
+					var outerHeight = top-start
+					if(outerHeight < this.options.minHeight){
+						outerHeight = this.options.minHeight
+					}
+					this.element.outerHeight(outerHeight+this.margin.y())
+					
+				}
+				if(direction.indexOf("e") > -1){
+					var left = drag.location.x();
+				
+					var start = this.element.offset().left;
+					var outerWidth = left-start
+					if(outerHeight < this.options.minWidth){
+						outerWidth = this.options.minWidth
+					}
+					this.element.outerWidth(outerWidth+this.margin.x())
+				}
+				var el = this.element;
+				el.trigger("resize")
+				
 
-			this.bind(this.cached.body.children().eq(0), "scroll", "bodyScroll")
-			this.delegate(this.cached.header.find('tr'), "th", "mousemove", "th_mousemove");
-
-			//
-
-			//this.paginator().mixin(this.options.paginatorType);
-			this.element.parent().trigger('resize');
-		},
-		windowresize: function() {
-			var body = this.cached.body,
-				header = this.cached.header,
-				hideHead = header.is(':visible');
-			body.hide();
-			if ( hideHead ) {
-				header.hide();
-			}
-			var footer = this.cached.footer.width(),
-				scrollbarWidth = Mxui.scrollbarWidth;
-			var table = body.find('table').width(footer > scrollbarWidth ? footer - scrollbarWidth : scrollbarWidth);
-			body.children().eq(0).width(footer > scrollbarWidth ? footer : scrollbarWidth);
-			header.width(footer > scrollbarWidth ? footer : scrollbarWidth);
-			body.show();
-			if ( hideHead ) {
-				header.show();
-			}
-			if ( table.height() < body.height() ) {
-				table.width(footer > 0 ? footer : scrollbarWidth)
-			}
-		},
-		/**
-		 * Listens for page events
-		 * @param {Object} el
-		 * @param {Object} ev
-		 * @param {Object} data
-		 */
-		paginate: function( el, ev, data ) {
-			if ( typeof data.offset == "number" && this.options.offset != data.offset ) {
-				data.offset = Math.min(data.offset, Math.floor(this.options.count / this.options.limit) * this.options.limit)
-
-				this.options.offset = data.offset;
-				//update paginators
-				this.findAll();
-			}
-		},
-		".pagenumber keypress": function( el, ev ) {
-			if ( ev.charCode && !/\d/.test(String.fromCharCode(ev.charCode)) ) {
-				ev.preventDefault()
-			}
-		},
-		".pageinput form submit": function( el, ev ) {
-			ev.preventDefault();
-			var page = parseInt(el.find('input').val(), 10) - 1,
-				offset = page * this.options.limit;
-
-			this.element.trigger("paginate", {
-				offset: offset
-			})
-		},
-		findAll: function() {
-			this.element.trigger("updating")
-			this.cached.tbody.html("<tr><td>Loading ...<td></tr>")
-			this.options.model.findAll(this.params(), this.callback('found'));
-		},
-/*paginator: function ()
-	  {
-	  return this.element.children('.footer').find(".gridpages")
-	  },*/
-		found: function( items ) {
-			this.options.count = items.count;
-			if (!items.length ) {
-				this.cached.header.hide();
-				this.element.trigger("updated", {
-					params: this.params(),
-					items: items
-				})
-				var ib = this.cached.innerBody;
-				this.cached.table.hide();
-				ib.append("<div class='noitems'>" + this.options.noItems + "</div>")
-				ib.trigger('resize');
-				return;
-			}
-
-
-			if (!this.options.columns ) {
-				var columns = (this.options.columns = {})
-				$.each(this.options.model.attributes, function( name, type ) {
-					if ( name != "id" ) columns[name] = $.String.capitalize(name)
-				})
-			}
-			var body = this.cached.innerBody,
-				table = this.cached.table,
-				tbody = this.cached.tbody;
-			table.children("col").remove();
-			//draw column with set widths
-			table.prepend('//mxui/grid/views/columns', {
-				columns: this.options.columns,
-				widths: this.widths,
-				group: this.group
-			})
-			var tbody = tbody.html('//mxui/grid/views/body', {
-				options: this.options,
-				items: items
-			})
-
-			tbody.find("tr.spacing").children("th").each(function() {
-				var $td = $(this),
-					$spacer = $td.children().eq(0),
-					width = $spacer.outerWidth(),
-					height = $spacer.outerHeight();
-				$td.css({
-					padding: 0,
-					margin: 0
-				})
-				$spacer.outerWidth(width + 2).css("float", "none").html("").height(1)
-			})
-
-			this.element.trigger("updated", {
-				params: this.params(),
-				items: items
-			})
-
-			//do columns ...
-			this.cached.header.find("tr").html('//mxui/grid/views/header', this);
-			tbody.trigger("resize")
-			setTimeout(this.callback('sizeTitle'), 1)
-		},
-		sizeTitle: function() {
-			var body = this.cached.body,
-				firstWidths = this.cached.tbody.find("tr:first").children().map(function() {
-					return $(this).outerWidth()
-				}),
-				header = this.cached.header,
-				title = this.cached.header.find("th");
-
-
-			for ( var i = 0; i < title.length - 1; i++ ) {
-				title.eq(i).outerWidth(firstWidths[i]);
-			}
-			header.find("table").width(body.find("table").width() + 40) //extra padding for scrollbar
-			this.titleSized = true;
-		},
-		params: function() {
-			return $.extend({}, this.options.params, {
-				order: this.options.order,
-				offset: this.options.offset,
-				limit: this.options.limit,
-				group: this.options.group,
-				count: this.options.count
-			})
-		},
-		resize: function() {
-			this.cached.innerBody.height(0)
-			if ( this.titleSized ) {
-				setTimeout(this.callback('sizeTitle'), 1)
-			} else {
-				setTimeout(this.callback('windowresize'), 1)
-			}
-		},
-		bodyScroll: function( el, ev ) {
-			this.element.children(":first").scrollLeft(el.scrollLeft())
-		},
-		"th mouseenter": function( el ) {
-			el.addClass("hover")
-		},
-		"th mouseleave": function( el ) {
-			el.removeClass("hover")
-		},
-		"th click": function( el, ev ) {
-
-			var attr = el[0].className.match(/([^ ]+)-column-header/)[1];
-			var sort = el.hasClass("sort-asc") ? "desc" : "asc"
-			//see if we might already have something with this
-			var i = 0;
-			while ( i < this.options.order.length ) {
-				if ( this.options.order[i].indexOf(attr + " ") == 0 ) {
-					this.options.order.splice(i, 1)
-				} else {
-					i++;
+			},
+			".ui-resizable-handle dragend" : function(){
+				if (!$.support.correctOverflow && this.overflow == "visible") {
+					this.element.css("overflow","visible")
 				}
 			}
-			if (!el.hasClass("sort-desc") ) { // otherwise reset this column's search
-				this.options.order.unshift(attr + " " + sort)
-			}
-			this.findAll();
-		},
-		"th dragdown": function( el, ev, drag ) {
-			if ( this.isMouseOnRight(el, ev, 2) ) {
-				var resize = $("<div id='column-resizer'/>").appendTo(document.body).addClass("column-resizer");
-				var offset = el.offset();
-
-				resize.height(this.element.children(".body").outerHeight() + el.outerHeight()).outerWidth(el.outerWidth());
-				resize.css(offset)
-				ev.preventDefault();
-				//prevent others from dragging
-			} else {
-				drag.cancel();
-			}
-		},
-		"th dragmove": function( el, ev, drag ) {
-			ev.preventDefault();
-			var width = ev.vector().minus(el.offsetv()).left();
-
-			if ( width > el.find("span:first").outerWidth() ) $("#column-resizer").width(width)
-		},
-		"th dragend": function( el, ev, drag ) {
-			ev.preventDefault();
-			var width = ev.vector().minus(el.offsetv()).left(),
-				attr = el[0].className.match(/([^ ]+)-column-header/)[1],
-				cg;
-			if ( width > el.find("span:first").outerWidth() ) cg = this.element.find("col:eq(" + el.index() + ")").outerWidth(width)
-			else {
-				cg = this.element.find("col:eq(" + el.index() + ")").outerWidth(el.find("span:first").outerWidth())
-			}
-			this.widths[attr] = cg.width();
-			setTimeout(this.callback('sizeTitle'), 1)
-			$("#column-resizer").remove();
-		},
-		th_mousemove: function( el, ev ) {
-			if ( this.isMouseOnRight(el, ev) ) {
-				el.css("cursor", "e-resize")
-			} else {
-				el.css("cursor", "")
-			}
-		},
-		isMouseOnRight: function( el, ev, extra ) {
-			return el.offset().left + el.outerWidth() - 8 - (extra || 0) < ev.vector().left()
-		},
-		sortedClass: function( attr ) {
-			var i = 0;
-			for ( var i = 0; i < this.options.order.length; i++ ) {
-				if ( this.options.order[i].indexOf(attr + " ") == 0 ) {
-					return "sort-" + this.options.order[i].split(" ")[1]
-				}
-			}
-			return "";
-		},
-		replace: function( el, message ) {
-			var html = this._renderMessages([message]);
-			el.replaceWith(html.join(''));
-			this.element.trigger('resize');
-		},
-		insert: function( el, messages, fadeIn ) {
-			var noitems = this.find('.noitems')
-			if ( noitems.length ) {
-				noitems.remove();
-				this.cached.header.find("tr").html('//mxui/grid/views/header', this);
-				var tbl = this.find('.innerBody table').show();
-				return this.found(messages)
-			}
-			var html = this._renderMessages(messages),
-				els = $(html.join(''));
-			if ( el.length ) el.after(els);
-			else {
-				(tbl ? tbl.children('tbody') : this.find('.innerBody tbody')).html(els)
-			}
-			els.hide().fadeIn();
-			this.windowresize();
-			this.element.trigger('resize');
-		},
-		_renderMessages: function( items ) {
-			var html = [],
-				i, item;
-			var options = $.extend(true, {}, this.options, {
-				renderPartial: true
-			})
-			for ( i = 0; i < items.length; i++ ) {
-				item = items[i]
-				html.push(this.options.renderer(item, options, i, items))
-			}
-			return html;
-		},
-		update: function( options ) {
-			$.extend(this.options, options)
-			this.findAll();
-		},
-		"tr mouseenter": function( el, ev ) {
-			el.addClass(this.options.hoverClass);
-		},
-		"tr mouseleave": function( el, ev ) {
-			el.removeClass(this.options.hoverClass);
-		},
-		destroy: function() {
-			delete this.cached
-			this._super()
-
-		}
-	})
-
-})(jQuery)
+		})
+		
+	 })(jQuery)

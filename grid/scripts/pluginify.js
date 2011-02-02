@@ -13,3 +13,10 @@ steal('//steal/build/pluginify/pluginify', function(s){
 		destination: "mxui/grid/scripts/standalone/filler.js",
 	})
 })
+
+steal('//steal/build/pluginify/pluginify', function(s){
+	steal.build.pluginify("mxui/resizable",{
+		nojquery: true,
+		destination: "mxui/grid/scripts/standalone/resizable.js",
+	})
+})
