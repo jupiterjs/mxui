@@ -312,10 +312,6 @@ steal.plugins('jquery/controller', 'jquery/view/ejs', 'jquery/event/drag',
 			this.cached.tbody.html("<tr><td>Loading ...<td></tr>")
 			this.options.model.findAll(this.params(), this.callback('found'));
 		},
-/*paginator: function ()
-	  {
-	  return this.element.children('.footer').find(".gridpages")
-	  },*/
 		found: function( items ) {
 			this.options.count = items.count;
 			if (!items.length ) {
