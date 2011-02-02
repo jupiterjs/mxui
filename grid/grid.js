@@ -11,27 +11,105 @@ steal.plugins('jquery/controller', 'jquery/view/ejs', 'jquery/event/drag',
 	 *  
 	 * Grid accepts an object of optional parameters.  
 	 * 
-	 * - *columns* A list of column headers that will be displayed in this grid:
-	 *     columns: {
-	 *      id: "ID",
+	 * - *columns* 
+	 *  A list of column headers that will be displayed in this grid:
+	 *  @codestart
+	 *  columns: {
+	 *  	id: "ID",
 	 *      title: "Title",
 	 *      collection: "Collection",
 	 *      mediaType: "Media Type"
 	 *  }
+	 *  @codeend
 	 *  The key of the key-value pair determines the internal name of the column, and the name of the attribute 
 	 *  used from the model instances displayed (each model instance should have a mediaType attribute in the 
 	 *  example above).  The value of the key-value is the column title displayed. 
 	 *  
-	 * - limit
-	 * - offset
-	 * - types
-	 * - order
-	 * - group
-	 * - model
-	 * - hoverClass
-	 * - display
-	 * - rendered
-	 * - noItems
+	 * - *limit*
+	 *  Used for pagination.  This is the number of items per page.  This is used to calculate offset and which page you're on.
+	 *  
+	 * - *offset*
+	 * Used internally for pagination.  Setting a non-zero offset means the first page loaded will start at whatever you set.
+	 * 
+	 * - *order*
+	 * An array that determines the initial sorting of the table.
+	 * @codestart
+	 * order: ["name asc"]
+	 * @codeend
+	 * This would sort the grid by name ascending.  A second value in the array would be passed to break sorting ties. 
+	 * These values are sent to the service, which is assumed to have support for sorting.
+	 * 
+	 * - *model*
+	 * The Model class which will be used to request data for this grid.  This model is assumed to have 
+	 * at least a findAll method and attributes that correspond to each column.  The service the model interacts with 
+	 * is assumed to support ordering and limit/offset if paging is used.  You pass any model like this:
+	 * @codestart
+	 * model: Resource
+	 * @codeend
+	 * and define a findAll like this:
+	 * @codestart
+	 * $.Model.extend("Resource",{
+					findAll : function(params, success, error){
+						$.ajax({
+				            url: '/resource',
+				            type: 'get',
+				            dataType: 'json',
+				            data: params,
+				            success: this.callback(['wrapMany',success]),
+							error: error,
+				        })
+					}
+				},{})
+		@codeend
+	 *  
+	 * - *hoverClass*
+	 * A class that is added to each table row element as it is moused over.
+	 * 
+	 * - *renderer*
+	 * Provide a renderer function to override what each row looks like.  By default gris/views/row.ejs is used.
+	 * 
+	 * - *render*
+	 * A key-value pair of column names and functions.  By default each column is rendered as whatever data 
+	 * each model instance has for this attribute.  If a column name is listed in this 
+	 * parameter, the function given is used to render the HTML for this attribute.  For example:
+	 * @codestart
+	 * render: {
+            icon: function (community) {
+                if (community.isHot && community.hasNewPosts) {
+                    return "<div class='communityfolder newhot' />"
+                }
+                if (community.isHot) return "<div class='communityfolder hot' />";
+                if (community.hasNewPosts) return "<div class='communityfolder new' />";
+
+                return "<div class='communityfolder topicfolder' />";
+            },
+            name: function (community) {
+                return "<a href='#community/show&id=" + community.id + "'>" + community.name + "</a>"
+            }
+        }
+	   @codeend
+	 * The icon columns would be rendered using the HTML generated in the icon function above.  Each 
+	 * function is passed a model instance as a parameter. 
+	 * 
+	 * - *noItems*
+	 * The text rendered if there are no items to be shown in the grid.
+	 * 
+	 * - *params*
+	 * Extra parameters that are passed to each service request.  For example, if your grid contains data about 
+	 * a certain forum with a forum ID that must be passed into each request, provide that here.
+	 * @codestart
+	 * params: { forumId: forum.id }
+	 * @codeend
+	 * 
+	 * # Events
+	 * 
+	 * Resize, paginate, updating, updated
+	 * 
+	 * # Customizing style
+	 * 
+	 * # Model Layer
+	 * 
+	 * # Service Layer
 	 *  
 	 */
 	$.Controller.extend("Mxui.Grid", {
@@ -39,12 +117,10 @@ steal.plugins('jquery/controller', 'jquery/view/ejs', 'jquery/event/drag',
 			columns: null,
 			limit: null,
 			offset: null,
-			types: [],
 			order: [],
 			group: [],
 			model: null,
 			hoverClass: "hover",
-			display: {},
 			//paginatorType: Mxui.Paginator.Page,
 			renderer: function( inst, options, i, items ) {
 				return $.View("//mxui/grid/views/row", {
@@ -222,6 +298,10 @@ steal.plugins('jquery/controller', 'jquery/view/ejs', 'jquery/event/drag',
 			header.find("table").width(body.find("table").width() + 40) //extra padding for scrollbar
 			this.titleSized = true;
 		},
+		/**
+		 * This method is used to determine which parameters are passed to the model layer, and then to the service.
+		 * This includes anything passed in as params in addition to order, offset, limit, group, and count.
+		 */
 		params: function() {
 			return $.extend({}, this.options.params, {
 				order: this.options.order,
@@ -317,11 +397,24 @@ steal.plugins('jquery/controller', 'jquery/view/ejs', 'jquery/event/drag',
 			}
 			return "";
 		},
+		/**
+		 * Used to replace the contents of one row with a more up to date model instance.
+		 * @codestart
+		 * this.find('.grid').controller(Mxui.Grid).replace(msgEl, message)
+		 * @codeend
+		 * @param {HTMLElement} el The tr element that is being updated
+		 * @param {Object} message The new model instance to use for rendering the replacement row
+		 */
 		replace: function( el, message ) {
 			var html = this._renderMessages([message]);
 			el.replaceWith(html.join(''));
 			this.element.trigger('resize');
 		},
+		/**
+		 * Used to insert rows into an existing grid.  They are ad
+		 * @param {HTMLElement} el The new rows are added after this element.
+		 * @param {Array} messages The array of model instances.  Each instance is used to render a new row.
+		 */
 		insert: function( el, messages, fadeIn ) {
 			var noitems = this.find('.noitems')
 			if ( noitems.length ) {

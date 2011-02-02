@@ -49,17 +49,6 @@
 							error: error,
 				            fixture: "-resources" //calculates the fixture path from the url and type.
 				        })
-					},
-					findOne : function(params, success, error){
-						$.ajax({
-				            url: '/resources',
-				            type: 'get',
-				            dataType: 'json',
-				            data: params,
-				            success: this.callback(['wrap',success]),
-							error: error,
-				            fixture: "-resource" //calculates the fixture path from the url and type.
-				        })
 					}
 				},{})
 				
