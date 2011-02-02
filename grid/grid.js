@@ -7,12 +7,22 @@ steal.plugins('jquery/controller', 'jquery/view/ejs', 'jquery/event/drag',
 	 * that fills in the grid.  It supports paging through limit/offset parameters, 
 	 * sorting, grouping, and customizeable layout.
 	 * 
+	 * @codestart
+	    $(".grid").phui_filler().mxui_grid({
+	        model: Resource,
+	        limit: 100,
+	        offset: 0
+		})
+	 * @codeend
+	 * 
 	 * # Params
 	 *  
 	 * Grid accepts an object of optional parameters.  
 	 * 
 	 * - *columns* 
+	 * 
 	 *  A list of column headers that will be displayed in this grid:
+	 *  
 	 *  @codestart
 	 *  columns: {
 	 *  	id: "ID",
@@ -21,32 +31,42 @@ steal.plugins('jquery/controller', 'jquery/view/ejs', 'jquery/event/drag',
 	 *      mediaType: "Media Type"
 	 *  }
 	 *  @codeend
+	 *  
 	 *  The key of the key-value pair determines the internal name of the column, and the name of the attribute 
 	 *  used from the model instances displayed (each model instance should have a mediaType attribute in the 
 	 *  example above).  The value of the key-value is the column title displayed. 
 	 *  
 	 * - *limit*
+	 * 
 	 *  Used for pagination.  This is the number of items per page.  This is used to calculate offset and which page you're on.
 	 *  
 	 * - *offset*
+	 * 
 	 * Used internally for pagination.  Setting a non-zero offset means the first page loaded will start at whatever you set.
 	 * 
 	 * - *order*
+	 * 
 	 * An array that determines the initial sorting of the table.
+	 * 
 	 * @codestart
 	 * order: ["name asc"]
 	 * @codeend
+	 * 
 	 * This would sort the grid by name ascending.  A second value in the array would be passed to break sorting ties. 
 	 * These values are sent to the service, which is assumed to have support for sorting.
 	 * 
 	 * - *model*
+	 * 
 	 * The Model class which will be used to request data for this grid.  This model is assumed to have 
 	 * at least a findAll method and attributes that correspond to each column.  The service the model interacts with 
 	 * is assumed to support ordering and limit/offset if paging is used.  You pass any model like this:
+	 * 
 	 * @codestart
 	 * model: Resource
 	 * @codeend
+	 * 
 	 * and define a findAll like this:
+	 * 
 	 * @codestart
 	 * $.Model.extend("Resource",{
 					findAll : function(params, success, error){
@@ -63,15 +83,19 @@ steal.plugins('jquery/controller', 'jquery/view/ejs', 'jquery/event/drag',
 		@codeend
 	 *  
 	 * - *hoverClass*
+	 * 
 	 * A class that is added to each table row element as it is moused over.
 	 * 
 	 * - *renderer*
+	 * 
 	 * Provide a renderer function to override what each row looks like.  By default gris/views/row.ejs is used.
 	 * 
 	 * - *render*
+	 * 
 	 * A key-value pair of column names and functions.  By default each column is rendered as whatever data 
 	 * each model instance has for this attribute.  If a column name is listed in this 
 	 * parameter, the function given is used to render the HTML for this attribute.  For example:
+	 * 
 	 * @codestart
 	 * render: {
             icon: function (community) {
@@ -88,29 +112,97 @@ steal.plugins('jquery/controller', 'jquery/view/ejs', 'jquery/event/drag',
             }
         }
 	   @codeend
+	   
 	 * The icon columns would be rendered using the HTML generated in the icon function above.  Each 
 	 * function is passed a model instance as a parameter. 
 	 * 
 	 * - *noItems*
+	 * 
 	 * The text rendered if there are no items to be shown in the grid.
 	 * 
 	 * - *params*
+	 * 
 	 * Extra parameters that are passed to each service request.  For example, if your grid contains data about 
 	 * a certain forum with a forum ID that must be passed into each request, provide that here.
+	 * 
 	 * @codestart
 	 * params: { forumId: forum.id }
 	 * @codeend
 	 * 
 	 * # Events
 	 * 
-	 * Resize, paginate, updating, updated
+	 * The grid triggers jQuery synthetic events that can be used to notify you of changes of state in the grid.  
+	 * 
+	 * - *Resize*
+	 * 
+	 * Used when the columns need to be readjusted, such as after a row is replaced.
+	 * 
+	 * - *Paginate*
+	 * 
+	 * Paginators trigger a paginate event when a user clicks a page button (next or previous).  The 
+	 * grid listens to these events to dispatch another request for more data.
+	 * 
+	 * - *Updating*
+	 * 
+	 * This event is triggered when the grid is requesting new data and about to reload itself.
+	 * 
+	 * - *Updated*
+	 * 
+	 * This event is triggered when all data has been found and the new grid has been rendered.
 	 * 
 	 * # Customizing style
 	 * 
+	 * To customize the style of a new grid (besides using your own CSS), you should use your own renderer and render 
+	 * functions.  As described in the params section above, the renderer function is a method that renders each row.  
+	 * To customize how a certain type of cell in the grid looks, add a render method for that cell. 
+	 * 
 	 * # Model Layer
 	 * 
+	 * Each grid is passed a single model class.  This model must provide a findAll method.  This findAll method is called 
+	 * directly, and its assumed that the response will contain raw JSON data that will be turned into model instances, which 
+	 * the grid renders as rows.
+	 * 
 	 * # Service Layer
-	 *  
+	 * 
+	 * The service layer will have to implement a REST service with parameters that match those of the grid.  If paging is used, 
+	 * limit and offset will need to be supported.  For sorting, your service will accept an array of sort types.  The first item in 
+	 * the array is the highest priority sort.  Each item contains a string with the field name and direction, like "name asc".
+	 * 
+	 * Any other parameters can be supported also, and these will need to be provided in the form of options.params.
+	 * 
+	 * # Filtering
+	 * 
+	 * To perform server side filtering on an existing grid control, use the update method.  You'll have to pass in any 
+	 * parameters you want to use in your filtering, which will get passed directly through to your service request.  The 
+	 * grid will then re-render itself with the results.  For example:
+	 * 
+	 * @codestart
+	 * controller.update({params: {"mediatype": "audio"}})
+	 * @codeend
+	 * 
+	 * # Pagination
+	 * To build pagination into your grid, there is a grid pagination plugin, phui/grid/paginated.  Include 
+	 * this plugin and pass in the grid and paginator you'll use: 
+	 *     
+	 * @codestart
+    $(".grid").phui_filler().mxui_grid_paginated({
+        paginatorType: Mxui.Paginator.Page,
+        gridType: Mxui.Grid
+	})
+	 * @codeend
+	 *
+	 * This plugin simply renders a footer with pagination links and triggers 
+	 * pagination events, which the grid uses to request more data and render the grid. 
+	 * You can provide your own pagination by doing something similar:
+	 * 
+	 * @codestart
+		var to = {
+			offset: this.options.offset+ this.options.limit,
+			count: this.options.count,
+			limit: this.options.limit
+		}
+		this.element.trigger("paginate", to)
+	 * @codeend
 	 */
 	$.Controller.extend("Mxui.Grid", {
 		defaults: {
@@ -445,6 +537,16 @@ steal.plugins('jquery/controller', 'jquery/view/ejs', 'jquery/event/drag',
 			}
 			return html;
 		},
+		/**
+		 * This method is used to induce a reload of all the data in the grid.  You could use update to 
+		 * perform filtering by passing additional params into the options.  For example:
+		 * 
+		 * @codestart
+		 * controller.update({params: {"mediatype": "audio"}})
+		 * @codeend
+		 * 
+		 * @param {Object} options any additional options passed in here will extend the controller's options object
+		 */
 		update: function( options ) {
 			$.extend(this.options, options)
 			this.findAll();
