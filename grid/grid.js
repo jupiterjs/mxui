@@ -370,9 +370,3 @@ steal.plugins('jquery/controller', 'jquery/view/ejs', 'jquery/event/drag',
 	})
 
 })
-/*.views("//mxui/grid/views/body.ejs",
-	   "//mxui/grid/views/columns.ejs",
-	   "//mxui/grid/views/header.ejs",
-	   "//mxui/grid/views/init.ejs",
-	   "//mxui/grid/views/row.ejs"
-	   )*/
