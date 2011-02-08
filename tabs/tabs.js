@@ -19,7 +19,7 @@ steal.plugins('mxui/menuable').then(function($){
 			this.find(this.options.child_selector).each(function(){
 				
 				var sub = self.sub($(this).addClass(self.options.button_class_names))
-				sub.mixin.apply(sub, self.options.types);
+//				sub.mixin.apply(sub, self.options.types);
 				sub.addClass(self.options.tab_class_names);
 				if(!$(this).hasClass(self.options.active) && ! sub.triggerHandled("hide")){
 					$(sub).hide();
