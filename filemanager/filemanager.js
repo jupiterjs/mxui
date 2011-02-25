@@ -25,11 +25,8 @@ steal.plugins(
 			},
 			showFolders: function(items){
 //				this.element.find('.folders').mxui_treegrid()
-//				var items = list.grep(function(item){
-//					return item.type == "file"
-//				})
 				this.element.find('.files').mxui_list({
-					items: items,
+					items: items.files(),
 					show: '//mxui/filemanager/views/files',
 					callback: this.callback('showFiles'),
 					nodeType: "tr"

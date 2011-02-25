@@ -21,24 +21,27 @@
 			$.Model.List('Entry.List', {
 				files: function(){
 					return this.grep(function(entry){
-						this.type = "file"
+						return entry.type === "file"
 					})
 				}
 			})
-			$.fixture.make(['entrys', 'entry'], 50, function(i){
+			var numEntries = 50;
+			$.fixture.make(['entrys', 'entry'], numEntries, function(i){
+				var type = i<(numEntries/2)? "file": "folder"
 				return {
-					name: "Entry "+i,
+					name: type+i,
 					status: "in progress",
+					type: type,
 					dateModified: Math.floor(new Date().getTime()),
 					parentId: i<100? 1: 2
 				}
 			})
 			$(document).ready(function(){
 				$('#wrapper').mxui_filemanager({
-					model: Entry,
+					model: new Entry.List(),
 					fileColumns: {
-						"name": "Name",
-						"status": "Status"
+						name: "Name",
+						status: "Status"
 					}
 				})
 			})
