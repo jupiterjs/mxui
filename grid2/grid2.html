@@ -17,49 +17,108 @@
 		<link type="text/css" href="grid.css" rel="stylesheet" />
 	</head>
 	<body>
-		<div id='grid'></div>
+		<table id="grid">
+			<tbody>
+				<tr>
+					<td>Steve</td>
+					<td>Dec 14, 2003</td>
+				</tr>
+				<tr>
+					<td>Bob</td>
+					<td>Dec 14, 2003</td>
+				</tr>
+				<tr>
+					<td>Emily</td>
+					<td>Dec 14, 2003</td>
+				</tr>
+				<tr>
+					<td>Cassandra</td>
+					<td>Dec 14, 2003</td>
+				</tr>
+				<tr>
+					<td>Steve</td>
+					<td>Dec 14, 2003</td>
+				</tr>
+				<tr>
+					<td>Bob</td>
+					<td>Dec 14, 2003</td>
+				</tr>
+				<tr>
+					<td>Emily</td>
+					<td>Dec 14, 2003</td>
+				</tr>
+				<tr>
+					<td>Cassandra</td>
+					<td>Dec 14, 2003</td>
+				</tr>
+				<tr>
+					<td>Steve</td>
+					<td>Dec 14, 2003</td>
+				</tr>
+				<tr>
+					<td>Bob</td>
+					<td>Dec 14, 2003</td>
+				</tr>
+				<tr>
+					<td>Emily</td>
+					<td>Dec 14, 2003</td>
+				</tr>
+				<tr>
+					<td>Cassandra</td>
+					<td>Dec 14, 2003</td>
+				</tr>
+				<tr>
+					<td>Steve</td>
+					<td>Dec 14, 2003</td>
+				</tr>
+				<tr>
+					<td>Bob</td>
+					<td>Dec 14, 2003</td>
+				</tr>
+				<tr>
+					<td>Emily</td>
+					<td>Dec 14, 2003</td>
+				</tr>
+				<tr>
+					<td>Cassandra</td>
+					<td>Dec 14, 2003</td>
+				</tr>
+				<tr>
+					<td>Steve</td>
+					<td>Dec 14, 2003</td>
+				</tr>
+				<tr>
+					<td>Bob</td>
+					<td>Dec 14, 2003</td>
+				</tr>
+				<tr>
+					<td>Emily</td>
+					<td>Dec 14, 2003</td>
+				</tr>
+				<tr>
+					<td>Cassandra</td>
+					<td>Dec 14, 2003</td>
+				</tr>
+			</tbody>
+			<a href='#' id='gridify'>Make the table a grid</a>
+		</table>
 		<script type='text/javascript' 
                 src='../../steal/steal.js?mxui/grid2,development'>   
         </script>
 		<script type='text/javascript'>
-			//create content
-			var html = [],
-				cols = 8,
-				head = ["<th>HereIsALongColumnName</th>"],
-				randomString = function(){
-					var len = parseInt( Math.random()*20 ), 
-						str = []
-					for(var i =0; i < len; i++){
-						var rand = parseInt( Math.random()*60 )
-						str.push(String.fromCharCode(32+ (rand > 40 ? 0 : rand )  ))
-					}
-					return str.join("")
-				};
-			
-			
-			for(var c = 1;  c< cols; c++){
-					head.push("<th>col ",c,"</th>")
-			}
-			
-			
-			for(var r=0; r < 100; r++){
-				html.push("<tr>")
-				for(var c = 0 ;  c< cols; c++){
-					html.push("<td>", randomString() ,"</td>")
-				}
-				html.push("</tr>")
-			}
-			
-			
-			
 			//want this as simple as possible
 			//provide it titles and 
 			// table contents
-			$(function(){
-				$("#grid").mxui_grid2({
-					thead : "<tr>"+head.join('')+"</tr>",
-					tbody : html.join('')
-				}).mxui_filler();
+			$(document).ready(function(){
+				$("#gridify").click(function(){
+					$("#grid").mxui_filler().mxui_grid2({
+						columns: {
+							name: "Name",
+							bday: "Birthday"
+						}
+					})
+					$('.mxui_grid2').mxui_filler()
+				})
 				
 			})
 			

@@ -1,30 +1,52 @@
-steal.plugins('mxui/scrollable_table','mxui/resizer').then(function($){
+steal.plugins('mxui/scrollable_table','mxui/resizer', 
+	'jquery/controller/view',
+	'jquery/view/ejs').then(function($){
+	/**
+	 * A simple grid.  A Table element is an input to this controller.
+	 * A grid accepts a list of columns and titles like this:
+	 *  @codestart
+	 *  columns: {
+	 *  	id: "ID",
+	 *      title: "Title",
+	 *      collection: "Collection",
+	 *      mediaType: "Media Type"
+	 *  }
+	 *  @codeend
+	 *  
+	 *  Scrollable is added to each grid, which makes 
+	 *  the header stay in place, while the body scrolls.
+	 *  
+	 *  Resizer is also added to each grid, which makes 
+	 *  the columns resizeable by dragging.
+	 */
 	
-	
-	$.Controller.extend("Mxui.Grid2",{},
+	$.Controller.extend("Mxui.Grid2",{
+		defaults: {
+			columns: {}
+		}
+	},
 	{
+		setup: function(el, options){
+			$(el).wrap("<div></div>")
+			
+			this._super($(el).parent()[0], options)
+			//wrap table with a div (which will contain the scrollable table)
+		},
 		init : function(){
 			//create the scrollable table
-			this.element.html(
-				[	"<table><thead>",
-					this.options.thead,
-					"</thead><tbody>",
-					this.options.tbody,
-					"</tbody>"].join(''))
+			var head = this.view('head', {columns: this.options.columns})
+			this.element.find('table').prepend(head)
 			
 			this.element.children('table').mxui_scrollable_table()
 			this.scrollable = this.element.children(":first").controller(Mxui.ScrollableTable);
 			
 			this.scrollable.cache.thead.mxui_resizer({selector: "th"});
 			this.element.addClass("grid");
-			this.callback('setFixedAndColumns')
+			this.setFixedAndColumns()
 		},
-		"th resize:start" : function(el, ev){
-			$("#mxui_resizer")
-				.outerWidth(el.outerWidth())
-				.height(this.element.outerHeight());
-			ev.preventDefault();
-			ev.stopPropagation();
+		"th resize:end" : function(el, ev, outerwidth){
+			var index = el.parent().find("th").index(el);
+			this.scrollable.cache.table.find('col:eq('+index+')').width(outerwidth)
 		},
 		setFixedAndColumns : function(){
 			var tbody = this.scrollable.cache.tbody,

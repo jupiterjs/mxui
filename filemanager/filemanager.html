@@ -1,0 +1,48 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
+	"http://www.w3.org/TR/html4/strict.dtd">
+<html lang="en">
+	<head>
+		<title>filemanager</title>
+		<link rel="stylesheet/less" type="text/css" href="filemanager.less">
+	</head>
+	<body>
+	    <div id='wrapper'></div>
+		<script type='text/javascript' 
+	    src='../../steal/steal.js'>	 
+        </script>
+		<script type='text/javascript'>
+			steal.plugins("mxui/filemanager", "steal/less", 
+				'jquery/model', 'jquery/model/list', 'jquery/dom/fixture')
+				.then(function(){
+					steal.less("filemanager")
+				})
+				.then(function(){
+			$.Model('Entry')
+			$.Model.List('Entry.List', {
+				files: function(){
+					return this.grep(function(entry){
+						this.type = "file"
+					})
+				}
+			})
+			$.fixture.make(['entrys', 'entry'], 50, function(i){
+				return {
+					name: "Entry "+i,
+					status: "in progress",
+					dateModified: Math.floor(new Date().getTime()),
+					parentId: i<100? 1: 2
+				}
+			})
+			$(document).ready(function(){
+				$('#wrapper').mxui_filemanager({
+					model: Entry,
+					fileColumns: {
+						"name": "Name",
+						"status": "Status"
+					}
+				})
+			})
+			}).start();
+        </script>
+	</body>
+</html>

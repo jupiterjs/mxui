@@ -1,0 +1,74 @@
+body {font-family: verdana}
+td {padding: 3px;}
+.files, .folders{
+	float:left;
+	li{
+		list-style:none;
+	}
+}
+.folders{
+	margin-right:100px;
+}
+.grid{
+	width:500px;
+	height:400px;
+}
+
+body .grid {
+	overflow: auto;
+}
+.mxui_filler {
+	overflow: hidden;
+}
+
+.grid th {
+	text-align: left;
+		overflow: hidden;
+}
+.grid th a {
+	display: block;
+}
+ .grid .body  {
+	overflow: hidden;
+	width:100%;
+}
+.grid table {
+	width: 100%;
+	width:100%;
+
+}
+.grid .innerBody, .grid .scrollBody {
+	overflow: auto;
+}
+.header {
+	overflow: hidden;
+	border-bottom: solid 1px gray;
+	width: 100%;
+}
+.grid th {
+	padding: 2px;
+}
+.footer {
+	margin:0px;padding:0px;
+	border-top: solid 1px gray;
+	overflow: hidden;
+}
+
+.grid .active a:hover, .grid .active a{
+	border-color: gray;
+	color: gray;
+}
+.grid .footer form {
+	padding:0px 3px;
+}
+.footer form {
+	margin:0px;padding:0px
+}
+.column-resizer {
+	position: absolute;
+	border-right: solid 2px black;
+	border-left: solid 2px black;
+	cursor: e-resize;
+	z-index: 9999;
+}
+.innerBody tr:nth-child(odd), .scrollBody tr:nth-child(odd) {background: #DEF}

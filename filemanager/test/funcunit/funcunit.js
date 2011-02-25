@@ -1,3 +1,3 @@
 steal
  .plugins("funcunit")
- .then("resizer_test")
+ .then("filemanager_test");

@@ -7,9 +7,10 @@ steal.plugins(
 //Resizer resizes a bunch of elements by listening to drag/drop
 //for performance reasons, this shouldn't be used on elements covering most of the dom.
 
-$.Controller.extend("Mxui.Resizer",
-{
-	
+$.Controller.extend("Mxui.Resizer",{
+	defaults: {
+		selector: "th"
+	}
 },
 {
 	"{selector} dragdown": function (el, ev, drag) {
@@ -37,13 +38,15 @@ $.Controller.extend("Mxui.Resizer",
 		var width = ev.vector().minus(el.offsetv()).left();
 		
 		//we want to keep it from moving smaller than the text
-		if (width > el.find("span.minWidth").outerWidth())
+		if (width > el.find("span").outerWidth())
 			$("#mxui_resizer").width(width)
 	},
 	"{selector} dragend": function (el, ev, drag) {
 		ev.preventDefault();
-		el.trigger("resize:end")
-		
+		var width = $("#mxui_resizer").width(),
+			outerwidth = $("#mxui_resizer").outerWidth()
+		el.width(width)
+			.trigger("resize:end", outerwidth)
 		$("#mxui_resizer").remove();
 	},
 	//make sure this is really fast
