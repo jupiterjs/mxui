@@ -22,6 +22,7 @@ steal.plugins('mxui/menuable').then(function($){
 				$.each(self.options.types,function(){
 					sub[this]();
 				})
+
 				sub.addClass(self.options.tab_class_names);
 				if(!$(this).hasClass(self.options.active) && ! sub.triggerHandled("hide")){
 					$(sub).hide();
