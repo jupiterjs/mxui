@@ -6,12 +6,16 @@ td {padding: 3px;}
 		list-style:none;
 	}
 }
+@height:400px;
 .folders{
-	margin-right:100px;
+	width:200px;
+	border-right:1px solid black;
+	height:@height;
+    overflow-y: scroll;
 }
 .grid{
 	width:500px;
-	height:400px;
+	height:@height+20;
 }
 
 body .grid {

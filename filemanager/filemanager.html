@@ -23,6 +23,11 @@
 					return this.grep(function(entry){
 						return entry.type === "file"
 					})
+				},
+				folders: function(){
+					return this.grep(function(entry){
+						return entry.type === "folder"
+					})
 				}
 			})
 			var numEntries = 50;
