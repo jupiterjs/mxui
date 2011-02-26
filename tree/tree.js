@@ -1,11 +1,14 @@
-steal.plugins('jquery/controller').then(function($){
+steal.plugins('jquery/controller', 'jquery/event/default').then(function($){
 	$.Controller.extend("Mxui.Tree",
 	{
 		defaults : {
 			lastNode: "last-child",
 			rootNode: "root-node",
 			hasChildren : "has-children",
-			child_selector: "li"
+			child_selector: "li",
+			select_event: "click",
+			active: "active",
+			selected: "selected"
 		},
 		listensTo: ["default.show","default.hide","show","hide"]
 	},
