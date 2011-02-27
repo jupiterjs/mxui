@@ -51,7 +51,7 @@ steal.plugins('jquery/dom/dimensions', 'jquery/event/resize').then(function( $ )
 
 
 			this.bind('destroyed', evData, function( ev ) {
-				ev.filler.removeClass('mxui_filler')
+				$(ev.target).removeClass('mxui_filler')
 				$(options.parent).unbind('resize', filler.parentResize)
 			});
 

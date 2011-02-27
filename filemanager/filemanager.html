@@ -30,15 +30,15 @@
 					})
 				}
 			})
-			var numEntries = 50;
+			var numEntries = 1000;
 			$.fixture.make(['entrys', 'entry'], numEntries, function(i){
-				var type = i<(numEntries/2)? "file": "folder"
+				var type = (Math.random()<0.5)? "file": "folder";
 				return {
 					name: type+i,
 					status: "in progress",
 					type: type,
 					dateModified: Math.floor(new Date().getTime()),
-					parentId: i<100? 1: 2
+					parentId : i < 50 ? null : Math.floor(Math.random()*i)
 				}
 			})
 			$(document).ready(function(){

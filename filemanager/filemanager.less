@@ -12,6 +12,18 @@ td {padding: 3px;}
 	border-right:1px solid black;
 	height:@height;
     overflow-y: scroll;
+	ul{
+		padding:0 5px 0 5px;
+	}
+	.activeFolder>span{
+		background-color:#aaaaaa;
+	}
+	li.item {
+		background: url(folder.jpg) no-repeat 0 5px;
+		padding-left:20px;
+		padding-top:5px;
+		cursor:pointer;
+	}
 }
 .grid{
 	width:500px;
@@ -76,9 +88,3 @@ body .grid {
 	z-index: 9999;
 }
 .innerBody tr:nth-child(odd), .scrollBody tr:nth-child(odd) {background: #DEF}
-
-li.item {
-	background: url(folder.jpg) no-repeat;
-	padding-left:20px;
-	padding-bottom:5px;
-}
