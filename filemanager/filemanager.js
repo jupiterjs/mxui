@@ -22,8 +22,11 @@ steal.plugins(
 				})
 			},
 			renderFiles: function(items){
+				// remove old grid
 				this.element.children(":eq(1)").remove()
+				// add container for a newo ne
 				this.element.append(this.view('renderFiles'))
+				// render files list and grid
 				this.find('.files')
 					.mxui_list({
 						items: items,
@@ -34,6 +37,12 @@ steal.plugins(
 						columns: this.options.fileColumns
 					});
 				
+			},
+			renderFolderList: function(el, items){
+				el.mxui_list({
+					items: items,
+					show: '//mxui/filemanager/views/folders'
+				})
 			},
 			'.folders select': function(el, ev){
 				var li = $(ev.target),
@@ -49,30 +58,24 @@ steal.plugins(
 					parentId: folder.id
 				})
 			},
-			//adds existing and created to the list
 			"{model} add" : function(list, ev, items){
 				items = new list.Class(items);
+				this.renderFiles(items.files())
 				// folders
 				var parentId = items[0].parentId;
-				// check if the new item's parentId is null, if so add it to the main el
-				if(parentId == null){
-					this.element.find('.folders').mxui_list({
-						items: items.folders(),
-						show: '//mxui/filemanager/views/folders'
-					})
+				// if no parentId, this is the first pass
+				if(!parentId){
+					this.renderFolderList(this.element.find('.folders'), items.folders())
 					this.element.find('.folders').mxui_tree()
+					this.folderTree = this.find('.folders').controller(Mxui.Tree);
 				} else {
 					var foldersList = $("<ul></ul>")
 					// otherwise render a new list, put it in the tree
-					foldersList.mxui_list({
-						items: items.folders(),
-						show: '//mxui/filemanager/views/folders'
-					})
-					this.find('.folders').controller(Mxui.Tree)
+					this.renderFolderList(foldersList, items.folders())
+					this.folderTree
 						.styleUL(foldersList)
-						.appendTo(this.find('.activeFolder')[0])
+						.appendTo(this.find('.activeFolder'))
 				}
-				this.renderFiles(items.files())
 			}
 		})
 	})
