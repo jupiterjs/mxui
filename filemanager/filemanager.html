@@ -19,9 +19,13 @@
 				.then(function(){
 			$.Model('Entry')
 			$.Model.List('Entry.List', {
-				files: function(){
+				files: function(parentId){
 					return this.grep(function(entry){
-						return entry.type === "file"
+						if(entry.type !== "file")
+							return false;
+						if(parentId)
+							return (entry.parentId === parentId);
+						return true;
 					})
 				},
 				folders: function(){

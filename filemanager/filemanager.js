@@ -26,7 +26,7 @@ steal.plugins(
 				this.element.append(this.view('renderFiles'))
 				this.find('.files')
 					.mxui_list({
-						items: items.files(),
+						items: items,
 						show: '//mxui/filemanager/views/files',
 						nodeType: "tr"
 					})
@@ -42,7 +42,7 @@ steal.plugins(
 				li.addClass('activeFolder')
 				// if there's already content, do nothing
 				if(li.find('ul').length){
-					return;
+					return this.renderFiles(this.options.model.files(folder.id))
 				}
 				// do another request using this parentId
 				this.options.model.findAll({
@@ -72,7 +72,7 @@ steal.plugins(
 						.styleUL(foldersList)
 						.appendTo(this.find('.activeFolder')[0])
 				}
-				this.renderFiles(items)
+				this.renderFiles(items.files())
 			}
 		})
 	})
