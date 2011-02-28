@@ -1,17 +1,33 @@
+@toolbarheight: 75px;
 body {font-family: verdana; margin:0;}
 td {padding: 3px;}
 .files, .folders{
-	float:left;
+
 	li{
 		list-style:none;
 	}
 }
+.folders {
+	width: 178px;
+		position: absolute;
+	border: solid 1px black;
+	bottom: 0px;
+}
+.grid {
+	left: 200px;
+	top: 0px;
+	right: 0px;
+		position: absolute;
+
+	bottom: 0px;
+}
 ul.folders {
-	margin-top:25px;
+	top: 0px;
+	padding: 10px;
+	margin: 0px;
 	overflow:auto;
 }
 .folders{
-	min-width:200px;
     overflow-y: scroll;
 	ul{
 		padding:0 5px 0 5px;
@@ -26,11 +42,18 @@ ul.folders {
 		cursor:pointer;
 	}
 }
+#wrapper {
+	position: absolute;
+	top: 0px;
+	bottom: 0px;
+	left: 0px;
+	right: 0px;
+}
 #wrapper .files{
 	.activated{
 		background-color:#aaaaaa;
 	}
-	border-left:1px solid black;
+	
 	tr.spacing{
 		display:none;
 	}
@@ -38,6 +61,7 @@ ul.folders {
 
 body .grid {
 	overflow: auto;
+	border: solid 1px black;
 }
 .mxui_filler {
 	overflow: hidden;
@@ -61,6 +85,7 @@ body .grid {
 }
 .grid .innerBody, .grid .scrollBody {
 	overflow: auto;
+	background-color: #efefef;
 }
 .header {
 	overflow: hidden;
@@ -95,16 +120,28 @@ body .grid {
 }
 .innerBody tr:nth-child(odd), .scrollBody tr:nth-child(odd) {background: #DEF}
 
+
 .toolbar {
-	width:500px;
-	height:75px;
+	height:@toolbarheight;
 	div{
 		float:left;
-		height:75px;
-		width:75px;
+		height:@toolbarheight;
+		width:@toolbarheight;
 		background-color:#a1daff;
 		margin-right:20px;
 		text-align:center;
 		cursor: pointer;
 	}
+}
+
+.mxui_filemanager {
+	position: absolute;
+	top: @toolbarheight	;
+	bottom: 0px;
+	width: 100%;
+}
+
+.mxui_resizer {
+	border-left: solid 2px black;
+	z-index: 1000;
 }

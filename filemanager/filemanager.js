@@ -27,7 +27,7 @@ steal.plugins(
 				var list = new this.list(items);
 				// render folder list, then tree
 				this._renderFolderList(this.element.find('.folders'), list.folders())
-				this.element.find('.folders').mxui_tree().mxui_filler();
+				this.element.find('.folders').mxui_tree()//.mxui_filler();
 				var foldersEl = this.find('.folders')
 				this.folderTree = foldersEl.controller(Mxui.Tree);
 				foldersEl.data("list", list);
@@ -61,7 +61,8 @@ steal.plugins(
 			},
 			addEntries:function(items, replaceExisting){
 				var list = new this.list(items);
-				var trs = this._renderFiles(items.files())
+				var trs = this._renderFiles(items.files());
+				
 				this.filesGrid.clear();
 				this.filesGrid.insert(trs)
 				var foldersList = $("<ul></ul>")
@@ -110,6 +111,9 @@ steal.plugins(
 				var trs = this._renderFiles(list)
 				this.filesGrid.insert(trs)
 				// TODO add this file to the active folder's model.list
+			},
+			windowresize : function(){
+				this.find('.mxui_grid2').triggerHandler('resize')
 			}
 		})
 	})
