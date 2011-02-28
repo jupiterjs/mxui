@@ -1,4 +1,4 @@
-body {font-family: verdana}
+body {font-family: verdana; margin:0;}
 td {padding: 3px;}
 .files, .folders{
 	float:left;
@@ -6,11 +6,12 @@ td {padding: 3px;}
 		list-style:none;
 	}
 }
-@height:400px;
+ul.folders {
+	margin-top:25px;
+	overflow:auto;
+}
 .folders{
-	width:200px;
-	border-right:1px solid black;
-	height:@height;
+	min-width:200px;
     overflow-y: scroll;
 	ul{
 		padding:0 5px 0 5px;
@@ -29,10 +30,10 @@ td {padding: 3px;}
 	.activated{
 		background-color:#aaaaaa;
 	}
-}
-.grid{
-	width:500px;
-	height:@height+20;
+	border-left:1px solid black;
+	tr.spacing{
+		display:none;
+	}
 }
 
 body .grid {
@@ -93,3 +94,17 @@ body .grid {
 	z-index: 9999;
 }
 .innerBody tr:nth-child(odd), .scrollBody tr:nth-child(odd) {background: #DEF}
+
+.toolbar {
+	width:500px;
+	height:75px;
+	div{
+		float:left;
+		height:75px;
+		width:75px;
+		background-color:#a1daff;
+		margin-right:20px;
+		text-align:center;
+		cursor: pointer;
+	}
+}

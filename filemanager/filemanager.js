@@ -27,7 +27,7 @@ steal.plugins(
 				var list = new this.list(items);
 				// render folder list, then tree
 				this._renderFolderList(this.element.find('.folders'), list.folders())
-				this.element.find('.folders').mxui_tree()
+				this.element.find('.folders').mxui_tree().mxui_filler();
 				var foldersEl = this.find('.folders')
 				this.folderTree = foldersEl.controller(Mxui.Tree);
 				foldersEl.data("list", list);
@@ -49,15 +49,17 @@ steal.plugins(
 				// if there's already content, do nothing
 				var nestedUl = li.find('ul');
 				if(nestedUl.length){
-					var newList = nestedUl.data("list");
-					return this.renderFiles(newList.files());
+					var newList = nestedUl.data("list"),
+						trs = this._renderFiles(newList.files());
+					this.filesGrid.clear();
+					return this.filesGrid.insert(trs)
 				}
 				// do another request using this parentId
 				this.options.model.findAll({
 					parentId: folder.id
 				}, this.callback('addEntries'))
 			},
-			addEntries:function(items){
+			addEntries:function(items, replaceExisting){
 				var list = new this.list(items);
 				var trs = this._renderFiles(items.files())
 				this.filesGrid.clear();
@@ -87,6 +89,27 @@ steal.plugins(
 					$(this).attr("tabindex", "0")
 				})
 				return filesList.children();
+			},
+			".folders newFolder": function(el, ev, item){
+				var list = new this.list(item),
+					foldersList = $("<ul></ul>")
+//				foldersList.data("list", list);
+				// otherwise render a new list, put it in the tree
+				this._renderFolderList(foldersList, list)
+				var openFolder = this.find('.folders .selected');
+				if(!openFolder.length){
+					openFolder = this.find("ul.folders")
+				}
+				this.folderTree
+					.styleUL(foldersList)
+					.appendTo(openFolder)
+			},
+			".files newFile": function(el, ev, item){
+				// TODO refactor this code out, so other things can use it
+				var list = new this.list(item);
+				var trs = this._renderFiles(list)
+				this.filesGrid.insert(trs)
+				// TODO add this file to the active folder's model.list
 			}
 		})
 	})

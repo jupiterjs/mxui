@@ -3,15 +3,15 @@
 <html lang="en">
 	<head>
 		<title>filemanager</title>
-		<link rel="stylesheet/less" type="text/css" href="filemanager.less">
+		<link rel="stylesheet/less" type="text/css" href="../filemanager.less">
 	</head>
 	<body>
 	    <div id='wrapper'></div>
 		<script type='text/javascript' 
-	    src='../../steal/steal.js'>	 
+	    src='../../../steal/steal.js'>	 
         </script>
 		<script type='text/javascript'>
-			steal.plugins("mxui/filemanager", "steal/less", 
+			steal.plugins("mxui/filemanager/toolbar", "steal/less", 
 				'jquery/model', 'jquery/model/list', 'jquery/dom/fixture')
 				.then(function(){
 					steal.less("filemanager")
@@ -42,7 +42,7 @@
 				}
 			})
 			$(document).ready(function(){
-				$('#wrapper').mxui_filemanager({
+				$('#wrapper').mxui_toolbar({
 					model: Entry,
 					fileColumns: {
 						name: "Name",

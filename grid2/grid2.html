@@ -13,10 +13,18 @@
 				padding: 0px;
 				margin: 0px;
 			}
+			#wrapper {
+				width: 600px;
+				height: 600px;
+				padding: 10px;
+				border: solid 1px red;
+				overflow: auto;
+			}
         </style>
 		<link type="text/css" href="grid.css" rel="stylesheet" />
 	</head>
 	<body>
+		<div id='wrapper'>
 		<table id="grid">
 			<tbody>
 				<tr>
@@ -100,6 +108,7 @@
 					<td>Dec 14, 2003</td>
 				</tr>
 			</tbody>
+			</div>
 			<a href='#' id='gridify'>Make the table a grid</a>
 		</table>
 		<script type='text/javascript' 
@@ -117,7 +126,6 @@
 							bday: "Birthday"
 						}
 					})
-					$('.mxui_grid2').mxui_filler()
 				})
 				
 			})

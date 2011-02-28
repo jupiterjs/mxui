@@ -62,7 +62,7 @@ steal.plugins('mxui/scrollable_table','mxui/resizer',
 				row.after(newEls);
 			}
 			else {
-				this.find('.body tbody').html(newEls)
+				this.find('.body tbody').append(newEls)
 			}
 		},
 		// remove all content from the grid
