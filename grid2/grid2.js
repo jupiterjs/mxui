@@ -48,6 +48,27 @@ steal.plugins('mxui/scrollable_table','mxui/resizer',
 			var index = el.parent().find("th").index(el);
 			this.scrollable.cache.table.find('col:eq('+index+')').width(outerwidth)
 		},
+		/**
+		 * Insert rows into the table
+		 * @param {Object} row insert after this row
+		 * @param {Object} newEls new elements to insert (they should be trs)
+		 */
+		insert: function( row, newEls ) {
+			if(!newEls) {
+				newEls = row;
+				row = null;
+			}
+			if (row && row.length) {
+				row.after(newEls);
+			}
+			else {
+				this.find('.body tbody').html(newEls)
+			}
+		},
+		// remove all content from the grid
+		clear: function(){
+			this.find('.body tbody').html("");
+		},
 		setFixedAndColumns : function(){
 			var tbody = this.scrollable.cache.tbody,
 				table = this.scrollable.cache.table,

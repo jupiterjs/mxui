@@ -16,66 +16,73 @@ steal.plugins(
 			}
 		},{
 			init: function(){
+				this.list = window[this.options.model.fullName]["List"];
 				this.element.html(this.view())
 				this.options.model.findAll({
 					parentId: null
-				})
+				}, this.callback('setupFM'));
 			},
-			renderFiles: function(items){
-				// remove old grid
-				this.element.children(":eq(1)").remove()
-				// add container for a newo ne
-				this.element.append(this.view('renderFiles'))
-				// render files list and grid
+			setupFM: function(items){
+				var list = new this.list(items);
+				// render folder list, then tree
+				this._renderFolderList(this.element.find('.folders'), list.folders())
+				this.element.find('.folders').mxui_tree()
+				var foldersEl = this.find('.folders')
+				this.folderTree = foldersEl.controller(Mxui.Tree);
+				foldersEl.data("list", list);
+				
+				// render files list, then grid
 				this.find('.files')
 					.mxui_list({
-						items: items,
+						items: list.files(),
 						show: '//mxui/filemanager/views/files',
 						nodeType: "tr"
 					})
 					.mxui_grid2({
 						columns: this.options.fileColumns
 					});
-				
+               this.filesGrid = this.element.children(":eq(1)").controller(Mxui.Grid2);
 			},
-			renderFolderList: function(el, items){
+			'.folders select': function(el, ev){
+				var li = $(ev.target),
+					folder = li.model();
+				// if there's already content, do nothing
+				var nestedUl = li.find('ul');
+				if(nestedUl.length){
+					var newList = nestedUl.data("list");
+					return this.renderFiles(newList.files());
+				}
+				// do another request using this parentId
+				this.options.model.findAll({
+					parentId: folder.id
+				}, this.callback('addEntries'))
+			},
+			addEntries:function(items){
+				var list = new this.list(items);
+				this._renderFiles(items.files())
+				var foldersList = $("<ul></ul>")
+				foldersList.data("list", list);
+				// otherwise render a new list, put it in the tree
+				this._renderFolderList(foldersList, items.folders())
+				this.folderTree
+					.styleUL(foldersList)
+					.appendTo(this.find('.folders .selected'))
+			},
+			_renderFolderList: function(el, items){
 				el.mxui_list({
 					items: items,
 					show: '//mxui/filemanager/views/folders'
 				})
 			},
-			'.folders select': function(el, ev){
-				var li = $(ev.target),
-					folder = li.model();
-				$('.activeFolder').removeClass('activeFolder')
-				li.addClass('activeFolder')
-				// if there's already content, do nothing
-				if(li.find('ul').length){
-					return this.renderFiles(this.options.model.files(folder.id))
-				}
-				// do another request using this parentId
-				this.options.model.findAll({
-					parentId: folder.id
+			_renderFiles: function(list){
+				var filesList = $("<div />")
+				filesList.mxui_list({
+					items: list,
+					show: '//mxui/filemanager/views/files',
+					nodeType: "tr"
 				})
-			},
-			"{model} add" : function(list, ev, items){
-				items = new list.Class(items);
-				this.renderFiles(items.files())
-				// folders
-				var parentId = items[0].parentId;
-				// if no parentId, this is the first pass
-				if(!parentId){
-					this.renderFolderList(this.element.find('.folders'), items.folders())
-					this.element.find('.folders').mxui_tree()
-					this.folderTree = this.find('.folders').controller(Mxui.Tree);
-				} else {
-					var foldersList = $("<ul></ul>")
-					// otherwise render a new list, put it in the tree
-					this.renderFolderList(foldersList, items.folders())
-					this.folderTree
-						.styleUL(foldersList)
-						.appendTo(this.find('.activeFolder'))
-				}
+				this.filesGrid.clear();
+				this.filesGrid.insert(filesList.children())
 			}
 		})
 	})

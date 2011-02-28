@@ -49,25 +49,24 @@ steal.plugins('jquery/controller', 'jquery/event/default').then(function($){
 				ev.preventDefault();
 			}
 			ev.stopPropagation();
+			this.find("."+this.options.selected).removeClass(this.options.selected)
+			el.addClass(this.options.selected)
 			//make sure we aren't already active
 			if(el.hasClass(this.options.active)){
 				$(el).trigger("deselect")
 			}else{
 				$(el).trigger("select")
 			}
-			ev.stopPropagation();
 		},
 		"{child_selector} default.deselect" : function(el, ev){
 			//Hide this guy
 			$(ev.target).closest(this.options.child_selector)
 				.removeClass(this.options.active)
-				.removeClass(this.options.selected)
 				.children("ul").hide();
 		},
 		"{child_selector} default.select" : function(el, ev){
 		   $(ev.target).closest(this.options.child_selector)
-				.addClass(this.options.active)
-				.addClass(this.options.selected).children("ul").show();
+				.addClass(this.options.active).children("ul").show();
 		},
 		
 		"default.hide" : function(el, ev){
