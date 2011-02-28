@@ -7,7 +7,8 @@ steal.plugins(
 	'jquery/dom/fixture', 
 	'mxui/grid2',
 	'mxui/list',
-	'mxui/tree')
+	'mxui/tree',
+	'mxui/selectable')
 	.then(function(){
 		$.Controller("Mxui.Filemanager", {
 			defaults: {
@@ -32,16 +33,15 @@ steal.plugins(
 				foldersEl.data("list", list);
 				
 				// render files list, then grid
-				this.find('.files')
-					.mxui_list({
-						items: list.files(),
-						show: '//mxui/filemanager/views/files',
-						nodeType: "tr"
-					})
-					.mxui_grid2({
-						columns: this.options.fileColumns
-					});
-               this.filesGrid = this.element.children(":eq(1)").controller(Mxui.Grid2);
+				var trs = this._renderFiles(list.files())
+					
+				this.find('.files').append(trs).mxui_grid2({
+					columns: this.options.fileColumns
+				})
+				.mxui_selectable({
+					selectableClassName: "item"
+				});
+                this.filesGrid = this.element.children(":eq(1)").controller(Mxui.Grid2);
 			},
 			'.folders select': function(el, ev){
 				var li = $(ev.target),
@@ -59,7 +59,9 @@ steal.plugins(
 			},
 			addEntries:function(items){
 				var list = new this.list(items);
-				this._renderFiles(items.files())
+				var trs = this._renderFiles(items.files())
+				this.filesGrid.clear();
+				this.filesGrid.insert(trs)
 				var foldersList = $("<ul></ul>")
 				foldersList.data("list", list);
 				// otherwise render a new list, put it in the tree
@@ -81,8 +83,10 @@ steal.plugins(
 					show: '//mxui/filemanager/views/files',
 					nodeType: "tr"
 				})
-				this.filesGrid.clear();
-				this.filesGrid.insert(filesList.children())
+				filesList.find("tr").each(function(){
+					$(this).attr("tabindex", "0")
+				})
+				return filesList.children();
 			}
 		})
 	})
