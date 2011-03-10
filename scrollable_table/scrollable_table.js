@@ -22,6 +22,10 @@ $.Controller.extend("Mxui.ScrollableTable",{
 		// body acts as a buffer for the scroll bar
 		this.cache.body.css("width","100%");
 		this.cache.tbody = this.cache.table.children('tbody')
+		if(!this.cache.tbody.length){
+			this.cache.tbody = $('<tbody/>')
+			this.cache.table.append(this.cache.tbody)
+		}
 		// we need to keep this guy the right size
 		this.cache.scrollBody.css('overflow','auto');
 		
