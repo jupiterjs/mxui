@@ -214,7 +214,7 @@ steal.plugins('jquery/dom/dimensions').then(function ($) {
         }
 
         // make element absolute positioned	
-
+		
         var fitAbove = fit(this, of, within, maxHeight, keep);
 
 		/*
