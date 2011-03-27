@@ -125,11 +125,11 @@
             <li><span class="selectable">eighty</span></li>
 		</div>
 		<script type='text/javascript' 
-                src='../../steal/steal.js?mxui/selectable'>   
+                src='../../../steal/steal.js?mxui/util/selectable'>   
         </script>
 		<script type='text/javascript'>
 			$(function(){
-				$('#menu, #nested_menu, #overflow_menu').mxui_selectable();
+				$('#menu, #nested_menu, #overflow_menu').mxui_util_selectable();
 				$('#overflow_menu .selectable').each(function(i, el){
 					$(el).attr("tabindex", "0");
 				});

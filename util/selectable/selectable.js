@@ -19,7 +19,7 @@ steal.plugins('jquery/controller',
  *     $('#list').mxui_selectable()
  *     ;
  */
-$.Controller.extend('Mxui.Selectable',{
+$.Controller.extend('Mxui.Util.Selectable',{
 	/**
 	 * @attribute defaults
 	 * 
