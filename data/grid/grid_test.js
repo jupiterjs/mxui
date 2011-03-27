@@ -1,4 +1,5 @@
-module("mxui/grid", { 
+steal.plugins('funcunit').then(function(){
+module("mxui/data/grid", { 
 	setup: function(){
         S.open("//mxui/grid.html");
 		S(".resource_1").exists();
@@ -38,4 +39,6 @@ test("sorting", function(){
 	
 
 	
+});
+
 })

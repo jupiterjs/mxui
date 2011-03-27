@@ -1,7 +1,7 @@
-steal.plugins('mxui/grid','jquery/event/drop','mxui/sortable').then(function($){
+steal.plugins('mxui/data/grid','jquery/event/drop','mxui/layout/sortable').then(function($){
 
 	//creates a grid inside
-	$.Controller.extend("Mxui.Grid.Groupable",{
+	$.Controller.extend("Mxui.Data.Grid.Groupable",{
 		defaults: {
 			dragToGroupText: "Drag a column name here to group the items by the values within that column."
 		}

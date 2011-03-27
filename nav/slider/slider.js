@@ -2,7 +2,7 @@ steal.plugins('jquery/controller',
               'jquery/event/drag/limit', 
               'jquery/event/drag/step').then(function( $ ) {
 
-	$.Controller("Mxui.Slider", {
+	$.Controller("Mxui.Nav.Slider", {
 		defaults: {
 			min: 0,
 			max: 10,

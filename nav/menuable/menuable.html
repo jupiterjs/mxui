@@ -70,10 +70,10 @@
 			</li>
         </ul>
 		<script type='text/javascript' 
-                src='../../steal/steal.js?steal[app]=mxui/menuable&steal[env]=development'>   
+                src='../../../steal/steal.js?mxui/nav/menuable'>   
         </script>
 		<script type='text/javascript'>
-			$("#menu1").mxui_menuable().find("ul").mxui_menuable().hide()
+			$("#menu1").mxui_nav_menuable().find("ul").mxui_nav_menuable().hide()
 				.bind("show:before", function(ev){
 					ev.preventDefault()
 					$(this).show(function(){
@@ -92,7 +92,7 @@
 			
 			
 			//menu with focus
-			$("#menu2").mxui_menuable().find("ul").mxui_menuable().hide()
+			$("#menu2").mxui_nav_menuable().find("ul").mxui_nav_menuable().hide()
 				.bind("show:before", function(ev){
 					ev.preventDefault();
 					$(this).show(function(){
@@ -117,7 +117,7 @@
 			
 			
 			
-			$("#menu3").mxui_menuable().find("ul").mxui_menuable().hide()
+			$("#menu3").mxui_nav_menuable().find("ul").mxui_nav_menuable().hide()
 			$('#menu3').delegate("ul", "show:before", function(ev){
 				ev.stopPropagation();
 				ev.preventDefault();

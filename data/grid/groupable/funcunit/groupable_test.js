@@ -1,4 +1,4 @@
-module("mxui/grid/groupable test",{ 
+module("mxui/data/grid/groupable test",{ 
 	setup: function(){
         S.open("//mxui/groupablegrid.html");
 		S(".resource_1").exists();

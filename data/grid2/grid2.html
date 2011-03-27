@@ -112,7 +112,7 @@
 			<a href='#' id='gridify'>Make the table a grid</a>
 		</table>
 		<script type='text/javascript' 
-                src='../../steal/steal.js?mxui/grid2,development'>   
+                src='../../../steal/steal.js?mxui/data/grid2,development'>   
         </script>
 		<script type='text/javascript'>
 			//want this as simple as possible
@@ -120,7 +120,7 @@
 			// table contents
 			$(document).ready(function(){
 				$("#gridify").click(function(){
-					$("#grid").mxui_filler().mxui_grid2({
+					$("#grid").mxui_layout_fill().mxui_data_grid2({
 						columns: {
 							name: "Name",
 							bday: "Birthday"

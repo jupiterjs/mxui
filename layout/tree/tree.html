@@ -49,12 +49,12 @@
 		
 		
 		<script type='text/javascript' 
-                src='../../steal/steal.js?steal[app]=mxui/tree&steal[env]=development'>   
+                src='../../../steal/steal.js?mxui/layout/tree'>   
         </script>
 		<script type='text/javascript'>
-			$("#menu1").mxui_tree();
+			$("#menu1").mxui_layout_tree();
 			
-			$("#menu2").mxui_tree().bind("select", function(ev){
+			$("#menu2").mxui_layout_tree().bind("select", function(ev){
 				//console.log("selecting ...", ev.target)
 				var li = $(ev.target)
 				console.log(li, li.children().length)

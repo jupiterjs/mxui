@@ -1,7 +1,7 @@
-steal.plugins('jquery','jquery/controller').then(function($){
+steal.plugins('jquery/controller').then(function($){
     
 	
-	$.Controller.extend("Mxui.Positionable",
+	$.Controller("Mxui.Layout.Positionable",
     {
 		listensTo : ["show",'move'],
 		iframe: false,

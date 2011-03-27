@@ -1,6 +1,6 @@
 steal.plugins('jquery/controller',
-	'mxui/positionable',
-	'mxui/bgiframe',
+	'mxui/layout/positionable',
+	'mxui/layout/bgiframe',
 	'mxui/layout/fill').then(function($){
 	/**
 	 * @tag mxui
@@ -20,17 +20,21 @@ steal.plugins('jquery/controller',
 	 * 
 	 * @demo mxui/layout/block/block.html
 	 */	
-	$.Controller.extend("Mxui.Layout.Block", 
+	$.Controller("Mxui.Layout.Block", 
 	{
 		defaults : {
-			types : [Mxui.Positionable, Mxui.Bgiframe],
 			zIndex: 9999
 		},
 		listensTo: ['show','hide']
 	},{
 		init : function(){
-			this.element.show().mixin.apply(this.element, this.options.types)
-			    .mxui_layout_fill(({all: true, parent: $(window)}));
+			this.element.show()
+			    .mxui_layout_fill(({all: true, parent: $(window)}))
+				.mxui_layout_positionable()
+				.mxui_layout_bgiframe();
+				
+			
+			
 			if(!this.element.is(":visible")){
 				this.element.css({height: "1px", width: "1px"})
 			}

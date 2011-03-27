@@ -38,14 +38,14 @@
 	    </div>
 		<input id='value2'/>
 		<script type='text/javascript' 
-                src='../../steal/steal.js?mxui/slider,development'>   
+                src='../../../steal/steal.js?mxui/nav/slider,development'>   
         </script>
 		<script type='text/javascript'>
-			$("#slider").mxui_slider({interval: 1, min: 1, max: 10, val: 5})
+			$("#slider").mxui_nav_slider({interval: 1, min: 1, max: 10, val: 5})
 			.change(function(ev, value){
 				$('#value').val(value)
 			});
-			$("#slider2").mxui_slider({interval: 1, min: 1, max: 25, val: 5, contained: false})
+			$("#slider2").mxui_nav_slider({interval: 1, min: 1, max: 25, val: 5, contained: false})
 			.change(function(ev, value){
 				$('#value2').val(value)
 			});

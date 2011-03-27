@@ -1,4 +1,5 @@
-steal.plugins('jquery/dom/dimensions', 'jquery/event/resize').then(function( $ ) {
+steal.plugins('jquery/dom/dimensions', 
+	'jquery/event/resize').then(function( $ ) {
 	//evil things we should ignore
 	var matches = /script|td/,
 
@@ -44,7 +45,8 @@ steal.plugins('jquery/dom/dimensions', 'jquery/event/resize').then(function( $ )
 			}
 			var evData = {
 				filler: this,
-				inFloat: inFloat(this[0], thePage ? document.body : options.parent[0])
+				inFloat: inFloat(this[0], thePage ? document.body : options.parent[0]),
+				options: options
 			};
 			$(options.parent).bind('resize', evData, filler.parentResize);
 			//if this element is removed, take it out
@@ -70,6 +72,8 @@ steal.plugins('jquery/dom/dimensions', 'jquery/event/resize').then(function( $ )
 			}
 			return this;
 		};
+		
+		
 	$.extend(filler, {
 		parentResize: function( ev ) {
 
@@ -89,12 +93,12 @@ steal.plugins('jquery/dom/dimensions', 'jquery/event/resize').then(function( $ )
 				}),
 				last = children.eq(-1),
 
-				offsetParentIsContainer = ev.data.filler.offsetParent()[0] === container[0]
+				offsetParentIsContainer = ev.data.filler.offsetParent()[0] === container[0],
 				//if the last element shares our containers offset parent or is the container
 				//we can just use offsetTop
-				offset = offsetParentIsContainer || last.offsetParent()[0] == container.offsetParent()[0] ? offsetTop : pageOffset;
-			//the offset of the container
-			firstOffset = offsetParentIsContainer ? 0 : offset(container), parentHeight = parent.height();
+				offset = offsetParentIsContainer || last.offsetParent()[0] == container.offsetParent()[0] ? offsetTop : pageOffset,
+				//the offset of the container
+				firstOffset = offsetParentIsContainer ? 0 : offset(container), parentHeight = parent.height();
 
 			if ( isBleeder ) {
 				//temporarily add a small div to use to figure out the 'bleed-through' margin
@@ -114,13 +118,25 @@ steal.plugins('jquery/dom/dimensions', 'jquery/event/resize').then(function( $ )
 				// the current height of the object
 				fillerHeight = ev.data.filler.height();
 
+			console.log(fillerHeight + delta)
 			//adjust the height
-			ev.data.filler.height(fillerHeight + delta)
+			
+			if(ev.data.options.all){
+				// we don't care about anything else ... we are likely absolutely positioned
+				//we need to fill the parent width ...
+				
+				ev.data.filler.outerHeight( parent.height() );
+				ev.data.filler.outerWidth(parent.width() )
+			}else{
+				ev.data.filler.height(fillerHeight + delta)
+			}
+			
 
 			//remove the temporary element
 			if ( isBleeder ) {
 				last.remove();
 			}
+			
 			ev.data.filler.triggerHandler('resize');
 		}
 	});

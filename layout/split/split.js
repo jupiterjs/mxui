@@ -1,12 +1,11 @@
 steal.plugins('jquery/controller','jquery/event/drag/limit','jquery/dom/dimensions').then(function($){
 	
 	
-	$.Controller.extend("Mxui.Splitter",
+	$.Controller.extend("Mxui.Layout.Split",
 	{
 		defaults : {
 			child_class_names : "split",
 			active : "active",
-			types : [],
 			hover : "split-hover",
 			splitter : "splitter"
 		},
@@ -15,7 +14,6 @@ steal.plugins('jquery/controller','jquery/event/drag/limit','jquery/dom/dimensio
 	{
 		init : function(){
 			//determine if horizontal or vertical ...
-			this.element.mixin.apply(this.element, this.options.types).css("overflow","hidden")
 			//insert splitter
 			var c = this.element.children(":visible"), splitters = c.length - 1;
 			for(var i=0; i < c.length - 1; i++){
@@ -45,6 +43,9 @@ steal.plugins('jquery/controller','jquery/event/drag/limit','jquery/dom/dimensio
                 $(ev.target).removeClass(this.options.hover)
             }
         },
+		".hsplitter dragdown" : function(el, ev){
+			ev.preventDefault();
+		},
 		".hsplitter draginit" : function(el, ev, drag){
 			drag.limit(this.element)
 			drag.vertical()

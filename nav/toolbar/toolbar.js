@@ -1,5 +1,5 @@
-steal.plugins('mxui/menu','jquery/event/default').then(function(){
-   Mxui.Menu.extend("Mxui.Toolbar",
+steal.plugins('mxui/nav/menu','jquery/event/default').then(function(){
+   Mxui.Nav.Menu("Mxui.Nav.Toolbar",
    {
 		defaults: {
 			child_selector : "li",
@@ -17,7 +17,7 @@ steal.plugins('mxui/menu','jquery/event/default').then(function(){
                .children("li").addClass(this.options.button_class_names).each(function(){
                    //need to keep a reference to each menu
 				   var el = $(this);
-				   el.data("menu-element", el.find(">ul, >.ui-menu").mixin(menuType))
+				   new menuType( el.data("menu-element", el.find(">ul, >.ui-menu") ) )
                })
 			this.element.parent().addClass(this.options.tabs_container_class)
 				.addClass(this.options.class_names)
@@ -29,7 +29,7 @@ steal.plugins('mxui/menu','jquery/event/default').then(function(){
 	   }
    })
    
-   Mxui.Toolbar.extend("Mxui.UI.Toolbar",{
+   Mxui.Nav.Toolbar("Mxui.UI.Toolbar",{
    	defaults: {
 	   class_names: "ui-tabs ui-widget ui-widget-content ui-corner-all",
        menu_type: Mxui.UI.Menu,

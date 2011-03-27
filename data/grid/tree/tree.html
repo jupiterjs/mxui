@@ -9,7 +9,7 @@
             .error_text { color: red; font-size: 10px;}
             td {padding: 3px;}
         </style>
-        <link type="text/css" href="../../smoothness/jquery-ui-1.7.2.custom.css" rel="stylesheet" />            
+        <link type="text/css" href="../../../smoothness/jquery-ui-1.7.2.custom.css" rel="stylesheet" />            
         <link type="text/css" href="../grid.css" rel="stylesheet" />        
     </head>
     <body>
@@ -17,11 +17,11 @@
             
         </div>
         <script type='text/javascript' 
-                src='../../../steal/steal.js'>   
+                src='../../../../steal/steal.js'>   
         </script>
         <script type='text/javascript'>
-            steal.plugins("mxui/grid/tree",
-                            "mxui/filler",
+            steal.plugins("mxui/data/grid/tree",
+                            "mxui/layout/fill",
                             "jquery/model",
                             "jquery/dom/fixtures").then(function($){
                 
@@ -78,7 +78,7 @@
                     hasChildren : function(){ return true }
                 })
                 
-                $(".grid").mxui_filler().mxui_grid_tree({
+                $(".grid").mxui_fill().mxui_data_grid_tree({
                     model: Resource,
                     limit: 100,
                     offset: 0,

@@ -22,10 +22,10 @@
 				line-height: 3px;
 				font-size: 0px;
 			}
-			.mxui_splitter .split-hover{
+			.mxui_layout_split .split-hover{
 				border: solid 1px blue;
 			}
-			.mxui_splitter {
+			.mxui_layout_split {
 				overflow: hidden
 			}
 			.split {
@@ -103,12 +103,10 @@
 	    
 		
 		<script type='text/javascript' 
-                src='../../steal/steal.js?steal[app]=mxui/splitter&steal[env]=development'
-                package='main.js'
-                compress='false'>   
+                src='../../../steal/steal.js?steal[app]=mxui/layout/split'>   
         </script>
 		<script type='text/javascript'>
-			$("#container").mxui_splitter();
+			$("#container").mxui_layout_split();
 			$("#add").click(function(){
 				$("<div class='panel'><a href='javsacript://' class='remove'>remove</a>Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.</div>")
 					.appendTo($("#container")).trigger("insert")
@@ -127,7 +125,7 @@
 				big = ! big;
 			});
 			
-			$("#container2").mxui_splitter();
+			$("#container2").mxui_layout_split();
 			$("#add2").click(function(){
 				$("<div class='panel'><a href='javsacript://' class='remove'>remove</a>Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.</div>")
 					.appendTo($("#container2")).trigger("insert")

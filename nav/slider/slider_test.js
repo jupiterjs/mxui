@@ -1,6 +1,8 @@
+steal.plugins('funcunit').then(function(){
+	
 module("slider test", { 
 	setup: function(){
-		S.open("//mxui/slider/slider.html");
+		S.open("//mxui/nav/slider/slider.html");
 	}
 });
 
@@ -19,4 +21,6 @@ test("moving out of bounds", function(){
 	}).drag("-400 +0", function(){
 		equals( S("#value").val(), 1);
 	})
+});
+
 })

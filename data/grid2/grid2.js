@@ -1,4 +1,5 @@
-steal.plugins('mxui/scrollable_table','mxui/resizer', 
+steal.plugins('mxui/layout/scrollable_table',
+	'mxui/layout/resizer', 
 	'jquery/controller/view',
 	'jquery/view/ejs').then(function($){
 	/**
@@ -20,7 +21,7 @@ steal.plugins('mxui/scrollable_table','mxui/resizer',
 	 *  the columns resizeable by dragging.
 	 */
 	
-	$.Controller.extend("Mxui.Grid2",{
+	$.Controller.extend("Mxui.Data.Grid2",{
 		defaults: {
 			columns: {}
 		}

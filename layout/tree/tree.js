@@ -1,5 +1,5 @@
 steal.plugins('jquery/controller', 'jquery/event/default').then(function($){
-	$.Controller.extend("Mxui.Tree",
+	$.Controller.extend("Mxui.Layout.Tree",
 	{
 		defaults : {
 			lastNode: "last-child",

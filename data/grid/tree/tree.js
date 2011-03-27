@@ -1,11 +1,11 @@
-steal.plugins('mxui/grid')
+steal.plugins('mxui/data/grid')
      .resources()
      .models()
      .controllers()
      .views()
      .then(function($){
 
-    Mxui.Grid.extend("Mxui.Grid.Tree",{
+    Mxui.Grid.extend("Mxui.Data.Grid.Tree",{
         defaults: {
             indentedColumn: null
         }

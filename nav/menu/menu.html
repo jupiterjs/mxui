@@ -3,7 +3,7 @@
 <html lang="en">
 	<head>
 		<title>menu</title>
-        <link type="text/css" href="../smoothness/jquery-ui-1.7.2.custom.css" rel="stylesheet" />
+        <link type="text/css" href="../../smoothness/jquery-ui-1.7.2.custom.css" rel="stylesheet" />
         <style type='text/css'>
             body {font-family: verdana}
             .error {border: solid 1px red;}
@@ -82,11 +82,11 @@
         </ul>
 
 		<script type='text/javascript' 
-                src='../../steal/steal.js'>   
+                src='../../../steal/steal.js'>   
         </script>
         <script type='text/javascript'>
-            steal.plugins('mxui/menu').then(function(){
-				$("#menu1").mxui_menu();
+            steal.plugins('mxui/nav/menu').then(function(){
+				$("#menu1").mxui_nav_menu();
             	$("#menu2").mxui_ui_menu().show().trigger("move", {top: 60, left: 280});
 			}).start();
         </script>

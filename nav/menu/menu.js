@@ -1,4 +1,4 @@
-steal.plugins('mxui/positionable','mxui/menuable','jquery/event/hover').then(function($){
+steal.plugins('mxui/layout/positionable','mxui/nav/menuable','jquery/event/hover').then(function($){
 	
 	/**
 	 * A general Menu System.
@@ -18,7 +18,7 @@ steal.plugins('mxui/positionable','mxui/menuable','jquery/event/hover').then(fun
 	 * "show" -> shows the menu
 	 */
 	
-	Mxui.Menuable.extend("Mxui.Menu",
+	Mxui.Nav.Menuable.extend("Mxui.Nav.Menu",
 	{
 		defaults : {
 			/**
@@ -58,7 +58,11 @@ steal.plugins('mxui/positionable','mxui/menuable','jquery/event/hover').then(fun
 			//If we are a submenu or we want the top menu to also have types 
 			if(options.level > 0 || this.options.apply_types_to_top){
 				//mixin types and hide
-				this.element.mixin.apply(this.element, this.options.types).hide()
+				var el =  this.element;
+				$.each(this.options.types, function(){
+					new this(el)
+				})
+				this.element.hide()
 			}
 					//add pretty class names
 			return this.element.addClass(this.options.class_names+" ui-menu-"+options.level).
@@ -141,9 +145,9 @@ steal.plugins('mxui/positionable','mxui/menuable','jquery/event/hover').then(fun
    /**
     * Mxui.UI.Menu is a jQuery.UI themed menu.
     */
-   Mxui.Menu.extend("Mxui.UI.Menu",{
+   Mxui.Nav.Menu.extend("Mxui.UI.Menu",{
    		defaults: {
-			types : [Mxui.Positionable.extend("Mxui.UI.TopLeft",{defaults: {my: "left top",at: "right top"}},{}), 
+			types : [Mxui.Layout.Positionable("Mxui.UI.TopLeft",{defaults: {my: "left top",at: "right top"}},{}), 
 					 Mxui.UI.Highlight],
 			select_event : "hoverenter",
 			child_selector : "li",

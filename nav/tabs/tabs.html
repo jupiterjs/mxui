@@ -3,7 +3,7 @@
 <html lang="en">
 	<head>
 		<title>tabs</title>
-		<link type="text/css" href="../smoothness/jquery-ui-1.7.2.custom.css" rel="stylesheet" />
+		<link type="text/css" href="../../smoothness/jquery-ui-1.7.2.custom.css" rel="stylesheet" />
         <style type='text/css'>
             body {font-family: verdana}
             .error {border: solid 1px red;}
@@ -114,10 +114,10 @@
 		    </div>
 		</div>	
 		
-		<script type='text/javascript' src='../../steal/steal.js?steal[app]=mxui/tabs'></script>
+		<script type='text/javascript' src='../../../steal/steal.js?mxui/nav/tabs'></script>
 		<script type='text/javascript'>
-steal.plugins('mxui/tabs').then(function(){
-			$("#tabable").mxui_tabable().find("li").click(function(ev){
+
+			$("#tabable").mxui_nav_tabable().find("li").click(function(ev){
 				ev.preventDefault();
 				ev.stopPropagation();
 				$(this).trigger("activate")
@@ -128,9 +128,9 @@ steal.plugins('mxui/tabs').then(function(){
 				if(ev.keyCode == 13)
 					$(this).trigger("active")
 			});
-			$("#tabs").mxui_tabs()
+			$("#tabs").mxui_nav_tabs()
 			$("#uitabs, #uitabs2").mxui_ui_tabs()
-})
+
 		</script>
 	</body>
 </html>
