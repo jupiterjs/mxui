@@ -22,6 +22,10 @@ $.Controller.extend("Mxui.ScrollableTable",{
 		// body acts as a buffer for the scroll bar
 		this.cache.body.css("width","100%");
 		this.cache.tbody = this.cache.table.children('tbody')
+		if(!this.cache.tbody.length){
+			this.cache.tbody = $('<tbody/>')
+			this.cache.table.append(this.cache.tbody)
+		}
 		// we need to keep this guy the right size
 		this.cache.scrollBody.css('overflow','auto');
 		
@@ -110,14 +114,20 @@ $.Controller.extend("Mxui.ScrollableTable",{
 	sizeTitle: function () {
 
 		var body = this.cache.body,
-			firstWidths = this.cache.tbody.find("tr:first").children().map(function () { return $(this).outerWidth() }),
+			firstWidths = this.cache.tbody.find("tr:first")
+				.children()
+				.map(function () { return $(this).outerWidth() }),
 			header = this.cache.head,
 			title = this.cache.head.find("th, td"); //in case they use tds
 
 		for (var i = 0; i < title.length -1 ; i++) {
 			 title.eq(i).outerWidth(firstWidths[i]);
 		}
-		header.find("table").width(this.cache.table.width() + Mxui.scrollbarWidth) 
+		var padding = 0;
+		if (this.cache.table.height() >= body.height()) {
+			padding = Mxui.scrollbarWidth
+		}
+		header.find("table").width(this.cache.table.width() + padding) 
 		this.cache.head.css('visibility','visible')
 		this.titleSized = true;
 	},
