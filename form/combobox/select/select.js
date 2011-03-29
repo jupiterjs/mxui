@@ -1,6 +1,6 @@
-steal.plugins('mxui/combobox').then(function(){
+steal.plugins('mxui/form/combobox').then(function(){
 
-    $.Controller.extend("Mxui.Combobox.Select", {
+    $.Controller.extend("Mxui.Form.Combobox.Select", {
     },
 	{
         setup: function(el, options){
@@ -28,7 +28,7 @@ steal.plugins('mxui/combobox').then(function(){
 				})
 				el.after(input);
 				el.remove();
-				input.mxui_combobox(
+				input.mxui_form_combobox(
 					 $.extend( options, { items: items } )               
 				 );
 

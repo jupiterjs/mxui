@@ -70,8 +70,8 @@
                 src='../../steal/steal.js'>   
         </script>
         <script type='text/javascript'>
-            steal.plugins("mxui/combobox/select",
-			              "mxui/combobox/ajax",
+            steal.plugins("mxui/form/combobox/select",
+			              "mxui/form/combobox/ajax",
 			              "jquery/dom/fixture").then(function($){
             
 				/*
@@ -96,7 +96,7 @@
 				}
 				maximize();				
 									
-                $("#combobox8a").mxui_combobox({
+                $("#combobox8a").mxui_form_combobox({
                     	items: createItems(6)
 				});		
 				
