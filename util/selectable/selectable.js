@@ -103,7 +103,8 @@ $.Controller.extend('Mxui.Util.Selectable',{
 				.trigger('deactivate');
 			
 			// activate the new one
-			el.trigger("activate", el.model && el.model());
+			
+			el.trigger("activate", el.models ? [el.models()] : undefined);
 			
 		}else if(ev.ctrlKey){ // if we add to the 'activated' list
 			
