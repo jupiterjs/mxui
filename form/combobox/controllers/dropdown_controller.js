@@ -1,21 +1,21 @@
-steal.plugins('mxui/fittable').then(function () {
+steal.plugins('mxui/layout/fit').then(function () {
 
 	
 	/**
 	 * @hide
 	 * @class DropdownController
-	 * @plugin mxui/combobox/dropdown_controller
+	 * @plugin mxui/form/combobox/dropdown_controller
 	 * 
 	 * This class creates a dropdown UI component.  Used internally by `Combobox`.  It manages the dropdown by animating and drawing it.
 	 * 
 	 * @codestart
-	 *    $("&lt;div&gt;").mxui_combobox_dropdown();
+	 *    $("&lt;div&gt;").mxui_form_combobox_dropdown();
 	 * @codeend
 	 *
 	 * @param {Object} options Options used to customize the Dropdown
 	 */
 	
-    $.Controller.extend("Mxui.Combobox.DropdownController", 
+    $.Controller.extend("Mxui.Form.Combobox.DropdownController", 
 	/* @static */
 	{}, 
 	/* @prototype */
@@ -112,10 +112,10 @@ steal.plugins('mxui/fittable').then(function () {
                 }
                 this.list = this.element.html(html)
 					.children("ul")
-					.mxui_combobox_selectable({
+					.mxui_form_combobox_selectable({
 					    selectedClassName: "selected"
 					})
-					.mxui_combobox_selectable("cache");
+					.mxui_form_combobox_selectable("cache");
             }
             
             var modelHash = {};
@@ -296,7 +296,7 @@ steal.plugins('mxui/fittable').then(function () {
             // (we don't want all hidden dropdowns on the page to suddenly open on resize)
             if (this.element.is(":visible")) {
                 this.style();
-                this.element.fit({
+                this.element.mxui_layout_fit({
                     within: 300,
                     of: this.options.parentElement,
                     maxHeight: this.options.maxHeight,
@@ -405,7 +405,7 @@ steal.plugins('mxui/fittable').then(function () {
 
             // knows WAY too much
 
-            this.element.fit({
+            this.element.mxui_layout_fit({
                 within: 300,
                 of: this.options.parentElement,
                 maxHeight: this.options.maxHeight,

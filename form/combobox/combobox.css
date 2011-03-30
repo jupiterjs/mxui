@@ -1,4 +1,4 @@
-.mxui_combobox {
+.mxui_form_combobox {
 	width: 310px;
 	background:none repeat scroll 0 0 #FFFFFF;
 	border:1px solid #888888;
@@ -8,8 +8,8 @@
 	vertical-align:top;
 }
 
-.mxui_combobox input,
-.mxui_combobox .viewbox {
+.mxui_form_combobox input,
+.mxui_form_combobox .viewbox {
 	background:none repeat scroll 0 0 transparent;
 	border:0 none;
 	height:16px;
@@ -21,32 +21,32 @@
 	padding:0;
 }
 
-.mxui_combobox .viewbox {
+.mxui_form_combobox .viewbox {
     font-size: 12px;
     /*height: 16px;*/
 	/*margin-top: 0;*/
 	width: auto !important;
 }
 
-.mxui_combobox .container {
+.mxui_form_combobox .container {
 	margin-right:17px;
 }
 
-.mxui_combobox .toggle {
+.mxui_form_combobox .toggle {
 	background:url("images/dropdown.png") center no-repeat;
 	width:17px;
 	float: right;
 	cursor: pointer;
 }
 
-.mxui_combobox_dropdown {
+.mxui_form_combobox_dropdown {
 	padding: 0px;
 	border: 1px solid WindowFrame;
 	background-color: Window;
 	overflow: auto;
 }
 
-.mxui_combobox_dropdown ul {
+.mxui_form_combobox_dropdown ul {
 	width: 100%;
 	list-style-position: outside;
 	list-style: none;
@@ -54,7 +54,7 @@
 	margin: 0;
 }
 
-.mxui_combobox_dropdown li {
+.mxui_form_combobox_dropdown li {
 	/*margin: 1px;*/
 	/*padding: 3px 0px;*/
 	/*cursor: pointer;*/
@@ -68,39 +68,39 @@
 	overflow: hidden;
 }
 
-*+html .mxui_combobox_dropdown li {
+*+html .mxui_form_combobox_dropdown li {
 	display: inline;
 }
 
-.mxui_combobox_dropdown .activated {
+.mxui_form_combobox_dropdown .activated {
 	background-color: #FFDE58;
 }
 
-.mxui_combobox_dropdown .activated span {
+.mxui_form_combobox_dropdown .activated span {
 	font-weight: bold !important;
 	font-style: normal !important;
 	color: black !important;
 }
 
-.mxui_combobox_dropdown .selected {
+.mxui_form_combobox_dropdown .selected {
 	background-color: orange;
 }
 
-.mxui_combobox_dropdown .selected span {
+.mxui_form_combobox_dropdown .selected span {
 	color: white !important;	
 }
 
-.mxui_combobox_dropdown .disabled .text {
+.mxui_form_combobox_dropdown .disabled .text {
 	color: #bbbbbb !important;
 
 }
-.mxui_combobox_dropdown .disabled {
+.mxui_form_combobox_dropdown .disabled {
 	border-bottom: 1px solid #cccccc;
 	padding: 3px 0;
 	display: block;
 	width: 100%;
 }
-.mxui_combobox_dropdown .selectable {
+.mxui_form_combobox_dropdown .selectable {
 	display: block;
 	width: 100%;
 	margin:0;
@@ -108,20 +108,20 @@
 	border-bottom: 1px solid #cccccc;
     cursor: pointer;
 }
-*+html .mxui_combobox_dropdown ul {
+*+html .mxui_form_combobox_dropdown ul {
     width:auto !important; /*IE7*/
 }
 
-*+html .mxui_combobox_dropdown li {
+*+html .mxui_form_combobox_dropdown li {
 	display: inline;
 }
 
-*+html .mxui_combobox_dropdown ul .item { /*IE7*/
+*+html .mxui_form_combobox_dropdown ul .item { /*IE7*/
     display:block; 
     width:auto;
 }
 
-.mxui_combobox_dropdown .loadingText
+.mxui_form_combobox_dropdown .loadingText
 {
 	font-size:9px;
     padding:4px;

@@ -1,9 +1,9 @@
-steal.plugins('mxui/combobox')
+steal.plugins('mxui/form/combobox')
     .then(function ($)
     {
 
 
-        $.Controller.extend("Mxui.Combobox.Ajax", {
+        $.Controller.extend("Mxui.Form.Combobox.Ajax", {
             defaults: {
                 loadingMessage: "Loading ...",
                 process: function (data)
@@ -31,7 +31,7 @@ steal.plugins('mxui/combobox')
                 el.remove();
 				
 				$.extend(options, {overrideDropdown: true});
-                input.mxui_combobox(options);
+                input.mxui_form_combobox(options);
                 this._super(input[0], options);
             }
         },
