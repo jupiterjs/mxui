@@ -1,6 +1,8 @@
-module("mxui/scrollable_test", { 
+steal.plugins('funcunit').then(function(){
+	
+module("mxui/layout/table_scroll", { 
 	setup: function(){
-        S.open("//mxui/scrollable_table/scrollable_table.html");
+        S.open("//mxui/layout/table_scroll/table_scroll.html");
 		
 		// helps compare columns
 		this.compareCols = function(i, size){
@@ -16,7 +18,7 @@ module("mxui/scrollable_test", {
 			
 		}
 	}
-})
+});
 
 test("columns are the right size", function(){
 	var compareCols = this.compareCols;
@@ -47,3 +49,5 @@ test("resize test", function(){
 	});
 
 });
+
+})

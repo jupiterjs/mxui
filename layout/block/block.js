@@ -6,6 +6,7 @@ steal.plugins('jquery/controller',
 	 * @tag mxui
 	 * @plugin mxui/block
 	 * @test mxui/block/funcunit.html
+	 * 
 	 * Blocks the browser screen from user interaction.
 	 * 
 	 * Sometimes it is necessary to block the browser from user interaction such as when a spinner image

@@ -1,4 +1,4 @@
-steal.plugins('mxui/layout/scrollable_table',
+steal.plugins('mxui/layout/table_scroll',
 	'mxui/layout/resizer', 
 	'jquery/controller/view',
 	'jquery/view/ejs').then(function($){
@@ -38,10 +38,10 @@ steal.plugins('mxui/layout/scrollable_table',
 			var head = this.view('head', {columns: this.options.columns})
 			this.element.find('table').prepend(head)
 			
-			this.element.children('table').mxui_scrollable_table()
-			this.scrollable = this.element.children(":first").controller(Mxui.ScrollableTable);
+			this.element.children('table').mxui_layout_table_scroll()
+			this.scrollable = this.element.children(":first").controller(Mxui.Layout.TableScroll);
 			
-			this.scrollable.cache.thead.mxui_resizer({selector: "th"});
+			this.scrollable.cache.thead.mxui_layout_resizer({selector: "th"});
 			this.element.addClass("grid");
 			this.setFixedAndColumns()
 		},
