@@ -2,6 +2,12 @@ steal.plugins('jquery/controller',
 	'jquery/event/key')
      .then(function(){
 
+//we have to clear out activate
+$.event.special.activate = {
+	setup : function(){return true},
+	teardown : function(){return true}
+}
+
 /**
  * Provides keyboard and mouse selection and multi selection to a group of items.
  * Instead of listening to click and key events, you can add selectable and listen to
@@ -178,7 +184,7 @@ $.Controller.extend('Mxui.Util.Selectable',{
 			el.removeClass(this.options.activatedClassName);
 		}
     },
-    "{selectOn} select": function(el, ev){
+    "{selectOn} select" : function(el, ev){
        
 		var selected = this.element.find( "."+this.options.selectedClassName );
         if (selected.length) {
