@@ -7,24 +7,47 @@ steal.plugins('jquery/controller','jquery/event/drag/limit','jquery/dom/dimensio
 			child_class_names : "split",
 			active : "active",
 			hover : "split-hover",
-			splitter : "splitter"
+			splitter : "splitter",
+			direction : null
 		},
-		listensTo : ["insert","remove"]
+		listensTo : ["insert","remove"],
+		directionMap : {
+			vertical: {
+				dim: "width",
+				cap: "Width",
+				outer: "outerWidth"
+			},
+			horizontal : {
+				dim : "height",
+				cap : "Height",
+				outer : "outerHeight"
+			}
+		}
 	},
 	{
 		init : function(){
 			//determine if horizontal or vertical ...
 			//insert splitter
-			var c = this.element.children(":visible"), splitters = c.length - 1;
-			for(var i=0; i < c.length - 1; i++){
-				$(c[i]).after("<div class='hsplitter'/>")
+			var c = this.element.children(":visible"), 
+				splitters = c.length - 1;
+			
+			// determine direction
+			if(!this.options.direction){
+				this.options.direction = c.eq(0).position().top == c.eq(1).position().top ? 
+					"vertical" : "horizontal"
 			}
-			var splitterHeight = this.element.children(".hsplitter").outerHeight()
+			var firstLetter = this.options.direction.substr(0,1);
+			this.dirs = this.Class.directionMap[this.options.direction];
+			
+			for(var i=0; i < c.length - 1; i++){
+				$(c[i]).after("<div class='"+firstLetter+"splitter splitter'/>")
+			}
+			var splitterHeight = this.element.children(".hsplitter")[this.dirs.outer]()
 			//size everything
-			var total  = this.element.height() - splitterHeight* splitters;
+			var total  = this.element[this.dirs.dim]() - splitterHeight* splitters;
 			for(var i=0; i < c.length; i++){
 				var $c = $(c[i]);
-				var cheight = $c.outerHeight();
+				var cheight = $c[this.dirs.outer]();
 				if(cheight > total){
 					cheight = total;
 				}
@@ -73,13 +96,12 @@ steal.plugins('jquery/controller','jquery/event/drag/limit','jquery/dom/dimensio
 			}
 			//do the shrinking one first
 			if(top > 0){
-				next.height( nextH - top)//.trigger("resize");
-				prev.height( prevH + top)//.trigger("resize");
+				next.height( nextH - top);
+				prev.height( prevH + top);
 			}else{
-				prev.height( prevH + top)//.trigger("resize");
-				next.height( nextH - top)//.trigger("resize");
+				prev.height( prevH + top);
+				next.height( nextH - top);
 			}
-		
 			
 			setTimeout(function(){
 				prev.triggerHandler("resize")
@@ -92,8 +114,10 @@ steal.plugins('jquery/controller','jquery/event/drag/limit','jquery/dom/dimensio
 			//if not visible do nothing
 
 			
-			if(!this.element.is(":visible"))
+			if(!this.element.is(":visible")){
 				return;
+			}
+				
 			
 			if( !(data && data.force === true) && ! this.forceNext){
 				var h = this.element.height(), w = this.element.width()

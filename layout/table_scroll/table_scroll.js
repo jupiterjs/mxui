@@ -3,7 +3,7 @@ steal.plugins('jquery/controller','mxui/layout/fill','mxui/util/scrollbar_width'
 //needs to work from a table, but also if there is no table ...
 //	
 
-$.Controller.extend("Mxui.ScrollableTable",{
+$.Controller.extend("Mxui.Layout.TableScroll",{
 	setup : function(el, options){
 		//remove the header and put in another table
 		

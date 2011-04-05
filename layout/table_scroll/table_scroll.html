@@ -23,7 +23,7 @@
 				margin: 0px;  padding: 2px;
 			}
         </style>
-		<link type="text/css" href="../resizable/resizable.css" rel="stylesheet" />
+		<link type="text/css" href="../resize/resize.css" rel="stylesheet" />
 	</head>
 	<body>
 		<a href="javascript://" id='scrollable'>Make Scrollable</a>
@@ -44,10 +44,10 @@
 	    </div>
 		
 		<script type='text/javascript' 
-                src='../../steal/steal.js'>   
+                src='../../../steal/steal.js'>   
         </script>
 		<script type='text/javascript'>
-			steal.plugins('mxui/scrollable_table','mxui/resizable').start();
+			steal.plugins('mxui/layout/table_scroll','mxui/layout/resize').start();
 		</script>
 		<script type='text/javascript'>
 			var body = $('tbody'),
@@ -79,11 +79,11 @@
 			}
 			body.html(html.join(''))
 			$('#scrollable').click(function(){
-				$('#table').mxui_scrollable_table();
+				$('#table').mxui_layout_table_scroll();
 			})
 			
 			$('#resize').click(function(){
-				$('#container').css("overflow","hidden").mxui_resizable();
+				$('#container').css("overflow","hidden").mxui_layout_resize();
 			})
 			
 		</script>
