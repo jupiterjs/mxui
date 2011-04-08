@@ -1,0 +1,15 @@
+<table>
+	<thead>
+		<tr>
+		<%for(var col in columns){%>
+			<%= view('//mxui/data/grid2/views/th', {name: col, title: columns[col]}) %>
+		<%}%>
+		</tr>
+	</thead>
+	<tbody>
+		<tr class='loading'>
+			<td colspan='<%=count %>'>Loading ...</td>
+		</tr>
+		
+	</tbody>
+</table>

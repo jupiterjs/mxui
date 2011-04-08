@@ -118,7 +118,6 @@ steal.plugins('jquery/dom/dimensions',
 				// the current height of the object
 				fillerHeight = ev.data.filler.height();
 
-			console.log(fillerHeight + delta)
 			//adjust the height
 			
 			if(ev.data.options.all){

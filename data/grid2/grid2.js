@@ -1,5 +1,5 @@
 steal.plugins('mxui/layout/table_scroll',
-	'mxui/layout/resizer', 
+	'mxui/data',
 	'jquery/controller/view',
 	'jquery/view/ejs').then(function($){
 	/**
@@ -23,32 +23,49 @@ steal.plugins('mxui/layout/table_scroll',
 	
 	$.Controller.extend("Mxui.Data.Grid2",{
 		defaults: {
-			columns: {}
+			columns: {},
+			params: null // params data
 		}
 	},
 	{
-		setup: function(el, options){
-			$(el).wrap("<div></div>")
-			
-			this._super($(el).parent()[0], options)
-			//wrap table with a div (which will contain the scrollable table)
-		},
 		init : function(){
 			//create the scrollable table
-			var head = this.view('head', {columns: this.options.columns})
-			this.element.find('table').prepend(head)
+			var count = 0;
+			for(var name in this.options.columns){
+				count++;
+			}
+			this.element.append( this.view({columns: this.options.columns, count: count}) )
+			this.element.children('table').mxui_layout_table_scroll();
 			
-			this.element.children('table').mxui_layout_table_scroll()
+			
 			this.scrollable = this.element.children(":first").controller(Mxui.Layout.TableScroll);
 			
-			this.scrollable.cache.thead.mxui_layout_resizer({selector: "th"});
-			this.element.addClass("grid");
-			this.setFixedAndColumns()
+			//this.scrollable.cache.thead.mxui_layout_resizer({selector: "th"});
+			this.element.addClass("grid").mxui_layout_fill();
+			//this.setFixedAndColumns()
+			this.options.model.findAll(this.options.params.attrs(), this.callback('list'))
 		},
-		"th resize:end" : function(el, ev, outerwidth){
+		list : function(items){
+			this.curentParams = this.options.params.attrs();
+			
+			var tbody = this.clear();
+			tbody.html(this.view('list',{
+				row : this.options.row,
+				items: items
+			})).trigger('resize');
+			// draw in items
+			//console.log(items)
+			this.options.params.attr('count',items.count)
+		},
+		"{params} updated.attr" : function(params, ev, attr, val){
+			if(attr !== 'count'){
+				this.options.model.findAll(this.options.params.attrs(), this.callback('list'))
+			}
+		},
+		/*"th resize:end" : function(el, ev, outerwidth){
 			var index = el.parent().find("th").index(el);
 			this.scrollable.cache.table.find('col:eq('+index+')').width(outerwidth)
-		},
+		},*/
 		/**
 		 * Insert rows into the table
 		 * @param {Object} row insert after this row
@@ -68,10 +85,12 @@ steal.plugins('mxui/layout/table_scroll',
 		},
 		// remove all content from the grid
 		clear: function(){
-			this.find('.body tbody').html("");
+			return this.find('.body tbody').html("");
 		},
+		
+		// creates cols so this can be resized ...
 		setFixedAndColumns : function(){
-			var tbody = this.scrollable.cache.tbody,
+			/*var tbody = this.scrollable.cache.tbody,
 				table = this.scrollable.cache.table,
 				tr = tbody.children(":first"),
 				children = tr.children(),
@@ -80,7 +99,7 @@ steal.plugins('mxui/layout/table_scroll',
 				fragment.appendChild( $("<col/>").width(children.eq(i).outerWidth())[0]  )
 			}
 			table.prepend(fragment)
-			table.css("tableLayout","fixed")
+			table.css("tableLayout","fixed")*/
 		}
 	})
 })
