@@ -21,7 +21,7 @@ body .grid {
 	width:100%;
 
 }
-.grid .innerBody {
+.grid .innerBody, .grid .scrollBody {
 	overflow: auto;
 }
 .header {
@@ -114,9 +114,9 @@ div {
 }
 .column-resizer {
 	position: absolute;
-	border-right: solid 1px black;
-	border-left: solid 1px black;
+	border-right: solid 2px black;
+	border-left: solid 2px black;
 	cursor: e-resize;
 	z-index: 9999;
 }
-.innerBody tr:nth-child(odd) {background: #DEF}
+.innerBody tr:nth-child(odd), .scrollBody tr:nth-child(odd) {background: #DEF}
