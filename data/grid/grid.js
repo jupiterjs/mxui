@@ -1,30 +1,42 @@
 steal.plugins('mxui/layout/table_scroll',
 	'mxui/data',
 	'jquery/controller/view',
-	'jquery/view/ejs').then(function($){
+	'jquery/view/ejs',
+	'mxui/data/order').then(function($){
 	/**
-	 * A simple grid.  A Table element is an input to this controller.
-	 * A grid accepts a list of columns and titles like this:
-	 *  @codestart
-	 *  columns: {
-	 *  	id: "ID",
-	 *      title: "Title",
-	 *      collection: "Collection",
-	 *      mediaType: "Media Type"
-	 *  }
-	 *  @codeend
-	 *  
-	 *  Scrollable is added to each grid, which makes 
-	 *  the header stay in place, while the body scrolls.
-	 *  
-	 *  Resizer is also added to each grid, which makes 
-	 *  the columns resizeable by dragging.
+	 * A simple data grid that is paginate-able and sortable.
+	 * 
+	 * ## Use
+	 * 
+	 * Add the grid to a div (or other element) like:
+	 * 
+	 *     $('#grid').mxui_data_grid({
+	 *     
+	 *       model : Recipe,		   // a model to use to make requests
+	 *       
+	 *       params : new Mxui.Data,   // a model to use for pagination 
+	 *                                 // and sorting values
+	 *       
+	 *       row : "//path/to/row.ejs" // a template to render a row with
+	 *       
+	 *       columns : {               // column titles
+	 *         title : "Title",
+	 *         date : "Date"
+	 *       }
+	 *     })
+	 *   
+	 * The grid will automatically 'fill'
+	 * its parent element's height.
+	 * 
+	 * 
 	 */
 	
 	$.Controller.extend("Mxui.Data.Grid",{
 		defaults: {
 			columns: {},
-			params: null // params data
+			params: new Mxui.Data,
+			row : null,
+			model : null
 		}
 	},
 	{
@@ -37,12 +49,14 @@ steal.plugins('mxui/layout/table_scroll',
 			this.element.append( this.view({columns: this.options.columns, count: count}) )
 			this.element.children('table').mxui_layout_table_scroll();
 			
-			
+			this.find('thead').mxui_data_order({params: this.options.params})
 			this.scrollable = this.element.children(":first").controller(Mxui.Layout.TableScroll);
 			
 			//this.scrollable.cache.thead.mxui_layout_resizer({selector: "th"});
 			this.element.addClass("grid").mxui_layout_fill();
 			//this.setFixedAndColumns()
+			
+			
 			this.options.model.findAll(this.options.params.attrs(), this.callback('list'))
 		},
 		list : function(items){
@@ -54,18 +68,18 @@ steal.plugins('mxui/layout/table_scroll',
 				items: items
 			})).trigger('resize');
 			// draw in items
-			//console.log(items)
 			this.options.params.attr('count',items.count)
 		},
 		"{params} updated.attr" : function(params, ev, attr, val){
 			if(attr !== 'count'){
-				this.options.model.findAll(this.options.params.attrs(), this.callback('list'))
+				//want to throttle for rapid updates
+				clearTimeout(this.newRequestTimer,100)
+				this.newRequestTimer = setTimeout(this.callback('newRequest'))
 			}
 		},
-		/*"th resize:end" : function(el, ev, outerwidth){
-			var index = el.parent().find("th").index(el);
-			this.scrollable.cache.table.find('col:eq('+index+')').width(outerwidth)
-		},*/
+		newRequest : function(){
+			this.options.model.findAll(this.options.params.attrs(), this.callback('list'))
+		},
 		/**
 		 * Insert rows into the table
 		 * @param {Object} row insert after this row

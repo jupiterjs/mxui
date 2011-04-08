@@ -56,7 +56,9 @@ $.Controller('Mxui.Data.Order',
 		if(current){
 			order.unshift(attr+" "+current)
 		}
-		this.options.params.attr('order', order)
+		this.options.params.attrs({
+			'order' : order,
+			offset: 0})
 	}
 })
 

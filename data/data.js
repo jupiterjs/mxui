@@ -32,7 +32,7 @@ $.Model("Mxui.Data",{
 		var offset = this.attr('offset'),
 			limit = this.attr('limit');
 		
-		this.attr('offset',Math.ceil(offset - limit, 0))
+		this.attr('offset',Math.max(offset - limit, 0))
 
 	},
 	/**

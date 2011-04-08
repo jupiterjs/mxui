@@ -86,12 +86,12 @@
 				if(!this.canMoveNext()){
 					$('#next').addClass('disabled')
 				}else{
-					$('#next').remove('disabled')
+					$('#next').removeClass('disabled')
 				}
 				if(!this.canMovePrev()){
 					$('#prev').addClass('disabled')
 				}else{
-					$('#prev').remove('disabled')
+					$('#prev').removeClass('disabled')
 				}
 			})
 		}).start();
