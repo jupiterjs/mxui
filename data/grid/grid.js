@@ -37,7 +37,8 @@ $.Controller.extend("Mxui.Data.Grid",{
 		columns: {},
 		params: new Mxui.Data,
 		row : null,
-		model : null
+		model : null,
+		noItems : "No Items"
 	}
 },
 {
@@ -60,6 +61,12 @@ $.Controller.extend("Mxui.Data.Grid",{
 		this.element.addClass("grid").mxui_layout_fill();
 		//this.setFixedAndColumns()
 		
+		// add jQuery UI stuff ...
+		this.element.find(".header table").attr('cellSpacing', '0').attr('cellPadding', '0');
+		var ths = this.element.find(".header th").addClass("ui-helper-reset ui-state-default")
+		ths.eq(0).addClass('ui-corner-left')
+		ths.eq(-1).addClass('ui-corner-right')
+
 		
 		this.options.model.findAll(this.options.params.attrs(), this.callback('list'))
 	},
