@@ -24,8 +24,12 @@
 			color: gray;
 			text-decoration: none;
 		}
+		#wrapper {
+			overflow:hidden;
+		}
     </style>
 	<link type="text/css" href="grid.css" rel="stylesheet" />
+	<link type="text/css" href="../../layout/resize/resize.css" rel="stylesheet" />
 </head>
 <body>
 	<div id='wrapper'>
@@ -43,7 +47,9 @@
             src='../../../steal/steal.js'>   
     </script>
 	<script type='text/javascript'>
-		steal.plugins('jquery/dom/fixture', 'mxui/data/grid').then(function(){
+		steal.plugins('jquery/dom/fixture', 
+			'mxui/data/grid',
+			'mxui/layout/resize').then(function(){
 		
 		//want this as simple as possible
 		//provide it titles and 
@@ -80,7 +86,9 @@
 			
 			$('#prev').click(function(){
 				params.prev();
-			})
+			});
+			
+			$('#wrapper').mxui_layout_resize();
 			
 			params.bind("updated.attr", function(){
 				if(!this.canMoveNext()){
