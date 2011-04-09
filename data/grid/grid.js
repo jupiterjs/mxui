@@ -39,7 +39,8 @@ $.Controller.extend("Mxui.Data.Grid",{
 		row : null,
 		model : null,
 		noItems : "No Items"
-	}
+	},
+	listensTo : ["select","deselect"]
 },
 {
 	init : function(){
@@ -145,6 +146,12 @@ $.Controller.extend("Mxui.Data.Grid",{
 	// remove all content from the grid
 	clear: function(){
 		return this.$.tbody.html("");
+	},
+	"select" : function(el, ev){
+		ev.preventDefault();
+	},
+	"deselect" : function(el, ev){
+		ev.preventDefault();
 	}
 
 });

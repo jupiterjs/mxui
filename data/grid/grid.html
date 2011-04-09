@@ -42,6 +42,7 @@
 	<script type='text/ejs' id='rowEjs'>
 		<td><%= name %></td>
 		<td><%= birthday %></td>
+		<td><%= foo %></td>
 	</script>
 	<script type='text/javascript' 
             src='../../../steal/steal.js'>   
@@ -63,7 +64,8 @@
 				return {
 					id: i,
 					name : "thing "+i,
-					birthday : Math.round(new Date()*Math.random())
+					birthday : Math.round(new Date()*Math.random()),
+					foo : "bar"
 				}
 			})
 			
@@ -75,7 +77,8 @@
 				params : params,
 				columns: {
 					name: "Name",
-					birthday: "Birthday"
+					birthday: "Birthday",
+					foo : "Thisisaverylongtitle"
 				},
 				row : "rowEjs"
 			})
