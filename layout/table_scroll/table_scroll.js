@@ -51,18 +51,17 @@ $.Controller.extend("Mxui.Layout.TableScroll",{
 		//make a quick resize
 		this.element.parent().triggerHandler("resize");
 		//then redraw the titles
-		console.log("init ...")
+
 		setTimeout(this.callback('sizeTitle'), 1);
 		
 		this.bind(this.cache.scrollBody, "scroll", "bodyScroll")
 	},
 	addSpacer : function(){
 		//check last element ...
-		console.log('space ... ', this.cache.tbody.children(':last').hasClass('spacing'))
+		
 		if(this.cache.tbody.children(':last').hasClass('spacing')){
 			return;
 		}
-		console.log('space')
 		
 		var spacer = this.cache.thead.children(0).clone()
 			.addClass('spacing');
