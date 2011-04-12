@@ -38,7 +38,9 @@ $.Controller.extend("Mxui.Data.Grid",{
 		params: new Mxui.Data,
 		row : null,
 		model : null,
-		noItems : "No Items"
+		noItems : "No Items",
+		// set to false for infinite scroll
+		newPageClears: true
 	},
 	listensTo : ["select","deselect"]
 },
@@ -69,16 +71,29 @@ $.Controller.extend("Mxui.Data.Grid",{
 		ths.eq(-1).addClass('ui-corner-right')
 
 		
-		this.options.model.findAll(this.options.params.attrs(), this.callback('list'))
+		this.options.model.findAll(this.options.params.attrs(), this.callback('list', true))
 	},
-	list : function(items){
+	/**
+	 * 
+	 * @param {Object} clear if this is true, clear the grid and create a new one, else insert
+	 * @param {Object} items
+	 */
+	list : function(clear, items){
 		this.curentParams = this.options.params.attrs();
-		
-		var tbody = this.clear();
-		tbody.html(this.view('list',{
+		var trs = this.view('list',{
 			row : this.options.row,
 			items: items
-		})).trigger('resize');
+		});
+		
+		if(clear){
+			var tbody = this.clear();
+			tbody.html(trs).trigger('resize');
+		}
+		else {
+			var lastTr = this.$.tbody.find("tr.asset:last")
+			this.insert(lastTr, $(trs));
+		}
+		
 		// draw in items
 		this.options.params.attr('count',items.count)
 	},
@@ -86,11 +101,15 @@ $.Controller.extend("Mxui.Data.Grid",{
 		if(attr !== 'count'){
 			//want to throttle for rapid updates
 			clearTimeout(this.newRequestTimer,100)
-			this.newRequestTimer = setTimeout(this.callback('newRequest'))
+			this.newRequestTimer = setTimeout(this.callback('newRequest', attr, val))
 		}
 	},
-	newRequest : function(){
-		this.options.model.findAll(this.options.params.attrs(), this.callback('list'))
+	newRequest : function(attr, val){
+		var clear = true; 
+		if(!this.options.newPageClears && attr == "offset"){ // if offset changes and we have newPageClears false
+			clear = false;
+		} 
+		this.options.model.findAll(this.options.params.attrs(), this.callback('list', clear))
 	},
     /**
      * Listen for updates and replace the text of the list
