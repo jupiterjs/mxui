@@ -94,7 +94,7 @@ $.Controller('Mxui.Data.List',
      * @param {Object} item
      */
     "{model._shortName}.updated subscribe" : function(called, item){
-        var el = item.elements(this.element).html(this.options.list, item);
+        var el = item.elements(this.element).html(this.options.show, item);
         if(this.options.updated){
             this.options.updated(this.element, el, item)
         }
