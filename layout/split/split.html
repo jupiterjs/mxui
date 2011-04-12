@@ -8,137 +8,218 @@
             .error {border: solid 1px red;}
             .error_text { color: red; font-size: 10px;}
             td {padding: 3px;}
-			#container, #container2 {
+			.container {
 				border: solid 1px;
-				width: 300px;
+				width: 350px;
 				height: 400px;
 				margin: 10px;
+				position:relative;
 			}
-			.hsplitter {
-				height: 3px;
-				background-color: gray;
-				cursor: s-resize;
-				border: solid 1px gray;
-				line-height: 3px;
-				font-size: 0px;
-			}
-			.mxui_layout_split .split-hover{
-				border: solid 1px blue;
-			}
-			.mxui_layout_split {
-				overflow: hidden
-			}
-			.split {
-				overflow: auto;
-			}
-			#container .panel:nth-child(even),
-			#container2 .panel:nth-child(even) {
+			#container, #container2{width:600px;}
+			.panel {
 				background-color: #ddddee;
 			}
-			#container .panel:nth-child(odd),
-			#container2 .panel:nth-child(odd) {
-				background-color: #eedddd;
-			}
-			table {
-				border-collapse: collapse;
-			}
-			table td {
-				border-width: 1px;
-				border-style: solid;
-				border-color: #CCCCCC;
+			h3
+			{
+				border-bottom:solid 1px #CCC;
 			}
         </style>
 	</head>
 	<body>
 	    <h1>Splitter</h1>
-		<table>
-			<tr>
-				<td>
-					<div id='container'>
-				    	<div class='panel'>
-				    		<a href='javsacript://' class='remove'>remove</a>
-							Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.
-				        	Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.
-				        	Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.
-				    	</div>
-						<div class='panel'>
-				    		<a href='javsacript://' class='remove'>remove</a>				
-							Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.
-				        	Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.
-				        	Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.
-				    	</div>
-				    </div>
-					<a href='javascript://' id="add">add</a>
-					<a href='javascript://' id="resize">resize</a>
+
+		<h3>Vertical: Floating</h3>
+		<p>$(&quot;#container&quot;).mxui_layout_split({ direction: &quot;vertical&quot; });</p>
+		<div id='container' class="container">
+	    	<div class='panel' style="float:left;width:200px;">
+				Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.
+	        	Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.
+	        	Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.
+	    	</div>
+			<div class='panel' style="float:left;width:200px;">			
+				Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.
+	        	Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.
+	        	Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.
+	    	</div>
+			<div class='panel collapsible' style="float:left;width:200px;">			
+				Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.
+	        	Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.
+	        	Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.
+	    	</div>
+	    </div>
+		
+		<a href='javascript://' id="add">Add Panel</a>
+		<a href='javascript://' id="remove">Remove Last Panel</a>
+		<a href='javascript://' id="resize">Resize Parent</a>
+		<a href='javascript://' id="hide">Hide Last</a>
+		
+		
+		<h3>Vertical: Absolute</h3>
+		<p>$(&quot;#container2&quot;).mxui_layout_split({ direction: &quot;vertical&quot; });</p>
+		<div id='container2' class="container">
+	    	<div class='panel' style="width:200px;position:absolute;left:0;">
+				Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.
+	        	Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.
+	        	Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.
+	    	</div>
+			<div class='panel' style="width:200px;position:absolute;left:200px;">			
+				Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.
+	        	Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.
+	        	Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.
+	    	</div>
+			<div class='panel collapsible' style="width:200px;position:absolute;left:400px;">			
+				Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.
+	        	Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.
+	        	Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.
+	    	</div>
+	    </div>
+		
+		<a href='javascript://' id="add2">Add Panel</a>
+		<a href='javascript://' id="remove2">Remove Last Panel</a>
+		<a href='javascript://' id="resize2">Resize Parent</a>
+		<a href='javascript://' id="hide2">Hide Last</a>
+		
+		<h3>Horizontal</h3>
+		<p>$(&quot;#container3&quot;).mxui_layout_split({ direction: &quot;horizontal&quot; });</p>
+		<div id='container3' class="container">
+	    	<div class='panel' style="width:100%;height:200px;">
+				Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.
+	        	Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.
+	        	Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.
+	    	</div>
+			<div class='panel collapsible' style="width:100%;height:200px;">			
+				Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.
+	        	Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.
+	        	Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.
+	    	</div>
+	    </div>
+		
+		<a href='javascript://' id="add3">Add Panel</a>
+		<a href='javascript://' id="remove3">Remove Last Panel</a>
+		<a href='javascript://' id="resize3">Resize Parent</a>
+		<a href='javascript://' id="hide3">Hide Last</a>
+		
+		<h3>Horizontal And Vertical</h3>
+		<p>
+			$(&quot;#container4&quot;).mxui_layout_split({ direction: &quot;vertical&quot; });</br>
+			$(&quot;#container4inside&quot;).mj_ui_split({ direction: &quot;horizontal&quot; });
+		</p>
+		<div id='container4' class="container">
+	    	<div class='panel' style="float:left;width:200px;">
+				Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.
+	        	Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.
+	        	Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.
+	    	</div>
+			<div class='panel' id="container4inside" style="float:left;width:200px;">
+				<div class="panel2">
+						Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.
+	        	Lorem ipsum dolor sit amet, 
+				</div>		
+				<div class="panel2">	
+			consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.
+	        	Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.
+	    	</div>	
+			</div>
+	    </div>
 					
-				</td>
-				<td>
-					<div id='container2'>
-				    	<div class='panel' style="border:1px solid #CCCCCC;padding:5px;margin:5px;height:80px;">
-				    		<a href='javsacript://' class='remove'>remove</a>
-							<table>
-								<tr><td>Lorem</td><td>ipsum dolor</td><td>sit amet</td></tr>
-								<tr><td>Lorem</td><td>ipsum dolor</td><td>sit amet</td></tr>
-								<tr><td>Lorem</td><td>ipsum dolor</td><td>sit amet</td></tr>
-								<tr><td>Lorem</td><td>ipsum dolor</td><td>sit amet</td></tr>
-								<tr><td>Lorem</td><td>ipsum dolor</td><td>sit amet</td></tr>
-								<tr><td>Lorem</td><td>ipsum dolor</td><td>sit amet</td></tr>
-							</table>
-				    	</div>
-						<div class='panel' style="border:1px solid #CCCCCC;padding:5px;margin:5px;">
-				    		<a href='javsacript://' class='remove'>remove</a>				
-							Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.
-				        	Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.
-				        	Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.
-				    	</div>
-				    </div>		
-					<a href='javascript://' id="add2">add</a>
-					<a href='javascript://' id="resize2">resize</a>		
-					
-				</td>
-			</tr>
-		</table>
-		
-		
-	    
-		
-		<script type='text/javascript' 
-                src='../../../steal/steal.js?steal[app]=mxui/layout/split'>   
-        </script>
+        <script type='text/javascript' src='../../../steal/steal.js'></script>
 		<script type='text/javascript'>
-			$("#container").mxui_layout_split();
-			$("#add").click(function(){
-				$("<div class='panel'><a href='javsacript://' class='remove'>remove</a>Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.</div>")
-					.appendTo($("#container")).trigger("insert")
-			})
-			$(".remove").live("click", function(ev){
-				ev.preventDefault();
-				$(this).parent().trigger("remove").remove();
-			})
-			var big = true;
-			$("#resize").click(function(){
-				if(big){
-					$("#container").height(600).trigger("resize")
-				}else{
-					$("#container").height(400).trigger("resize")
-				}
-				big = ! big;
-			});
+			steal.plugins('mxui/layout/split').then(function(){
+				
+				$("#container").mxui_layout_split({ direction: "vertical" });
+				$("#container2").mxui_layout_split({ direction: "vertical" });
+				$("#container3").mxui_layout_split({ direction: "horizontal" });
+				$("#container4").mxui_layout_split({ direction: "vertical" });
+				$("#container4inside").mxui_layout_split({ direction: "horizontal" });
 			
-			$("#container2").mxui_layout_split();
-			$("#add2").click(function(){
-				$("<div class='panel'><a href='javsacript://' class='remove'>remove</a>Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.</div>")
-					.appendTo($("#container2")).trigger("insert")
-			})
-			var big2 = true;
-			$("#resize2").click(function(){
-				if(big2){
-					$("#container2").height(600).trigger("resize")
-				}else{
-					$("#container2").height(400).trigger("resize")
+				$("#add").click(function(){
+					$("<div class='panel' id='new' style='width:150px;float:left;'>Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.</div>")
+						.appendTo($("#container")).trigger("insert");
+				});
+				
+				$("#add2").click(function(){
+					$("<div class='panel' style='width:150px;position:absolute;'>Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.</div>")
+						.appendTo($("#container2")).trigger("insert");
+				});
+				
+				$("#add3").click(function(){
+					$("<div class='panel' style='width:100%;height:100px'>Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.</div>")
+						.appendTo($("#container3")).trigger("insert");
+				});
+				
+				$('#remove').click(function(){
+					$("#container").find('.panel:last').trigger('remove');
+				});
+				
+				$('#remove2').click(function(){
+					$("#container2").find('.panel:last').trigger('remove');
+				});
+				
+				$('#remove3').click(function(){
+					$("#container3").find('.panel:last').trigger('remove');
+				});
+				
+				var grow = true;
+				$("#resize").click(function(){
+					if(grow){
+						grow = false;
+						$("#container").height(600).width(500).trigger("resize");
+					}else{
+						grow = true;
+						$("#container").height(400).width(300).trigger("resize");
+					}
+				});	
+								
+				var grow2 = true;
+				$("#resize2").click(function(){
+					if(grow2){
+						grow2 = false;
+						$("#container2").height(600).width(500).trigger("resize");
+					}else{
+						grow2 = true;
+						$("#container2").height(400).width(300).trigger("resize");
+					}
+				});	
+				
+				var grow3 = true;
+				$("#resize3").click(function(){
+					if(grow3){
+						grow3 = false;
+						$("#container3").height(600).width(500).trigger("resize");
+					}else{
+						grow3 = true;
+						$("#container3").height(400).width(300).trigger("resize");
+					}
+				});	
+				
+				function hidething(elm, container)
+				{
+					if(elm.text() == "Hide Last"){
+						elm.text('Show Last');
+						container.mxui_layout_split('hidePanel', container.find('.panel:last'));
+						
+					} else {
+						elm.text('Hide Last');
+						container.mxui_layout_split('showPanel', container.find('.panel:last'));
+					}
 				}
-				big2 = ! big2;
-			});			
+				
+				$('#hide').click(function(ev)
+				{	
+					hidething($(ev.target), $('#container'));
+				});
+				
+				$('#hide2').click(function(ev)
+				{
+					hidething($(ev.target), $('#container2'));
+				});
+				
+				$('#hide3').click(function(ev)
+				{
+					hidething($(ev.target), $('#container3'));
+				});
+			
+			}).start();
 		</script>
 	</body>
 </html>
