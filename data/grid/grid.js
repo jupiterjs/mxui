@@ -123,14 +123,14 @@ $.Controller.extend("Mxui.Data.Grid",{
         }
     },
     "{model._shortName}.created subscribe" : function(called, item){
-        var newEl = $($.View(this.options.row,{
+        var newEl = $($.View("//mxui/data/grid/views/list",{
             items : [item],
-            options: this.options
-        })).hide()
+            row: this.options.row
+        }))
         if(this.options.insert){
             this.options.insert(this.element, newEl, item)
         }else{
-            this.insert(newEl).show()
+            this.insert(newEl)
 			//newEl.appendTo(this.element).slideDown();
         }
     },
