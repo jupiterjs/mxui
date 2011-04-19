@@ -1,21 +1,16 @@
-<div class='header'>
-	<table>
-		<thead>
-			<tr>
-				<td>Loading ...</td>
-			</tr>
-		</thead>
-	</table>
-</div>
-<div  class='body' style='width: 100%'>
-	<div class='innerBody'>
-		<table>
-			<tbody>
-				
-			</tbody>
-		</table>
-	</div>
-</div>
-<div class='footer'></div>
-
-
+<table cellpadding='0' cellspacing='0'>
+	<thead>
+		<tr>
+		<%for(var col in columns){%>
+			<%== view('//mxui/data/grid/views/th', {name: col, title: columns[col]}) %>
+		<%}%>
+		</tr>
+	</thead>
+	<tbody>
+		<tr class='loading'>
+			<td colspan='<%=count %>'>Loading ...</td>
+		</tr>
+		
+	</tbody>
+	
+</table>

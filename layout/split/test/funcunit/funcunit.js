@@ -1,3 +1,3 @@
 steal
  .plugins("funcunit")
- .then("sortable_test")
+ .then("split_test");

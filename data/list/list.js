@@ -72,15 +72,29 @@ $.Controller('Mxui.Data.List',
         this.options.callback && this.options.callback(items)
     },
     ".item {activateEvent}" : function(el, ev){
-        el.trigger("activate", el.model())
-    },
+		if(el.hasClass("activated")){
+			this._deactivate(el)
+		} else {
+			var old = this.find(".activated");
+			this._deactivate(old);
+			this._activate(el);
+		}
+	},
+	_deactivate: function(el){
+		el.removeClass("activated");
+		el.trigger("deactivate", el.model());
+	},
+	_activate: function(el){
+		el.addClass("activated");
+		el.trigger("activate", el.model());
+	},
     /**
      * Listen for updates and replace the text of the list
      * @param {Object} called
      * @param {Object} item
      */
     "{model._shortName}.updated subscribe" : function(called, item){
-        var el = item.elements(this.element).html(this.options.list, item);
+        var el = item.elements(this.element).html(this.options.show, item);
         if(this.options.updated){
             this.options.updated(this.element, el, item)
         }

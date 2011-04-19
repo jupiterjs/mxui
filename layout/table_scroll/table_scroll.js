@@ -37,28 +37,8 @@ $.Controller.extend("Mxui.Layout.TableScroll",{
 		this.cache.footer = $("<div class='footer'/>").appendTo(this.element);
 		
 		// add representations of the header cells to the bottom of the table
-		var spacer = this.cache.thead.children(0).clone()
-			.addClass('spacing')
-			.appendTo(this.cache.tbody)
-		// wrap contents with a spacing
-		spacer.children("th, td").each(function () { 
-			var td = $(this);
-			td.html("<div class='spacer'>"+td.html()+"</div>")
-		})
-		//now set spacing, and make minimal height
-		spacer.children("th, td").each(function () {
-			var $td = $(this),
-				$spacer = $td.children().eq(0),
-				width = $spacer.outerWidth(), 
-				height = $spacer.outerHeight();
-			$td.css({ padding: 0, margin: 0 })
-			
-			$spacer.outerWidth(width + 2).css({
-				"float": "none",
-				"visibility": "hidden"
-			}).html("").height(1)
-		})
 		
+		this.addSpacer();
 		
 		
 		// fill up the parent
@@ -71,15 +51,49 @@ $.Controller.extend("Mxui.Layout.TableScroll",{
 		//make a quick resize
 		this.element.parent().triggerHandler("resize");
 		//then redraw the titles
-		
+
 		setTimeout(this.callback('sizeTitle'), 1);
 		
 		this.bind(this.cache.scrollBody, "scroll", "bodyScroll")
 	},
+	addSpacer : function(){
+		//check last element ...
+		
+		if(this.cache.tbody.children(':last').hasClass('spacing')){
+			return;
+		}
+		
+		var spacer = this.cache.thead.children(0).clone()
+			.addClass('spacing');
+			
+		// wrap contents with a spacing
+		spacer.children("th, td").each(function () { 
+			var td = $(this);
+			td.html("<div style='float:left'>"+td.html()+"</div>")
+		});
+		
+		spacer.appendTo(this.cache.tbody);
+		
+		//now set spacing, and make minimal height
+		spacer.children("th, td").each(function () {
+			var $td = $(this),
+				$spacer = $td.children(':first'),
+				width = $spacer.outerWidth(), 
+				height = $spacer.outerHeight();
+			$td.css({ padding: 0, margin: 0 })
+			
+			$spacer.outerWidth(width + 2).css({
+				"float": "none",
+				"visibility": "hidden"
+			}).html("").height(1)
+		})
+	},
 	resize: function () {
 		clearTimeout(this._windowTimeout)
 		clearTimeout(this._sizeTitleTimeout)
-		this.cache.scrollBody.height(0)
+		this.cache.scrollBody.height(0);
+		this.addSpacer();
+		
 		if ( this.titleSized ) {
 			this._windowTimeout = setTimeout(this.callback('windowresize'), 1)
 			this._sizeTitleTimeout = setTimeout(this.callback('sizeTitle'), 3)
