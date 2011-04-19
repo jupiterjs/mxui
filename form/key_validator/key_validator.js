@@ -1,4 +1,4 @@
-steal.plugins('jquery/controller').then(function(){
+steal.plugins('jquery/controller','jquery/event/key').then(function(){
 	//get the start selection / cursor
 	$.fn.selectionStart = function(){
 		var el = this[0];
@@ -57,7 +57,7 @@ steal.plugins('jquery/controller').then(function(){
 
 			// Listen on keydown for backspace and delete, since those keys
 			// don't register keyCodes in IE's keypress event.
-			var key = $.keyname(ev);
+			var key = ev.key();
 			
 			if ((key === "backspace" || key === "delete")){
 				
@@ -71,7 +71,7 @@ steal.plugins('jquery/controller').then(function(){
 		
 		"keypress" : function(el, ev){
 			
-			var key = $.keyname(ev);
+			var key = ev.key()
 			
 			if (this.skip && (key == "backspace" || key == "delete") ){
 				return;
