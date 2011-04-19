@@ -37,7 +37,7 @@ body .grid {
 	border-top: solid 1px gray;
 	overflow: hidden;
 }
-div {
+.mxui_data_grid div {
 	position: relative;
 }
 .pagelisting {
