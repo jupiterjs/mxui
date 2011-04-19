@@ -1,4 +1,4 @@
-steal.plugins('jquery/controller','mxui/keycode').then(function(){
+steal.plugins('jquery/controller').then(function(){
 	//get the start selection / cursor
 	$.fn.selectionStart = function(){
 		var el = this[0];
