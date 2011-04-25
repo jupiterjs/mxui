@@ -73,19 +73,21 @@
                 src='../../../steal/steal.js?mxui/nav/menuable'>   
         </script>
 		<script type='text/javascript'>
-			$("#menu1").mxui_nav_menuable().find("ul").mxui_nav_menuable().hide()
-				.bind("show:before", function(ev){
-					ev.preventDefault()
+			$("#menu1").mxui_nav_menuable()
+				.find("ul").mxui_nav_menuable().hide()
+				.bind("show", function(ev){
+					ev.pause()
 					$(this).show(function(){
-						$(this).trigger("show:after")
+						ev.resume();
 					});
 				})
-				.bind("hide:before", function(ev){
-					ev.preventDefault()
+				.bind("hide", function(ev){
+					ev.pause()
 					$(this).hide(function(){
-						$(this).trigger("hide:after")
+						ev.resume();
 					});
 				});
+				
         	$("#menu1").find("li").click(function(){
 				$(this).trigger("activate")
 			});
@@ -93,16 +95,16 @@
 			
 			//menu with focus
 			$("#menu2").mxui_nav_menuable().find("ul").mxui_nav_menuable().hide()
-				.bind("show:before", function(ev){
-					ev.preventDefault();
+				.bind("show", function(ev){
+					ev.pause()
 					$(this).show(function(){
-						$(this).trigger("show:after")
+						ev.resume();
 					});
 				})
-				.bind("hide:before", function(ev){
-					ev.preventDefault();
+				.bind("hide", function(ev){
+					ev.pause()
 					$(this).hide(function(){
-						$(this).trigger("hide:after")
+						ev.resume();
 					});
 				});
 				
@@ -118,18 +120,18 @@
 			
 			
 			$("#menu3").mxui_nav_menuable().find("ul").mxui_nav_menuable().hide()
-			$('#menu3').delegate("ul", "show:before", function(ev){
+			$('#menu3').delegate("ul", "show", function(ev){
 				ev.stopPropagation();
-				ev.preventDefault();
+				ev.pause();
 				$(this).fadeIn("slow",function(){
-					$(this).trigger("show:after")
+					ev.resume();
 				});
 			})
-			$('#menu3').delegate("ul", "hide:before", function(ev){
+			$('#menu3').delegate("ul", "hide", function(ev){
 				ev.stopPropagation();
-				ev.preventDefault();
+				ev.pause();
 				$(this).fadeOut("slow",function(){
-					$(this).trigger("hide:after")
+					ev.resume();
 				});
 				
 			})

@@ -102,7 +102,7 @@ steal.plugins('mxui/nav/menuable').then(function($){
 			
 			el.trigger("activate");
 	   },
-	   "{child_selector} activate:after" : function(el, ev){
+	   "{child_selector} activate" : function(el, ev){
 	   		var el = this.element;
 			setTimeout(function(){
 				el.parent().triggerHandler("resize")
