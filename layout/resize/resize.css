@@ -24,12 +24,12 @@
 	right:0px;
 	width:12px;
 	background-color: #ddddff;
-	
+	z-index: 1000;
 }
 .ui-resizable-handle {
 	display:block;
 	font-size:0.1px;
 	position:absolute;
-	z-index:99999;
+	z-index: 1000;
 	
 }

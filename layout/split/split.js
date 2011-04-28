@@ -29,12 +29,12 @@ steal.plugins('jquery/controller',
 	$.Controller.extend("MXUI.Layout.Split",
 	{
 		defaults : {
-			child_class_names : "split",
 			active : "active",
 			hover : "split-hover",
 			splitter : "splitter",
 			direction : null,
-			dragDistance: 5
+			dragDistance: 5,
+			panelClass : null
 		},
 		listensTo : ["insert","remove"],
 		directionMap : {
@@ -60,7 +60,7 @@ steal.plugins('jquery/controller',
 		 */
 		init : function()
 		{
-			var c = this.element.children(":visible");
+			var c = this.panels();
 			
 			//- Determine direction.  
 			//- TODO: Figure out better way to measure this since if its floating the panels and the 
@@ -97,10 +97,10 @@ steal.plugins('jquery/controller',
 				
 			}
 			
-			var splitterDim = this.element.children(".splitter")[this.dirs.outer](),
-							  total  = this.element[this.dirs.dim]() - splitterDim * (c.length - 1),
-							  pHeight = this.element.height(),
-							  splitters = this.element.children(".splitter");
+			var splitters = this.element.children(".splitter")
+				splitterDim = splitters[this.dirs.outer](),
+				total  = this.element[this.dirs.dim]() - splitterDim * (c.length - 1),
+				pHeight = this.element.height();
 			
 			//- If its vertical, we need to set the height of the split bar
 			if (this.options.direction == "vertical") {
@@ -128,6 +128,9 @@ steal.plugins('jquery/controller',
 				
 				total = total - cdim;
 			}
+		},
+		panels : function(){
+			return this.element.children(( this.options.panelClass ? "."+ this.options.panelClass :"")+":not(.splitter):visible")
 		},
 		/**
 		 * Adds hover class to splitter bar.
@@ -329,7 +332,7 @@ steal.plugins('jquery/controller',
 				this.forceNext = true;
 			}
 			
-			this.size(this.element.children(":not(.splitter):visible").not(target), true);
+			this.size(this.panels().not(target), true);
 			
 			target.remove();
 		},
@@ -418,26 +421,30 @@ steal.plugins('jquery/controller',
 				$(window).resize();
 			}
 		},
-		
 		/**
-		 * Takes elements and animates them to the right size based on the drag.
-		 * @param {Object} els
+		 * Takes elements and animates them to the right size
+		 * 
+		 * @param {jQuery} [els] child elements
+		 * @param {Boolean} [animate] animate the change
+		 * @param {jQuery} [keep] keep this element's width / height the same
 		 */
 		size : function(els, animate, keep)
 		{
-			els = els || this.element.children(":not(.splitter):visible");
+			els = els || this.panels();
+			
+			var splitters = this.element.children(".splitter:visible"),
+				splitterDim = splitters[this.dirs.outer](),
+				total  = this.element[this.dirs.dim]() - (splitterDim * splitters.length),
+				// rounding remainder
+				remainder = 0;
 			
 			//makes els the right height
 			if(keep){
-				els = els.not(keep)
+				els = els.not(keep);
+				total = total - $(keep)[this.dirs.outer]() ;
 			}
-			var splitters = this.element.children(".splitter:visible"),
-				splitterDim = splitters[this.dirs.outer](),
-				total  = this.element[this.dirs.dim]() - (splitterDim * splitters.length);
-			
-			if(keep){
-				total = total - $(keep)[this.dirs.outer]();
-			}
+			// round down b/c some browsers don't like fractional dimensions
+			total = Math.floor(total);
 			
 			//calculate current percentage of height
 			var dims = [], sum = 0;
@@ -448,34 +455,42 @@ steal.plugins('jquery/controller',
 				sum += dim;
 			}
 			
-			var increase = total / sum, keepSized = false;
-			if (increase == 1.0) {
-				els.each(function(){
-					$(this).triggerHandler('resize')
-				});
-				return;
+			var increase = total / sum, 
+				keepSized = false,
+				curLeft = 0;
+			
+			
+			//resize splitters to new height if vertical (horizontal will automatically be the right width)
+			var pHeight = this.element.height(), 
+				pWidth = this.element.width();
+			
+			if(this.options.direction == "vertical"){
+				splitters.height(pHeight);
 			}
 			
-			//go through and resize
-			var pHeight = this.element.height(), pWidth = this.element.width();
-			if(this.options.direction == "vertical"){
-				this.element.children('.splitter').height(pHeight);
-			}
-			// Adjust widths for each pane to account for rounding
-			var adj = els.length + (keep ? keep.length : 0);
+			// Adjust widths for each pane and account for rounding
 			for (var i = 0; i < els.length; i++) {
-				var $c = $(els[i]), dim = dims[i];
 				
-				var newDim = this.options.direction == "horizontal" ? {
-					outerHeight: Math.floor(dim * increase) + (adj--),
+				var $c = $(els[i]), 
+					dim = dims[i],
+					newDim = (dim * increase) +remainder,
+					newDimFloor = i === els.length -1 ? total : Math.floor(newDim);
+				
+				// save the remainder (might be used on the next element)
+				remainder = newDim - newDimFloor;
+				// save the total remaining, used on the last element
+				total = total - newDimFloor;	
+				
+				var newDims = this.options.direction == "horizontal" ? {
+					outerHeight: newDimFloor,
 					outerWidth: pWidth
 				} : {
-					outerWidth: Math.floor(dim * increase) + (adj--),
+					outerWidth: newDimFloor,
 					outerHeight: pHeight
 				};
 				
 				if (animate && !this.usingAbsPos) {
-					$c.animate(newDim, "fast", function(){
+					$c.animate(newDims, "fast", function(){
 						$(this).triggerHandler('resize');
 						
 						if (keep && !keepSized) {
@@ -485,17 +500,18 @@ steal.plugins('jquery/controller',
 					});
 				}
 				else {
-					$c.outerHeight(newDim.outerHeight).outerWidth(newDim.outerWidth).triggerHandler('resize');
+					$c.outerHeight(newDims.outerHeight).outerWidth(newDims.outerWidth).triggerHandler('resize');
 				}
-			}
-			
-			//- we need to reitterate through and set the absolute position'd elms position now
-			if (this.usingAbsPos){
-				els = this.element.children(":not(.splitter)");
-				for(var i =0; i < els.length; i++){
-					this.repositionAbsoluteElms(els, i, splitters, splitterDim);
+				// adjust positions if absolutely positioned
+				if ( this.usingAbsPos ) {
+					//set splitter in the right spot
+					$c.css(this.dirs.pos,curLeft )
+					splitters.eq(i).css(this.dirs.pos, curLeft+newDimFloor)
 				}
+				// move the next location
+				curLeft = curLeft+ newDimFloor + splitterDim;
 			}
+
 		},
 		
 		/**
