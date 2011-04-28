@@ -36,7 +36,7 @@ steal.plugins('jquery/controller','jquery/event/drop','jquery/event/drag/limit',
 		"dropover" : function(el, ev, drop, drag){
 
 			if(!this.element.has(drag.element).length){
-				this.element.triggerDefaults("sortable:addPlaceholder")
+				this.element.trigger("sortable:addPlaceholder")
 				var placeholder = this.options.makePlaceHolder(drag.element).addClass("sortable-placeholder").removeAttr("id")
 				var res = this.where(ev);
 				res.el[res.pos](placeholder)
@@ -46,7 +46,7 @@ steal.plugins('jquery/controller','jquery/event/drop','jquery/event/drag/limit',
 		"dropout" : function(el, ev, drop, drag){
 			if(!this.element.has(drag.element).length){
 				this.find(".sortable-placeholder").remove();
-				this.element.triggerDefaults("sortable:removePlaceholder")
+				this.element.trigger("sortable:removePlaceholder")
 			}
 			
 		},

@@ -15,13 +15,20 @@
 				margin: 10px;
 				position:relative;
 			}
-			#container, #container2{width:600px;}
+			#container, #container2, #container_min_width{width:600px;}
 			.panel {
 				background-color: #ddddee;
 			}
 			h3
 			{
 				border-bottom:solid 1px #CCC;
+			}
+			
+			.min-wide {
+				min-width: 200px;
+			}
+			.min {
+				min-width: 100px;
 			}
         </style>
 	</head>
@@ -68,6 +75,27 @@
 	        	Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.
 	    	</div>
 			<div class='panel collapsible' style="width:200px;position:absolute;left:400px;">			
+				Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.
+	        	Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.
+	        	Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.
+	    	</div>
+	    </div>
+		
+		
+		<h3>Vertical: Absolute Min Width</h3>
+		<p>$(&quot;#container2&quot;).mxui_layout_split({ direction: &quot;vertical&quot; });</p>
+		<div id='container_min_width' class="container">
+	    	<div class='panel min' style="width:200px; position:absolute;left:0;">
+				Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.
+	        	Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.
+	        	Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.
+	    	</div>
+			<div class='panel min-wide' style="width:200px;position:absolute;left:200px;">			
+				Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.
+	        	Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.
+	        	Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.
+	    	</div>
+			<div class='panel' style="width:200px;position:absolute;left:400px;">			
 				Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.
 	        	Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.
 	        	Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.
@@ -128,10 +156,11 @@
 				
 				$("#container").mxui_layout_split({ direction: "vertical" });
 				$("#container2").mxui_layout_split({ direction: "vertical" });
+				$("#container_min_width").mxui_layout_split({ direction: "vertical" });
 				$("#container3").mxui_layout_split({ direction: "horizontal" });
 				$("#container4").mxui_layout_split({ direction: "vertical" });
 				$("#container4inside").mxui_layout_split({ direction: "horizontal" });
-			
+				
 				$("#add").click(function(){
 					$("<div class='panel' id='new' style='width:150px;float:left;'>Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.</div>")
 						.appendTo($("#container")).trigger("insert");

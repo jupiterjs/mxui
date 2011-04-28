@@ -72,8 +72,9 @@ steal.plugins('jquery/controller', 'jquery/event/default').then(function($){
 		"default.hide" : function(el, ev){
 			if(ev.target == this.element[0]){
 				var old = this.sub(this.element.find("."+this.options.active).removeClass(this.options.active));
-				old && old.triggerDefaults("hide")
-				this.element.hide();
+				old && old.triggerAsync("hide", function(){
+					$(ev.target).hide()
+				});
 			}
 			
 		},

@@ -111,7 +111,6 @@ steal.plugins('mxui/layout/positionable','mxui/nav/menuable','jquery/event/hover
 		">show" : function(el, ev){
 		   if(ev.target == this.element[0]){
 				this.element.show();
-				//this.element.triggerDefault("show:after")
 		   }
 			
 		}
