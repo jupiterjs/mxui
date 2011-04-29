@@ -86,6 +86,14 @@ steal.plugins('funcunit').then(function(){
 	};
 	verticalTest("floating","#container", 0);
 	verticalTest("absolute","#container2", 1);
+	
+	test("vertical absolute - second  splitter position",function(){
+		var second = S('#container2 .panel:eq(1)'),
+			offset = second.offset(),
+			outer = second.outerWidth();
+		equals(S('#container2 .splitter:eq(1)').offset().left, offset.left+outer, "right position");
+	})
+	
 	/*
 	test("Remove Panel",function(){ 
 		S('#remove').click().wait(2000,function(){

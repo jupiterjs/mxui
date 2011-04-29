@@ -85,16 +85,9 @@ steal.plugins('jquery/controller',
 			//- Insert the splitter bars
 			for(var i=0; i < c.length - 1; i++){	
 				var $c = $(c[i]);	
-				$c.after("<div class='" + this.options.direction.substr(0,1) + "splitter splitter'>");
-				
-				//- Append Collapser Anchors
-				if($c.hasClass('collapsible')){
-					$c.next().append("<a class='left-collapse collapser' href='javascript://'>Expand/Collapse</a>");
-				}
-				else if($(c[i + 1]).hasClass('collapsible')){
-					$c.next().append("<a class='right-collapse collapser' href='javascript://'>Expand/Collapse</a>");
-				}
-				
+				$c.after(this.splitterEl(
+					$c.hasClass('collapsible') ? "left" : ($(c[i + 1]).hasClass('collapsible') ? "right" : undefined)
+				));				
 			}
 			
 			var splitters = this.element.children(".splitter")
@@ -121,6 +114,16 @@ steal.plugins('jquery/controller',
 			}
 			
 			this.size()
+		},
+		splitterEl : function(dir){
+			var splitter = $("<div class='" + this.options.direction.substr(0,1) + "splitter splitter'>");
+			if(this.usingAbsPos){
+				splitter.css("position","absolute");
+			}
+			if(dir){
+				splitter.append("<a class='"+dir+"-collapse collapser' href='javascript://'>Expand/Collapse</a>")
+			}
+			return splitter;
 		},
 		panels : function(){
 			return this.element.children(( this.options.panelClass ? "."+ this.options.panelClass :"")+":not(.splitter):visible")
@@ -279,12 +282,9 @@ steal.plugins('jquery/controller',
 				prevElm = target.prev();
 				
 			target.addClass("split");
-			target.before("<div class='" + this.options.direction.substr(0,1) + "splitter splitter'/>");
+			target.before(this.splitterEl(target.hasClass('collapsible') && "right"));
 			
 			//- Append Collapser Anchors
-			if(target.hasClass('collapsible')){
-				target.prev().append("<a class='right-collapse collapser' href='javascript://'>Expand/Collapse</a>");
-			}
 			
 			this.size(null, true, target);
 			
@@ -376,15 +376,11 @@ steal.plugins('jquery/controller',
 				} else {
 					//- if it was hidden by start, it didn't get a 
 					//- splitter added so we need to add one here
-					panel.before("<div class='" + this.options.direction.substr(0,1) + "splitter splitter'/>");
-					
-					//- Append Collapser Anchors
-					if(prevElm.hasClass('collapsible')){
-						panel.prev().append("<a class='left-collapse collapser' href='javascript://'>Expand/Collapse</a>");
-					}
-					else if(panel.hasClass('collapsible')){
-						panel.prev().append("<a class='right-collapse collapser' href='javascript://'>Expand/Collapse</a>");
-					}
+					panel.before(this.splitterEl(
+						prevElm.hasClass('collapsible')? "left" : (
+							panel.hasClass('collapsible') ? "right" : undefined
+						)
+					));
 				}
 				
 				this.size(null, false, panel);
