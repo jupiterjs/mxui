@@ -135,7 +135,7 @@ steal.plugins('jquery/controller',
 		 */
         ".splitter mouseenter" : function(el, ev)
 		{
-            el.addClass(this.options.hover)
+			el.addClass(this.options.hover)
         },
 		
 		/**
@@ -145,7 +145,9 @@ steal.plugins('jquery/controller',
 		 */
         ".splitter mouseleave" : function(el, ev)
 		{
-            el.removeClass(this.options.hover)
+            if(!this.dragging){
+				el.removeClass(this.options.hover)
+			}
         },
 		
 		/**
@@ -232,6 +234,7 @@ steal.plugins('jquery/controller',
 		".splitter dragend" : function(el, ev, drag)
 		{
 			this.dragging = false;
+			el.removeClass(this.options.hover)
 			drag.selection();
 			setTimeout(function(){
 				$(window).resize()
