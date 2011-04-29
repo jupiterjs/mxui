@@ -164,13 +164,13 @@
 					.each(addButtons).mxui_layout_resize();
 				
 				
-				$(document.body).delegate("a","click", function(){
+				$(document.body).delegate("a","click", function(ev){
 					var action = this.className,
 						container = $(this).parent().prev();
 					
 					switch(action){
 						case "add" : 
-							$("<div class='panel' style='width:150px;float:left;'>Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.</div>")
+							$("<div class='panel add' style='width:150px;float:left;'>Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.</div>")
 								.appendTo(container).trigger("insert");
 							break;
 						case "remove" : 

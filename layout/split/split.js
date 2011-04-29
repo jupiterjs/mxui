@@ -102,32 +102,25 @@ steal.plugins('jquery/controller',
 				total  = this.element[this.dirs.dim]() - splitterDim * (c.length - 1),
 				pHeight = this.element.height();
 			
+			
 			//- If its vertical, we need to set the height of the split bar
 			if (this.options.direction == "vertical") {
 				splitters.height(pHeight);
 			}
 			
+			
+			
 			//- Size the elements				  
 			for(var i=0; i < c.length; i++){
 				var $c = $(c[i]);
-				var cdim = $c[this.dirs.outer]();
 				// store in data for faster lookup
 				$c.data("split-min-"+this.dirs.dim,parseInt( $c.css('min-'+this.dirs.dim) ));
 				
-				if(cdim > total){
-					cdim = total;
-				}
 				
-				$c[this.dirs.dim](cdim).addClass("split");
-				this.repositionAbsoluteElms(c, i, splitters, splitterDim);
-				
-				//- If its a vertical split, we need to size all the elms height to be the same.
-				if(this.options.direction == "vertical"){
-					$c.height(pHeight);
-				}
-				
-				total = total - cdim;
+				$c.addClass("split");
 			}
+			
+			this.size()
 		},
 		panels : function(){
 			return this.element.children(( this.options.panelClass ? "."+ this.options.panelClass :"")+":not(.splitter):visible")
@@ -436,61 +429,79 @@ steal.plugins('jquery/controller',
 				splitterDim = splitters[this.dirs.outer](),
 				total  = this.element[this.dirs.dim]() - (splitterDim * splitters.length),
 				// rounding remainder
-				remainder = 0;
+				remainder = 0,
+				dims = [],
+				newDims = [],
+				sum = 0,
+				i,
+				c$,
+				dim,
+				increase,
+				keepSized = false,
+				curLeft = 0,
+				index,
+				rawDim,
+				newDim,
+				pHeight = this.element.height(), 
+				pWidth = this.element.width(),
+				length,
+				start;
 			
 			//makes els the right height
 			if(keep){
 				els = els.not(keep);
 				total = total - $(keep)[this.dirs.outer]() ;
 			}
+			
+			length = els.length;
+			start = Math.floor(Math.random() * length);
 			// round down b/c some browsers don't like fractional dimensions
 			total = Math.floor(total);
 			
 			//calculate current percentage of height
-			var dims = [], sum = 0;
-			for(var i =0; i < els.length; i++){
-				var $c = $(els[i]), 
-					dim = $c[this.dirs.outer](true);
+
+			for(i =0; i < length; i++){
+				$c = $(els[i]), 
+				dim = $c[this.dirs.outer](true);
 				dims.push(dim)
 				sum += dim;
 			}
 			
-			var increase = total / sum, 
-				keepSized = false,
-				curLeft = 0;
+			increase = total / sum;
+			
+			// this randomly adjusts sizes so scaling is approximately equal
+			for(i =start; i < length+start; i++){
+				index = i >= length ? i - length : i;
+				dim = dims[index];
+				rawDim = (dim * increase) +remainder;
+				newDim = ( i == length+start -1 ?  total :  Math.round(rawDim) );
+				newDims[index] = newDim;
+				total = total - newDim;	
+			}
+			// randomly set each dim
 			
 			
 			//resize splitters to new height if vertical (horizontal will automatically be the right width)
-			var pHeight = this.element.height(), 
-				pWidth = this.element.width();
+			
 			
 			if(this.options.direction == "vertical"){
 				splitters.height(pHeight);
 			}
-			
 			// Adjust widths for each pane and account for rounding
-			for (var i = 0; i < els.length; i++) {
+			for (i = 0; i < length; i++) {
 				
-				var $c = $(els[i]), 
-					dim = dims[i],
-					newDim = (dim * increase) +remainder,
-					newDimFloor = i === els.length -1 ? total : Math.floor(newDim);
+				$c = $(els[i]);
 				
-				// save the remainder (might be used on the next element)
-				remainder = newDim - newDimFloor;
-				// save the total remaining, used on the last element
-				total = total - newDimFloor;	
-				
-				var newDims = this.options.direction == "horizontal" ? {
-					outerHeight: newDimFloor,
+				var dim = this.options.direction == "horizontal" ? {
+					outerHeight: newDims[i],
 					outerWidth: pWidth
 				} : {
-					outerWidth: newDimFloor,
+					outerWidth: newDims[i],
 					outerHeight: pHeight
 				};
 				
 				if (animate && !this.usingAbsPos) {
-					$c.animate(newDims, "fast", function(){
+					$c.animate(dim, "fast", function(){
 						$(this).triggerHandler('resize');
 						
 						if (keep && !keepSized) {
@@ -500,16 +511,16 @@ steal.plugins('jquery/controller',
 					});
 				}
 				else {
-					$c.outerHeight(newDims.outerHeight).outerWidth(newDims.outerWidth).triggerHandler('resize');
+					$c.outerHeight(dim.outerHeight).outerWidth(dim.outerWidth).triggerHandler('resize');
 				}
 				// adjust positions if absolutely positioned
 				if ( this.usingAbsPos ) {
 					//set splitter in the right spot
 					$c.css(this.dirs.pos,curLeft )
-					splitters.eq(i).css(this.dirs.pos, curLeft+newDimFloor)
+					splitters.eq(i).css(this.dirs.pos, curLeft+newDims[i])
 				}
 				// move the next location
-				curLeft = curLeft+ newDimFloor + splitterDim;
+				curLeft = curLeft+ newDims[i] + splitterDim;
 			}
 
 		},
