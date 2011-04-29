@@ -138,11 +138,11 @@
 	        	Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.
 	    	</div>
 			<div class='panel horizontal-splitter' id="container4inside" style="float:left;width:200px;">
-				<div class="panel2">
+				<div class="panel">
 						Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.
 	        	Lorem ipsum dolor sit amet, 
 				</div>		
-				<div class="panel2">	
+				<div class="panel">	
 			consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.
 	        	Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.
 	    	</div>	
@@ -161,8 +161,9 @@
 				
 				
 				$('.horizontal-splitter').mxui_layout_split({ direction: "horizontal", panelClass: "panel" })
-					.each(addButtons).mxui_layout_resize();
+					.each(addButtons)
 				
+				$('#container3').mxui_layout_resize()
 				
 				$(document.body).delegate("a","click", function(ev){
 					var action = this.className,
