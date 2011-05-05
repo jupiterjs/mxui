@@ -13,13 +13,24 @@ $.Controller('Mxui.Data.Order',
 {
 	defaults : {
 		params : null,
-		order : ["asc","desc"]
+		order : ["asc","desc"],
+		// if true, can sort by multiple columns at a time
+		multiSort: true,
+		// if true, there are three states (asc, desc, no sort)
+		canUnsort: true
 	}
 },
 /* @Prototype */
 {
+	init: function(){
+		if(this.options.params && this.options.params.order){
+			this._addSortClass(this.options.params.order);
+		}
+	},
 	"{params} order" : function(params, ev, order){
-		
+		this._addSortClass(order)
+	},
+	_addSortClass: function(order){
 		this.find('th').each(function(){
 			var el = $(this),
 				attr = sortName(el);
@@ -40,6 +51,8 @@ $.Controller('Mxui.Data.Order',
 			order = (this.options.params.attr('order') || []).slice(0),
 			current;
 		
+		
+		
 		//see if we might already have something with this
 		while ( i < order.length ) {
 			if ( order[i].indexOf(attr + " ") == 0 ) {
@@ -51,10 +64,20 @@ $.Controller('Mxui.Data.Order',
 		}
 		
 		var index = $.inArray(current, this.options.order)
+		
 		current = this.options.order[index+1];
+		if(!current && !this.options.canUnsort){
+			current = this.options.order[0]
+		}
+		
 		
 		if(current){
-			order.unshift(attr+" "+current)
+			var newOrder = attr+" "+current;
+			if(!this.options.multiSort){
+				order = [newOrder]
+			} else {
+				order.unshift(newOrder)
+			}
 		}
 		this.options.params.attrs({
 			'order' : order,

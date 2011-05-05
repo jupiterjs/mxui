@@ -39,6 +39,10 @@ $.Controller.extend("Mxui.Data.Grid",{
 		row : null,
 		model : null,
 		noItems : "No Items",
+		// if true, can sort by multiple columns at a time
+		multiSort: true,
+		// if true, there are three states (asc, desc, no sort)
+		canUnsort: true,
 		// set to false for infinite scroll
 		newPageClears: true
 	},
@@ -54,7 +58,11 @@ $.Controller.extend("Mxui.Data.Grid",{
 		this.element.append( this.view({columns: this.options.columns, count: count}) )
 		this.element.children('table').mxui_layout_table_scroll();
 		
-		this.find('thead').mxui_data_order({params: this.options.params})
+		this.find('thead').mxui_data_order({
+			params: this.options.params,
+			multiSort: this.options.multiSort, 
+			canUnsort: this.options.canUnsort
+		})
 		
 		this.$ = {};
 		
