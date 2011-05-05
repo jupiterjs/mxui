@@ -1,6 +1,8 @@
 steal.plugins('jquery/controller',
 			  'jquery/event/drag/limit',
-			  'jquery/dom/dimensions').css('split').then(function($){
+			  'jquery/dom/dimensions',
+			  'jquery/event/key',
+			  'jquery/event/resize').css('split').then(function($){
 	
 	/**
 	 * 
@@ -116,12 +118,12 @@ steal.plugins('jquery/controller',
 			this.size()
 		},
 		splitterEl : function(dir){
-			var splitter = $("<div class='" + this.options.direction.substr(0,1) + "splitter splitter'>");
+			var splitter = $("<div class='" + this.options.direction.substr(0,1) + "splitter splitter' tabindex='0'>");
 			if(this.usingAbsPos){
 				splitter.css("position","absolute");
 			}
 			if(dir){
-				splitter.append("<a class='"+dir+"-collapse collapser' href='javascript://'>Expand/Collapse</a>")
+				splitter.append("<a class='"+dir+"-collapse collapser' href='javascript://'></a>")
 			}
 			return splitter;
 		},
@@ -135,7 +137,9 @@ steal.plugins('jquery/controller',
 		 */
         ".splitter mouseenter" : function(el, ev)
 		{
-			el.addClass(this.options.hover)
+			if (!this.dragging) {
+				el.addClass(this.options.hover)
+			}
         },
 		
 		/**
@@ -150,14 +154,19 @@ steal.plugins('jquery/controller',
 			}
         },
 		
-		/**
-		 * Drag down event for the '.splitter' split bar.
-		 * @param {Object} el
-		 * @param {Object} ev
-		 */
-		".splitter dragdown" : function(el, ev)
-		{
-			ev.preventDefault();
+		".splitter keydown" : function(el, ev){
+			var offset = el.offset();
+			switch(ev.key()){
+				case 'right':
+					this.moveTo(el, offset.left +1 );
+					break;
+				case 'left':
+					this.moveTo(el, offset.left - 1);
+					break;
+				case '\r':
+					this.toggleCollapse(el);
+					break;
+			}
 		},
 		
 		/**
@@ -174,29 +183,53 @@ steal.plugins('jquery/controller',
 			drag[this.dirs.dragDir]();
 			//drag.ghost()
 			el.addClass("move").addClass(this.options.hover);
-			this.currentOffset = el.offset();
-			this.currentNext = el.next()[this.dirs.dim]();
-			this.currentPrev = el.prev()[this.dirs.dim]();
+			this.moveCache = this._makeCache(el);
+			
 			this.dragging = true;
 		},
-		".splitter dragmove" : function(el, ev, drag){
-			var newOffset =  drag.location[this.dirs.pos](),
-				prevOffset = this.currentOffset[this.dirs.pos],
+		//gets the cache info for an element
+		_makeCache : function(el){
+			var next = el.next(),
+				prev = el.prev();
+			return {
+				offset: el.offset()[this.dirs.pos],
+				next: next,
+				prev: prev,
+				nextD: next[this.dirs.dim](),
+				prevD: prev[this.dirs.dim]()
+			};
+		},
+		/**
+		 * Moves a slider to a specific offset in the page
+		 * @param {jQuery} el
+		 * @param {Number} newOffset The location in the page in the direction the slider moves
+		 * @param {Object} [cache] A cache of dimensions data to make things run faster (esp for drag/drop). It looks like
+		 * 
+		 *     {
+		 *       offset: {top: 200, left: 200},
+		 *       prev: 400, // width or height of the previous element
+		 *       next: 200  // width or height of the next element
+		 *     }
+		 * @return {Boolean} false if unable to move
+		 */
+		moveTo : function(el, newOffset, cache){
+			
+			cache = cache || this._makeCache(el);
+			
+			var prevOffset = cache.offset,
 				delta = newOffset - prevOffset || 0 ,
-				prev = el.prev(),
-				next = el.next(),
-				prevD = this.currentPrev
-				nextD = this.currentNext,
+				prev = cache.prev,
+				next = cache.next,
+				prevD = cache.prevD,
+				nextD = cache.nextD,
 				prevMin = prev.data("split-min-"+this.dirs.dim),
 				nextMin = next.data("split-min-"+this.dirs.dim);
 			
 			// we need to check the 'getting smaller' side
 			if(delta > 0 && ( nextD - delta <  nextMin) ) {
-				ev.preventDefault();
-				return;
+				return false;
 			} else if(delta < 0 && ( prevD + delta <  prevMin) ) {
-				ev.preventDefault();
-				return;
+				return false;
 			}
 			
 			// make sure we can't go smaller than the right's min
@@ -218,12 +251,20 @@ steal.plugins('jquery/controller',
 				//next.css(this.dirs.pos, el.position().left + el[this.dirs.outer]()+"px");
 			}
 
-			
+			// this can / should be throttled
 			setTimeout(function(){
 				//$(window).resize()
 				prev.triggerHandler("resize")
 				next.triggerHandler("resize")
 			},1)
+		},
+		".splitter dragmove" : function(el, ev, drag){
+			var moved = this.moveTo(el, 
+				drag.location[this.dirs.pos](), 
+				this.moveCache)
+			if(moved === false){
+				ev.preventDefault();
+			}
 		},
 		/**
 		 * Drag end event for the '.splitter' split bar.
@@ -236,9 +277,11 @@ steal.plugins('jquery/controller',
 			this.dragging = false;
 			el.removeClass(this.options.hover)
 			drag.selection();
-			setTimeout(function(){
-				$(window).resize()
-			},1)
+			
+			// todo, do we still need to do this
+			//setTimeout(function(){
+			//	$(window).resize()
+			//},1)
 		},
 		
 		/**
@@ -335,29 +378,33 @@ steal.plugins('jquery/controller',
 		
 		
 		
-		/**
-		 * Occurs when the split bar's collapser was clicked to toggle visibility of a panel.
-		 * @param {Object} el
-		 * @param {Object} event
-		 */
+		
 		".collapser click":function(el,event)
 		{
-			var splitBar = el.parent(),
-				prevElm = splitBar.prev(),
+			this.toggleCollapse(el.parent());
+		},
+		/**
+		 * Collapses a splitter ..
+		 * @param {Object} el
+		 */
+		toggleCollapse : function(splitBar){
+			// check the next and prev element should be collapsed
+			var prevElm = splitBar.prev(),
 				nextElm = splitBar.next(),
-				elmToTakeActionOn = prevElm.hasClass('collapsible') ? prevElm : nextElm,
-				elmIsHidden = !elmToTakeActionOn.is(':visible');
-				
-			if(elmIsHidden){
+				elmToTakeActionOn = ( prevElm.hasClass('collapsible') && prevElm ) || (nextElm.hasClass('collapsible') && nextElm);
+			if(!elmToTakeActionOn){
+				return;
+			}
+			
+			if(!elmToTakeActionOn.is(':visible')){
 				this.showPanel(elmToTakeActionOn);
 			} else {
 				this.hidePanel(elmToTakeActionOn, true);
 			}
 			
 			elmToTakeActionOn.toggleClass('collapsed');
-			el.toggleClass('left-collapse').toggleClass('right-collapse');
+			splitBar.children().toggleClass('left-collapse').toggleClass('right-collapse');
 		},
-		
 		/**
 		 * Shows a panel that is currently hidden.
 		 * @param {Object} panel
@@ -389,7 +436,7 @@ steal.plugins('jquery/controller',
 				this.size(null, false, panel);
 				
 				//-trigger window resize for inner elms
-				$(window).resize();
+				//$(window).resize();
 			}
 		},
 		
@@ -410,7 +457,7 @@ steal.plugins('jquery/controller',
 				this.size();
 				
 				//-trigger window resize for inner elms
-				$(window).resize();
+				//$(window).resize();
 			}
 		},
 		/**

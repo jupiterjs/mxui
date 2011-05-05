@@ -1,6 +1,10 @@
-module("mxui/menuable", { 
+steal.plugins('funcunit').then(function(){
+
+module("mxui/nav/menuable", { 
 	setup: function(){
-        S.open("//mxui/menuable/menuable.html");
+        S.open("//mxui/nav/menuable/menuable.html");
+		// a little fuzz
+		S.wait(100);
 	}
 })
 
@@ -76,4 +80,6 @@ test("Nested Menu", function(){
 	S("#menu3 li:first>ul>li").visible(function(){
 		ok(true, "first menu is visible")
 	})
+});
+
 })

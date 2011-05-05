@@ -1,3 +1,4 @@
+steal.plugins('funcunit').then(function(){
 module("mxui/sortable", { 
 	setup: function(){
         S.open("//mxui/layout/sortable/sortable.html");
@@ -26,4 +27,5 @@ test("moving items", function(){
 	});
 
 
+});
 })

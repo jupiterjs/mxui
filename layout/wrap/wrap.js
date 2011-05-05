@@ -32,7 +32,7 @@ steal.plugins('jquery').then(function($){
 	
 				//Move margins to the wrapper
 				$el.css({ marginLeft: $org.css("marginLeft"), marginTop: $org.css("marginTop"), marginRight: $org.css("marginRight"), marginBottom: $org.css("marginBottom") });
-				$org.css({ marginLeft: 0, marginTop: 0, marginRight: 0, marginBottom: 0});
+				$org.css({ marginLeft: "0px", marginTop: "0px", marginRight: "0px", marginBottom: "0px"});
 	
 				//Prevent Safari textarea resize
 				//this.originalResizeStyle = $org.css('resize');
@@ -43,7 +43,7 @@ steal.plugins('jquery').then(function($){
 				//this._proportionallyResizeElements.push();
 	
 				// avoid IE jump (hard set the margin)
-				$org.css({ margin: $org.css('margin') });
+				//$org.css({ margin: $org.css('margin') });
 	
 				// fix handlers offset
 				//this._proportionallyResize();

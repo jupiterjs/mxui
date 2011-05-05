@@ -31,7 +31,7 @@ steal.plugins('jquery/controller',
 				var diff = $(el).mxui_layout_wrap()[0]
 				this._super(diff, options)
 				if(diff != el){
-					this.original = $(el).mxui_layout_fill({width: true}); //set to fill
+					this.original = $(el).mxui_layout_fill({all: true}); //set to fill
 				}
 			},
 			directionInfo: {

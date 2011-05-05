@@ -4,6 +4,7 @@ steal.plugins('funcunit').then(function(){
 		setup: function(){
 			S.open("//mxui/layout/split/split.html");
 			S('.mxui_layout_split').exists();
+			S.wait(10); // so things can get settled ...
 		}
 	});
 	
@@ -68,8 +69,8 @@ steal.plugins('funcunit').then(function(){
 				left = S(container+' .panel:eq(0)').width()
 				right = S(container+' .panel:eq(0)').width();
 				ok(Math.abs(left - right) < 2, "left and right about equal");
-				ok(Math.abs(widths[0] + widths[2] / 2 - left) < 2, "left consumes ");
-				ok(Math.abs(widths[1] + widths[2] / 2 - right) < 2, "right consumes ");
+				ok(Math.abs(widths[0] + widths[2] / 2 - left) < 3, "left consumes ");
+				ok(Math.abs(widths[1] + widths[2] / 2 - right) < 3, "right consumes ");
 			});
 			// make sure they fill in about equal ..
 			
@@ -93,6 +94,12 @@ steal.plugins('funcunit').then(function(){
 			outer = second.outerWidth();
 		equals(S('#container2 .splitter:eq(1)').offset().left, offset.left+outer, "right position");
 	})
+	
+	
+	test("collapse and drag", function(){
+		
+	})
+	
 	
 	/*
 	test("Remove Panel",function(){ 
