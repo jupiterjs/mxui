@@ -1,4 +1,4 @@
-steal.plugins('jquery/controller','mxui/layout/fill','mxui/util/scrollbar_width').then(function($){
+steal.plugins('mxui/layout/table_fill').then(function($){
 	
 //needs to work from a table, but also if there is no table ...
 //	
@@ -27,7 +27,7 @@ $.Controller.extend("Mxui.Layout.TableScroll",{
 			this.cache.table.append(this.cache.tbody)
 		}
 		// we need to keep this guy the right size
-		this.cache.scrollBody.css('overflow','auto');
+		//this.cache.scrollBody.css('overflow','auto');
 		
 		
 		this.cache.thead = this.cache.table.children('thead').remove();
@@ -37,22 +37,21 @@ $.Controller.extend("Mxui.Layout.TableScroll",{
 		this.cache.footer = $("<div class='footer'/>").appendTo(this.element);
 		
 		// add representations of the header cells to the bottom of the table
-		
 		this.addSpacer();
 		
 		
 		// fill up the parent
-		this.element.mxui_layout_fill();
-		
+		//this.element.mxui_layout_fill();
+		this.sizeTitle();
 		//make the scroll body fill up all other space
-		this.cache.scrollBody.mxui_layout_fill({ parent: this.element })
+		this.cache.scrollBody
+			.mxui_layout_table_fill({ parent: this.element.parent() })
+		this.bind(this.cache.scrollBody,"resize", "bodyResized")
 		//this.element.parent().triggerHandler('resize')
 		
 		//make a quick resize
-		this.element.parent().triggerHandler("resize");
 		//then redraw the titles
 
-		setTimeout(this.callback('sizeTitle'), 1);
 		
 		this.bind(this.cache.scrollBody, "scroll", "bodyScroll")
 	},
@@ -88,42 +87,8 @@ $.Controller.extend("Mxui.Layout.TableScroll",{
 			}).html("").height(1)
 		})
 	},
-	resize: function () {
-		clearTimeout(this._windowTimeout)
-		clearTimeout(this._sizeTitleTimeout)
-		this.cache.scrollBody.height(0);
-		this.addSpacer();
-		
-		if ( this.titleSized ) {
-			this._windowTimeout = setTimeout(this.callback('windowresize'), 1)
-			this._sizeTitleTimeout = setTimeout(this.callback('sizeTitle'), 3)
-			
-		} else {
-			this._windowTimeout = this._windowTimeout = setTimeout(this.callback('windowresize'), 1)
-		}
-	},
-	windowresize : function(){
-		var body = this.cache.body,
-			header = this.cache.head,
-			hideHead = header.is(':visible');
-		body.hide();
-		if (hideHead) {
-			header.hide();
-		}
-		var footer = this.cache.footer.width(),
-			scrollbarWidth = Mxui.scrollbarWidth,
-			table = this.cache.table.width(footer  > scrollbarWidth ? footer - scrollbarWidth : scrollbarWidth);
-		
-
-		body.children().eq(0).width(footer > scrollbarWidth ? footer : scrollbarWidth);
-		header.width(footer > scrollbarWidth ? footer : scrollbarWidth);
-		body.show();
-		if (hideHead) {
-			header.show();
-		}
-		if (table.height() < body.height()) {
-			table.width(footer > 0 ? footer : scrollbarWidth)
-		}
+	bodyResized : function(){
+		this.sizeTitle();
 	},
 	sizeTitle: function () {
 

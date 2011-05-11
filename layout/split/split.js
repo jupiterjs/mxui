@@ -16,8 +16,10 @@ steal.plugins('jquery/controller',
 	 * sometimes it's not able to so you might have to pass the direction in the options.
 	 * 
 	 * Example Usage:
-	 * $('.parent).mxui_layout_split();
-	 * <div class='parent'><div class='panel'><div class='panel'></div>
+	 * 
+	 *     $('.parent).mxui_layout_split();
+	 * 
+	 *     <div class='parent'><div class='panel'><div class='panel'></div>
 	 * 
 	 * API Notes:
 	 * 

@@ -61,9 +61,9 @@ steal.plugins('jquery/dom/dimensions',
 			//add a resize to get things going
 			var func = function() {
 				//logg("triggering ..")
-				setTimeout(function() {
+				//setTimeout(function() {
 					options.parent.triggerHandler("resize");
-				}, 13)
+				//}, 13)
 			}
 			if ( $.isReady ) {
 				func();
@@ -76,7 +76,7 @@ steal.plugins('jquery/dom/dimensions',
 		
 	$.extend(filler, {
 		parentResize: function( ev ) {
-
+			
 			var parent = $(this),
 				isWindow = this == window,
 				container = (isWindow ? $(document.body) : parent),
@@ -89,32 +89,34 @@ steal.plugins('jquery/dom/dimensions',
 					}
 
 					var get = $.curStyles(this, ['position', 'display']);
-					return get.position !== "absolute" && get.position !== "fixed" && get.display !== "none" && !jQuery.expr.filters.hidden(this)
+					return get.position !== "absolute" 
+							&& get.position !== "fixed" 
+							&& get.display !== "none" 
+							&& !jQuery.expr.filters.hidden(this)
 				}),
 				last = children.eq(-1),
-
-				offsetParentIsContainer = ev.data.filler.offsetParent()[0] === container[0],
-				//if the last element shares our containers offset parent or is the container
-				//we can just use offsetTop
-				offset = offsetParentIsContainer || last.offsetParent()[0] == container.offsetParent()[0] ? offsetTop : pageOffset,
-				//the offset of the container
-				firstOffset = offsetParentIsContainer ? 0 : offset(container), parentHeight = parent.height();
-
+				parentHeight = parent.height(),
+				currentSize;
+			
 			if ( isBleeder ) {
 				//temporarily add a small div to use to figure out the 'bleed-through' margin
 				//of the last element
 				last = $('<div style="height: 0px; line-height:0px;overflow:hidden;' + (ev.data.inFloat ? 'clear: both' : '') + ';"/>')
-
-
-
 				.appendTo(container);
+			}	
+			//for performance, we want to figure out the currently used height of the parent element
+			// as quick as possible
+			// we can use either offsetTop or offset depending ...
+			if(last.offsetParent()[0] === container[0]) {
+				currentSize = last[0].offsetTop+last.outerHeight();
+			} else {
+				currentSize = last.offset().top - container.offset().top + last.outerHeight()
 			}
+			
+				
 
-			// the current size the content is taking up
-			var currentSize = (bottom(last, offset) - 0) - firstOffset,
-
-				// what the difference between the parent height and what we are going to take up is
-				delta = parentHeight - currentSize,
+			// what the difference between the parent height and what we are going to take up is
+			var delta = parentHeight - currentSize,
 				// the current height of the object
 				fillerHeight = ev.data.filler.height();
 
@@ -136,7 +138,7 @@ steal.plugins('jquery/dom/dimensions',
 				last.remove();
 			}
 			
-			ev.data.filler.triggerHandler('resize');
+			//ev.data.filler.triggerHandler('resize');
 		}
 	});
 

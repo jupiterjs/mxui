@@ -57,6 +57,19 @@
 				overflow: auto;
 				
 			}
+			#scrollable {
+				width: 290px;
+				height: 290px;
+				border: solid 1px red;
+				padding: 10px;
+			}
+			#fillthis {
+				overflow: auto
+			}
+			#long {
+				height: 400px;
+				background-color: yellow;
+			}
         </style>
 	</head>
 	<body>
@@ -123,11 +136,17 @@
 </table>
 <div id='myloggin'></div>
 </div>		
+
+<h1>Areas with Scrollbars</h1>
+<div id='scrollable'>
+	<p>Hello World, How are You? <a href='javascript://' id='scrollfill'>Run</a></p>
+	<div id='fillthis'>
+		<div id='long'>I am very long ...</div>
+	</div>
+</div>
 		
-		
-		
-		
-		
+<h1>Content</h1>
+	<h1>Content</h1><h1>Content</h1>	
 		
 <script type='text/javascript' 
         src='../../../steal/steal.js'>   
@@ -156,6 +175,11 @@
 			$("#myloggin").append("<p>"+text+"</p>")
 			//$("#myloggin")[0].scrollTop = $("#myloggin")[0].scrollHeight
 		}
+		$('#scrollfill').click(function(){
+			$('#fillthis').mxui_layout_fill({
+					parent: $("#scrollable")
+				})
+		})
 		/**/
 		/*$("#nestedFiller2").mxui_filler({
 			parent: $("#resize2").mxui_resizable(),

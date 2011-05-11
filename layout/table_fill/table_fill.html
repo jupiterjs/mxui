@@ -50,7 +50,7 @@
                 src='../../../steal/steal.js'>   
         </script>
 		<script type='text/javascript'>
-			steal.plugins('mxui/layout/table_scroll','mxui/layout/resize').start();
+			steal.plugins('mxui/layout/table_fill','mxui/layout/resize').start();
 		</script>
 		<script type='text/javascript'>
 			var body = $('tbody'),
@@ -73,7 +73,7 @@
 			}
 			$("thead tr").html(head.join(''))
 			
-			for(var r=0; r < 100; r++){
+			for(var r=0; r < 20; r++){
 				html.push("<tr>")
 				for(var c = 0 ;  c< cols; c++){
 					html.push("<td>", randomString() ,"</td>")
@@ -82,7 +82,7 @@
 			}
 			body.html(html.join(''))
 			$('#scrollable').click(function(){
-				$('#table').mxui_layout_table_scroll();
+				$('#table').mxui_layout_table_fill();
 			})
 			
 			$('#resize').click(function(){
