@@ -31,6 +31,7 @@
 	<body>
 		<a href="javascript://" id='scrollable'>Make Scrollable</a>
 	    <a href="javascript://" id='resize'>Resize</a>
+		<a href="javascript://" id='changeColumn'>Change Column</a>
 		<div id='container'>
 	    	<p>I can't see the columns when I scroll down :(.</p>
 			<table id='table'>
@@ -61,8 +62,10 @@
 					var len = parseInt( Math.random()*20 ), 
 						str = []
 					for(var i =0; i < len; i++){
-						var rand = parseInt( Math.random()*60 )
-						str.push(String.fromCharCode(32+ (rand > 40 ? 0 : rand )  ))
+						var rand = parseInt( Math.random()*60 ),
+							ch = String.fromCharCode(32+ (rand > 40 ? 0 : rand )  );
+							
+						str.push(ch == ">" || ch == "<" ? "" : ch)
 					}
 					return str.join("")
 				};
@@ -80,15 +83,20 @@
 				}
 				html.push("</tr>")
 			}
-			body.html(html.join(''))
+			body.html(html.join(''));
+			var els;
 			$('#scrollable').click(function(){
 				$('#table').mxui_layout_table_scroll();
+				els = $('.mxui_layout_table_scroll').controller(Mxui.Layout.TableScroll).elements()
 			})
 			
 			$('#resize').click(function(){
 				$('#container').css("overflow","hidden").mxui_layout_resize();
 			})
-			
+			$('#changeColumn').click(function(){
+				els.thead.find('th:eq(1)').text('NEW COLUMN')
+				$('.mxui_layout_table_scroll').mxui_layout_table_scroll('changed')
+			})
 		</script>
 	</body>
 </html>

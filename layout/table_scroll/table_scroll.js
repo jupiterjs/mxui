@@ -1,69 +1,200 @@
 steal.plugins('mxui/layout/table_fill').then(function($){
-	
-//needs to work from a table, but also if there is no table ...
-//	
 
-$.Controller.extend("Mxui.Layout.TableScroll",{
+// helpers
+var setWidths = function(cells, firstWidths){
+	var length = cells.length -1;
+	for (var i = 0; i <  length; i++) {
+		 cells.eq(i).outerWidth(firstWidths[i]);
+	}
+}
+
+/**
+ * @class Mxui.Layout.TableScroll
+ * 
+ * Makes a table body elements under a table 
+ * header.  For example if you have the following html:
+ * 
+ *     <div id='area' style='height: 400px'>
+ *        <p>This is My Table</p>
+ *        <table id='people'>
+ *          <thead>
+ *            <tr> <th>Name</th><th>Age</th><th>Location</th> </tr>
+ *          </thead>
+ *          <tbody>
+ *            <tr> <td>Justin</td><td>28</td><td>Chicago</td> </tr>
+ *            <tr> <td>Brian</td><td>27</td><td>Chicago</td> </tr>
+ *            ...
+ *          </tbody>
+ *        </table>
+ *     </div>
+ * 
+ * Thw following make the list of people, the tbody, scrollable between
+ * the table header and footer:
+ * 
+ *     $('#people').mxui_layout_table_scroll()
+ * 
+ * This makes it so you can always see the table header 
+ * and footer. 
+ * 
+ * The table will 'fill' the height of it's parent 
+ * element. This means that if the <code>area</code> element's height 
+ * becomes 500px, the scrollable area of the table (the scrollBody) will
+ * increase 100px.
+ * 
+ * 
+ * @param {Object} el
+ * @param {Object} options
+ */
+$.Controller("Mxui.Layout.TableScroll",{
 	setup : function(el, options){
-		//remove the header and put in another table
-		
-		this.cache = {
+		// a cache of elements.
+		this.$ = {
 			table: $(el)
 		}
-		this.cache.scrollBody = this.cache.table.wrap("<div><div  class='body'><div class='scrollBody'></div></div></div>").parent()
-		this.cache.body = this.cache.scrollBody.parent();
+		// the area that scrolls
+		this.$.scrollBody = this.$.table.wrap("<div><div  class='body'><div class='scrollBody'></div></div></div>").parent()
+		// a div that houses the scrollable area.  IE < 8 needs this.  It acts
+		// as a buffer for the scroll bar
+		this.$.body = this.$.scrollBody.parent();
 
-		this._super(this.cache.body.parent()[0], options)
+		this._super(this.$.body.parent()[0], options)
 		//wrap table with a scrollable div
 		
 		
 	},
 	init : function(){
 		// body acts as a buffer for the scroll bar
-		this.cache.body.css("width","100%");
-		this.cache.tbody = this.cache.table.children('tbody')
-		if(!this.cache.tbody.length){
-			this.cache.tbody = $('<tbody/>')
-			this.cache.table.append(this.cache.tbody)
+		this.$.body.css("width","100%");
+		
+		// get the thead, and tfoot into their own table.
+		$.each(['thead','tfoot'], this.callback('_wrapWithTable'))
+		
+		
+		// get the tbody
+		this.$.tbody = this.$.table.children('tbody')
+		
+		// if one doesn't exist ... make it
+		if(!this.$.tbody.length){
+			this.$.tbody = $('<tbody/>')
+			this.$.table.append(this.$.tbody)
 		}
-		// we need to keep this guy the right size
-		//this.cache.scrollBody.css('overflow','auto');
 		
+		// add thead
+		if(this.$.theadTable){
+			this.$.head = $("<div class='header'></div>")
+						.css({
+							"visibility":"hidden",
+							overflow: "hidden"
+						})
+						.prependTo(this.element)
+						.append(this.$.theadTable);
+			this._addSpacer('thead');
+		}
+		if(this.$.tfootTable){
+			this.$.foot = $("<div class='footer'></div>")
+						.css({
+							"visibility":"hidden",
+							overflow: "hidden"
+						})
+						.appendTo(this.element)
+						.append(this.$.tfootTable);
+			this._addSpacer('tfoot');
+		}
 		
-		this.cache.thead = this.cache.table.children('thead').remove();
-		this.cache.headTable = this.cache.thead.wrap('<table/>').parent();
-		this.cache.head = $("<div class='header'></div>").css("visibility","hidden").prependTo(this.element).append(this.cache.headTable);
-		this.cache.head.css("overflow","hidden")
-		this.cache.footer = $("<div class='footer'/>").appendTo(this.element);
 		
 		// add representations of the header cells to the bottom of the table
-		this.addSpacer();
 		
 		
 		// fill up the parent
 		//this.element.mxui_layout_fill();
-		this.sizeTitle();
+		
 		//make the scroll body fill up all other space
-		this.cache.scrollBody
+		this.$.scrollBody
 			.mxui_layout_table_fill({ parent: this.element.parent() })
-		this.bind(this.cache.scrollBody,"resize", "bodyResized")
+			
+		this.bind(this.$.scrollBody,"resize", "bodyResized")
 		//this.element.parent().triggerHandler('resize')
 		
 		//make a quick resize
 		//then redraw the titles
 
 		
-		this.bind(this.cache.scrollBody, "scroll", "bodyScroll")
+		this.bind(this.$.scrollBody, "scroll", "bodyScroll")
+		this._sizeHeaderAndFooters();
 	},
-	addSpacer : function(){
-		//check last element ...
+	_wrapWithTable : function(i , tag){
 		
-		if(this.cache.tbody.children(':last').hasClass('spacing')){
-			return;
+		// save it
+		this.$[tag] = this.$.table.children(tag)
+		if(this.$[tag].length && this.$[tag].find('td, th').length){
+			// remove it (w/o removing any widgets on it)
+			this.$[tag][0].parentNode.removeChild(this.$[tag][0]);
+			
+			//wrap it with a table and save the table
+			this.$[tag+"Table"] = this.$.thead.wrap('<table/>').parent()
 		}
 		
-		var spacer = this.cache.thead.children(0).clone()
-			.addClass('spacing');
+		
+		
+	},
+	/**
+	 * Returns useful elements of the table
+	 * the thead, tbody, tfoot, and scrollBody of the modified table
+	 */
+	elements : function(){
+		return {
+			tbody: this.$.tbody,
+			tfoot: this.$.tfoot,
+			thead: this.$.thead,
+			scrollBody: this.$.scrollBody
+		}
+	},
+	/**
+	 * Call when columns are added or removed or the title's changed 
+	 */
+	changed : function(){
+		if(this.$.foot){
+			this._addSpacer('tfoot');
+		}
+		if(this.$.head){
+			this._addSpacer('thead');
+		}
+		this._sizeHeaderAndFooters();
+		this.element.resize()
+	},
+	/**
+	 * Add elements to this scrollable table.  This assumes these elements
+	 * matches the current column headers
+	 * @param {jQuery} [after]
+	 * @param {jQuery} els
+	 */
+	append : function(after, els){
+		if(!els){
+			this.$.spacer.before(after)
+		} else{
+			after.after(els)
+		}
+		this.element.resize();
+	},
+	empty : function(){
+		this.$.tbody.children(":not(.spacing)").remove();
+		this.element.resize();
+	},
+	/**
+	 * @hide
+	 * Adds a spacer on the bottom of the table that mimicks the dimensions
+	 * of the table header elements.  This keeps the body columns for being
+	 * smaller than the header widths.
+	 */
+	_addSpacer : function(tag){
+		//check last element ...
+		var last = this.$.tbody.children('.spacing.'+tag)
+		if(last.length){
+			last.remove();
+		}
+		
+		var spacer = this.$[tag].children(0).clone()
+			.addClass('spacing').addClass(tag);
 			
 		// wrap contents with a spacing
 		spacer.children("th, td").each(function () { 
@@ -71,7 +202,7 @@ $.Controller.extend("Mxui.Layout.TableScroll",{
 			td.html("<div style='float:left'>"+td.html()+"</div>")
 		});
 		
-		spacer.appendTo(this.cache.tbody);
+		spacer.appendTo(this.$.tbody);
 		
 		//now set spacing, and make minimal height
 		spacer.children("th, td").each(function () {
@@ -79,42 +210,66 @@ $.Controller.extend("Mxui.Layout.TableScroll",{
 				$spacer = $td.children(':first'),
 				width = $spacer.outerWidth(), 
 				height = $spacer.outerHeight();
-			$td.css({ padding: 0, margin: 0 })
+				
+			$td.css({ padding: 0, margin: 0, width: "" })
 			
 			$spacer.outerWidth(width + 2).css({
 				"float": "none",
-				"visibility": "hidden"
-			}).html("").height(1)
+				"visibility": "hidden",
+				height: "1px"
+			}).html("")
 		})
+		this.$.spacer = spacer;
 	},
+	/**
+	 * @hide
+	 * When the body is resized, resize the header and footer th and td elements
+	 */
 	bodyResized : function(){
-		this.sizeTitle();
-	},
-	sizeTitle: function () {
-
-		var body = this.cache.body,
-			firstWidths = this.cache.tbody.find("tr:first")
-				.children()
-				.map(function () { return $(this).outerWidth() }),
-			header = this.cache.head,
-			title = this.cache.head.find("th, td"); //in case they use tds
-
-		for (var i = 0; i < title.length -1 ; i++) {
-			 title.eq(i).outerWidth(firstWidths[i]);
-		}
-		var padding = 0;
-		if (this.cache.table.height() >= body.height()) {
-			padding = Mxui.scrollbarWidth
-		}
-		header.find("table").width(this.cache.table.width() + padding) 
-		this.cache.head.css('visibility','visible')
-		this.titleSized = true;
+		this._sizeHeaderAndFooters();
 	},
 	bodyScroll: function (el, ev) {
-		this.cache.head.scrollLeft(el.scrollLeft())
+		this.$.head.scrollLeft(el.scrollLeft())
 	},
+	/**
+	 * @hide
+	 * Sizes the table header cells to match the width of 
+	 * the column widths.
+	 */
+	_sizeHeaderAndFooters: function () {
+
+		var body = this.$.body,
+			
+			// getting the outer widths is the most expensive thing
+			firstWidths = this.$.tbody.find("tr:first")
+				.children()
+				.map(function () { return $(this).outerWidth() }),
+			
+			padding = this.$.table.height() >= body.height() ? 
+							Mxui.scrollbarWidth : 0,
+			tableWidth = this.$.table.width();
+		
+		
+		if(this.$.foot){
+			var cells = this.$.tfootTable.find("th, td")
+			if(cells.length == firstWidths.length){
+				setWidths(cells,firstWidths);
+			}
+			this.$.foot.css('visibility','visible')
+			this.$.tfootTable.width(tableWidth + padding) 
+		}
+		if(this.$.head){
+			var cells = this.$.theadTable.find("th, td")
+			if (cells.length == firstWidths.length) {
+				setWidths(cells, firstWidths);
+			}
+			this.$.head.css('visibility', 'visible')
+			this.$.theadTable.width(tableWidth + padding)
+		}
+	},
+	
 	destroy : function(){
-		delete this.cache;
+		delete this.$;
 		this._super();
 	}
 })

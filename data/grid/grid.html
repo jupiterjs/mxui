@@ -9,34 +9,39 @@
         .error_text { color: red; font-size: 10px;}
         td {padding: 3px;}
 
-		body {
-			padding: 0px;
-			margin: 0px;
-		}
-		#wrapper {
-			width: 600px;
-			height: 600px;
+		
+		.wrapper {
+			width: 500px;
+			height: 500px;
 			padding: 10px;
 			border: solid 1px red;
 			overflow: auto;
+			overflow:hidden;
 		}
 		.disabled {
 			color: gray;
 			text-decoration: none;
 		}
-		#wrapper {
-			overflow:hidden;
-		}
+
     </style>
 	<link type="text/css" href="grid.css" rel="stylesheet" />
 	<link type="text/css" href="../../layout/resize/resize.css" rel="stylesheet" />
 </head>
 <body>
-	<div id='wrapper'>
+	<h1>Paginated Grid</h1>
+	<div id='wrapper' class='wrapper'>
 		<div id='grid'></div>
-	<div>
-	<a href='javascript://' id='prev'>previous</a>
-	<a href='javascript://' id='next'>next</a>
+		<p><a href='javascript://' id='prev'>previous</a>
+			<a href='javascript://' id='next'>next</a>
+		</p>
+	</div>
+	
+	<h2>Forever Scroll Grid</h2>
+	<div id='wrapforever' class='wrapper'>
+		<div id='forever'></div>
+	</div>
+	
+	
 	
 	
 	<script type='text/ejs' id='rowEjs'>
@@ -92,7 +97,7 @@
 				params.prev();
 			});
 			
-			$('#wrapper').mxui_layout_resize();
+			$('.wrapper').mxui_layout_resize();
 			
 			params.bind("updated.attr", function(){
 				if(!this.canMoveNext()){
@@ -106,6 +111,28 @@
 					$('#prev').removeClass('disabled')
 				}
 			})
+			var paramsScroll = new Mxui.Data({limit : 30, offset: 0})
+			
+			// Forever Scroll
+			$("#forever").mxui_data_grid({
+				model : Thing,
+				params : paramsScroll,
+				columns: {
+					name: "Name",
+					birthday: "Birthday",
+					foo : "Thisisaverylongtitle"
+				},
+				row : "rowEjs",
+				offsetEmpties: false
+			})
+			
+			$("#forever .scrollBody").bind("scroll", function(){
+				if(this.clientHeight+this.scrollTop + 70 >= this.scrollHeight && !paramsScroll.updating){
+					
+					paramsScroll.attr('offset', paramsScroll.offset + 30)
+				}
+			})
+			
 		}).start();
 	</script>
 </body>

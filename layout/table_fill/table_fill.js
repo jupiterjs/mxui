@@ -29,21 +29,24 @@ $.Controller('Mxui.Layout.TableFill',{
 			options.parent = this.options.parent;
 		}
 		this.element.mxui_layout_fill(options).css('overflow','auto');
-		this.bind(this.$.table,"resize",'tableResize');
-
-		
 		
 	},
-	tableResize : function(table, ev){
+	// listen on resize b/c we want to do this right away
+	// in case anyone else cares about the table's
+	// dimensions (like table scroll)
+	resize : function(ev){
+		var table = this.$.table,
+			el = this.element[0];
 		//let the table flow naturally
 		table.css("width","");
 		
 		// is it scrolling vertically
-		if(this.element[0].offsetHeight < this.element[0].scrollHeight){
+		if(el.offsetHeight < el.scrollHeight){
 			table.outerWidth(this.element.width() - Mxui.scrollbarWidth)
 		} else {
 			table.outerWidth(this.element.width() )
 		}
+		
 	}
 })
 	

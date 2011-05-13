@@ -62,7 +62,7 @@ steal.plugins('jquery/dom/dimensions',
 			var func = function() {
 				//logg("triggering ..")
 				//setTimeout(function() {
-					options.parent.triggerHandler("resize");
+					options.parent.resize();
 				//}, 13)
 			}
 			if ( $.isReady ) {
@@ -76,7 +76,6 @@ steal.plugins('jquery/dom/dimensions',
 		
 	$.extend(filler, {
 		parentResize: function( ev ) {
-			
 			var parent = $(this),
 				isWindow = this == window,
 				container = (isWindow ? $(document.body) : parent),
