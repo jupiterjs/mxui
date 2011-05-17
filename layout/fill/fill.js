@@ -103,16 +103,17 @@ steal.plugins('jquery/dom/dimensions',
 				last = $('<div style="height: 0px; line-height:0px;overflow:hidden;' + (ev.data.inFloat ? 'clear: both' : '') + ';"/>')
 				.appendTo(container);
 			}	
+			
 			//for performance, we want to figure out the currently used height of the parent element
 			// as quick as possible
 			// we can use either offsetTop or offset depending ...
-			if(last.offsetParent()[0] === container[0]) {
-				currentSize = last[0].offsetTop+last.outerHeight();
-			} else {
-				currentSize = last.offset().top - container.offset().top + last.outerHeight()
+			if(last && last.length > 0){
+				if(last.offsetParent()[0] === container[0]) {
+					currentSize = last[0].offsetTop+last.outerHeight();
+				} else {
+					currentSize = last.offset().top - container.offset().top + last.outerHeight()
+				}
 			}
-			
-				
 
 			// what the difference between the parent height and what we are going to take up is
 			var delta = parentHeight - currentSize,

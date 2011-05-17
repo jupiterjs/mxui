@@ -77,7 +77,7 @@ $.Controller.extend("Mxui.Data.Grid",{
 		// add jQuery UI stuff ...
 		this.element.find(".header table").attr('cellSpacing', '0').attr('cellPadding', '0');
 		
-		var ths = this.$.thead.children().addClass("ui-helper-reset ui-state-default")
+		var ths = this.$.thead.find('th').addClass("ui-helper-reset ui-state-default");
 		
 		ths.eq(0).addClass('ui-corner-left')
 		ths.eq(-1).addClass('ui-corner-right')
