@@ -121,13 +121,18 @@ steal.plugins('jquery/dom/dimensions',
 
 			//adjust the height
 			
-			if(ev.data.options.all){
+			if(ev.data.options.all) {
 				// we don't care about anything else ... we are likely absolutely positioned
 				//we need to fill the parent width ...
+				// temporarily collapse ... then expand ...
 				
-				ev.data.filler.outerHeight( parent.height() );
-				ev.data.filler.outerWidth(parent.width() )
-			}else{
+				ev.data.filler.height(0).width(0);
+				var parentWidth = parent.width(),
+					parentHeight = parent.height();
+				
+				ev.data.filler.outerHeight( parentHeight);
+				ev.data.filler.outerWidth( parentWidth ) ;
+			} else {
 				ev.data.filler.height(fillerHeight + delta)
 			}
 			
