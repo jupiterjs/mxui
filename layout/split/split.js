@@ -75,6 +75,12 @@ steal.plugins('jquery/controller',
 			$.Drag.distance = this.options.dragDistance;
 			this.dirs = this.Class.directionMap[this.options.direction];
 			this.usingAbsPos = c.eq(0).css('position') == "absolute";
+			if(this.usingAbsPos){
+				var pos = this.element.css("position");
+				if(pos !== 'absolute' && pos != 'relative'){
+					this.element.css("position",'relative')
+				}
+			}
 			this.initalSetup(c);
 		},
 		
