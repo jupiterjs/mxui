@@ -533,11 +533,11 @@ steal.plugins('jquery/controller', 'jquery/event/drag/limit', 'jquery/dom/dimens
 					$c.animate(dim, "fast", function() {
 
 						if ( resizePanels ) {
-							$(this).trigger('resize');
+							$(this).trigger('resize', [false]);
 						}
 
 						if ( keep && !keepSized ) {
-							keep.trigger('resize')
+							keep.trigger('resize', [false])
 							keepSized = true;
 						}
 					});
