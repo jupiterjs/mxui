@@ -1,5 +1,4 @@
-steal.plugins('jquery/dom/dimensions', 
-	'jquery/event/resize').then(function( $ ) {
+steal.plugins('jquery/dom/dimensions', 'jquery/event/resize').then(function( $ ) {
 	//evil things we should ignore
 	var matches = /script|td/,
 
@@ -51,7 +50,6 @@ steal.plugins('jquery/dom/dimensions',
 			$(options.parent).bind('resize', evData, filler.parentResize);
 			//if this element is removed, take it out
 
-
 			this.bind('destroyed', evData, function( ev ) {
 				$(ev.target).removeClass('mxui_filler')
 				$(options.parent).unbind('resize', filler.parentResize)
@@ -62,7 +60,7 @@ steal.plugins('jquery/dom/dimensions',
 			var func = function() {
 				//logg("triggering ..")
 				//setTimeout(function() {
-					options.parent.resize();
+				options.parent.resize();
 				//}, 13)
 			}
 			if ( $.isReady ) {
@@ -72,8 +70,8 @@ steal.plugins('jquery/dom/dimensions',
 			}
 			return this;
 		};
-		
-		
+
+
 	$.extend(filler, {
 		parentResize: function( ev ) {
 			var parent = $(this),
@@ -88,28 +86,24 @@ steal.plugins('jquery/dom/dimensions',
 					}
 
 					var get = $.curStyles(this, ['position', 'display']);
-					return get.position !== "absolute" 
-							&& get.position !== "fixed" 
-							&& get.display !== "none" 
-							&& !jQuery.expr.filters.hidden(this)
+					return get.position !== "absolute" && get.position !== "fixed" && get.display !== "none" && !jQuery.expr.filters.hidden(this)
 				}),
 				last = children.eq(-1),
-				parentHeight = parent.height(),
+				parentHeight = parent.height() - (isWindow ? parseInt(container.css('marginBottom'), 10) || 0 : 0),
 				currentSize;
-			
+
 			if ( isBleeder ) {
 				//temporarily add a small div to use to figure out the 'bleed-through' margin
 				//of the last element
-				last = $('<div style="height: 0px; line-height:0px;overflow:hidden;' + (ev.data.inFloat ? 'clear: both' : '') + ';"/>')
-				.appendTo(container);
-			}	
-			
+				last = $('<div style="height: 0px; line-height:0px;overflow:hidden;' + (ev.data.inFloat ? 'clear: both' : '') + ';"/>').appendTo(container);
+			}
+
 			//for performance, we want to figure out the currently used height of the parent element
 			// as quick as possible
 			// we can use either offsetTop or offset depending ...
-			if(last && last.length > 0){
-				if(last.offsetParent()[0] === container[0]) {
-					currentSize = last[0].offsetTop+last.outerHeight();
+			if ( last && last.length > 0 ) {
+				if ( last.offsetParent()[0] === container[0] ) {
+					currentSize = last[0].offsetTop + last.outerHeight();
 				} else {
 					currentSize = last.offset().top - container.offset().top + last.outerHeight()
 				}
@@ -121,28 +115,26 @@ steal.plugins('jquery/dom/dimensions',
 				fillerHeight = ev.data.filler.height();
 
 			//adjust the height
-			
-			if(ev.data.options.all) {
+			if ( ev.data.options.all ) {
 				// we don't care about anything else ... we are likely absolutely positioned
 				//we need to fill the parent width ...
 				// temporarily collapse ... then expand ...
-				
 				ev.data.filler.height(0).width(0);
 				var parentWidth = parent.width(),
 					parentHeight = parent.height();
-				
-				ev.data.filler.outerHeight( parentHeight);
-				ev.data.filler.outerWidth( parentWidth ) ;
+
+				ev.data.filler.outerHeight(parentHeight);
+				ev.data.filler.outerWidth(parentWidth);
 			} else {
 				ev.data.filler.height(fillerHeight + delta)
 			}
-			
+
 
 			//remove the temporary element
 			if ( isBleeder ) {
 				last.remove();
 			}
-			
+
 			//ev.data.filler.triggerHandler('resize');
 		}
 	});
