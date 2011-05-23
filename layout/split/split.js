@@ -67,6 +67,13 @@ steal.plugins('jquery/controller', 'jquery/event/drag/limit', 'jquery/dom/dimens
 			$.Drag.distance = this.options.dragDistance;
 			this.dirs = this.Class.directionMap[this.options.direction];
 			this.usingAbsPos = c.eq(0).css('position') == "absolute";
+			if(this.usingAbsPos){
+
+				if(!/absolute|relative|fixed/.test(this.element.css('position'))){
+					this.element.css('position','relative')
+				}
+			}
+			
 			this.initalSetup(c);
 		},
 
