@@ -27,6 +27,7 @@ $.Controller('Mxui.Layout.TableFill',{
 		var options = {};
 		if(this.options.parent){
 			options.parent = this.options.parent;
+			options.filler = this.options.filler;
 		}
 		this.element.mxui_layout_fill(options).css('overflow','auto');
 		

@@ -46,7 +46,9 @@ $.Controller.extend("Mxui.Data.Grid",{
 		// if true, there are three states (asc, desc, no sort)
 		canUnsort: true,
 		// set to false for infinite scroll
-		offsetEmpties: true
+		offsetEmpties: true,
+		// set to false to turn off the filler
+		filler: true
 	},
 	listensTo : ["select","deselect"]
 },
@@ -59,7 +61,9 @@ $.Controller.extend("Mxui.Data.Grid",{
 		}
 		this.element.append( this.view({columns: this.options.columns, count: count}) )
 		
-		this.element.children('table').mxui_layout_table_scroll();
+		this.element.children('table').mxui_layout_table_scroll({
+			filler: this.options.filler
+		});
 		this.$ = this.element.children(":first").controller(Mxui.Layout.TableScroll).elements()
 		
 		
@@ -71,7 +75,10 @@ $.Controller.extend("Mxui.Data.Grid",{
 		
 		this.$.tbody.mxui_util_selectable();
 		//this.scrollable.cache.thead.mxui_layout_resizer({selector: "th"});
-		this.element.addClass("grid").mxui_layout_fill();
+		this.element.addClass("grid");
+		if (this.options.filler) {
+			this.element.mxui_layout_fill();
+		}
 		//this.setFixedAndColumns()
 		
 		// add jQuery UI stuff ...
