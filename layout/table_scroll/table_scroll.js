@@ -109,8 +109,11 @@ $.Controller("Mxui.Layout.TableScroll",{
 		//this.element.mxui_layout_fill();
 		
 		//make the scroll body fill up all other space
-		this.$.scrollBody
-			.mxui_layout_table_fill({ parent: this.element.parent() })
+		if (this.options.filler) {
+			this.$.scrollBody.mxui_layout_table_fill({
+				parent: this.element.parent()
+			})
+		}
 			
 		this.bind(this.$.scrollBody,"resize", "bodyResized")
 		//this.element.parent().triggerHandler('resize')
