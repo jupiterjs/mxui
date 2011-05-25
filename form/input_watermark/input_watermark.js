@@ -20,6 +20,14 @@ steal.plugins('jquery/controller')
 		},
 		
 		/**
+		 * Resets the input back to orig state.
+		 */
+		reset:function()
+		{
+			this.element.val(this.options.defaultText).addClass('blurred default');
+		},
+		
+		/**
 		 * Binds on the input box for when it is focused to remove default text and remove the blurred text.
 		 * @param {Object} el
 		 * @param {Object} ev
@@ -40,7 +48,7 @@ steal.plugins('jquery/controller')
 		*/
 		"focusout" : function(el, ev){
 			if(el.val() === ""){
-				el.val(this.options.defaultText).addClass('blurred default');
+				this.reset();
 			}
 		}
 	});
