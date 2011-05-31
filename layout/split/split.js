@@ -469,7 +469,6 @@ steal.plugins('jquery/controller', 'jquery/event/drag/limit', 'jquery/dom/dimens
 		 * @param {Boolean} [resizePanels] resize the panels or not.
 		 */
 		size: function( els, animate, keep, resizePanels ) {
-			console.log(els, animate, keep, resizePanels);
 			els = els || this.panels();
 			resizePanels = resizePanels == undefined ? true : false;
 
