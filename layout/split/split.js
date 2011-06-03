@@ -264,9 +264,10 @@ steal.plugins('jquery/controller', 'jquery/event/drag/limit', 'jquery/dom/dimens
 			}
 
 			// this can / should be throttled
-			setTimeout(function() {
-				prev.trigger("resize");
-				next.trigger("resize");
+			clearTimeout(this._moveTimer);
+			this._moveTimer = setTimeout(function() {
+				prev.trigger("resize",[false]);
+				next.trigger("resize",[false]);
 			}, 1);
 		},
 

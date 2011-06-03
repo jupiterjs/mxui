@@ -462,7 +462,8 @@ steal.plugins(
 			var width = ev.vector().minus(el.offsetv()).left(),
 				attr = el[0].className.match(/([^ ]+)-column-header/)[1],
 				cg;
-			if ( width > el.find("span:first").outerWidth() ) cg = this.element.find("col:eq(" + el.index() + ")").outerWidth(width)
+			if ( width > el.find("span:first").outerWidth() ) 
+				cg = this.element.find("col:eq(" + el.index() + ")").outerWidth(width)
 			else {
 				cg = this.element.find("col:eq(" + el.index() + ")").outerWidth(el.find("span:first").outerWidth())
 			}
