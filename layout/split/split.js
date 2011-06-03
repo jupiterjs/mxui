@@ -193,10 +193,21 @@ steal.plugins('jquery/controller', 'jquery/event/drag/limit', 'jquery/dom/dimens
 
 			// limit motion to one direction
 			drag[this.dirs.dragDir]();
-			//drag.ghost()
+			var hoverClass = this.options.hover;
 			el.addClass("move").addClass(this.options.hover);
 			this.moveCache = this._makeCache(el);
-			this.dragging = true;
+			
+			if(this.moveCache.next.hasClass('collapsed') 
+			|| this.moveCache.prev.hasClass('collapsed')){
+				el.addClass('disabled');
+				drag.cancel();
+				
+				setTimeout(function(){ el.removeClass('disabled')
+										 .removeClass("move")
+										 .removeClass(hoverClass); }, 800);
+			} else {
+				this.dragging = true;
+			}
 		},
 
 		/**
@@ -257,8 +268,13 @@ steal.plugins('jquery/controller', 'jquery/event/drag/limit', 'jquery/dom/dimens
 			}
 
 			if ( this.usingAbsPos ) {
-				el.css(this.dirs.pos, newOffset);
-				var off = {};
+				//- Sets the split bar element's offset relative to parents
+				var newOff = $(el).offset();
+				newOff[this.dirs.pos] = newOffset;
+				el.offset(newOff);
+				
+				//- Sets the next elements offset relative to parents
+				var off = next.offset();
 				off[this.dirs.pos] = newOffset + el[this.dirs.outer]();
 				next.offset(off);
 			}
@@ -306,6 +322,7 @@ steal.plugins('jquery/controller', 'jquery/event/drag/limit', 'jquery/dom/dimens
 		resize: function( el, ev, data ) {
 			//if not visible do nothing
 			if (!this.element.is(":visible") ) {
+				this.oldHeight = this.oldWidth = 0;
 				return;
 			}
 
@@ -470,7 +487,6 @@ steal.plugins('jquery/controller', 'jquery/event/drag/limit', 'jquery/dom/dimens
 		 * @param {Boolean} [resizePanels] resize the panels or not.
 		 */
 		size: function( els, animate, keep, resizePanels ) {
-			console.log(els, animate, keep, resizePanels);
 			els = els || this.panels();
 			resizePanels = resizePanels == undefined ? true : false;
 
