@@ -28,9 +28,11 @@ steal(function($){
  * borders. Some have reported it is due to the opacity filter. All 
  * these settings can be changed if needed as explained below.
  *
- * @example $('div').bgiframe();
- * @before <div><p>Paragraph</p></div>
- * @result <div><iframe class="bgiframe".../><p>Paragraph</p></div>
+ *     $('div').bgiframe();
+ * 
+ *     <div><p>Paragraph</p></div>
+ * 
+ *      <div><iframe class="bgiframe".../><p>Paragraph</p></div>
  *
  * @param Map settings Optional settings to configure the iframe.
  * @option String|Number top The iframe must be offset to the top
@@ -64,9 +66,6 @@ steal(function($){
  *		the src of the iframe to whatever they need.
  *		Default: "javascript:false;"
  *
- * @name bgiframe
- * @type jQuery
- * @cat Plugins/bgiframe
  * @author Brandon Aaron (brandon.aaron@gmail.com || http://brandonaaron.net)
  */
 

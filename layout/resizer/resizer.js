@@ -4,61 +4,56 @@ steal.plugins(
 'jquery/event/drag',
 'jquery/dom/dimensions').then(function($){
 
-//Resizer resizes a bunch of elements by listening to drag/drop
-//for performance reasons, this shouldn't be used on elements covering most of the dom.
+//Resizer is like a splitter, but it does not do resizing, only sends mesages
 
 $.Controller.extend("Mxui.Layout.Resizer",{
 	defaults: {
-		selector: "th"
+		selector: "th",
+		distance : 8
 	}
 },
 {
 	"{selector} dragdown": function (el, ev, drag) {
-		if (this.isMouseOnRight(el, ev, 2)) {
-			var resize = $("<div id='mxui_resizer' class='column-resizer'/>")
-							.css("position","absolute")
-							.appendTo(document.body)
-							.css(el.offset())
-			
+		var distance = this.distance(el, ev);
+		
+		
+		if (distance-2 < this.options.distance) {			
+			this.start = ev.pageX;
 			ev.preventDefault();
-			el.trigger("resize:start")
+			el.trigger(this.makeEvent("size:start", ev),[distance] )
 			//prevent others from dragging
 		} else {
 			drag.cancel();
 		}
 	},
-	//overwrite to size
-	"{selector} default.resize:start" : function(el){
-		$("#mxui_resizer")
-			.outerWidth(el.outerWidth())
-			.height(el.outerHeight());
-	},
 	"{selector} dragmove": function (el, ev, drag) {
 		ev.preventDefault();
-		var width = ev.vector().minus(el.offsetv()).left();
-		
-		//we want to keep it from moving smaller than the text
-		if (width > el.find("span").outerWidth())
-			$("#mxui_resizer").width(width)
+		el.trigger(this.makeEvent("size", ev),[ev.pageX - this.start])
 	},
 	"{selector} dragend": function (el, ev, drag) {
-		ev.preventDefault();
-		var width = $("#mxui_resizer").width(),
-			outerwidth = $("#mxui_resizer").outerWidth()
-		el.width(width)
-			.trigger("resize:end", outerwidth)
-		$("#mxui_resizer").remove();
+		el.trigger(this.makeEvent("size:end", ev), [ev.pageX - this.start] )
 	},
 	//make sure this is really fast
 	"{selector} mousemove": function (el, ev) {
-		if (this.isMouseOnRight(el, ev)) {
+		if (this.isOnRight(el, ev)) {
 			el.css("cursor", "e-resize")
 		} else {
 			el.css("cursor", "")
 		}
 	},
-	isMouseOnRight: function (el, ev, extra) {
+	isOnRight: function (el, ev, extra) {
 		return el.offset().left + el.outerWidth() - 8 - (extra || 0) < ev.vector().left()
+	},
+	// how many pixels to the left the current event is
+	distance : function(el, ev){
+		return el.offset().left + el.outerWidth() - ev.vector().left();
+	},
+	makeEvent : function(type, ev){
+		var event = $.Event(type);
+		$.each(["clientX","clientY","pageX","pageY"], function(i, prop){
+			event[prop] = ev[prop]
+		})
+		return event;
 	}
 })
 
