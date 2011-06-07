@@ -48,7 +48,8 @@
 .mxui_layout_split .vsplitter .collapser
 {
 	position:absolute;
-	top:46%;
+	top:50%;
+	margin-top:-13px;
 	width:3px;
 	cursor:pointer;
 	height:27px;
@@ -57,7 +58,8 @@
 .mxui_layout_split .hsplitter .collapser
 {
 	position:absolute;
-	left:46%;
+	left:50%;
+	margin-left:-13px;
 	width:27px;
 	cursor:pointer;
 	height:3px;
