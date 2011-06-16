@@ -17,7 +17,8 @@ $.Controller('Mxui.Data.Order',
 		// if true, can sort by multiple columns at a time
 		multiSort: true,
 		// if true, there are three states (asc, desc, no sort)
-		canUnsort: true
+		canUnsort: true,
+		clicker: "th"
 	}
 },
 /* @Prototype */
@@ -31,7 +32,7 @@ $.Controller('Mxui.Data.Order',
 		this._addSortClass(order)
 	},
 	_addSortClass: function(order){
-		this.find('th').each(function(){
+		this.find(this.options.clicker).each(function(){
 			var el = $(this),
 				attr = sortName(el);
 			
@@ -44,7 +45,7 @@ $.Controller('Mxui.Data.Order',
 			}
 		})
 	},
-	"th click": function( el, ev ) {
+	"{clicker} click": function( el, ev ) {
 
 		var attr = sortName(el),
 			i = 0,
