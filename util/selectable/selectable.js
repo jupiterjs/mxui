@@ -132,7 +132,7 @@ $.Controller.extend('Mxui.Util.Selectable',{
 			var selectable = this.element.find( this.options.selectOn+":visible"),
 				found = false,
 				lastSelected= this.lastSelected,
-				activated = $().add(el);
+				activated = $().add(el).add(lastSelected);
 				
 			if(lastSelected.length && lastSelected[0] != el[0]){
 				for(var i =0; i < selectable.length;i++){
@@ -143,11 +143,8 @@ $.Controller.extend('Mxui.Util.Selectable',{
 						}else{
 							break;
 						}
-					}else{
-						
-						if(found){
-							activated.push(select)
-						}
+					}else if(found){
+						activated.push(select)
 					}
 				}
 			}
@@ -155,12 +152,9 @@ $.Controller.extend('Mxui.Util.Selectable',{
 			el.trigger("activate",el.models ? 
 					[activated.models()] :
 					undefined);
-			
-			
-			
 		}
-		
 	},
+	
     "{selectOn} click": function(el, ev){
 		this._activate(el, ev);
 		
