@@ -24,7 +24,6 @@ steal('funcunit').then(function(){
 			S('.remove:visible:eq('+num+")").click();
 			S(container+' .add').missing();
 			S(container+' .panel:eq(2)').width(function(width){
-				console.log(width - lastWidth)
 				return Math.abs(width - lastWidth) <= 1
 			}, 1000, function(){
 				ok(true, "set back to original width " + lastWidth)
