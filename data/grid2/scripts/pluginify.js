@@ -1,4 +1,4 @@
-load('steal/rhino/steal.js')
+load('steal/rhino/rhino.js')
 
 steal('//steal/build/pluginify/pluginify', function(s){
 	steal.build.pluginify("mxui/grid",{
