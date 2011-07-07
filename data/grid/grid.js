@@ -4,7 +4,7 @@ steal('mxui/layout/table_scroll',
 	'jquery/view/ejs',
 	'mxui/data/order',
 	'mxui/util/selectable')
-	.then('./th.ejs','./init.ejs','./list.ejs')
+	.then('./views/th.ejs','./views/init.ejs','./views/list.ejs')
 	.then(function($){
 /**
  * A simple data grid that is paginate-able and sortable.
