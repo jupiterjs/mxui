@@ -1,1 +1,1 @@
-steal.plugins('funcunit').then('groupable_test')
+steal('funcunit').then('groupable_test')

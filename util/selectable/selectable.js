@@ -1,4 +1,4 @@
-steal.plugins('jquery/controller', 
+steal('jquery/controller', 
 	'jquery/event/key')
      .then(function(){
 

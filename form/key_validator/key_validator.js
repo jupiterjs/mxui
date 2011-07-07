@@ -1,4 +1,4 @@
-steal.plugins('jquery/controller','jquery/event/key').then(function(){
+steal('jquery/controller','jquery/event/key').then(function(){
 	//get the start selection / cursor
 	$.fn.selectionStart = function(){
 		var el = this[0];

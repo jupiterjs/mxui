@@ -1,4 +1,4 @@
-steal.plugins('mxui/form/combobox').then(function(){
+steal('mxui/form/combobox').then(function(){
 
     $.Controller.extend("Mxui.Form.Combobox.Select", {
     },

@@ -1,4 +1,4 @@
-steal.plugins('jquery/controller','jquery/view/ejs','jquery/event/default').then(function(){
+steal('jquery/controller','jquery/view/ejs','jquery/event/default').then(function(){
 	$.Controller.extend("Mxui.Paginator",{
 		defaults : {
 			buttonClass: "toolbar_button",

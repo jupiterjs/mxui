@@ -50,9 +50,7 @@
                 src='../../../steal/steal.js'>   
         </script>
 		<script type='text/javascript'>
-			steal.plugins('mxui/layout/table_fill','mxui/layout/resize').start();
-		</script>
-		<script type='text/javascript'>
+			steal('mxui/layout/table_fill','mxui/layout/resize').then(function(){
 			var body = $('tbody'),
 				html = [],
 				cols = 8,
@@ -88,7 +86,7 @@
 			$('#resize').click(function(){
 				$('#container').css("overflow","hidden").mxui_layout_resize();
 			})
-			
+			})
 		</script>
 	</body>
 </html>

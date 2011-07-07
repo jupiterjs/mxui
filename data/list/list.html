@@ -35,10 +35,10 @@
         </script>
 		
 		<script type='text/javascript'>
-			steal.plugins("mxui/data/list",
+			steal("mxui/data/list",
 				"jquery/model",
 				"jquery/dom/fixture")
-				.css('list')
+				.then('./list.css')
 				.then(function(){
 				$.Model('File')
 				$.fixture.make('file', 10, function(i){
@@ -62,7 +62,7 @@
 				$('#list1, #list2').bind('activate', function(ev, item){
 					$("#out1").html(item.name)
 				})
-			}).start();
+			});
 		</script>
 	</body>
 </html>

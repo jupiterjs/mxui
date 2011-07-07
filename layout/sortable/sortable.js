@@ -1,4 +1,4 @@
-steal.plugins('jquery/controller','jquery/event/drop','jquery/event/drag/limit','jquery/event/default').then(function($){
+steal('jquery/controller','jquery/event/drop','jquery/event/drag/limit','jquery/event/default').then(function($){
 	
 	/**
 	 * 

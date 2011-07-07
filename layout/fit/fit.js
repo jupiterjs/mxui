@@ -1,4 +1,4 @@
-steal.plugins('jquery/dom/dimensions').then(function ($) {
+steal('jquery/dom/dimensions').then(function ($) {
 
     var scrollableParent2 = function (el) {
 		

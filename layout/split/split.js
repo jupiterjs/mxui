@@ -1,4 +1,4 @@
-steal.plugins('jquery/controller', 'jquery/event/drag/limit', 'jquery/dom/dimensions', 'jquery/event/key', 'jquery/event/resize').css('split').then(function( $ ) {
+steal('jquery/controller', 'jquery/event/drag/limit', 'jquery/dom/dimensions', 'jquery/event/key', 'jquery/event/resize').css('split').then(function( $ ) {
 
 	/**
 	 * 

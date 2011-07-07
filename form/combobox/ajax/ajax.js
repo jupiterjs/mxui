@@ -1,4 +1,4 @@
-steal.plugins('mxui/form/combobox')
+steal('mxui/form/combobox')
     .then(function ($)
     {
 

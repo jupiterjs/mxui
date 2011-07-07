@@ -1,4 +1,4 @@
-steal.plugins('jquery/controller', 'jquery/lang/json', 'mxui/util/scrollbar_width', 'jquery/event/key')
+steal('jquery/controller', 'jquery/lang/json', 'mxui/util/scrollbar_width', 'jquery/event/key')
 	.controllers('dropdown','selectable').then(function() {
 
 	/**

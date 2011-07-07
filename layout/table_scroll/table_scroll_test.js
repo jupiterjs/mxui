@@ -1,4 +1,4 @@
-steal.plugins('funcunit').then(function(){
+steal('funcunit').then(function(){
 	
 module("mxui/layout/table_scroll", { 
 	setup: function(){

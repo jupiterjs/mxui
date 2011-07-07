@@ -1,4 +1,4 @@
-steal.plugins('mxui/paginator').then(function($){
+steal('mxui/paginator').then(function($){
 	Mxui.Paginator.extend("Mxui.Paginator.Page",{
 		defaults : {
 			pageClass: "pages",

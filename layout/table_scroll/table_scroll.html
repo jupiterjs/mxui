@@ -51,9 +51,7 @@
                 src='../../../steal/steal.js'>   
         </script>
 		<script type='text/javascript'>
-			steal.plugins('mxui/layout/table_scroll','mxui/layout/resize').start();
-		</script>
-		<script type='text/javascript'>
+			steal('mxui/layout/table_scroll','mxui/layout/resize').then(function(){
 			var body = $('tbody'),
 				html = [],
 				cols = 8,
@@ -98,6 +96,7 @@
 			$('#changeColumn').click(function(){
 				els.thead.find('th:eq(1)').text('NEW COLUMN')
 				$('.mxui_layout_table_scroll').mxui_layout_table_scroll('changed')
+			})
 			})
 		</script>
 	</body>

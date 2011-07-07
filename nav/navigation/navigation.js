@@ -1,4 +1,4 @@
-steal.plugins('mxui/toolbar').then(function(){
+steal('mxui/toolbar').then(function(){
 	
 	var J = Mxui;
 	$.Controller.extend("Mxui.Shiftable",{listensTo: ["shift"]},

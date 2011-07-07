@@ -1,4 +1,4 @@
-steal.plugins('jquery/controller').then(function($){
+steal('jquery/controller').then(function($){
     
 	
 	$.Controller("Mxui.Layout.Positionable",

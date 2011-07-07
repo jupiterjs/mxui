@@ -1,1 +1,1 @@
-steal.plugins('funcunit').then('navigation_test')
+steal('funcunit').then('navigation_test')

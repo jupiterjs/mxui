@@ -1,1 +1,1 @@
-steal.plugins("funcunit").then("menu_test")
+steal("funcunit").then("menu_test")

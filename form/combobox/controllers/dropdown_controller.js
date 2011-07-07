@@ -1,4 +1,4 @@
-steal.plugins('mxui/layout/fit').then(function () {
+steal('mxui/layout/fit').then(function () {
 
 	
 	/**

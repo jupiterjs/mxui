@@ -1,4 +1,4 @@
-steal.plugins('jquery/controller',
+steal('jquery/controller',
 	'mxui/layout/positionable',
 	'mxui/layout/bgiframe',
 	'mxui/layout/fill').then(function($){

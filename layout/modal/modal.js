@@ -1,4 +1,4 @@
-steal.plugins('jquery/controller','mxui/positionable').then(function($){
+steal('jquery/controller','mxui/positionable').then(function($){
 	Mxui.Positionable("Mxui.Modal", {
 		defaults: {
 			my: 'center center',

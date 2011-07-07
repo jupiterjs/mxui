@@ -1,4 +1,4 @@
-steal.plugins('mxui/data/grid','jquery/event/drop','mxui/layout/sortable').then(function($){
+steal('mxui/data/grid','jquery/event/drop','mxui/layout/sortable').then(function($){
 
 	//creates a grid inside
 	$.Controller.extend("Mxui.Data.Grid.Groupable",{

@@ -1,4 +1,4 @@
-steal.plugins('mxui/data/grid','mxui/nav/paginator/page').then(function($){
+steal('mxui/data/grid','mxui/nav/paginator/page').then(function($){
 	$.Controller.extend("Mxui.Data.Grid.Paginated",
 	{
 		defaults : {

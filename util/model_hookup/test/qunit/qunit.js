@@ -5,5 +5,5 @@ steal
  .then("model_hookup_test")
  
 if(steal.browser.rhino){
-  steal.plugins('funcunit/qunit/env')
+  steal('funcunit/qunit/env')
 }

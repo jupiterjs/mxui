@@ -1,4 +1,4 @@
-steal.plugins('jquery/controller', 'jquery/event/default').then(function($){
+steal('jquery/controller', 'jquery/event/default').then(function($){
 	$.Controller.extend("Mxui.Layout.Tree",
 	{
 		defaults : {

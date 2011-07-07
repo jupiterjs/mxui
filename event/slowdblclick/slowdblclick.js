@@ -1,4 +1,4 @@
-steal.plugins('jquery/event').then(function($){
+steal('jquery/event').then(function($){
 	
 	// listens to a number of clicks, calls back on the last one
 	

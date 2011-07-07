@@ -155,7 +155,7 @@
 					
         <script type='text/javascript' src='../../../steal/steal.js'></script>
 		<script type='text/javascript'>
-			steal.plugins('mxui/layout/split','mxui/layout/resize').then(function(){
+			steal('mxui/layout/split','mxui/layout/resize').then(function(){
 				var addButtons = function(){
 					$(this).after( $('#buttons').clone().removeAttr('id').show() );
 				}
@@ -211,7 +211,7 @@
 				}
 				
 			
-			}).start();
+			});
 		</script>
 	</body>
 </html>

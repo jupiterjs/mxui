@@ -25,7 +25,7 @@
                 src='../steal/steal.js'>   
         </script>
 		<script type='text/javascript'>
-			steal.plugins("mxui/grid/paginated",
+			steal("mxui/grid/paginated",
 							"jquery/model",
 							"jquery/dom/fixture").then(function($){
 				$.fixture["make"](["resources","resource"],1000,function(num){
@@ -78,8 +78,6 @@
 				
 				
 			})
-			
-			steal.start();
 			
 		</script>
 	</body>

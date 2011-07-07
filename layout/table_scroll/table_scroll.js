@@ -1,4 +1,4 @@
-steal.plugins('mxui/layout/table_fill').then(function($){
+steal('mxui/layout/table_fill').then(function($){
 
 // helpers
 var setWidths = function(cells, firstWidths){

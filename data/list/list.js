@@ -1,6 +1,6 @@
-steal.plugins('jquery/controller/subscribe',
+steal('jquery/controller/subscribe',
 			  'jquery/view/ejs')
-	 .views('list.ejs').then(function($){
+	 .then('./list.ejs').then(function($){
 
 //helper determines if identical params
 var same = function(a, b){

@@ -1,4 +1,4 @@
-steal.plugins('mxui/layout/fill',
+steal('mxui/layout/fill',
 	'mxui/util/scrollbar_width',
 	'jquery/controller').then(function(){
 	

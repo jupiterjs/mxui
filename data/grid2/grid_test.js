@@ -1,4 +1,4 @@
-steal.plugins('funcunit').then(function(){
+steal('funcunit').then(function(){
 module("mxui/data/grid", { 
 	setup: function(){
         S.open("//mxui/grid.html");

@@ -1,4 +1,4 @@
-steal.plugins('jquery/controller',
+steal('jquery/controller',
 	'mxui/layout/wrap',
 	'jquery/event/drag',
 	'jquery/dom/dimensions',
