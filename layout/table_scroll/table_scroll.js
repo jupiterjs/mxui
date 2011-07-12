@@ -155,7 +155,7 @@ $.Controller("Mxui.Layout.TableScroll",{
 	/**
 	 * Call when columns are added or removed or the title's changed 
 	 */
-	changed : function(){
+	changed : function(resize){
 		if(this.$.foot){
 			this._addSpacer('tfoot');
 		}
@@ -163,7 +163,9 @@ $.Controller("Mxui.Layout.TableScroll",{
 			this._addSpacer('thead');
 		}
 		this._sizeHeaderAndFooters();
-		this.element.resize()
+		if (resize !== false) {
+			this.element.resize()
+		}
 	},
 	/**
 	 * Add elements to this scrollable table.  This assumes these elements
@@ -173,6 +175,10 @@ $.Controller("Mxui.Layout.TableScroll",{
 	 */
 	append : function(after, els){
 		if(!els){
+			// if this spacer hasn't been created
+			if(!this.$.spacer){
+				this.changed(false);
+			}
 			this.$.spacer.before(after)
 		} else{
 			after.after(els)
@@ -188,8 +194,13 @@ $.Controller("Mxui.Layout.TableScroll",{
 	 * Adds a spacer on the bottom of the table that mimicks the dimensions
 	 * of the table header elements.  This keeps the body columns for being
 	 * smaller than the header widths.
+	 * 
+	 * This ONLY works when the table is visible.
 	 */
 	_addSpacer : function(tag){
+		if(!this.$[tag].is(":visible")){
+			return;
+		}
 		//check last element ...
 		var last = this.$.tbody.children('.spacing.'+tag)
 		if(last.length){
@@ -211,8 +222,7 @@ $.Controller("Mxui.Layout.TableScroll",{
 		spacer.children("th, td").each(function () {
 			var $td = $(this),
 				$spacer = $td.children(':first'),
-				width = $spacer.outerWidth(), 
-				height = $spacer.outerHeight();
+				width = $spacer.outerWidth();
 				
 			$td.css({ padding: 0, margin: 0, width: "" })
 			

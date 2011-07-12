@@ -48,7 +48,10 @@ $.Controller.extend("Mxui.Data.Grid",{
 		// set to false for infinite scroll
 		offsetEmpties: true,
 		// set to false to turn off the filler
-		filler: true
+		filler: true,
+		
+		// immediately uses the  model to request items for the grid
+		loadImmediate: true
 	},
 	listensTo : ["select","deselect"]
 },
@@ -89,8 +92,10 @@ $.Controller.extend("Mxui.Data.Grid",{
 		ths.eq(0).addClass('ui-corner-left')
 		ths.eq(-1).addClass('ui-corner-right')
 
+		if(this.options.loadImmediate){
+			this.options.model.findAll(this.options.params.attrs(), this.callback('list', true))
+		}
 		
-		this.options.model.findAll(this.options.params.attrs(), this.callback('list', true))
 	},
 	/**
 	 * 
