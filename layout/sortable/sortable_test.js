@@ -1,4 +1,4 @@
-steal.plugins('funcunit').then(function(){
+steal('funcunit').then(function(){
 module("mxui/sortable", { 
 	setup: function(){
         S.open("//mxui/layout/sortable/sortable.html");

@@ -1,4 +1,4 @@
-steal.plugins('jquery').then(function($){
+steal('jquery').then(function($){
 	/**
 	 * Wraps an element with another element .. returns new element
 	 */

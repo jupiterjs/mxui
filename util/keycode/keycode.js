@@ -1,4 +1,4 @@
-steal.plugins('jquery').then(function(){
+steal('jquery').then(function(){
 	
 	/**
 	 * Call like $.keycode(ev, "enter")

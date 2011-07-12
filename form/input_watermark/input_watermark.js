@@ -1,4 +1,4 @@
-steal.plugins('jquery/controller')
+steal('jquery/controller')
 	.then(function($)
 {
 
@@ -9,14 +9,21 @@ steal.plugins('jquery/controller')
 	{
 		defaults:
 		{
-			defaultText: "Enter text here"
+			defaultText: "Enter text here",
+			replaceCurrent: false
 		}
 	},
 	{
+		/**
+		 * Init called by jmvc base controller.  Add some css and set the text.
+		 */
 		init : function()
 		{
-			this.element.addClass('blurred default');
-			this.element.val(this.options.defaultText);
+			var current = this.element.val();
+			if(current == null || current == "" || this.options.replaceCurrent){
+				this.element.addClass('blurred default');
+				this.element.val(this.options.defaultText);
+			}
 		},
 		
 		/**

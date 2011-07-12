@@ -15,9 +15,9 @@
 
         <script type='text/javascript' src='../../../steal/steal.js'></script>
         <script type='text/javascript'>
-            steal.plugins("mxui/form/input_watermark").then(function($){
+            steal("mxui/form/input_watermark").then(function($){
 				$('#foo').mxui_form_input_watermark({ defaultText:"BAM!" });
-			}).start();
+			});
 		</script>
 	</body>
 </html>

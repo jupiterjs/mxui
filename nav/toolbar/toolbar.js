@@ -1,4 +1,4 @@
-steal.plugins('mxui/nav/menu','jquery/event/default').then(function(){
+steal('mxui/nav/menu','jquery/event/default').then(function(){
    Mxui.Nav.Menu("Mxui.Nav.Toolbar",
    {
 		defaults: {

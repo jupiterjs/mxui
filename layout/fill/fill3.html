@@ -48,7 +48,7 @@
                 src='../../../steal/steal.js'>   
         </script>
 		<script type='text/javascript'>
-			steal.plugins('mxui/layout/fill').then(function($){
+			steal('mxui/layout/fill').then(function($){
 				$("button[name=adjustWidth]").click(function(ev) {
 					var w = $("#containerH").width();
 					w == 320 ? $("#containerH").width(480) : $("#containerH").width(320);
@@ -66,7 +66,6 @@
 				$("#containerH").trigger("resize");				
 								
 			})
-			steal.start();
 		</script>
 	</body>
 </html>

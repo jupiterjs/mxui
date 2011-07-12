@@ -46,7 +46,7 @@
                 src='../../steal/steal.js'>   
         </script>
         <script type='text/javascript'>
-            steal.plugins("mxui/fittable").then(function($){
+            steal("mxui/fittable").then(function($){
 				
 				var items = function(n) {
 					var items = ["<ul>"];
@@ -89,7 +89,6 @@
 					}).css("opacity",1);
 				});								
 			});
-			steal.start();
 		</script>
 	</body>
 </html>

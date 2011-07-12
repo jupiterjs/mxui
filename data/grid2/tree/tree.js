@@ -1,4 +1,4 @@
-steal.plugins('mxui/data/grid')
+steal('mxui/data/grid')
      .resources()
      .models()
      .controllers()

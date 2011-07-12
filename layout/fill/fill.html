@@ -152,7 +152,7 @@
         src='../../../steal/steal.js'>   
 </script>
 <script type='text/javascript' id="demo-source">
-	steal.plugins('mxui/layout/fill','mxui/layout/resize').then(function(){
+	steal('mxui/layout/fill','mxui/layout/resize').then(function(){
 		$(function(){
 			var out = [], affects= jQuery.support.containerSizeAdjustments;
 			for (var part in affects) {
@@ -206,7 +206,6 @@
 			$("#nestedFiller2").siblings().height(40)
 		})*/
 	})
-	steal.start();
 </script>
 	</body>
 </html>

@@ -1,4 +1,4 @@
-steal.plugins(
+steal(
 'jquery/controller',
 'jquery/event/default',
 'jquery/event/drag',

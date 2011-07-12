@@ -1,4 +1,4 @@
-steal.plugins('jquery/controller','mxui/data').then(function($){
+steal('jquery/controller','mxui/data').then(function($){
 
 var sortName = function(el){
 	return el[0].className.match(/([^ ]+)-sort/)[1];

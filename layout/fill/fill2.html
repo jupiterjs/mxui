@@ -84,7 +84,7 @@
 				$("#clear").after("<pre>"+text+"</pre>")
 			}
 			
-			steal.plugins('mxui/layout/fill').then(function(){
+			steal('mxui/layout/fill').then(function(){
 				$("#fill").click(function(){
 					$(function(){
 						$(".grid").mxui_layout_fill();
@@ -100,7 +100,7 @@
 					//logg($(".footer").innerHeight());
 					//$(".grid").height(210)
 				})
-			}).start();
+			});
 		</script>
 	</body>
 </html>

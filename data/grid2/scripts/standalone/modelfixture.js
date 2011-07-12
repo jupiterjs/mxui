@@ -2339,7 +2339,7 @@
 	 * the success and complete handlers are called.  This only sets
 	 * functional fixtures.  By default, the delay is 200ms.
 	 * @codestart
-	 * steal.plugins('jquery/dom/fixtures').then(function(){
+	 * steal('jquery/dom/fixtures').then(function(){
 	 *   $.fixture.delay = 1000;
 	 * })
 	 * @codeend

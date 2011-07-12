@@ -1,4 +1,4 @@
-steal.plugins('mxui/layout/positionable','mxui/nav/menuable','jquery/event/hover').then(function($){
+steal('mxui/layout/positionable','mxui/nav/menuable','jquery/event/hover').then(function($){
 	
 	/**
 	 * A general Menu System.

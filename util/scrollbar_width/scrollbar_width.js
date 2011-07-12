@@ -1,4 +1,4 @@
-steal.plugins('jquery').then(function($){
+steal('jquery').then(function($){
 		var div = $('<div id="out"><div style="height:200px;"></div></div>').css({
 				position: "absolute",
 				top: "0px",

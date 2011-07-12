@@ -1,4 +1,4 @@
-steal.plugins('funcunit').then(function(){
+steal('funcunit').then(function(){
 	
 module("slider test", { 
 	setup: function(){
