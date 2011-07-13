@@ -51,7 +51,8 @@ $.Controller.extend("Mxui.Data.Grid",{
 		filler: true,
 		
 		// immediately uses the  model to request items for the grid
-		loadImmediate: true
+		loadImmediate: true,
+		selectable : true
 	},
 	listensTo : ["select","deselect"]
 },
@@ -76,7 +77,7 @@ $.Controller.extend("Mxui.Data.Grid",{
 			canUnsort: this.options.canUnsort
 		})
 		
-		this.$.tbody.mxui_util_selectable();
+		this.options.selectable && this.$.tbody.mxui_util_selectable();
 		//this.scrollable.cache.thead.mxui_layout_resizer({selector: "th"});
 		this.element.addClass("grid");
 		if (this.options.filler) {
