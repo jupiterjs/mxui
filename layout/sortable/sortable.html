@@ -53,13 +53,15 @@
 		<div class='somethingElse' id='drag'>SOMETHING ELSE</div>
 		<div id='away'>away</div>
 		<script type='text/javascript' 
-                src='../../../steal/steal.js?mxui/layout/sortable'>   
+                src='../../../steal/steal.js'>   
         </script>
 		<script type='text/javascript'>
-			$("#sortable").mxui_sortable().bind("sortable:addPlaceholder", function(){
-				$(document.body).append("<p>added placeholder</p>")
+			steal("mxui/layout/sortable" , function(){
+				$("#sortable").mxui_layout_sortable().bind("sortable.addPlaceholder", function(){
+					$(document.body).append("<p>added placeholder</p>")
+				})
+				$(".somethingElse").bind("draginit",function(){})
 			})
-			$(".somethingElse").bind("draginit",function(){})
 			
 		</script>
 	</body>

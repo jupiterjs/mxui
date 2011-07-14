@@ -141,13 +141,13 @@ $.Controller.extend("Mxui.Data.Grid",{
      * @param {Object} called
      * @param {Object} item
      */
-    "{model._shortName}.updated subscribe" : function(called, item){
+    "{model} updated" : function(model, ev, item){
         var el = item.elements(this.element).html(this.options.row, item);
         if(this.options.updated){
             this.options.updated(this.element, el, item)
         }
     },
-    "{model._shortName}.created subscribe" : function(called, item){
+    "{model} created" : function(model, ev, item){
         var newEl = $($.View("//mxui/data/grid/views/list",{
             items : [item],
             row: this.options.row
@@ -159,7 +159,7 @@ $.Controller.extend("Mxui.Data.Grid",{
 			//newEl.appendTo(this.element).slideDown();
         }
     },
-    "{model._shortName}.destroyed subscribe" : function(called, item){
+    "{model} destroyed" : function(model, ev, item){
         var el = item.elements(this.element)
         if(this.options.remove){
             this.options.remove(this.element,el, item)
