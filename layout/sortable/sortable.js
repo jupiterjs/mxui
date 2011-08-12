@@ -68,11 +68,16 @@ steal('jquery/controller',
 				var res = this.where(ev);
 				
 				
+				var ev = $.Event("sortable.addPlaceholder");
 				
+				this.element.trigger( ev , [drag, placeholder]);
 				// place it
-				res.el[res.pos](placeholder);
+				if(! ev.isDefaultPrevented()) {
+					res.el[res.pos](placeholder);
+				}
 				
-				placeholder.trigger("sortable.addPlaceholder")
+				
+				
 			}
 		},
 		"dropout" : function(el, ev, drop, drag){
