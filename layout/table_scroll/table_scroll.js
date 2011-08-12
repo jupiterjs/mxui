@@ -174,15 +174,14 @@ $.Controller("Mxui.Layout.TableScroll",{
 	 * @param {jQuery} els
 	 */
 	append : function(after, els){
-		if(!this.$.spacer){
-			return;
-		}
+		
 		if(!els){
 			// if this spacer hasn't been created
 			if(!this.$.spacer){
 				this.changed(false);
 			}
-			this.$.spacer.before(after)
+			
+			this.$.spacer && this.$.spacer.before(after)
 		} else{
 			after.after(els)
 		}
