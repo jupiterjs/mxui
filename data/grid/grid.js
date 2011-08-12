@@ -146,6 +146,7 @@ $.Controller.extend("Mxui.Data.Grid",{
         if(this.options.updated){
             this.options.updated(this.element, el, item)
         }
+		this.element.resize()
     },
     "{model} created" : function(model, ev, item){
         var newEl = $($.View("//mxui/data/grid/views/list",{
