@@ -40,7 +40,24 @@ $.Controller.extend('Mxui.Util.Selectable',{
         activatedClassName : "activated",
 		multiActivate: true,
 		// caches 
-		cache : false
+		cache : false,
+		
+		/**
+		 * Parent element unto which is utmost container to de-select in
+		 */
+		parent: null,
+		
+		/**
+		 * Allows de-selection if current item is selected and 
+		 * user clicks something inside the parent that is not an item
+		 */
+		enableDeselection: false,
+		
+		/*
+		 *  Provides a call back function to be executed when de-select occurs 
+		 *  and other related/dependent context can be set accordingly
+		 */
+		deSelectionCallback: null
     }
 },
 {
@@ -48,6 +65,34 @@ $.Controller.extend('Mxui.Util.Selectable',{
 	init: function() {
 		this.lastSelected = null;
     },
+	
+	"{parent} click":function(elm,event)
+	{
+		var parent = this.options.parent,
+			selectOn = this.options.selectOn;
+		
+		function closestUntil(cur){
+			if(cur.is(parent)){
+				return null;
+			} else if(cur.is(selectOn)){
+				return cur;
+			} else {
+				return closestUntil(cur.parent());
+			}
+		}
+		
+		if(this.options.enableDeselection && !closestUntil($(event.target))){
+			this.find(this.options.selectOn).removeClass('selected activated');
+			
+			if ( this.options.deSelectionCallback){
+				var matchedItems  = this.find(this.options.selectOn);
+				if ( matchedItems.length > 0 ){
+					this.options.deSelectionCallback(  matchedItems.eq(0))  ;
+				}
+			}
+		}
+	},
+	
     "{selectOn} mouseenter": function(el, ev){
         this._select(el, false);
     },
