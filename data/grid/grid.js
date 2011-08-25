@@ -112,8 +112,8 @@ $.Controller.extend("Mxui.Data.Grid",{
 		if(attr !== 'count' && attr !== 'updating'){
 			//want to throttle for rapid updates
 			params.attr('updating', true)
-			clearTimeout(this.newRequestTimer,100)
-			this.newRequestTimer = setTimeout(this.callback('newRequest', attr, val))
+			clearTimeout(this.newRequestTimer)
+			this.newRequestTimer = setTimeout(this.callback('newRequest', attr, val), 100)
 		}
 	},
 	newRequest : function(attr, val){
