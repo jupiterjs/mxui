@@ -80,9 +80,8 @@ $.Controller('Mxui.Data.Order',
 				order.unshift(newOrder)
 			}
 		}
-		this.options.params.attrs({
-			'order' : order,
-			offset: 0})
+    this.options.params.attr('offset', 0)
+		this.options.params.attr('order', order)
 	}
 })
 
