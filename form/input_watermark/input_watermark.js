@@ -1,4 +1,4 @@
-steal('jquery/controller')
+steal('jquery/controller', './input_watermark.css')
 	.then(function($)
 {
 
@@ -15,14 +15,39 @@ steal('jquery/controller')
 	},
 	{
 		/**
+		 * Wrap a div around it for password.
+		 * @param {Object} el
+		 * @param {Object} options
+		 */
+		setup:function(el, options)
+		{
+			var $el = $(el).wrap('<div>');
+			this.input = $el;
+			this._super($el.parent(), options);
+		},
+		
+		/**
 		 * Init called by jmvc base controller.  Add some css and set the text.
 		 */
 		init : function()
 		{
-			var current = this.element.val();
+			//- passwords need to be replaced w/ text boxes
+			if(this.input.is(':password')){
+				var origElmHtml = this.element.html();
+				this.passwordElm = $(origElmHtml);
+				this.textElm = $(origElmHtml.replace(/type=["']?password["']?/i, 'type="text"'));
+			}
+			
+			var current = this.input.val();
 			if(current == null || current == "" || this.options.replaceCurrent){
-				this.element.addClass('blurred default');
-				this.element.val(this.options.defaultText);
+				//- if we are a password, we have to swap inputs.
+				if(this.passwordElm){
+					this.input.replaceWith(this.textElm);
+					this.input = this.find('input[type=text]');
+				}
+				
+				this.input.addClass('blurred default');
+				this.input.val(this.options.defaultText);
 			}
 		},
 		
@@ -31,7 +56,13 @@ steal('jquery/controller')
 		 */
 		reset:function()
 		{
-			this.element.val(this.options.defaultText).addClass('blurred default');
+			//- if we are a password, we have to swap inputs.
+			if(this.passwordElm){
+				this.input.replaceWith(this.textElm);
+				this.input = this.find('input[type=text]');
+			}
+			
+			this.input.val(this.options.defaultText).addClass('blurred default');
 		},
 		
 		/**
@@ -39,12 +70,21 @@ steal('jquery/controller')
 		 * @param {Object} el
 		 * @param {Object} ev
 		 */
-		"focusin" : function(el, ev){
-			if(el.val() == this.options.defaultText){
-				el.val("");
-				el.removeClass('default');
+		"focusin" : function(el, ev)
+		{
+			if(this.input.val() == this.options.defaultText){
+				//- if we are a password, we have to swap inputs.
+				if(this.passwordElm){
+					this.input.replaceWith(this.passwordElm);
+					this.input = this.find('input[type=password]');
+				}
+				
+				this.input.focus();
+				this.input.val("");
+				this.input.removeClass('default');
 			}
-			el.removeClass('blurred');
+			
+			this.input.removeClass('blurred');
 		},
 
 		/**
@@ -53,8 +93,9 @@ steal('jquery/controller')
 		* @param {Object} el The event target element.
 		* @param {Object} ev The event being fired.
 		*/
-		"focusout" : function(el, ev){
-			if(el.val() === ""){
+		"focusout" : function(el, ev)
+		{
+			if(this.input.val() === ""){
 				this.reset();
 			}
 		}
