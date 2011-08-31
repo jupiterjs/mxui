@@ -68,6 +68,10 @@ $.Controller.extend('Mxui.Util.Selectable',{
 	
 	"{parent} click":function(elm,event)
 	{
+		if(!this.lastSelected){
+			return false;
+		}
+		
 		var parent = this.options.parent,
 			selectOn = this.options.selectOn;
 		
