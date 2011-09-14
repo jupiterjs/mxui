@@ -68,8 +68,8 @@ $.Controller.extend('Mxui.Util.Selectable',{
 	
 	"{parent} click":function(elm,event)
 	{
-		if(!this.lastSelected){
-			return false;
+		if(!this.lastSelected || !this.options.parent){
+			return;
 		}
 		
 		var parent = this.options.parent,
