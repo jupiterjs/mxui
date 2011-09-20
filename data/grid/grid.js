@@ -4,7 +4,9 @@ steal('mxui/layout/table_scroll',
 	'jquery/view/ejs',
 	'mxui/data/order',
 	'mxui/util/selectable')
-	.then('./views/th.ejs','./views/init.ejs','./views/list.ejs')
+  .then('jquery-ui/ui/jquery.effects.core.js')
+  .then('jquery-ui/ui/jquery.effects.slide.js')
+//	.then('./views/th.ejs','./views/init.ejs','./views/list.ejs')
 	.then(function($){
 /**
  * A simple data grid that is paginate-able and sortable.
@@ -141,35 +143,34 @@ $.Controller.extend("Mxui.Data.Grid",{
      * @param {Object} called
      * @param {Object} item
      */
-//    "{model} updated" : function(model, ev, item){
-//        var el = item.elements(this.element).html(this.options.row, item);
-//        if(this.options.updated){
-//            this.options.updated(this.element, el, item)
-//        }
-//		this.element.resize()
-//    },
-//    "{model} created" : function(model, ev, item){
-//        var newEl = $($.View("//mxui/data/grid/views/list",{
-//            items : [item],
-//            row: this.options.row
-//        }))
-//        if(this.options.append){
-//            this.options.append(this.element, newEl, item)
-//        }else{
-//            this.append(newEl)
-//			//newEl.appendTo(this.element).slideDown();
-//        }
-//    },
-//    "{model} destroyed" : function(model, ev, item){
-//        var el = item.elements(this.element)
-//        if(this.options.remove){
-//            this.options.remove(this.element,el, item)
-//        }else{
-//            el.slideUp( function(){
-//                el.remove();
-//            })
-//        }
-//    },
+    "{model} updated" : function(model, ev, item){
+        var el = item.elements(this.element).html(this.options.row, item);
+        if(this.options.updated){
+            this.options.updated(this.element, el, item)
+        }
+		    this.element.resize()
+    },
+    "{model} created" : function(model, ev, item){
+        var newEl = $($.View("//mxui/data/grid/views/list",{
+            items : [item],
+            row: this.options.row
+        }))
+        if(this.options.append){
+            this.options.append(this.element, newEl, item)
+        }else{
+            this.prepend(newEl)
+			//newEl.appendTo(this.element).slideDown();
+        }
+    },
+    "{model} destroyed" : function(model, ev, item){
+        var el = item.elements(this.element)
+        if(this.options.remove){
+            this.options.remove(this.element,el, item)
+        }else{
+            el.remove()
+
+        }
+    },
 	/**
 	 * Insert rows into the table
 	 * @param {Object} row insert after this row
