@@ -180,13 +180,21 @@ $.Controller("Mxui.Layout.TableScroll",{
 			if(!this.$.spacer){
 				this.changed(false);
 			}
-			
+
 			this.$.spacer && this.$.spacer.before(after)
 		} else{
 			after.after(els)
 		}
 		this.element.resize();
 	},
+  prepend: function(before, els){
+    if(!els){
+      this.$.tbody && this.$.tbody.prepend(before)
+		} else{
+			before.before(els)
+		}
+		this.element.resize();
+  },
 	empty : function(){
 		this.$.tbody.children(":not(.spacing)").remove();
 		this.element.resize();

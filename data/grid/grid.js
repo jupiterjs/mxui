@@ -178,6 +178,9 @@ $.Controller.extend("Mxui.Data.Grid",{
 	append: function( row, newEls ) {
 		this.element.children(":first").mxui_layout_table_scroll("append", row, newEls)
 	},
+  prepend: function(row, newEls){
+    this.element.children(":first").mxui_layout_table_scroll("prepend", row, newEls)
+  },
 	// remove all content from the grid
 	empty: function(){
 		this.element.children(":first").mxui_layout_table_scroll("empty")
