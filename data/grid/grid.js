@@ -40,7 +40,10 @@ $.Controller.extend("Mxui.Data.Grid",{
 	defaults: {
 		columns: {},
 		params: new Mxui.Data,
-		row : null,
+    initTemplate: '//mxui/data/grid/views/init.ejs',
+    listTemplate: '//mxui/data/grid/views/list.ejs',
+    titleTemplate: '//mxui/data/grid/views/th.ejs',
+		rowTemplate : null,
 		model : null,
 		noItems : "No Items",
 		// if true, can sort by multiple columns at a time
@@ -54,7 +57,23 @@ $.Controller.extend("Mxui.Data.Grid",{
 		
 		// immediately uses the  model to request items for the grid
 		loadImmediate: true,
-		selectable : true
+		selectable : true,
+
+    // default crud manipulations
+
+    refresh: function(tbody, elt, newElt){
+      elt.replaceWith(newElt)
+      tbody.resize()
+    },
+    append: function(tbody, newElt){
+      tbody.prepend(newElt)
+      tbody.resize()
+    },
+    remove: function(tbody, elt){
+      elt.remove()
+      tbody.resize()
+    }
+
 	},
 	listensTo : ["select","deselect"]
 },
@@ -65,7 +84,7 @@ $.Controller.extend("Mxui.Data.Grid",{
 		for(var name in this.options.columns){
 			count++;
 		}
-		this.element.append( this.view({columns: this.options.columns, count: count}) )
+		this.element.append( this.view(this.options.initTemplate,{titleTemplate: this.options.titleTemplate, columns: this.options.columns, count: count}) )
 		
 		this.element.children('table').mxui_layout_table_scroll({
 			filler: this.options.filler
@@ -110,8 +129,8 @@ $.Controller.extend("Mxui.Data.Grid",{
 		
 		this.options.params.attr('updating', false);
 		
-		var trs = $(this.view('list',{
-			row : this.options.row,
+		var trs = $(this.view(this.options.listTemplate,{
+			rowTemplate : this.options.rowTemplate,
 			items: items
 		}));
 		
@@ -138,38 +157,31 @@ $.Controller.extend("Mxui.Data.Grid",{
 		} 
 		this.options.model.findAll(this.options.params.attrs(), this.callback('list', clear))
 	},
+  _getRows: function(viewTemplateOption, items){
+    items = ( $.isArray(items) || items instanceof $.Model.List ) ? items : [items]
+    return $(this.view(this.options.listTemplate,{
+      rowTemplate : this.options[viewTemplateOption],
+      items: items
+    }, { columns: this.options.columns, renderer: this.options.renderer } ));
+  },
+
     /**
      * Listen for updates and replace the text of the list
      * @param {Object} called
      * @param {Object} item
      */
     "{model} updated" : function(model, ev, item){
-        var el = item.elements(this.element).html(this.options.row, item);
-        if(this.options.updated){
-            this.options.updated(this.element, el, item)
-        }
-		    this.element.resize()
+        var el = item.elements(this.element),
+            newElt= this._getRows('rowTemplate', item)
+        this.options.refresh(this.$.tbody, el, newElt)
     },
     "{model} created" : function(model, ev, item){
-        var newEl = $($.View("//mxui/data/grid/views/list",{
-            items : [item],
-            row: this.options.row
-        }))
-        if(this.options.append){
-            this.options.append(this.element, newEl, item)
-        }else{
-            this.prepend(newEl)
-			//newEl.appendTo(this.element).slideDown();
-        }
+        var newEl = this._getRows('rowTemplate', item)
+        this.options.append(this.$.tbody, newEl)
     },
     "{model} destroyed" : function(model, ev, item){
         var el = item.elements(this.element)
-        if(this.options.remove){
-            this.options.remove(this.element,el, item)
-        }else{
-            el.remove()
-
-        }
+        this.options.remove(this.$.tbody, el)
     },
 	/**
 	 * Insert rows into the table
@@ -186,6 +198,7 @@ $.Controller.extend("Mxui.Data.Grid",{
 	empty: function(){
 		this.element.children(":first").mxui_layout_table_scroll("empty")
 	},
+
 	"select" : function(el, ev){
 		ev.preventDefault();
 	},

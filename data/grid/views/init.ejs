@@ -2,7 +2,7 @@
 	<thead>
 		<tr>
 		<%for(var col in columns){%>
-			<%== view('//mxui/data/grid/views/th', {name: col, title: columns[col]}) %>
+			<%== $.View('//mxui/data/grid/views/th', {name: col, title: columns[col]}) %>
 		<%}%>
 		</tr>
 	</thead>
