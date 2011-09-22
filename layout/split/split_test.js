@@ -11,7 +11,7 @@ steal('funcunit').then(function(){
 	var verticalTest = function(name, container, num){
 	
 	
-		test("vertical "+name+" - add / remove panel", function(){
+		test("vertical "+name+" add / remove panel", function(){
 			var lastWidth = S(container+' .panel:eq(2)').width();
 			
 			
@@ -24,20 +24,23 @@ steal('funcunit').then(function(){
 			S('.remove:visible:eq('+num+")").click();
 			S(container+' .add').missing();
 			S(container+' .panel:eq(2)').width(function(width){
-				return Math.abs(width - lastWidth) <= 1
+				return Math.abs(width - lastWidth) <= 2
 			}, 1000, function(){
 				ok(true, "set back to original width " + lastWidth)
 			})
 		});
 		
-		test("vertical "+name+" - resize parent", function(){
+		test("vertical "+name+" resize parent", function(){
 			//make sure panels resize proportionally 
-			var widths = [S(container+' .panel:eq(0)').width(), 
-						  S(container+' .panel:eq(1)').width(), 
-						  S(container+' .panel:eq(2)').width()], 
+			var widths, heights;
+			S(container+' .panel:eq(2)').visible(function(){
+				widths = [S(container+' .panel:eq(0)').width(), 
+							  S(container+' .panel:eq(1)').width(), 
+							  S(container+' .panel:eq(2)').width()];
 				heights = [S(container+' .panel:eq(0)').height(), 
 						   S(container+' .panel:eq(1)').height(), 
 						   S(container+' .panel:eq(2)').height()];
+			})
 			
 			S('.ui-resizable-e:eq('+num+")").drag("+60 +0", function(){
 			
@@ -53,24 +56,26 @@ steal('funcunit').then(function(){
 			
 				for (var i = 0; i < heights.length; i++) {
 					var height = S(container+' .panel:eq(' + i + ')').height()
-					equals(height, heights[i] + 20, "heights set " + height + "," + heights[i])
+					equals(height, heights[i] + 23, "heights set " + height + "," + heights[i])
 				}
 				
 			})
 			
 		});
 		
-		test("vertical "+name+" - collapse and expand", function(){
-			var widths = [S(container+' .panel:eq(0)').width(), 
+		test("vertical "+name+" collapse and expand", function(){
+			var widths, left, right;
+			S(container+' .panel:eq(2)').visible(function(){
+				widths = [S(container+' .panel:eq(0)').width(), 
 						  S(container+' .panel:eq(1)').width(), 
-						  S(container+' .panel:eq(2)').width()], left, right;
-			
+						  S(container+' .panel:eq(2)').width()];
+			})
 			S(container+' .collapser').click(function(){
 				left = S(container+' .panel:eq(0)').width()
-				right = S(container+' .panel:eq(0)').width();
-				ok(Math.abs(left - right) < 2, "left and right about equal");
-				ok(Math.abs(widths[0] + widths[2] / 2 - left) < 3, "left consumes ");
-				ok(Math.abs(widths[1] + widths[2] / 2 - right) < 3, "right consumes ");
+				right = S(container+' .panel:eq(1)').width();
+				ok(Math.abs(left - right) <= 2, "left and right about equal");
+				ok(Math.abs(widths[0] + widths[2] / 2 - left) <= 3, "left consumes ");
+				ok(Math.abs(widths[1] + widths[2] / 2 - right) <= 3, "right consumes ");
 			});
 			// make sure they fill in about equal ..
 			
@@ -79,7 +84,7 @@ steal('funcunit').then(function(){
 								S(container+' .panel:eq(1)').width(), 
 								S(container+' .panel:eq(2)').width()]
 				for (var i = 0; i < widths.length; i++) {
-					ok(Math.abs(widths[i] - width2[i]) < 1, " " + i + " panel about equal");
+					ok(Math.abs(widths[i] - width2[i]) <= 3, " " + i + " panel about equal");
 				}
 			});
 		})
@@ -89,15 +94,12 @@ steal('funcunit').then(function(){
 	verticalTest("absolute","#container2", 1);
 	
 	test("vertical absolute - second  splitter position",function(){
-		var second = S('#container2 .panel:eq(1)'),
-			offset = second.offset(),
-			outer = second.outerWidth();
-		equals(S('#container2 .splitter:eq(1)').offset().left, offset.left+outer, "right position");
-	})
-	
-	
-	test("collapse and drag", function(){
-		
+		S('#container2 .splitter:eq(1)').visible(function(){
+			var second = S('#container2 .panel:eq(1)'),
+				offset = second.offset(),
+				outer = second.outerWidth();
+			equals(S('#container2 .splitter:eq(1)').offset().left, offset.left+outer, "right position");
+		})
 	})
 	
 	

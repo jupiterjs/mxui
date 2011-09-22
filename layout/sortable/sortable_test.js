@@ -14,16 +14,13 @@ test("adding an item", function(){
 
 })
 test("moving items", function(){
-	var first = S(".sortable:eq(0)"),
-		second = S(".sortable:eq(1)"),
-		third = S(".sortable:eq(2)");
 	
-	first.drag(".sortable:eq(2)", function(){
-		ok(/Second/.test(first.text()), "Second is first")
+	S(".sortable:eq(0)").drag(".sortable:eq(1)", function(){
+		ok(/Second/.test(S(".sortable:eq(0)").text()), "Second is first")
 		
-		ok(/Third/.test(second.text()), "First is second")
+		ok(/First/.test(S(".sortable:eq(1)").text()), "First is second")
 		
-		ok(/First/.test(third.text()), "Third stays the same")
+		ok(/Third/.test(S(".sortable:eq(2)").text()), "Third stays the same")
 	});
 
 
