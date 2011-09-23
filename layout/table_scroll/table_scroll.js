@@ -264,22 +264,24 @@ $.Controller("Mxui.Layout.TableScroll",{
 							Mxui.scrollbarWidth : 0,
 			tableWidth = this.$.table.width();
 		
-		
-		if(this.$.foot){
-			var cells = this.$.tfootTable.find("th, td")
-			if(cells.length == firstWidths.length){
-				setWidths(cells,firstWidths);
+		if(tableWidth){
+			if(this.$.foot){
+				var cells = this.$.tfootTable.find("th, td")
+				if(cells.length == firstWidths.length){
+					setWidths(cells,firstWidths);
+				}
+				this.$.foot.css('visibility','visible')
+				this.$.tfootTable.width(tableWidth + padding) 
 			}
-			this.$.foot.css('visibility','visible')
-			this.$.tfootTable.width(tableWidth + padding) 
-		}
-		if(this.$.head){
-			var cells = this.$.theadTable.find("th, td")
-			if (cells.length == firstWidths.length) {
-				setWidths(cells, firstWidths);
+			
+			if(this.$.head){
+				var cells = this.$.theadTable.find("th, td")
+				if (cells.length == firstWidths.length) {
+					setWidths(cells, firstWidths);
+				}
+				this.$.head.css('visibility', 'visible')
+				this.$.theadTable.width(tableWidth + padding)
 			}
-			this.$.head.css('visibility', 'visible')
-			this.$.theadTable.width(tableWidth + padding)
 		}
 	},
 	
