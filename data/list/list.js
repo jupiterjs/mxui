@@ -95,13 +95,13 @@ $.Controller('Mxui.Data.List',
      * @param {Object} called
      * @param {Object} item
      */
-    "{model._shortName}.updated subscribe" : function(called, item){
+    "{model} updated" : function(model, ev, item){
         var el = item.elements(this.element).html(this.options.show, item);
         if(this.options.updated){
             this.options.updated(this.element, el, item)
         }
     },
-    "{model._shortName}.created subscribe" : function(called, item){
+    "{model} created" : function(model, ev, item){
         var newEl = $($.View(this.options.list,{
             items : [item],
             options: this.options
@@ -115,7 +115,7 @@ $.Controller('Mxui.Data.List',
         //needs to add to items
         //this.element.append().hide().slideDown();
     },
-    "{model._shortName}.destroyed subscribe" : function(called, item){
+    "{model} destroyed" : function(model, ev, item){
         var el = item.elements(this.element)
         if(this.options.remove){
             this.options.remove(this.element,el, item)
