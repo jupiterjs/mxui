@@ -1,7 +1,11 @@
 /**
  * @class Mxui.Nav.Accordion
  */
-steal('jquery/controller','jquery/dom/dimensions','jquery/event/drag',function($){
+steal('jquery/controller',
+	  'jquery/dom/dimensions',
+	  'jquery/event/drag',
+	  'jquery/event/resize',
+	  function($){
 
 
 $.Controller("Mxui.Nav.Accordion",{
@@ -51,7 +55,7 @@ $.Controller("Mxui.Nav.Accordion",{
 		var ul_height = 0;
 		
 		// Set current div height to match parent first.
-		this.element.height($(this.element).parent().height());
+		//this.element.height($(this.element).parent().height());
 		
 		// Make sure current height is not fixed to prevent double scroll bar.
 		this.current.height('');
@@ -125,7 +129,7 @@ $.Controller("Mxui.Nav.Accordion",{
 			return;
 		}
 		
-		//we need to 'knock out' the top border / margin / etc roportinally ...
+		//we need to 'knock out' the top border / margin / etc proportinally ...
 		var newHeight = this.calculateRemainder(null, el),
 			newShow = el.next().show().height(0).trigger("show", arguments),
 			oldH3 = this.current.prev();
