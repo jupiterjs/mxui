@@ -1,0 +1,30 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
+            "http://www.w3.org/TR/html4/strict.dtd">
+<html lang="en">
+	<head>
+		<title>Mxui.Data.Tree</title>
+        <style type='text/css'>
+            body {font-family: verdana}
+            .error {border: solid 1px red;}
+            .error_text { color: red; font-size: 10px;}
+            td {padding: 3px;}
+        </style>
+	</head>
+	<body>
+	    <h1>Mxui.Data.Tree Demo</h1>
+		<ul id='tree'></ul>
+		<script type='text/javascript' 
+                src='../../../steal/steal.js'>
+        </script>
+		<script type='text/javascript'>
+			steal('mxui/data/tree','mxui/data/tree/fixture.js',function(){
+				state = new $.Observe({expanded: {}});
+				// create
+				$('#tree').mxui_data_tree({model: Item, state: state})
+					.delegate('.name-wrapper','click', function(){
+						state.attr('expanded.'+$(this).find('.item').model().id, true);
+					})
+			})
+		</script>
+	</body>
+</html>

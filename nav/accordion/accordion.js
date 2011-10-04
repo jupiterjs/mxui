@@ -124,6 +124,11 @@ $.Controller("Mxui.Nav.Accordion",{
 		var next = el.next();
 		// If we don't have one selected by default
 		if(!this.current || next.is(this.options.title) ) {
+			
+			this.current && this.current
+				.removeClass(this.options.currentClassName)
+				.removeClass(this.options.activeClassName);
+			
 			this.setActive(el, arguments);
 			return;
 		}
@@ -153,8 +158,7 @@ $.Controller("Mxui.Nav.Accordion",{
 		oldH3.removeClass(this.options.currentClassName).removeClass(this.options.activeClassName);
 		el.addClass(this.options.currentClassName).addClass(this.options.activeClassName);
 		
-		console.log(oldContent, newContent, newHeight)	
-		
+
 		// Animation closing the existing expanded content and removed class for title, then expand the new one.
 		oldContent.stop(true, true).animate({outerHeight: "0px"},{
 			complete : function(){
@@ -191,10 +195,7 @@ $.Controller("Mxui.Nav.Accordion",{
 		(titles || this.element.children(this.options.title) )
 				.each(function(){
 					total -= $(this).outerHeight(true);
-					
-					console.log($(this).outerHeight(true), this, total)
 				});
-		console.log("a",total)
 		return total;
 	},
 	
