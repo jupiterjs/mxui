@@ -95,7 +95,7 @@ steal('jquery/controller',
 					this.element.outerWidth(outerWidth+this.margin.x())
 				}
 				var el = this.element;
-				el.trigger("resize")
+				el.resize()
 				
 
 			},
