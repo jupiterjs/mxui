@@ -1,0 +1,21 @@
+.mxui_form_input_watermark
+{
+	position:relative;
+}
+.mxui_form_input_watermark .watermark
+{ 
+	color:#ccc; 
+	display:none;
+	position:absolute;
+	overflow:hidden;
+	white-space:nowrap;
+	
+	/* Stops selection of the watermark text. */
+	-moz-user-select: -moz-none;
+   -khtml-user-select: none;
+   -webkit-user-select: none;
+   user-select: none;
+   
+   /* Stops being able to click watermark text. */
+   pointer-events:none;
+}

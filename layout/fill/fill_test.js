@@ -26,7 +26,7 @@ test("Filler Tests", function(){
 
 	S("a#run").click()
 	
-	S.wait(100, function(){
+	S.wait(500, function(){
 		var height = S("#fill1").height()
 		ok(withinAPixel(height1, height),"heights are close "+height1+" "+height);
 		
@@ -40,16 +40,14 @@ test("Filler Tests", function(){
 		
 		
 		height1 = S("#fill1 .fill").height();
-		height2 = S("#fill2 .fill").height()
-		height3 = S("#fill3 .fill").height()
+		height2 = S("#fill2 .fill").height();
+		height3 = S("#fill3 .fill").height();
 	});
 	
 	
-	S("#fill1 .ui-resizable-se").drag("+0 +50");
-	S("#fill2 .ui-resizable-se").drag("+0 +50");
-	S("#fill3 .ui-resizable-se").drag("+0 +50", function(){
-		console.log('hs', height1, S("#fill1 .fill").height() );
-		
+	S("#fill1 .ui-resizable-se").visible().drag("+0 +50");
+	S("#fill2 .ui-resizable-se").visible().drag("+0 +50");
+	S("#fill3 .ui-resizable-se").visible().drag("+0 +50", function(){
 		ok(withinAPixel(height1+50, S("#fill1 .fill").height()),"heights are close ")
 		
 		ok(withinAPixel(height2+50, S("#fill2 .fill").height()),"heights are close")

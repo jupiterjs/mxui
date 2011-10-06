@@ -1,4 +1,4 @@
-steal('funcunit/qunit').then('wrap',function(){
+steal('funcunit/qunit').then('mxui/layout/wrap',function(){
 
 module("mxui/layout/wrap");
 

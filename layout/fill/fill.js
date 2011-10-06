@@ -82,10 +82,10 @@ steal('jquery/dom/dimensions', 'jquery/event/resize').then(function( $ ) {
 
 	$.extend(filler, {
 		parentResize: function( ev ) {
-      if (ev.data.filler.is(':hidden')){
-        //ev.stopPropagation()
-        return
-      }
+
+			if (ev.data.filler.is(':hidden')) {
+				return;
+			}
 
 			var parent = $(this),
 				isWindow = this == window,
@@ -103,23 +103,38 @@ steal('jquery/dom/dimensions', 'jquery/event/resize').then(function( $ ) {
 					return get.position !== "absolute" && get.position !== "fixed" && get.display !== "none" && !jQuery.expr.filters.hidden(this)
 				}),
 				last = children.eq(-1),
+				first,
 				parentHeight = parent.height() - (isWindow ? parseInt(container.css('marginBottom'), 10) || 0 : 0),
 				currentSize;
-
+			var div = '<div style="height: 0px; line-height:0px;overflow:hidden;' + (ev.data.inFloat ? 'clear: both' : '') + ';"/>'
 			if ( isBleeder ) {
 				//temporarily add a small div to use to figure out the 'bleed-through' margin
 				//of the last element
-				last = $('<div style="height: 0px; line-height:0px;overflow:hidden;' + (ev.data.inFloat ? 'clear: both' : '') + ';"/>').appendTo(container);
+				last = $(div).appendTo(container);
+				
 			}
-
+			
 			//for performance, we want to figure out the currently used height of the parent element
 			// as quick as possible
 			// we can use either offsetTop or offset depending ...
 			if ( last && last.length > 0 ) {
 				if ( last.offsetParent()[0] === container[0] ) {
 					currentSize = last[0].offsetTop + last.outerHeight();
+				} else if (last.offsetParent()[0] === container.offsetParent()[0]) {
+					first = $(div).prependTo(container);
+					currentSize = ( last[0].offsetTop + last.outerHeight() ) - first[0].offsetTop;
+					first.remove();
 				} else {
-					currentSize = last.offset().top - container.offset().top + last.outerHeight()
+					// add first so we know where to start from .. do not bleed in this case
+					first = $(div).prependTo(container);
+					/*console.log('last', last,'last-top', last.offset().top, 'last-height',last.outerHeight(),
+						'\nct',container, "container-top",container.offset().top,
+						'\nfirst',first, "first-top",
+						first.offset().top,
+						'parentMatch',
+						last.offsetParent()[0] === container.offsetParent()[0])*/
+					currentSize = ( last.offset().top + last.outerHeight() ) - first.offset().top //- container.offset().top
+					first.remove();
 				}
 			}
 
@@ -140,6 +155,7 @@ steal('jquery/dom/dimensions', 'jquery/event/resize').then(function( $ ) {
 				ev.data.filler.outerHeight(parentHeight);
 				ev.data.filler.outerWidth(parentWidth);
 			} else {
+				//console.log(ev.data.filler, "parentHeight",parentHeight, "currentSize",currentSize)
 				ev.data.filler.height(fillerHeight + delta)
 			}
 
@@ -147,9 +163,8 @@ steal('jquery/dom/dimensions', 'jquery/event/resize').then(function( $ ) {
 			//remove the temporary element
 			if ( isBleeder ) {
 				last.remove();
+				
 			}
-
-			//ev.data.filler.triggerHandler('resize');
 		}
 	});
 

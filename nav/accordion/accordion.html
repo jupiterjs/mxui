@@ -1,0 +1,98 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
+            "http://www.w3.org/TR/html4/strict.dtd">
+<html lang="en">
+	<head>
+		<title>accordion</title>
+        <style type='text/css'>
+            body {font-family: verdana}
+            .error {border: solid 1px red;}
+            .error_text { color: red; font-size: 10px;}
+            td {padding: 3px;}
+			#accordion {
+				height: 500px;
+				width: 200px;
+				border: solid 1px #666;
+			}
+			ul {
+				margin: 0px;
+			}
+        </style>
+		
+		<link rel="stylesheet" type="text/css" href="../../smoothness/jquery-ui-1.7.2.custom.css" />
+		
+	</head>
+	<body>
+		
+		 	<a href='javascript://' id='resize'>Resize</a>
+		 	
+	    <div id='accordion'>
+	    	<h3>Accordion</h3>
+			<ul class='content' style="overflow:auto;">
+				<li>Con1</li>
+				<li>Con1</li>
+				<li>Content for 1</li>
+				<li>Content for 1</li>
+				<li>Content for 1</li>
+				<li>Content for 1</li>
+				<li>Content for 1</li>
+				<li>Content for 1</li>
+				<li>Content for 1</li>
+				<li>Content for 1</li>
+				<li>Content for 1</li>
+				<li>Content for 1</li>
+				<li>Content for 1</li>
+				<li>Content for 1</li>
+				<li>Content for 1</li>
+				<li>Content for 1</li>
+				<li>Content for 1</li>
+				<li>Content for 1</li>
+				<li>Content for 1</li>
+				<li>Content for 1</li>
+				<li>Content for 1</li>
+				<li>Content for 1</li>
+				<li>Content for 1</li>
+				<li>Content for 1</li>
+				<li>Content for 1</li>
+				<li>Content for 1</li>
+				
+				
+				 
+			</ul>
+			<h3>two</h3>
+			<div class='content'>Another Piece of Content 2 </div>
+			<h3>three</h3>
+			<div class='content'>content 3 </div>
+			
+			<h3>four</h3>
+			
+			<h3>five</h3>
+			<div class='content'> Content Five</div>
+			 
+	    </div>
+		<br clear="all" />
+		
+ 		<a href='javascript://' id='resize_scroll'>Resize Scroll</a>
+		<a href='javascript://' id='resize_unscroll'>Resize Unscroll</a>
+		
+		<script type='text/javascript' src='../../../steal/steal.js'></script>
+		<script type='text/javascript'>
+		steal('mxui/nav/accordion').then(function(){	
+		
+				$('#accordion').mxui_nav_accordion();
+				
+				$('#resize').click(function(){
+					$('#accordion').height(550).trigger('resize');
+				});
+			
+				$('#resize_scroll').click(function(){
+					$('#accordion').height(250).trigger('resize');
+				});
+			
+				$('#resize_unscroll').click(function(){
+					$('#accordion').height(800).trigger('resize');
+				});
+			
+			});
+		</script>
+	</body>
+</html>

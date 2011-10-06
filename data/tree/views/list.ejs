@@ -1,0 +1,12 @@
+<% for(var i=0; i < this.length; i++){ 
+	var item = this[i];
+%>
+ <li>
+ 	<div class='name-wrapper'>
+		<span class='toggle <%= item.subFolderCount > 0 ? "visible" : "hidden" %> collapsed'></span>
+		<span class='ui-icon ui-icon-folder-collapsed'></span>
+		<span <%= item %> tabindex='0'><%= item.name %></span>
+	</div>
+	<ul></ul>
+ </li>
+<% } %>

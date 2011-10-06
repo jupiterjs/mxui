@@ -1,4 +1,4 @@
-steal('jquery/controller')
+steal('jquery/controller', './input_watermark.css')
 	.then(function($)
 {
 
@@ -10,19 +10,55 @@ steal('jquery/controller')
 		defaults:
 		{
 			defaultText: "Enter text here",
-			replaceCurrent: false
+			replaceCurrent: false,
+			replaceOnFocus: false,
+			replaceOnType: true
 		}
 	},
 	{
+		/**
+		 * Wrap a div around it for password.
+		 * @param {Object} el
+		 * @param {Object} options
+		 */
+		setup:function(el, options)
+		{
+			var $el = $(el).wrap('<div>'),
+				parent = $el.parent();
+				
+			this.input = $el;
+			this.watermark = $('<span class="watermark" />').appendTo(parent);
+			
+			this._super(parent, options);
+		},
+		
 		/**
 		 * Init called by jmvc base controller.  Add some css and set the text.
 		 */
 		init : function()
 		{
-			var current = this.element.val();
+			this.watermark.text(this.options.defaultText);
+			
+			//- clone the inputs styles we care about like font stuff
+			this.watermark.css({
+				left: parseInt(this.input.css('padding-left')) + 4, //- add 3 cuz its cursor sits on top of text
+				fontSize: this.input.css('font-size'),
+				lineHeight: this.input.css('line-height'),
+				fontWeight: this.input.css('font-weight'),
+				width: this.input.css('width')
+			});
+			
+			//- set this after, we have all the css... this would be better but can't seem to get it perfect
+			//this.watermark.css('top', this.input.position().top + (this.input.outerHeight() - (this.watermark.outerHeight() / 2)));
+			this.watermark.css('top', (this.element.height() - this.watermark.outerHeight()) / 2);
+			
+			var current = this.input.val();
 			if(current == null || current == "" || this.options.replaceCurrent){
-				this.element.addClass('blurred default');
-				this.element.val(this.options.defaultText);
+				this.watermark.show();
+				
+				if(this.options.replaceCurrent){
+					this.input.val('');
+				}
 			}
 		},
 		
@@ -31,7 +67,7 @@ steal('jquery/controller')
 		 */
 		reset:function()
 		{
-			this.element.val(this.options.defaultText).addClass('blurred default');
+			this.watermark.show();
 		},
 		
 		/**
@@ -39,12 +75,52 @@ steal('jquery/controller')
 		 * @param {Object} el
 		 * @param {Object} ev
 		 */
-		"focusin" : function(el, ev){
-			if(el.val() == this.options.defaultText){
-				el.val("");
-				el.removeClass('default');
+		"focusin" : function(el, ev)
+		{
+			if(this.options.replaceOnFocus && this.input.val() === ""){
+				this.watermark.hide();
 			}
-			el.removeClass('blurred');
+		},
+		
+		/**
+		 * when a user clicks the watermark text, stop the event and focus the input.
+		 * @param {Object} elm
+		 * @param {Object} event
+		 */
+		".watermark click":function(elm,event)
+		{
+			event.preventDefault();
+			this.input.focus();
+		},
+		
+		/**
+		 * Listens for keydown on the input.
+		 * @param {Object} el
+		 * @param {Object} ev
+		 */
+		"keydown":function(el,ev)
+		{
+			var ignoreKeys = [8,13,16,17,18,20,27,37,38,39,40,46,224];
+			if(this.options.replaceOnType){
+				if ( ! ( $.inArray(ev.which, ignoreKeys ) >=0 ) ){
+					this.watermark.hide();
+				}
+			}
+		},
+
+		/**
+		 * keydown and keyup handlers together provide a smoother watermark experience
+		 * @param el
+		 * @param ev
+		 */
+		"keyup" : function (el,ev){
+			if(this.options.replaceOnType){
+				if(this.input.val() !== ""){
+					this.watermark.hide();
+				} else {
+					this.watermark.show();
+				}
+			}
 		},
 
 		/**
@@ -53,10 +129,18 @@ steal('jquery/controller')
 		* @param {Object} el The event target element.
 		* @param {Object} ev The event being fired.
 		*/
-		"focusout" : function(el, ev){
-			if(el.val() === ""){
+		"focusout" : function(el, ev)
+		{
+			if(this.input.val() === ""){
 				this.reset();
 			}
+		},
+		
+		/**
+		 * to hide the watermark, can be used invoked from outside the plugin.
+		 */
+		hideWatermark : function (){
+			this.watermark.hide();
 		}
 	});
 });
