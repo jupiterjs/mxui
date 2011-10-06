@@ -125,19 +125,19 @@
 
 </div><!-- End demo-description -->
 <script type='text/javascript' 
-                src='../../steal/steal.js'
+                src='../../../steal/steal.js'
                 package='main.js'
                 compress='false'>   
 </script>
 <script type='text/javascript'>
 	
-	steal("mxui/positionable",'jquery/event/drag').then(
+	steal("mxui/layout/positionable",'jquery/event/drag').then(
 	function() {
 		
 		
 		
 		function position(using) {
-            $('.positionable').mxui_positionable({     
+            $('.positionable').mxui_layout_positionable({
                 my: $('#my_horizontal').val() + ' ' + $('#my_vertical').val(),
                 at: $('#at_horizontal').val() + ' '+ $('#at_vertical').val(),
                 offset: $('#offset').val(),

@@ -42,7 +42,7 @@
 				left: 300px;
 			}	
         </style>
-       <link type="text/css" href="../../../mxui/combobox/combobox.css" rel="stylesheet" />
+       <link type="text/css" href="../../../mxui/form/combobox/combobox.css" rel="stylesheet" />
 	</head>
 	<body>
 		<div id='fitter' class="fittable">Demo Fittable</div>
@@ -93,7 +93,7 @@
 				//	.css("position", "absolute")
 				.html( items(5));				
 				$("#target1").click(function(ev){
-					$("#fittable1").fit({
+					$("#fittable1").mxui_layout_fit({
 						within:300,
 						of:$("#target1")
 					}).css("opacity",1);
@@ -102,7 +102,7 @@
 				$("#fittable2")//.css("opacity",0)
 				.html( items(30));				
 				$("#target2").click(function(ev){
-					$("#fittable2").fit({
+					$("#fittable2").mxui_layout_fit({
 						within:300,
 						of:$("#target2")
 					})
@@ -110,7 +110,7 @@
 				
 				$("#fittable3").html( items(30));				
 				$("#target3").click(function(ev){
-					$("#fittable3").fit({
+					$("#fittable3").mxui_layout_fit({
 						within:300,
 						of:$("#target3")
 					});
@@ -118,7 +118,7 @@
 				
 				$("#fittable4").html( items(20));				
 				$("#target4").click(function(ev){
-					$("#fittable4").fit({
+					$("#fittable4").mxui_layout_fit({
 						within:300,
 						of:$("#target4")
 					});

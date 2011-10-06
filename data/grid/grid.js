@@ -155,8 +155,11 @@ $.Controller.extend("Mxui.Data.Grid",{
 		if(!this.options.offsetEmpties && attr == "offset"){ // if offset changes and we have offsetEmpties false
 			clear = false;
 		} 
-		this.options.model.findAll(this.options.params.attrs(), this.callback('list', clear))
+	  this.makeRequest(clear)
 	},
+  makeRequest: function(clear){
+    this.options.model.findAll(this.options.params.attrs(), this.callback('list', clear))
+  },
   _getRows: function(viewTemplateOption, items){
     items = ( $.isArray(items) || items instanceof $.Model.List ) ? items : [items]
     return $(this.view(this.options.listTemplate,{
@@ -171,9 +174,11 @@ $.Controller.extend("Mxui.Data.Grid",{
      * @param {Object} item
      */
     "{model} updated" : function(model, ev, item){
-        var el = item.elements(this.element),
-            newElt= this._getRows('rowTemplate', item)
-        this.options.refresh(this.$.tbody, el, newElt)
+        var el = item.elements(this.element)
+        if (el.length > 0){
+          var newElt= this._getRows('rowTemplate', item)
+          this.options.refresh(this.$.tbody, el, newElt)
+        }
     },
     "{model} created" : function(model, ev, item){
         var newEl = this._getRows('rowTemplate', item)
@@ -189,14 +194,14 @@ $.Controller.extend("Mxui.Data.Grid",{
 	 * @param {Object} newEls new elements to insert (they should be trs)
 	 */
 	append: function( row, newEls ) {
-		this.element.children(":first").mxui_layout_table_scroll("append", row, newEls)
+		this.element.children(".mxui_layout_table_scroll").mxui_layout_table_scroll("append", row, newEls)
 	},
   prepend: function(row, newEls){
-    this.element.children(":first").mxui_layout_table_scroll("prepend", row, newEls)
+    this.element.children(".mxui_layout_table_scroll").mxui_layout_table_scroll("prepend", row, newEls)
   },
 	// remove all content from the grid
 	empty: function(){
-		this.element.children(":first").mxui_layout_table_scroll("empty")
+		this.element.children(".mxui_layout_table_scroll").mxui_layout_table_scroll("empty")
 	},
 
 	"select" : function(el, ev){

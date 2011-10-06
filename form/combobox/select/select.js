@@ -13,7 +13,7 @@ steal('mxui/form/combobox').then(function(){
 				var input = $("<input type='text' />")
 							.attr("id", id)
 							.attr("name", name)
-							.attr("className", className)
+							.addClass(className)
 							
 				var items = [], option, $option;
 				el.find("option").each(function(){

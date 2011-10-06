@@ -54,7 +54,8 @@ steal('jquery/dom/dimensions', 'jquery/event/resize').then(function( $ ) {
 				inFloat: inFloat(this[0], thePage ? document.body : options.parent[0]),
 				options: options
 			};
-			$(options.parent).bind('resize', evData, filler.parentResize);
+
+			$(options.parent).bind('resize', evData, filler.parentResize)
 			//if this element is removed, take it out
 
 			this.bind('destroyed', evData, function( ev ) {
@@ -81,9 +82,15 @@ steal('jquery/dom/dimensions', 'jquery/event/resize').then(function( $ ) {
 
 	$.extend(filler, {
 		parentResize: function( ev ) {
+      if (ev.data.filler.is(':hidden')){
+        //ev.stopPropagation()
+        return
+      }
+
 			var parent = $(this),
 				isWindow = this == window,
 				container = (isWindow ? $(document.body) : parent),
+
 
 				//if the parent bleeds margins, we don't care what the last element's margin is
 				isBleeder = bleeder(parent),

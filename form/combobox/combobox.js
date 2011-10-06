@@ -1,5 +1,6 @@
 steal('jquery/controller', 'jquery/lang/json', 'mxui/util/scrollbar_width', 'jquery/event/key')
-	.controllers('dropdown','selectable').then(function() {
+  .then('./controllers/dropdown_controller.js','./controllers/selectable_controller.js')
+  .then(function() {
 
 	/**
 	 * @tag home

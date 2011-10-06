@@ -152,7 +152,7 @@ steal('mxui/layout/positionable','mxui/nav/menuable','jquery/event/hover').then(
 			class_names : "ui-widget-content ui-menu ui-widget ui-corner-all",
 			child_class_names : "ui-menu-item ui-state-default", 
 			apply_types_to_top : true,
-			active : "ui-state-active"
+		//	active : "ui-state-active"
 		}
 	},{})
    

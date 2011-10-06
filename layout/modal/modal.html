@@ -26,12 +26,14 @@
 	    </div>
 		<a href="#" id='show'>show as modal</a>
 		<script type='text/javascript' 
-                src='../../steal/steal.js?mxui/modal,production'>   
+                src='../../../steal/steal.js'>
         </script>
 		<script type='text/javascript'>
-			$("#show").click(function(){
-				$("#modal").mxui_modal().trigger('show');
-			})
+      steal("mxui/layout/modal").then(function(){
+        $("#show").click(function(){
+          $("#modal").mxui_modal().trigger('show');
+        })
+      })
 		</script>
 	</body>
 </html>
