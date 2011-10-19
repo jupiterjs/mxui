@@ -2,7 +2,8 @@ steal( 'jquery/controller',
 	   'jquery/view/ejs',
 	   'jquery/lang/observe/delegate',
 	   'jquery/controller/view',
-	   'jquery/view/ejs' )
+	   'jquery/view/ejs',
+	   'mxui/data' )
 	.then( './views/init.ejs', function($){
 
 /**

@@ -57,6 +57,13 @@ $.Controller.extend("Mxui.Data.Grid",{
 	listensTo : ["select","deselect"]
 },
 {
+	setup : function(el, options){
+		// check params has attrs
+		if(options && options.params && typeof options.params.attrs != 'function'){
+			options.params = new Mxui.Data(options.params)
+		}
+		this._super.apply(this, arguments);
+	},
 	init : function(){
 		//create the scrollable table
 		var count = 0;
@@ -93,6 +100,7 @@ $.Controller.extend("Mxui.Data.Grid",{
 		ths.eq(0).addClass('ui-corner-left')
 		ths.eq(-1).addClass('ui-corner-right')
 
+		
 		if(this.options.loadImmediate){
 			this.options.model.findAll(this.options.params.attrs(), this.callback('list', true))
 		}
