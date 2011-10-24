@@ -12,7 +12,8 @@ steal('jquery/controller', './input_watermark.css')
 			defaultText: "Enter text here",
 			replaceCurrent: false,
 			replaceOnFocus: false,
-			replaceOnType: true
+			replaceOnType: true,
+			verticalAlign: 'middle' //top or middle
 		}
 	},
 	{
@@ -49,8 +50,14 @@ steal('jquery/controller', './input_watermark.css')
 			});
 			
 			//- set this after, we have all the css... this would be better but can't seem to get it perfect
-			//this.watermark.css('top', this.input.position().top + (this.input.outerHeight() - (this.watermark.outerHeight() / 2)));
-			this.watermark.css('top', (this.element.height() - this.watermark.outerHeight()) / 2);
+			switch(this.options.verticalAlign){
+				case 'top':
+					this.watermark.css('top', this.input.position().top + 4);
+					break;
+				case 'middle':
+					this.watermark.css('top', (this.element.height() - this.watermark.outerHeight()) / 2);
+					break;
+			}
 			
 			var current = this.input.val();
 			if(current == null || current == "" || this.options.replaceCurrent){
