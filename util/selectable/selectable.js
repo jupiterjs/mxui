@@ -80,7 +80,7 @@ $.Controller.extend('Mxui.Util.Selectable',{
 				return null;
 			} else if(cur.is(selectOn)){
 				return cur;
-			} else {
+			} else if(cur && cur.length){
 				return closestUntil(cur.parent());
 			}
 		}
