@@ -256,7 +256,7 @@ $.Controller("Mxui.Layout.TableScroll",{
 		var body = this.$.body,
 			
 			// getting the outer widths is the most expensive thing
-			firstWidths = this.$.tbody.find("tr:first")
+			firstWidths = this.$.tbody.find("tr:first:not(.spacing)")
 				.children()
 				.map(function () { return $(this).outerWidth() }),
 			
