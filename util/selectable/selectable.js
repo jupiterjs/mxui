@@ -87,6 +87,7 @@ $.Controller.extend('Mxui.Util.Selectable',{
 		
 		if(this.options.enableDeselection && !closestUntil($(event.target))){
 			this.find(this.options.selectOn).removeClass('selected activated');
+			this.lastSelected = null;
 			
 			if ( this.options.deSelectionCallback){
 				var matchedItems  = this.find(this.options.selectOn);
