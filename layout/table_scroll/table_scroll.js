@@ -215,7 +215,7 @@ $.Controller("Mxui.Layout.TableScroll",{
 		// wrap contents with a spacing
 		spacer.children("th, td").each(function () { 
 			var td = $(this);
-			td.html("<div style='float:left'>"+td.html()+"</div>")
+			td.html("<div style='float: left;'>"+td.html()+"</div>")
 		});
 		
 		spacer.appendTo(this.$.tbody);
@@ -226,7 +226,7 @@ $.Controller("Mxui.Layout.TableScroll",{
 				$spacer = $td.children(':first'),
 				width = $spacer.outerWidth();
 				
-			$td.css({ padding: 0, margin: 0, width: "" })
+			$td.css({"padding-top": 0, "padding-bottom": 0, margin: 0, width: "" }) // If padding is removed from the cell sides, layout might break!
 			
 			$spacer.outerWidth(width + 2).css({
 				"float": "none",
