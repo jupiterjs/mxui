@@ -75,29 +75,31 @@ $.Controller('Mxui.Data.Tree',
 			.addClass('ui-icon-carat-1-s')
 		
 		this.iconFor(parentId)
-		   		.removeClass('ui-icon-folder-collapsed')
-				.addClass('ui-icon-folder-open')
+			.removeClass('ui-icon-folder-collapsed')
+			.addClass('ui-icon-folder-open')
 		if( container.children().length ) {
 			// make sure to show it 
 			container.show();
 		} else {
 			this.options.model.findAll({parentId: parentId || null}, 
 				this.proxy( function(items){
-				
-			   		this.containerFor(parentId).html(this.view(this.options.view,items)).show();
-					
+					var container = this.containerFor(parentId);
+					container.html(this.view(this.options.view,items)).show();
+					this.element.trigger('leafExpanded', container);
 				})
 			);
 		}
 	},
 	collapse : function(parentId) {
-		this.containerFor(parentId).hide();
+		var container = this.containerFor(parentId)
+		container.hide();
 		this.toggleFor(parentId)
 			.addClass('ui-icon-carat-1-e')
 			.removeClass('ui-icon-carat-1-s');
 		this.iconFor(parentId)
 		   		.addClass('ui-icon-folder-collapsed')
 				.removeClass('ui-icon-folder-open')
+		this.element.trigger('leafCollapsed', container)
 	},
 	/**
 	 * Finds the name element
