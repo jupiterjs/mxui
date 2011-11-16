@@ -133,10 +133,10 @@ $.Controller('Mxui.Data.Tree',
 		cb.call(this);
 	},
 	".ui-icon-carat-1-e click" : function(el){
-		this.options.state.attr('expanded.'+el.nextAll('.logical').model().id,true)
+		this.options.state.attr('expanded.'+el.nextAll('.' + this.options.model._shortName).model().id,true)
 	},
 	".ui-icon-carat-1-s click" : function(el){
-		this.options.state.removeAttr('expanded.'+el.nextAll('.logical').model().id)
+		this.options.state.removeAttr('expanded.'+el.nextAll('.' + this.options.model._shortName).model().id)
 	}
 })
 
