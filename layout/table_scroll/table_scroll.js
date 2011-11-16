@@ -46,6 +46,13 @@ var setWidths = function(cells, firstWidths){
  * @param {Object} options
  */
 $.Controller("Mxui.Layout.TableScroll",{
+	defaults : {
+		// this option is really for the grid, because the grid
+		// uses table scroll internally to add items to
+		// the list
+		filler : true
+	}
+},{
 	setup : function(el, options){
 		// a cache of elements.
 		this.$ = {
@@ -109,6 +116,7 @@ $.Controller("Mxui.Layout.TableScroll",{
 		//this.element.mxui_layout_fill();
 		
 		//make the scroll body fill up all other space
+		// why doesn't it do this by default?
 		if (this.options.filler) {
 			this.$.scrollBody.mxui_layout_table_fill({
 				parent: this.element.parent()

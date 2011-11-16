@@ -22,10 +22,11 @@ steal('mxui/form/combobox')
                     className = el.attr("class"),
                     name = el.attr("name");
 
-                var input = $("<input type='text' />")
-                    .attr("id", id)
-                    .attr("name", name)
-                    .attr("className", className);
+                var input = $("<input type='text' />").attr({
+					id: id,
+					name : name,
+					className : className
+				});
 
                 el.after(input);
                 el.remove();

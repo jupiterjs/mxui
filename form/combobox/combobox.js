@@ -1,5 +1,5 @@
 steal('jquery/controller', 'jquery/lang/json', 'mxui/util/scrollbar_width', 'jquery/event/key')
-	.controllers('dropdown','selectable').then(function() {
+	.then('./controllers/dropdown_controller','./controllers/selectable_controller',function() {
 
 	/**
 	 * @tag home
@@ -27,9 +27,16 @@ steal('jquery/controller', 'jquery/lang/json', 'mxui/util/scrollbar_width', 'jqu
 		/**
 		 * Default setttings for the Combobox.  These can all be overridden.
 		 *
-		 *   * __classNames__: _String._ When mxui_form_combobox is called on an element, it is wrapped in a div.  The element is given the class that is defined by `classNames`.
-		 *   * __filterEnabled__: _Boolean._ Controls whether autocompletion is enabled on the combobox.
-		 *   * __displayHTML__: _Boolean._ If true, show the contents of a list item as rich HTML.  If false, show it as plain text.
+		 *   * __classNames__: _String._ When mxui_form_combobox is called on an 
+		 *     element, it is wrapped in a div.  The element is given the class that 
+		 *     is defined by `classNames`.
+		 *     
+		 *   * __filterEnabled__: _Boolean._ Controls whether 
+		 *     autocompletion is enabled on the combobox.
+		 *     
+		 *   * __displayHTML__: _Boolean._ If true, show the contents 
+		 *     of a list item as rich HTML.  If false, show it as plain text.
+		 *     
 		 *   * __selectedClassName__: _String._ The class that will be assigned to options that the user focuses on.
 		 *   * __activatedClassName__: _String._ The class that will be assigned to options that the user clicks. 
 		 *   * __disabledClassName__: _String._ The class that will be assigned to options that are disabled and the user cannot select.
@@ -43,15 +50,14 @@ steal('jquery/controller', 'jquery/lang/json', 'mxui/util/scrollbar_width', 'jqu
 		 *   * __overrideDropdown__: _Boolean._ Determines whether to use the standard Combobox dropdown animation, or the animation function bound to the 'show:dropdown' event.
 		 *   * __noItemsMsg__: _String._ Text to show when no items are available in an autocomplete-enabled field.
 		 *   * __render__: _Object._ This method defines the HTML that wraps a Combobox item.  To override, initialize the Combobox with a function like so:
-		 *   @codestart
 		 * 
-		 * $("input").mxui_form_combobox({ render : {
-		 * 	  'itemTemplate': function(item, val){
-		 *      // HTML wrapping logic goes here
-		 *    } 
-		 * });
 		 * 
-		 * @codeend
+		 *     $("input").mxui_form_combobox({ render : {
+		 * 	      'itemTemplate': function(item, val){
+		 *          // HTML wrapping logic goes here
+		 *        } 
+		 *     });
+		 * 
 		 * 
 		 * Where `item` is the item being drawn, and `val` is the value that the item represents internally. 
 		 *   

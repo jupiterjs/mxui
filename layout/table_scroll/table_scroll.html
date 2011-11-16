@@ -84,9 +84,7 @@
 			body.html(html.join(''));
 			var els;
 			$('#scrollable').click(function(){
-				$('#table').mxui_layout_table_scroll({
-					filler:true
-				});
+				$('#table').mxui_layout_table_scroll();
 				els = $('.mxui_layout_table_scroll').controller(Mxui.Layout.TableScroll).elements()
 			})
 			
