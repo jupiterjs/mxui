@@ -2,6 +2,10 @@ steal('jquery/controller',
               'jquery/event/drag/limit', 
               'jquery/event/drag/step').then(function( $ ) {
 
+	/**
+	 * @class Mxui.Nav.Slider
+	 * @parent Mxui
+	 */
 	$.Controller("Mxui.Nav.Slider", {
 		defaults: {
 			min: 0,

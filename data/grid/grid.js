@@ -7,6 +7,9 @@ steal('mxui/layout/table_scroll',
 	.then('./views/th.ejs','./views/init.ejs','./views/list.ejs')
 	.then(function($){
 /**
+ * @class Mxui.Data.Grid
+ * @parent Mxui
+ * 
  * A simple data grid that is paginate-able and sortable.
  * 
  * ## Use

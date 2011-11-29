@@ -10,7 +10,7 @@ var setWidths = function(cells, firstWidths){
 
 /**
  * @class Mxui.Layout.TableScroll
- * 
+ * @parent Mxui
  * Makes a table body elements under a table 
  * header.  For example if you have the following html:
  * 

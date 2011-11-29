@@ -8,7 +8,7 @@ steal( 'jquery/controller',
 
 /**
  * @class Mxui.Data.Tree
- * 
+ * @parent Mxui
  * API
  *     
  *     // create
