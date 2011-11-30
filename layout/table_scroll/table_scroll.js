@@ -195,6 +195,9 @@ $.Controller("Mxui.Layout.TableScroll",{
 		}
 		this.element.resize();
 	},
+	/**
+	 * Empties the table scroll
+	 */
 	empty : function(){
 		this.$.tbody.children(":not(.spacing)").remove();
 		this.element.resize();

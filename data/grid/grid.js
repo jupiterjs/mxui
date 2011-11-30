@@ -34,6 +34,11 @@ steal('mxui/layout/table_scroll',
  * The grid will automatically 'fill'
  * its parent element's height.
  * 
+ * @constructor
+ * 
+ * @param {Object} columns A object of columnName -> columnTitle pairs. Ex:
+ * 
+ *     columns : { title : "Title", date : "Date" }
  * 
  */
 
@@ -189,7 +194,9 @@ $.Controller.extend("Mxui.Data.Grid",{
 	append: function( row, newEls ) {
 		this.element.children(":first").mxui_layout_table_scroll("append", row, newEls)
 	},
-	// remove all content from the grid
+	/**
+	 * Remove all children from the table
+	 */
 	empty: function(){
 		this.element.children(":first").mxui_layout_table_scroll("empty")
 	},
