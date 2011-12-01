@@ -25,4 +25,14 @@ test("moving items", function(){
 
 
 });
+test("adding a group of items", function(){
+	S("#groupDrag")
+		.drag("#sortable2 .sortable:eq(1)")
+		.drag("#away", function(){
+			ok(/GROUP DRAG PARENT/.test( S("#sortable2 .sortable:eq(2)").text() ) )
+			ok(/GROUP CHILD 1/.test( S("#sortable2 .sortable:eq(3)").text() ) )
+			ok(/GROUP CHILD 2/.test( S("#sortable2 .sortable:eq(4)").text() ) )
+		});
+});
+
 })

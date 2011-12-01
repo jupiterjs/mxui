@@ -13,7 +13,8 @@
 				border: dashed 2px red;
 				padding: 5px;
 			}
-			#sortable {
+			#sortable,
+			#sortable2 {
 				border: solid 1px green;
 				padding: 5px;
 				
@@ -34,10 +35,14 @@
 			.ui-helper-clearfix {
 				display:block;
 			}
-			.somethingElse {
+			.somethingElse,
+			.groupParent {
 				width: 200px;
-
 				border: dotted 2px orange;
+			}
+			.groupChild {
+				width: 200px;
+				border: dotted 2px blue;
 			}
         </style>
 	</head>
@@ -47,11 +52,20 @@
 			<div class='sortable'>First</div>
 			<div class='sortable'>Second</div>
 			<div class='sortable'>Third</div>
-			
 		</div>
 		<br/>
 		<div class='somethingElse' id='drag'>SOMETHING ELSE</div>
 		<div id='away'>away</div>
+		<br/><br/><br/>
+		<div id='sortable2' class='ui-helper-clearfix'>
+			<div class='sortable'>First</div>
+			<div class='sortable'>Second</div>
+			<div class='sortable'>Third</div>
+		</div>
+		<br/>
+		<div class='groupParent' id='groupDrag'>GROUP DRAG PARENT</div>
+		<div class='groupChild'>GROUP CHILD 1</div>
+		<div class='groupChild'>GROUP CHILD 2</div>
 		<script type='text/javascript' 
                 src='../../../steal/steal.js'>   
         </script>
@@ -60,7 +74,25 @@
 				$("#sortable").mxui_layout_sortable().bind("sortable.addPlaceholder", function(){
 					$(document.body).append("<p>added placeholder</p>")
 				})
+				$("#sortable2").mxui_layout_sortable({
+				  makePlaceHolder: function(el, ev, drop, drag) {
+						// Example for if a multiple item drag UI was implemented (using a single drag target, but injecting multiple items)
+						var css = {
+								"visibility":"hidden",
+								"position" : "",
+								"float" : "left"
+							},
+							placeholders = $(drag.movingElement).clone().css(css);
+						$.each($.find('.groupChild'), function(i, child) {
+							placeholders = placeholders.add($(child).clone().css(css));
+						});
+						return placeholders;
+					}
+				}).bind("sortable.addPlaceholder", function(){
+					$(document.body).append("<p>added placeholder</p>")
+				})
 				$(".somethingElse").bind("draginit",function(){})
+				$(".groupParent").bind("draginit",function(){})
 			})
 			
 		</script>
