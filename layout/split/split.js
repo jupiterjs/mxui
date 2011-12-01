@@ -2,7 +2,8 @@ steal('jquery/controller', 'jquery/event/drag/limit', 'jquery/dom/dimensions', '
 	.then('./split.css').then(function( $ ) {
 
 	/**
-	 * 
+	 * @class Mxui.Layout.Split
+	 * @parent Mxui
 	 * MXUI.Layout.Split is a splitter control that will split two or more elements
 	 * and allow the end-user to size the elements using a 'splitter bar'.
 	 * 
@@ -25,7 +26,7 @@ steal('jquery/controller', 'jquery/event/drag/limit', 'jquery/dom/dimensions', '
 	 * E.g. <div class='collapsible'><div class='split'><div class='collapsible'> Only one or the other can be collapsible.
 	 * 
 	 */
-	$.Controller.extend("MXUI.Layout.Split", {
+	$.Controller.extend("Mxui.Layout.Split", {
 		defaults: {
 			active: "active",
 			hover: "split-hover",

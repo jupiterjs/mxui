@@ -18,8 +18,11 @@ steal('jquery/controller',
 		})
 		
 		
-		
-		$.Controller.extend("Mxui.Layout.Resize",{
+		/**
+		 * @class Mxui.Layout.Resize
+		 * @parent Mxui
+		 */
+		$.Controller("Mxui.Layout.Resize",{
 			defaults : {
 				minHeight: 10,
 				minWidth: 10,

@@ -10,11 +10,17 @@ var setWidths = function(cells, firstWidths){
 
 /**
  * @class Mxui.Layout.TableScroll
+ * @parent Mxui
+ * @test mxui/layout/table_scroll/funcunit.html
  * 
  * Makes a table body elements under a table 
- * header.  For example if you have the following html:
+ * header.  This is very useful for making grid-like widgets.
  * 
- *     <div id='area' style='height: 400px'>
+ * ## Basic Example
+ * 
+ * If you have the following html:
+ * 
+ *     <div id='area' style='height: 500px'>
  *        <p>This is My Table</p>
  *        <table id='people'>
  *          <thead>
@@ -28,22 +34,65 @@ var setWidths = function(cells, firstWidths){
  *        </table>
  *     </div>
  * 
- * Thw following make the list of people, the tbody, scrollable between
+ * The following make the list of people, the tbody, scrollable between
  * the table header and footer:
  * 
  *     $('#people').mxui_layout_table_scroll()
  * 
- * This makes it so you can always see the table header 
- * and footer. 
+ * It makes it so you can always see the table header 
+ * and footer.  The table will [Mxui.Layout.Fill fill] the height of it's parent 
+ * element. This means that if the `#area` element's height 
+ * is 500px, the table will take up everything outside the `p`aragraph element.
  * 
- * The table will 'fill' the height of it's parent 
- * element. This means that if the <code>area</code> element's height 
- * becomes 500px, the scrollable area of the table (the scrollBody) will
- * increase 100px.
+ * ## Demo
  * 
+ * @demo mxui/layout/table_scroll/demo.html
  * 
- * @param {Object} el
- * @param {Object} options
+ * ## How it works
+ * 
+ * To scroll the `tbody` under the `thead`, TableScroll 
+ * wraps the table with `div`s and seperates out the 
+ * `thead` into its own div.  After changing the DOM,
+ * the table looks like:
+ * 
+ *     <div class='mxui_layout_table_scroll'>
+ *       <div class='header'>
+ *          <table>
+ *            <thead> THEAD CONTENT </thead>
+ *          </table>
+ *       </div>
+ *       <div class='body'>
+ *          <div class='scrollBody'>
+ *            <table>
+ *              <tbody> TBODY CONENT </tbody>
+ *            </table>
+ *          </div>
+ *       </div>
+ *     </div>
+ * 
+ * The grid also maintains a copy of the `thead`'s content
+ * in the scrolling table to ensure the columns are 
+ * sized correctly.
+ * 
+ * ## Changing the table
+ * 
+ * When you change the table's content, the table
+ * often needs to update the positions of 
+ * the column header.  If you change the tbody's content,
+ * you can simply trigger resize on the grid.
+ * 
+ * But, if you change the columns, you must call
+ * [Mxui.Layout.Fill.prototype.changed changed].
+ * 
+ * @constructor
+ * 
+ * @param {HTMLElement} el
+ * @param {Object} [options] values to configure
+ * the behavior of table scroll:
+ * 
+ *    - `filler` - By default, the table fills 
+ *      it's parent's height. Pass false to not actually scroll the
+ *      table.
  */
 $.Controller("Mxui.Layout.TableScroll",{
 	defaults : {
@@ -52,7 +101,11 @@ $.Controller("Mxui.Layout.TableScroll",{
 		// the list
 		filler : true
 	}
-},{
+},
+/** 
+ * @prototype
+ */
+{
 	setup : function(el, options){
 		// a cache of elements.
 		this.$ = {
@@ -150,7 +203,23 @@ $.Controller("Mxui.Layout.TableScroll",{
 	},
 	/**
 	 * Returns useful elements of the table
-	 * the thead, tbody, tfoot, and scrollBody of the modified table
+	 * the thead, tbody, tfoot, and scrollBody of the modified table:
+	 * 
+	 *     $('.mxui_layout_table_scroll')
+	 *       .controller().element() //-> {...}
+	 * 
+	 * If you need to change the content of the table, you can
+	 * use elements for access.  If you change the content, make sure
+	 * you call changed.
+	 * 
+	 * @return {Object} an object like:
+	 * 
+	 *     {
+	 *         tbody : HTMLTableSelectionElement,
+	 *         tfoot : HTMLTableSelectionElement,
+	 *         thead : HTMLTableSelectionElement,
+	 *         scrollBody : HTMLDivElement
+	 *     }
 	 */
 	elements : function(){
 		return {
@@ -161,7 +230,17 @@ $.Controller("Mxui.Layout.TableScroll",{
 		}
 	},
 	/**
-	 * Call when columns are added or removed or the title's changed 
+	 * Call when columns are added or removed or the title's changed.
+	 * 
+	 * ### Example:
+	 * 
+	 *     $('th:eq(2)').text('New Text');
+	 *     $('.mxui_layout_table_scroll')
+	 *        .mxui_layout_table_scroll('changed')
+	 * 
+	 * @param {Boolean} [resize] By default, changed will trigger a resize,
+	 * which re-calculates the layout.  Pass false to prevent this 
+	 * from happening.
 	 */
 	changed : function(resize){
 		if(this.$.foot){
@@ -176,28 +255,47 @@ $.Controller("Mxui.Layout.TableScroll",{
 		}
 	},
 	/**
-	 * Add elements to this scrollable table.  This assumes these elements
-	 * matches the current column headers
-	 * @param {jQuery} [after]
-	 * @param {jQuery} els
+	 * Add elements to this scrollable table
+	 * after an optional element. This 
+	 * assumes these elements matches the 
+	 * current column headers.  If you change the column
+	 * headers, make sure you trigger resize.
+	 * 
+	 *     $('.mxui_layout_table_scroll')
+	 *       .mxui_layout_table_scroll('append', elements );
+	 * 
+	 * @param {jQuery} els The elements to append.
+	 * @param {jQuery|false} [after] where to insert items in the list
+	 *   - If a jQuery collection is provided, elements will be added
+	 *     after this element.  
+	 *   - If `false`, elements will be added to the start of the grid.   
+	 *   - If nothing is provided, elements will be added to the end of the list 
 	 */
-	append : function(after, els){
-		
-		if(!els){
-			// if this spacer hasn't been created
-			if(!this.$.spacer){
-				this.changed(false);
-			}
+	append : function(els ,after ){
 			
-			this.$.spacer && this.$.spacer.before(after)
-		} else{
-			after.after(els)
+		if( after ) {
+			after.after(els);
+		} else if(after === false){
+			this.$.tbody.prepend(els);
+		} else {
+			this.$.tbody.append(els);
 		}
+		
 		this.element.resize();
 	},
+	/**
+	 * Empties the table body.
+	 * 
+	 *     $('.mxui_layout_table_scroll')
+	 *       .mxui_layout_table_scroll('empty');
+	 *       
+	 * @return {table_scroll} returns the table_scroll instance
+	 * for chaining.
+	 */
 	empty : function(){
 		this.$.tbody.children(":not(.spacing)").remove();
 		this.element.resize();
+		return this;
 	},
 	/**
 	 * @hide

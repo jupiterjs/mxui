@@ -7,6 +7,9 @@ steal('mxui/layout/table_scroll',
 	.then('./views/th.ejs','./views/init.ejs','./views/list.ejs')
 	.then(function($){
 /**
+ * @class Mxui.Data.Grid
+ * @parent Mxui
+ * 
  * A simple data grid that is paginate-able and sortable.
  * 
  * ## Use
@@ -31,6 +34,11 @@ steal('mxui/layout/table_scroll',
  * The grid will automatically 'fill'
  * its parent element's height.
  * 
+ * @constructor
+ * 
+ * @param {Object} columns A object of columnName -> columnTitle pairs. Ex:
+ * 
+ *     columns : { title : "Title", date : "Date" }
  * 
  */
 
@@ -184,9 +192,11 @@ $.Controller.extend("Mxui.Data.Grid",{
 	 * @param {Object} newEls new elements to insert (they should be trs)
 	 */
 	append: function( row, newEls ) {
-		this.element.children(":first").mxui_layout_table_scroll("append", row, newEls)
+		this.element.children(":first").mxui_layout_table_scroll("append",  newEls, row)
 	},
-	// remove all content from the grid
+	/**
+	 * Remove all children from the table
+	 */
 	empty: function(){
 		this.element.children(":first").mxui_layout_table_scroll("empty")
 	},

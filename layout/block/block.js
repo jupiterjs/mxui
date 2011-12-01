@@ -3,7 +3,8 @@ steal('jquery/controller',
 	'mxui/layout/bgiframe',
 	'mxui/layout/fill').then(function($){
 	/**
-	 * @tag mxui
+	 * @class Mxui.Layout.Block
+	 * @parent Mxui
 	 * @plugin mxui/block
 	 * @test mxui/block/funcunit.html
 	 * 

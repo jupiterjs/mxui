@@ -7,7 +7,10 @@ steal('jquery/controller',
 	  'jquery/event/resize',
 	  function($){
 
-
+/**
+ * @class Mxui.Nav.Accordion
+ * @parent Mxui
+ */
 $.Controller("Mxui.Nav.Accordion",{
 	defaults : {
 		title : "h3",
