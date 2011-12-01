@@ -3,6 +3,9 @@ steal('jquery/controller',
 	'jquery/event/drag/limit',
 	'jquery/event/default',
 	'jquery/event/drag/scroll').then(function($){
+		
+	var HORIZONTAL = 'horizontal',
+		VERTICAL = 'vertical';
 	
 	/**
 	 * Makes a sortable control that can accept outside draggables
@@ -15,10 +18,11 @@ steal('jquery/controller',
 				return drag.element.clone().css({
 					"visibility":"hidden",
 					"position" : "",
-					"float" : "left"
+					"float" : this.direction === VERTICAL ? "none" : "left"
 				})
 			},
 			sortable : ".sortable",
+			direction: HORIZONTAL,
 			scrolls : null,
 			scrollOptions: {}
 		}
@@ -34,7 +38,7 @@ steal('jquery/controller',
 			}
 			
 			drag.limit(this.element);
-			drag.horizontal();
+			drag[this.options.direction]();
 			//clone the drag and hide placehodler
 			var clone = el.clone().addClass("sortable-placeholder").css("visibility","hidden")
 			el.after(clone)
@@ -45,7 +49,8 @@ steal('jquery/controller',
 		"{sortable} dragend" : function(el){
 			el.css({
 				"position": "",
-				left: ""
+				left: "",
+				top: ""
 			})
 			el.trigger("sortable.end")
 		},
@@ -113,12 +118,16 @@ steal('jquery/controller',
 		 */
 		where : function(ev, not){
 			var sortables = this.find(this.options.sortable).not(not || []),
-				sortable;
+				sortable,
+				isVertical = this.options.direction === VERTICAL,
+				page = isVertical ? 'pageY' : 'pageX',
+				position = isVertical ? 'top' : 'left',
+				dimension = isVertical ? 'height' : 'width';
 
 			for(var i=0; i < sortables.length; i++){
 				//check if cursor is past 1/2 way
 				sortable =  $(sortables[i]);
-				if (ev.pageX < Math.floor(sortable.offset().left+sortable.width()/2)) {
+				if (ev[page] < Math.floor(sortable.offset()[position]+sortable[dimension]()/2)) {
 					return {
 						pos: "before",
 						el: sortable
@@ -132,7 +141,7 @@ steal('jquery/controller',
 					}
 			}
 			//check if it is at the end ...
-			if (ev.pageX >= Math.floor(sortable.offset().left+sortable.width()/2)) {
+			if (ev[page] >= Math.floor(sortable.offset()[position]+sortable[dimension]()/2)) {
 				return {
 						pos: "after",
 						el: sortable
