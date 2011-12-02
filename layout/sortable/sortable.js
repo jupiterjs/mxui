@@ -102,7 +102,7 @@ steal('jquery/controller',
 			var res = this.where(ev,drag.movingElement),
 				placeholder = this.find(".sortable-placeholder")
 
-			if(res.el[0] != placeholder[0]){
+			if($.inArray(res.el[0], placeholder) === -1){
 				placeholder.detach()
 				res.el[res.pos](placeholder)
 			}
