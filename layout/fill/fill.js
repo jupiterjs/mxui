@@ -44,8 +44,19 @@ steal('jquery/dom/dimensions', 'jquery/event/resize').then(function( $ ) {
 		 *     
 		 *     $('#inner').mxui_layout_fill( $('#outer') )
 		 * 
-		 * @param {HTMLElement|selector} [parent] the parent element to fill, defaults 
-		 * to the element's parent.
+		 * 
+		 * ## Limitations
+		 * 
+		 * Fill currently does not well in the following situations:
+		 * 
+		 * ### Margins
+		 * 
+		 * Some margins, especially 'leaking' margins do not work. 
+		 * 
+		 * ### T
+		 * 
+		 * @param {HTMLElement|selector} [parent] the parent element 
+		 * to fill, defaults to the element's parent.
 		 */
 		filler = $.fn.mxui_layout_fill = function( parent ) {
 			var options = parent;
