@@ -13,7 +13,9 @@ steal('mxui/layout/table_fill').then(function( $ ) {
 	 * @parent Mxui
 	 * @test mxui/layout/table_scroll/funcunit.html
 	 * 
-	 * Makes a table body elements under a table 
+	 * @description Makes a table body scroll under a table header.
+	 * 
+	 * Makes a table body scroll under a table 
 	 * header.  This is very useful for making grid-like widgets.
 	 * 
 	 * ## Basic Example
