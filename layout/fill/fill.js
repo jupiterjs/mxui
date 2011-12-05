@@ -36,16 +36,43 @@ steal('jquery/dom/dimensions', 'jquery/event/resize').then(function( $ ) {
 		},
 		/**
 		 * @function jQuery.fn.mxui_layout_fill
-		 * @parent mxui
-		 * Fills a parent element's hieght with the jQuery element.
+		 * @parent Mxui
 		 * 
-		 * @param {Object} options
+		 * Fills a parent element's height with the jQuery element.
+		 * 
+		 *     $('#inner').mxui_layout_fill('#outer')
+		 *     
+		 *     $('#inner').mxui_layout_fill( $('#outer') )
+		 * 
+		 * 
+		 * ## Limitations
+		 * 
+		 * Fill currently does not well in the following situations:
+		 * 
+		 * ### Margins
+		 * 
+		 * Some margins, especially 'leaking' margins do not work. 
+		 * 
+		 * ### T
+		 * 
+		 * @param {HTMLElement|selector} [parent] the parent element 
+		 * to fill, defaults to the element's parent.
 		 */
-		filler = $.fn.mxui_layout_fill = function( options ) {
+		filler = $.fn.mxui_layout_fill = function( parent ) {
+			var options = parent;
 			options || (options = {});
+			if(typeof options == 'string'){
+				options = this.closest(options)
+			}
+			if ( options.jquery || options.nodeName ) {
+				options = {parent: options};
+			}
+			
 			options.parent || (options.parent = $(this).parent())
 			options.parent = $(options.parent)
-			var thePage = isThePage(options.parent[0])
+			
+			var thePage = isThePage(options.parent[0]);
+			
 			if ( thePage ) {
 				options.parent = $(window)
 			}
@@ -62,13 +89,10 @@ steal('jquery/dom/dimensions', 'jquery/event/resize').then(function( $ ) {
 				$(options.parent).unbind('resize', filler.parentResize)
 			});
 
-			this.addClass('mxui_filler')
+			this.addClass('mxui_layout_fill')
 			//add a resize to get things going
 			var func = function() {
-				//logg("triggering ..")
-				//setTimeout(function() {
 				options.parent.resize();
-				//}, 13)
 			}
 			if ( $.isReady ) {
 				func();

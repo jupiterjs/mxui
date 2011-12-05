@@ -9,6 +9,8 @@ $.event.special.activate = {
 }
 
 /**
+ * @class Mxui.Util.Selectable
+ * @parent Mxui
  * Provides keyboard and mouse selection and multi selection to a group of items.
  * Instead of listening to click and key events, you can add selectable and listen to
  * activate and select events.

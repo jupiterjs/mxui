@@ -1,4 +1,10 @@
-module("modal")
+steal('funcunit').then(function(){
+	
+module("mxui/layout/modal",{ 
+	setup: function(){
+        S.open("//mxui/layout/modal/modal.html");
+	}
+})
 
 test("Modal initialization works", function(){
 	S('#show').click();
@@ -23,4 +29,4 @@ test("Pressing [escape] should close modals in correct order", function(){
 	S('#modal').css('display', 'none', 'Modals are closed in correct order')
 })
 
-})
+});

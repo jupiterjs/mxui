@@ -2,10 +2,10 @@ steal('jquery/controller', 'jquery/lang/json', 'mxui/util/scrollbar_width', 'jqu
 	.then('./controllers/dropdown_controller','./controllers/selectable_controller',function() {
 
 	/**
-	 * @tag home
-	 * @class Combobox
+	 * @class Mxui.Form.Combobox
 	 * @plugin mxui/form/combobox
 	 * @test mxui/form/combobox/funcunit.html
+	 * @parent Mxui
 	 * 
 	 * Combobox progressively enhances an &lt;input&gt; field.  This constructor accepts an Object of [Mxui.Combobox.static.defaults | options] used to customize the Combobox.
 	 * 

@@ -13,10 +13,18 @@
 				border: dashed 2px red;
 				padding: 5px;
 			}
-			#sortable {
+			#sortable3 .sortable {
+				float: none;
+			}
+			#sortable,
+			#sortable2 {
 				border: solid 1px green;
 				padding: 5px;
-				
+			}
+			#sortable3 {
+				border: solid 1px green;
+				padding: 5px;
+				width: 200px;
 			}
 			.ui-helper-clearfix:after {
 				clear:both;
@@ -34,9 +42,18 @@
 			.ui-helper-clearfix {
 				display:block;
 			}
-			.somethingElse {
+			.somethingElse,
+			.groupParent {
 				width: 200px;
-
+				border: dotted 2px orange;
+			}
+			.groupChild {
+				width: 200px;
+				border: dotted 2px blue;
+			}
+			.verticalDrag {
+				width: 190px;
+				padding: 5px;
 				border: dotted 2px orange;
 			}
         </style>
@@ -47,11 +64,31 @@
 			<div class='sortable'>First</div>
 			<div class='sortable'>Second</div>
 			<div class='sortable'>Third</div>
-			
 		</div>
 		<br/>
 		<div class='somethingElse' id='drag'>SOMETHING ELSE</div>
 		<div id='away'>away</div>
+		<br/><br/><br/>
+		
+		<div id='sortable2' class='ui-helper-clearfix'>
+			<div class='sortable'>First</div>
+			<div class='sortable'>Second</div>
+			<div class='sortable'>Third</div>
+		</div>
+		<br/>
+		<div class='groupParent' id='groupDrag'>GROUP DRAG PARENT</div>
+		<div class='groupChild'>GROUP CHILD 1</div>
+		<div class='groupChild'>GROUP CHILD 2</div>
+		<br/><br/><br/>
+		
+		<div id='sortable3' class='ui-helper-clearfix'>
+			<div class='sortable'>First</div>
+			<div class='sortable'>Second</div>
+			<div class='sortable'>Third</div>
+		</div>
+		<br/>
+		<div class='verticalDrag' id='vertDrag'>GO VERTICAL</div>
+		
 		<script type='text/javascript' 
                 src='../../../steal/steal.js'>   
         </script>
@@ -60,7 +97,32 @@
 				$("#sortable").mxui_layout_sortable().bind("sortable.addPlaceholder", function(){
 					$(document.body).append("<p>added placeholder</p>")
 				})
+				$("#sortable2").mxui_layout_sortable({
+				  makePlaceHolder: function(el, ev, drop, drag) {
+						// Example for if a multiple item drag UI was implemented (using a single drag target, but injecting multiple items)
+						var css = {
+								"visibility":"hidden",
+								"position" : "",
+								"float" : "left"
+							},
+							placeholders = $(drag.movingElement).clone().css(css);
+						$.each($.find('.groupChild'), function(i, child) {
+							placeholders = placeholders.add($(child).clone().css(css));
+						});
+						return placeholders;
+					}
+				}).bind("sortable.addPlaceholder", function(){
+					$(document.body).append("<p>added placeholder</p>")
+				})
+				$("#sortable3").mxui_layout_sortable({
+					direction: 'vertical'
+				}).bind("sortable.addPlaceholder", function(){
+					$(document.body).append("<p>added placeholder</p>")
+				})
+				
 				$(".somethingElse").bind("draginit",function(){})
+				$(".groupParent").bind("draginit",function(){})
+				$(".verticalDrag").bind("draginit",function(){})
 			})
 			
 		</script>

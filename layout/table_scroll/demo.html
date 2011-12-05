@@ -1,0 +1,97 @@
+<html>
+<head>
+	<style>
+		#container {
+			width: 400px;
+			height: 300px;
+			padding: 10px;
+			border: solid 1px red;
+			overflow: auto;
+		}
+		th {
+			text-align: left;
+		}
+		td {padding: 3px;}
+		tbody tr:nth-child(2n+1) {
+			background-color: #ddeeff
+		}
+	</style>
+	<link type="text/css" href="../resize/resize.css" rel="stylesheet" />
+</head>
+<body>
+	<a href="javascript://" id='scrollable'>Make Scrollable</a>
+    <a href="javascript://" id='resize'>Resize</a>
+	<a href="javascript://" id='changeColumn'>Change Column</a>
+	<div id="demo-html">
+<div id='container'>
+	<table>
+		<thead>
+			<tr>
+				<th>Project</th>
+				<th>Homepage</th>
+				<th>Description</th>
+				<th>Forks</th>
+			</tr>
+		</thead>
+		<tbody>	
+		</tbody>
+	</table>
+</div>
+	</div>
+	<script type='text/javascript' src='../../../steal/steal.js'>
+		
+	</script>
+	<script type='text/ejs' id="bodyEJS">
+		<% $.each(this, function(i, project){ %>
+		  <tr>
+		  	<td>
+		  		<a href="<%= project.html_url %>"><%= project.name %></a>
+			</td>
+			<td>
+				<a href="<%= project.homepage %>"><%= project.homepage %></a>
+			</td>
+			<td>
+				<%= project.description %>
+			</td>
+			<td>
+				<%= project.forks %>
+			</td>
+		  </tr>
+		<% }) %>
+	</script>
+	<script type='text/javascript'>
+		DEMO_HTML = document.getElementById('demo-html').innerHTML;
+	</script>
+	<script type='text/javascript' id="demo-source">
+steal('mxui/layout/table_scroll',
+      'jquery/view/ejs', 
+      'mxui/layout/resize',function(){
+	
+	// create table
+	$.ajax({
+		url : "https://api.github.com/users/jupiterjs/repos?callback=foo",
+		dataType: "jsonp",
+		success : function(json){
+			$('tbody').html("bodyEJS",json.data)
+		}
+	});
+	
+	// make it scrollable
+	$('#scrollable').click(function(){
+		$('table').mxui_layout_table_scroll();
+	})
+	
+	// add a resize
+	$('#resize').click(function(){
+		$('#container').css("overflow","hidden").mxui_layout_resize();
+	})
+	// change a column and reset layout
+	$('#changeColumn').click(function(){
+		$('th:eq(3)').text('NEW COLUMN IS WIDE')
+		$('.mxui_layout_table_scroll').mxui_layout_table_scroll('changed')
+	})
+})
+	</script>
+</body>
+
+</html>
