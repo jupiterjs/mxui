@@ -102,9 +102,6 @@ steal('jquery/controller', 'jquery/event/resize', 'mxui/layout/positionable', '.
 			if(typeof this.options.overlayElement != "undefined"){
 				this.options.overlayElement.remove();
 			}
-			if(typeof this.closeOnEscapeCb != undefined){
-				$(document).unbind('keydown', this.closeOnEscapeCb);
-			}
 			this._super.apply(this, arguments)
 		},
 		/**
@@ -119,9 +116,7 @@ steal('jquery/controller', 'jquery/event/resize', 'mxui/layout/positionable', '.
 					$('.' + this.options.overlayClass).hide();
 				}
 			}
-			$(document).unbind('keyup', this.closeOnEscapeCb);
 			stack.splice(stack.indexOf(this.stackId), 1);
-			delete this.closeOnEscapeCb;
 		},
 		/**
 		 * Show modal element and overlay if overlay exists
@@ -140,14 +135,11 @@ steal('jquery/controller', 'jquery/event/resize', 'mxui/layout/positionable', '.
 			this._super();
 			this.element.css('position', 'fixed');
 			this.closeOnEscapeCb = this.callback(this.closeOnEscape);
-			$(document).bind('keyup', this.closeOnEscapeCb);
 		},
-		closeOnEscape : function(ev){
-			if(ev.which == 27){ // escape button
-				if(stack[0] == this.stackId){
-					this.element.trigger('hide');
-					ev.stopImmediatePropagation();
-				}	
+		"{document} keyup" : function(el, ev){
+			if(this.element.css('display') == "block" && ev.which == 27 && stack[0] == this.stackId){
+				this.element.trigger('hide');
+				ev.stopImmediatePropagation();
 			}
 		},
 		"{overlayElement} click" : function(el, ev){
@@ -158,6 +150,4 @@ steal('jquery/controller', 'jquery/event/resize', 'mxui/layout/positionable', '.
 			this.move();
 		}
 	})
-	
-	
 })
