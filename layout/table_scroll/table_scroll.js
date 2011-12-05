@@ -269,7 +269,7 @@ steal('mxui/layout/table_fill').then(function( $ ) {
 			} else if ( after === false ) {
 				this.$.tbody.prepend(els);
 			} else {
-				this.$.tbody.append(els);
+				this.$.spacer.before(els);
 			}
 
 			this.element.resize();

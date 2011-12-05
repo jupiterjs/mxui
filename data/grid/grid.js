@@ -192,6 +192,10 @@ $.Controller.extend("Mxui.Data.Grid",{
 	 * @param {Object} newEls new elements to insert (they should be trs)
 	 */
 	append: function( row, newEls ) {
+		if( !newEls ) {
+			newEls = row;
+			row = undefined;
+		}
 		this.element.children(":first").mxui_layout_table_scroll("append",  newEls, row)
 	},
 	/**
