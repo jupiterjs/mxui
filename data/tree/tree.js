@@ -38,12 +38,17 @@ steal( 'jquery/controller',
 $.Controller('Mxui.Data.Tree',
 /** @Static */
 {
-	defaults : {}
+	defaults : {
+		parentId: 'parentId' // property on the model that identifies its parent
+	}
 },
 /** @Prototype */
 {
 	init : function(){
 		
+	},
+	modelId: function(model){
+		return model[ model.Class.id ];
 	},
 	// typically want to know the difference ...
 	"{state} expanded.* set" : function(state, ev, newVal){
@@ -81,7 +86,9 @@ $.Controller('Mxui.Data.Tree',
 			// make sure to show it 
 			container.show();
 		} else {
-			this.options.model.findAll({parentId: parentId || null}, 
+			var params = {};
+			params[this.options.parentId] = parentId || null;
+			this.options.model.findAll(params, 
 				this.proxy( function(items){
 					var container = this.containerFor(parentId);
 					container.html(this.view(this.options.view,items)).show();
@@ -106,7 +113,9 @@ $.Controller('Mxui.Data.Tree',
 	 * @param {Object} parentId
 	 */
 	elFor : function(parentId){
-		return new this.options.model({id: parentId}).elements(this.element);
+		var params = {};
+		params[this.options.model.id] = parentId;
+		return new this.options.model(params).elements(this.element);
 	},
 	/**
 	 * Finds the toggle element
@@ -133,10 +142,10 @@ $.Controller('Mxui.Data.Tree',
 		cb.call(this);
 	},
 	".ui-icon-carat-1-e click" : function(el){
-		this.options.state.attr('expanded.'+el.nextAll('.' + this.options.model._shortName).model().id,true)
+		this.options.state.attr('expanded.'+this.modelId(el.nextAll('.' + this.options.model._shortName).model()),true)
 	},
 	".ui-icon-carat-1-s click" : function(el){
-		this.options.state.removeAttr('expanded.'+el.nextAll('.' + this.options.model._shortName).model().id)
+		this.options.state.removeAttr('expanded.'+this.modelId(el.nextAll('.' + this.options.model._shortName).model()))
 	}
 })
 
