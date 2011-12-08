@@ -39,6 +39,7 @@ $.Controller('Mxui.Data.Tree',
 /** @Static */
 {
 	defaults : {
+		initialParams: {}, // default parameters to populate the initial tree
 		parentId: 'parentId' // property on the model that identifies its parent
 	}
 },
@@ -86,8 +87,10 @@ $.Controller('Mxui.Data.Tree',
 			// make sure to show it 
 			container.show();
 		} else {
-			var params = {};
-			params[this.options.parentId] = parentId || null;
+			var params = $.extend({}, this.options.initialParams);
+			if(parentId) {
+				params[this.options.parentId] = parentId;
+			}
 			this.options.model.findAll(params, 
 				this.proxy( function(items){
 					var container = this.containerFor(parentId);
