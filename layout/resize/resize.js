@@ -1,4 +1,5 @@
-steal('jquery/controller',
+steal('jquery',
+	'jquery/controller',
 	'mxui/layout/wrap',
 	'jquery/event/drag',
 	'jquery/dom/dimensions',

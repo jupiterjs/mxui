@@ -61,9 +61,11 @@
                 compress='false'>   
         </script>
 		<script type='text/javascript'>
-			$(function(){
-				$('.wrap').mxui_layout_resize()
-			})
+			steal("jquery").then(function() {
+				$(function(){
+					$('.wrap').mxui_layout_resize()
+				})
+			});
 		</script>
 	</body>
 </html>

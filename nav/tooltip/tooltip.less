@@ -1,0 +1,113 @@
+@z-index: 500;
+@space: 4px;
+
+// Theme generator
+.theme ( @dark, @light, @text, @opacity: 0.9 ) {
+	.outer {
+		background-color: @dark;
+		opacity: @opacity;
+	}
+	.inner {
+		color: @text;
+		background-color: @light;
+	}
+	.arrow {
+		opacity: @opacity;
+		&.down {
+			border-top-color: @dark;
+		}
+		&.up {
+			border-bottom-color: @dark;
+		}
+		&.left {
+			border-right-color: @dark;
+		}
+		&.right {
+			border-left-color: @dark;
+		}
+	}
+}
+
+.mxui-nav-tooltip {
+	position: absolute;
+	z-index: @z-index;
+	font-family: Lucida Grande, Lucida Sans, Verdana, Tahoma, sans-serif;
+	font-size: 12px;
+	visibility: hidden;
+	z-index: @z-index + 3;
+
+	.arrow {
+		position: absolute;
+		width: 0;
+		height: 0;
+		&.up {
+			border-left: 0 solid transparent;
+			border-right: 0 solid transparent;
+			border-bottom: 0 solid black;
+			left: 50%;
+			top: 0;
+		}
+
+		&.down {
+			border-left: 0px solid transparent;
+			border-right: 0px solid transparent;
+			border-top: 0px solid #f00;
+			left: 50%;
+			bottom: 0;
+		}
+
+		&.right {
+			border-top: 0px solid transparent;
+			border-bottom: 0px solid transparent;
+			border-left: 0px solid green;
+			right: 0;
+			top: 50%;
+		}
+
+		&.left {
+			border-top: 0px solid transparent;
+			border-bottom: 0px solid transparent; 
+			border-right: 0px solid blue;
+			left: 0;
+			top: 50%;
+		}
+	}
+
+	.outer {
+		position: absolute;
+		top: 0;
+		left: 0;
+		right: 0;
+		bottom: 0;
+		z-index: @z-index + 1;
+		border-radius: @space;
+		margin: @space;
+	}
+
+	.inner {
+		margin: @space * 2;
+		padding: @space;
+		z-index: @z-index + 2;
+		position: relative;
+	}
+
+	&.info {
+		.theme( #00529B, #BDE5F8, #00529B )
+	}
+
+	&.success {
+		.theme( #C6D880, #E6EFC2, #264409 )
+	}
+
+	&.notice {
+		.theme( #FFD324, #FFF6BF, #514721 )
+	}
+
+	&.error {
+		.theme( #FBC2C4, #FBE3E4, #8a1f11 )
+	}
+
+	&.huawei{
+		.theme( #000000, #000000, #EEEEEE, 0.8 )
+	}
+}
