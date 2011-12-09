@@ -19,8 +19,8 @@ steal('jquery/controller').then(function($){
 	   init : function(element, options){
            this.element.css("position","absolute");
            if(!this.options.keep){
-		   	this.element[0].parentNode.removeChild(this.element[0])
-            document.body.appendChild(this.element[0]);
+				this.element[0].parentNode.removeChild(this.element[0])
+				document.body.appendChild(this.element[0]);
 		   }
        },
        show : function(el, ev, position){
