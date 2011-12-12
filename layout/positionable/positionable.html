@@ -22,8 +22,8 @@
         height: 75px;
 		position: absolute;
         display: block;
-        right: 0;
-        bottom: 0;
+        right: 10px;
+        bottom: 10px;
 
         background-color: #bcd5e6;
         text-align: center;
@@ -125,40 +125,44 @@
 
 </div><!-- End demo-description -->
 <script type='text/javascript' 
-                src='../../steal/steal.js'
+                src='/steal/steal.js'
                 package='main.js'
                 compress='false'>   
 </script>
 <script type='text/javascript'>
 	
-	steal("mxui/positionable",'jquery/event/drag').then(
+	steal("mxui/layout/positionable",'jquery/event/drag').then(
 	function() {
 		
 		
 		
 		function position(using) {
-            $('.positionable').mxui_positionable({     
+			var options = {
                 my: $('#my_horizontal').val() + ' ' + $('#my_vertical').val(),
                 at: $('#at_horizontal').val() + ' '+ $('#at_vertical').val(),
                 offset: $('#offset').val(),
-				using: using,
 				collision: $("#collision_horizontal").val() + ' ' + $("#collision_vertical").val()
-            }).trigger("move", $('#parent'));
+            };
+
+			if ( using ) {
+				options.using = using;
+			}
+            $('.positionable').mxui_layout_positionable( options ).trigger("move", $('#parent'));
 		}
 		
 		$('.positionable').css("opacity", 0.5);
 		
-        $(':input').bind('keyup change', function() { position(); });
+		$(':input').bind('keyup change', function() {
+				position();
+		});
 		
 		$("#parent").bind('dragmove', function() { position(); });
 		
 		$('.positionable').bind("dragmove", function(event, ui) {
-				// reset offset before calculating it
-				$("#offset").val("0");
-				position(function(result) {
-					$("#offset").val("" + (ui.offset.left - result.left) + " " + (ui.offset.top - result.top));
-					position();
-				});
+			$("#offset").val("0");
+			position(function(result) {
+				$("#offset").val("" + (ui.location[0] - result.left) + " " + (ui.location[1] - result.top));
+			});
 		});
 		
 		position();

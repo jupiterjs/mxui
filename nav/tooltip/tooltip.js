@@ -97,8 +97,8 @@ steal(
 		},
 
 		determineCorners: function() {
-			var threeSpaces = this.space * 3,
-				fiveSpaces = this.space * 5;
+			var threeSpaces = this.space * 2,
+				fiveSpaces = this.space * 4;
 
 			this.corners= {
 				ne: {
@@ -206,7 +206,6 @@ steal(
 		},
 
 		setPosition: function() {
-			// TODO: Change to mxui_layout_positionable
 			var isHidden = this.tooltip.css("display") == "none";
 
 			if ( isHidden ) {
@@ -215,7 +214,7 @@ steal(
 					display: "block"
 				})
 
-				this.tooltip.position(
+				this.tooltip.mxui_layout_positionable(
 					$.extend({
 						of : this.element,
 						collision : "none"
@@ -227,7 +226,7 @@ steal(
 					display: "none"
 				})
 			} else {
-				this.tooltip.position(
+				this.tooltip.mxui_layout_positionable(
 					$.extend({
 						of : this.element,
 						collision : "none",
@@ -237,6 +236,7 @@ steal(
 					}, this.position )
 				);
 			}
+			this.tooltip.mxui_layout_positionable("move");
 		},
 
 		show : function() {
