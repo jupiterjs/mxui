@@ -10,6 +10,25 @@ steal('jquery/controller',
 /**
  * @class Mxui.Nav.Accordion
  * @parent Mxui
+ * 
+ * An accordion
+ * 
+ * @constructor
+ * 
+ * @param {HTMLElement} element the element to add the accordion too.
+ * @param {Object} options name-value pairs to configure
+ * the accordion.  The available options are:
+ * 
+ *   - title ("h3") - the title element selector
+ *   - animationSpeed ("slow") - how fast to animate
+ *   - currentClassName ("current") - the className to add to 
+ *     the opened title
+ *   - activeClassName ("ui-state-active") - the className to add
+ *     to the opened title
+ *   - hoverClassName ("ui-state-hover") - the className to add on
+ *     hovering a title
+ *   - activateFirstByDefault (true) - activate the first title
+ *   - activateFirstByDefault (true) - use click to activate
  */
 $.Controller("Mxui.Nav.Accordion",{
 	defaults : {
@@ -22,7 +41,11 @@ $.Controller("Mxui.Nav.Accordion",{
 		clickToActivate: true
 	},
 	listensTo : ["insert","resize"]
-},{
+},
+/**
+ * @prototype
+ */
+{
 	init : function()
 	{
 		// Initially add Title classes for title and hide the content.
@@ -48,8 +71,9 @@ $.Controller("Mxui.Nav.Accordion",{
 		return this.element.children(':visible').not(this.options.title)
 	},
 	/**
-	 * Draws the current in the right spot. Triggered initially or when resized.
-	 * @param children
+	 * Draws the current in the right spot. Triggered 
+	 * initially or when resized.
+	 * @param {jQuery} [children] - cached children (for performance)
 	 */
 	setHeight : function(children)
 	{
@@ -98,11 +122,7 @@ $.Controller("Mxui.Nav.Accordion",{
 		this.setHeight();
 	},
 	
-	/**
-	 * Occurs when title was clicked. 
-	 * @param {Object} elm
-	 * @param {Object} event
-	 */
+	// Occurs when title was clicked.
 	"{title} click" : function(elm, event)
 	{		
 		if(this.options.clickToActivate){
@@ -110,9 +130,7 @@ $.Controller("Mxui.Nav.Accordion",{
 		}
 	},
 	
-	/**
-	 * Activate was triggered.  Doing this to standardized the app's event system.
-	 */
+	//  Activate was triggered.  Doing this to standardized the app's event system.
 	"{title} activate":function()
 	{
 		this.expand.apply(this, arguments);
@@ -120,7 +138,7 @@ $.Controller("Mxui.Nav.Accordion",{
 	
 	/**
 	 * Expand the content of the title that was clicked.
-	 * @param el
+	 * @param {jQuery} el the title of the element to expand
 	 */
 	expand : function(el)
 	{
@@ -184,10 +202,11 @@ $.Controller("Mxui.Nav.Accordion",{
 	},
 	
 	/**
+	 * @hide
 	 * Calculate the allowed height left after subtracting height from all the titles.
-	 * @param titles
-	 * @param element resizing
-	 * @returns
+	 * @param {Object} titles - title elements
+	 * @param {Object} el resizing - element we are going to resize
+	 * @return {Number} the size
 	 */
 	calculateRemainder : function(titles, el)
 	{
@@ -204,6 +223,7 @@ $.Controller("Mxui.Nav.Accordion",{
 	
 	/**
 	 * Occurs when resize was triggered.
+	 * Call when an insert or dom modification happens.
 	 */
 	resize : function()
 	{
@@ -214,57 +234,34 @@ $.Controller("Mxui.Nav.Accordion",{
 		}, 10);
 	},
 	
-	/**
-	 * Occurs when insert was triggered.
-	 */
+	// Call when an insert or dom modification happens
 	insert : function()
 	{
 		this.setHeight();
 	},
 	
-	/**
-	 * Remove hover class on mouse out event.
-	 * @param el
-	 */
+	// Remove hover class on mouse out event.
 	"{title} mouseleave" : function(el)
 	{
 		el.removeClass(this.options.hoverClassName);
 	},
 	
-	/**
-	 * Add hover class on mouse in event.
-	 * @param el
-	 */
+	// Add hover class on mouse in event.
 	"{title} mouseenter" : function(el)
 	{
 		el.addClass(this.options.hoverClassName);
 	},
 	
-	/**
-	 * Occurs when an item was dropped over a title.
-	 * @param el
-	 */
+	// Occurs when an item was dropped over a title.
 	"{title} dropover" : function(el)
 	{
 		this._timer = setTimeout(this.callback('titleOver', el),200);
 	},
 	
-	/**
-	 * Occurs when an item was dropped out.
-	 * @param el
-	 */
+	// Occurs when an item was dropped out.
 	"{title} dropout" : function(el)
 	{
 		clearTimeout(this._timer);
-	},
-	
-	/**
-	 * Expand the content for the title having a drop over event triggered.
-	 * @param el
-	 */
-	titleOver : function(el)
-	{
-		this.expand(el);
 	}
 });
 

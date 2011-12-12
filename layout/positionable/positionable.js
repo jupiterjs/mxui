@@ -80,14 +80,14 @@ steal('jquery/controller').then(function($){
 			$.each( [ "my", "at" ], function() {
 				var pos = ( options[this] || "" ).split( " " );
 				if ( pos.length === 1) {
-					pos = horizontalPositions.test( pos[0] ) ?
-						pos.concat( [verticalDefault] ) :
-						verticalPositions.test( pos[0] ) ?
-							[ horizontalDefault ].concat( pos ) :
-							[ horizontalDefault, verticalDefault ];
+					pos = rhorizontal .test( pos[0] ) ?
+						pos.concat( [center] ) :
+						rvertical.test( pos[0] ) ?
+							[ center ].concat( pos ) :
+							[ center, center ];
 				}
-				pos[ 0 ] = horizontalPositions.test( pos[0] ) ? pos[ 0 ] : horizontalDefault;
-				pos[ 1 ] = verticalPositions.test( pos[1] ) ? pos[ 1 ] : verticalDefault;
+				pos[ 0 ] = rhorizontal .test( pos[0] ) ? pos[ 0 ] : center;
+				pos[ 1 ] = rvertical.test( pos[1] ) ? pos[ 1 ] : center;
 				options[ this ] = pos;
 			});
 		
@@ -105,13 +105,13 @@ steal('jquery/controller').then(function($){
 		
 			if ( options.at[0] === "right" ) {
 				basePosition.left += targetWidth;
-			} else if (options.at[0] === horizontalDefault ) {
+			} else if (options.at[0] === center ) {
 				basePosition.left += targetWidth / 2;
 			}
 		
 			if ( options.at[1] === "bottom" ) {
 				basePosition.top += targetHeight;
-			} else if ( options.at[1] === verticalDefault ) {
+			} else if ( options.at[1] === center ) {
 				basePosition.top += targetHeight / 2;
 			}
 		
@@ -129,13 +129,13 @@ steal('jquery/controller').then(function($){
 
 			if ( options.my[0] === "right" ) {
 				position.left -= elemWidth;
-			} else if ( options.my[0] === horizontalDefault ) {
+			} else if ( options.my[0] === center ) {
 				position.left -= elemWidth / 2;
 			}
 	
 			if ( options.my[1] === "bottom" ) {
 				position.top -= elemHeight;
-			} else if ( options.my[1] === verticalDefault ) {
+			} else if ( options.my[1] === center ) {
 				position.top -= elemHeight / 2;
 			}
 	
