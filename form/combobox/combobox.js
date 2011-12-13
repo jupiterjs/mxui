@@ -3,11 +3,11 @@ steal('jquery/controller', 'jquery/lang/json', 'mxui/util/scrollbar_width', 'jqu
 
 	/**
 	 * @class Mxui.Form.Combobox
-	 * @plugin mxui/form/combobox
+	 * @plugin mxui_form_combobox
 	 * @test mxui/form/combobox/funcunit.html
 	 * @parent Mxui
 	 * 
-	 * Combobox progressively enhances an &lt;input&gt; field.  This constructor accepts an Object of [Mxui.Combobox.static.defaults | options] used to customize the Combobox.
+	 * Combobox progressively enhances an &lt;input&gt; field.  This constructor accepts an Object of [Mxui.Combobox.static.defaults options] used to customize the Combobox.
 	 * 
 	 * Features:
 	 * 
@@ -18,11 +18,11 @@ steal('jquery/controller', 'jquery/lang/json', 'mxui/util/scrollbar_width', 'jqu
 	 *   * Allows the user to make a non-selection.
 	 *   * Customizable show/hide animations.
 	 * 
-	 * @demo mxui/combobox/comboboxdemo1.html
+	 * @demo mxui/form/combobox/comboboxdemo1.html
 	 * @param {Object} options Options used to customize the Combobox
 	 */
 	$.Controller.extend("Mxui.Form.Combobox", 
-	/* @static */		
+	/* @static */
 	{
 		/**
 		 * Default setttings for the Combobox.  These can all be overridden.
@@ -30,13 +30,10 @@ steal('jquery/controller', 'jquery/lang/json', 'mxui/util/scrollbar_width', 'jqu
 		 *   * __classNames__: _String._ When mxui_form_combobox is called on an 
 		 *     element, it is wrapped in a div.  The element is given the class that 
 		 *     is defined by `classNames`.
-		 *     
 		 *   * __filterEnabled__: _Boolean._ Controls whether 
 		 *     autocompletion is enabled on the combobox.
-		 *     
 		 *   * __displayHTML__: _Boolean._ If true, show the contents 
 		 *     of a list item as rich HTML.  If false, show it as plain text.
-		 *     
 		 *   * __selectedClassName__: _String._ The class that will be assigned to options that the user focuses on.
 		 *   * __activatedClassName__: _String._ The class that will be assigned to options that the user clicks. 
 		 *   * __disabledClassName__: _String._ The class that will be assigned to options that are disabled and the user cannot select.
@@ -52,15 +49,14 @@ steal('jquery/controller', 'jquery/lang/json', 'mxui/util/scrollbar_width', 'jqu
 		 *   * __render__: _Object._ This method defines the HTML that wraps a Combobox item.  To override, initialize the Combobox with a function like so:
 		 * 
 		 * 
-		 *     $("input").mxui_form_combobox({ render : {
-		 * 	      'itemTemplate': function(item, val){
-		 *          // HTML wrapping logic goes here
-		 *        } 
+		 *     $("input").mxui\_form\_combobox({ render : {
+		 *       'itemTemplate': function(item, val){
+		 *         // HTML wrapping logic goes here
+		 *       } 
 		 *     });
 		 * 
+		 * Where `item` is the item being drawn, and `val` is the value that the item represents internally.
 		 * 
-		 * Where `item` is the item being drawn, and `val` is the value that the item represents internally. 
-		 *   
 		 */
 		defaults: {
 			classNames: "mxui_form_combobox_wrapper",
@@ -335,7 +331,7 @@ steal('jquery/controller', 'jquery/lang/json', 'mxui/util/scrollbar_width', 'jqu
 
                 $.each(list, function(item)
                 {
-                    newList.push(item);
+                    newList.push(_, item);
                 });
 
                 list = newList;

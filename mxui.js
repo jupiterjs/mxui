@@ -2,6 +2,8 @@ steal(
 	'mxui/data/grid',
 	'mxui/data/tree',
 	
+	'mxui/form/combobox',
+	
 	'mxui/layout/bgiframe',
 	'mxui/layout/block',
 	'mxui/layout/fill',
