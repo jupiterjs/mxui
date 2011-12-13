@@ -14,10 +14,11 @@ The following lists each widget by how production ready it is:
   - TableScroll - makes a table scrollable
   - Bgiframe - adds an iframe to stop IE's 'bleed' problem
   - Sortable - sorting items
+  - Fill - manages widget's heights.  Makes layout a breeze.
   
 ### Close: Tested, API Finalized
 
-  - Fill - manages widget's heights.  Makes layout a breeze.
+
   - Accordion - a simple accordion widget
   
 ### Near: API Finalized or Tested
