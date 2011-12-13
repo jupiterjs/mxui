@@ -57,6 +57,10 @@ steal(
 			hideEvent: "mouseleave",
 			showEffect: "show",
 			hideEffect: "fadeOut",
+			showTimeout: 200,
+			hideTimeout: 500,
+			showTimeoutId: null,
+			hideTimeoutId: null,
 			position: "n"
 		}
 	}, {
@@ -73,12 +77,17 @@ steal(
 			// Append template to the offset parent
 			this.element.offsetParent().append( this.tooltip );
 
+			// Spacing for arrows and stuff is calculated off the margin,
+			// perhaps should be changed to a setting
 			this.space = parseInt( this.tooltip.outer.css("margin-left"), 10 );
-			this.determinePosition();
-
 
 			// Position tooltip
+			this.determinePosition();
 			this.setPosition();
+
+			$.each( ["width", "height"], this.proxy( function( i, dim ) {
+				this.tooltip[ dim ]( this.tooltip[ dim ]() );
+			}));
 
 			this.tooltip.css({
 				display: this.options.showEvent ? "none" : "block",
@@ -94,8 +103,14 @@ steal(
 					}));
 				}), 0);
 			}
-		},
 
+			if ( this.options.showEvent == "mouseenter" ) {
+				this.tooltip
+					.bind("mouseenter", this.callback("show"))
+					.bind("mouseleave", this.callback("hide"));
+			}
+
+		},
 		determineCorners: function() {
 			var threeSpaces = this.space * 2,
 				fiveSpaces = this.space * 4;
@@ -240,11 +255,14 @@ steal(
 		},
 
 		show : function() {
-			this.tooltip[ this.options.showEffect ]();
+			clearTimeout( this.options.hideTimeoutId );
+			this.tooltip.stop( true, true )[ this.options.showEffect ]();
 		},
 
 		hide : function() {
-			this.tooltip[ this.options.hideEffect ]();
+			this.options.hideTimeoutId = setTimeout(this.proxy( function() {
+				this.tooltip[ this.options.hideEffect ]();
+			}), this.options.hidetimeout );
 		},
 
 		"{showEvent}" : function() {
