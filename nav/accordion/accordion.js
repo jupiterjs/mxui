@@ -11,11 +11,19 @@ steal('jquery/controller',
  * @class Mxui.Nav.Accordion
  * @parent Mxui
  * 
- * An accordion
+ * Provides basic accordion vertical accordion functionality.
+ * 
+ * ## Basic Example
+ * 
+ * 
+ * 
+ * ## Demo
+ * 
+ * @demo mxui/layout/fill/demo.html
  * 
  * @constructor
  * 
- * @param {HTMLElement} element the element to add the accordion too.
+ * @param {HTMLElement} element the element to add the accordion to.
  * @param {Object} options name-value pairs to configure
  * the accordion.  The available options are:
  * 
