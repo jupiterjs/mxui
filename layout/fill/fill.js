@@ -37,6 +37,8 @@ steal('jquery/dom/dimensions', 'jquery/event/resize').then(function( $ ) {
 		/**
 		 * @function jQuery.fn.mxui_layout_fill
 		 * @parent Mxui
+		 * @test mxui/layout/fill/funcunit.html
+		 * @plugin mxui/layout/fill
 		 * 
 		 * Fills a parent element's height with the another 
 		 * element.  This is extremely useful for complex layout,
