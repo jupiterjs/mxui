@@ -59,6 +59,10 @@ steal('jquery/dom/dimensions', 'jquery/event/resize').then(function( $ ) {
 		 * to fill, defaults to the element's parent.
 		 */
 		filler = $.fn.mxui_layout_fill = function( parent ) {
+			// setup stuff on every element
+			this.addClass('mxui_layout_fill')
+			
+			
 			var options = parent;
 			options || (options = {});
 			if(typeof options == 'string'){
@@ -76,20 +80,30 @@ steal('jquery/dom/dimensions', 'jquery/event/resize').then(function( $ ) {
 			if ( thePage ) {
 				options.parent = $(window)
 			}
-			var evData = {
-				filler: this,
-				inFloat: inFloat(this[0], thePage ? document.body : options.parent[0]),
-				options: options
-			};
-			$(options.parent).bind('resize', evData, filler.parentResize);
-			//if this element is removed, take it out
+			
+			
+			this.each(function(){
+				
+				var evData = {
+					filler: $(this),
+					inFloat: inFloat(this, thePage ? document.body : options.parent[0]),
+					options: options
+				},
+				cb = function(){
+					filler.parentResize.apply(this, arguments)
+				}
+				$(options.parent).bind('resize', evData, cb);
+				//if this element is removed, take it out
+	
+				$(this).bind('destroyed', evData, function( ev ) {
+					$(ev.target).removeClass('mxui_filler')
+					$(options.parent).unbind('resize', cb)
+				});
+				
+			})
+			
 
-			this.bind('destroyed', evData, function( ev ) {
-				$(ev.target).removeClass('mxui_filler')
-				$(options.parent).unbind('resize', filler.parentResize)
-			});
-
-			this.addClass('mxui_layout_fill')
+			
 			//add a resize to get things going
 			var func = function() {
 				options.parent.resize();

@@ -268,8 +268,10 @@ steal('mxui/layout/table_fill').then(function( $ ) {
 				after.after(els);
 			} else if ( after === false ) {
 				this.$.tbody.prepend(els);
-			} else {
+			} else if(this.$.spacer){
 				this.$.spacer.before(els);
+			} else {
+				this.$.tbody.append(els);
 			}
 
 			this.element.resize();
