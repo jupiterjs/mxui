@@ -329,9 +329,9 @@ steal('jquery/controller', 'jquery/lang/json', 'mxui/util/scrollbar_width', 'jqu
                 var newList = [];
                 newList.push(item);
 
-                $.each(list, function(item)
+                $.each(list, function(_, item)
                 {
-                    newList.push(_, item);
+                    newList.push(item);
                 });
 
                 list = newList;
