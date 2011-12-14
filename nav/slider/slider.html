@@ -33,10 +33,6 @@
 	    	<div class='slider' id='slider'></div>
 	    </div>
 		<input id='value'/>
-		<div class='container'>
-	    	<div class='slider' id='slider2'></div>
-	    </div>
-		<input id='value2'/>
 		<script type='text/javascript' 
                 src='../../../steal/steal.js'>   
         </script>
@@ -45,10 +41,6 @@
 				$("#slider").mxui_nav_slider({interval: 1, min: 1, max: 10, val: 5})
 				.change(function(ev, value){
 					$('#value').val(value)
-				});
-				$("#slider2").mxui_nav_slider({interval: 1, min: 1, max: 25, val: 5, contained: false})
-				.change(function(ev, value){
-					$('#value2').val(value)
 				});
 			})
 			

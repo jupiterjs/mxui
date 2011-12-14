@@ -5,15 +5,43 @@ steal('jquery/controller',
 	/**
 	 * @class Mxui.Nav.Slider
 	 * @parent Mxui
+	 *
+	 * @description Converts an input into a slider with `min`, `max` and `interval` options.
+	 * Converts an input into a slider with `min`, `max` and `interval` options.
+	 *
+	 *		$("#slider").mxui_nav_slider({
+	 *			interval: 1, 
+	 *			min: 1, 
+	 *			max: 10, 
+	 *			val: 5
+	 *		});
+	 *
+	 * ## Demo
+	 * @demo mxui/nav/slider/slider.html
 	 */
-	$.Controller("Mxui.Nav.Slider", {
+	$.Controller("Mxui.Nav.Slider", 
+		/**
+		 * @static
+		 */
+	{
+		/**
+		 * Default options
+		 *
+		 * - `min` - Minimum slider value. Default is `0`
+		 * - `max` - Maximum slider value. Default is `10`
+		 * - `interval` - The amount by which the slider will adjust. Default is `1`
+		 */
 		defaults: {
 			min: 0,
 			max: 10,
 			// if the slider is contained in the parent
 			contained : true
 		}
-	}, {
+	}, 
+	/**
+	 * @prototype
+	 */
+	{
 		init: function() {
 			this.element.css({
 				position: 'relative'
