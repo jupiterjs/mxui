@@ -448,6 +448,33 @@ if ( $.uiBackCompat !== false ) {
 
     
 	
+	/**
+	 * @class Mxui.Layout.Positionable
+	 * @parent Mxui
+	 *
+	 * @description Allows you to position an element relative to another element.
+	 * Allows you to position an element relative to another element.
+	 *
+	 *
+	 *     $("#tooltip").mxui_layout_positionable({
+	 *         my: "bottom center",
+	 *         at: "top center",
+	 *         of: $("#target"),
+	 *         collision: "fit"
+	 *     }).trigger("move");
+	 *
+	 * In this example, we're initializing plugin on the `#tooltip` element and
+	 * telling it to position itself above `#target`. After initializing the
+	 * plugin, we need to trigger the "move" handler on it to apply it's
+	 * position.
+	 *
+	 * This plugin is built on top of the [jQuery UI Position Plugin](http://docs.jquery.com/UI/Position),
+	 * so you may refer to their documentation for more advanced usage.
+	 *
+	 * ## Demo
+	 * 
+	 * @demo mxui/layout/positionable/positionable.html
+	 */
 	$.Controller("Mxui.Layout.Positionable",
     {
 
@@ -459,15 +486,23 @@ if ( $.uiBackCompat !== false ) {
 		iframe: false,
 		keep : false //keeps it where it belongs
     },
+	/** 
+	 * @prototype
+	 */
     {
-       /**
-        * 
-        * @param {Object} element
-        * @param {Object} options
-        * 		my
-        *       at
-        *       of
-        */
+		/**
+		* 
+		* @param {Object} options
+		* - `my`
+		* - `at`
+		* - `of`
+		* - `collision`
+		* - `using`
+		*
+		* This plugin is built on top of the [jQuery UI Position Plugin](http://docs.jquery.com/UI/Position),
+		* so you may refer to their documentation for more advanced usage.
+		*
+		*/
 	   init : function(element, options) {
            this.element.css("position","absolute");
            if(!this.options.keep){
