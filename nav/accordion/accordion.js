@@ -13,6 +13,7 @@ steal('jquery/controller',
 /**
  * @class Mxui.Nav.Accordion
  * @parent Mxui
+ * @test mxui/nav/accordion/funcunit.html
  * 
  * Provides basic accordion vertical accordion functionality.
  * 
@@ -64,7 +65,7 @@ steal('jquery/controller',
  * the accordion.  The available options are:
  * 
  *   - title ("h3") - the title element selector
- *   - duration ("slow") - how fast to animate
+ *   - duration ("fast") - how fast to animate
  *   - activeClassName ("ui-state-active") - the className to add
  *     to the opened title
  *   - hoverClassName ("ui-state-hover") - the className to add on
@@ -75,7 +76,7 @@ steal('jquery/controller',
 $.Controller("Mxui.Nav.Accordion",{
 	defaults : {
 		title : "h3",
-		duration : "slow",
+		duration : "fast",
 		activeClassName: "ui-state-active",
 		hoverClassName: "ui-state-hover",
 		activateFirstByDefault: true,
