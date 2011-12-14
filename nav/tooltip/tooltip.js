@@ -112,63 +112,63 @@ steal(
 
 		},
 		determineCorners: function() {
-			var threeSpaces = this.space * 2,
-				fiveSpaces = this.space * 4;
+			var arrowSpacing = this.space * 2,
+				offsetSpacing = this.space * 4;
 
 			this.corners= {
 				ne: {
 					arrowCss: {
-						left: threeSpaces
+						left: arrowSpacing
 					},
-					offset : [ -( fiveSpaces ), 0 ]
+					offset : [ -( offsetSpacing ), 0 ]
 				},
 				en: {
 					arrowCss: {
 						top : "initial",
-						bottom: threeSpaces
+						bottom: arrowSpacing
 					},
-					offset : [ 0, ( fiveSpaces ) ]
+					offset : [ 0, ( offsetSpacing ) ]
 				},
 				es: {
 					arrowCss: {
 						bottom : "initial",
-						top: threeSpaces
+						top: arrowSpacing
 					},
-					offset : [ 0, -( fiveSpaces ) ]
+					offset : [ 0, -( offsetSpacing ) ]
 				},
 				se: {
 					arrowCss: {
-						left: threeSpaces
+						left: arrowSpacing
 					},
-					offset : [ -( fiveSpaces ), 0 ]
+					offset : [ -( offsetSpacing ), 0 ]
 				},
 				sw: {
 					arrowCss: {
-						right: threeSpaces,
+						right: arrowSpacing,
 						left: "initial"
 					},
-					offset : [ ( fiveSpaces ), 0 ]
+					offset : [ ( offsetSpacing ), 0 ]
 				},
 				ws: {
 					arrowCss: {
 						bottom : "initial",
-						top: threeSpaces
+						top: arrowSpacing
 					},
-					offset : [ 0, -( fiveSpaces ) ]
+					offset : [ 0, -( offsetSpacing ) ]
 				},
 				wn: {
 					arrowCss: {
 						top: "initial",
-						bottom: threeSpaces
+						bottom: arrowSpacing
 					},
-					offset : [ 0, ( fiveSpaces ) ]
+					offset : [ 0, ( offsetSpacing ) ]
 				},
 				nw: {
 					arrowCss: {
-						right: threeSpaces,
+						right: arrowSpacing,
 						left: "initial"
 					},
-					offset : [ ( fiveSpaces ), 0 ]
+					offset : [ ( offsetSpacing ), 0 ]
 				}
 			}
 		},

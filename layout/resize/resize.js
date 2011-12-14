@@ -22,14 +22,41 @@ steal('jquery',
 		/**
 		 * @class Mxui.Layout.Resize
 		 * @parent Mxui
+		 *
+		 * @description Adds a resizable hook to the bottom right of an element allowing you to drag the handle to resize the element.
+		 *
+		 * Adds a resizable hook to the bottom right of an element 
+		 * allowing you to drag the handle to resize the element.
+		 *
+		 *		$("textarea").mxui_layout_resize({
+		 *			minHeight : 40,
+		 *			minWidth: 120
+		 *		});
+		 *
+		 * ## Demo
+		 * @demo mxui/layout/resize/resize.html
 		 */
-		$.Controller("Mxui.Layout.Resize",{
+
+		$.Controller("Mxui.Layout.Resize",
+		/**
+		 * @static
+		 */
+		{
+			/*
+			 * - minHeight - The minimum height the element will be allowed to
+			 *   resize to. Default is 10 pixels.
+			 * - minWidth - The minimum width the element will be allowed to
+			 *   resize to. Default is 10 pixels.
+			 */
 			defaults : {
 				minHeight: 10,
 				minWidth: 10,
 				handles : 'e, s, se'
 			}
 		},
+		/**
+		 * @prototype
+		 */
 		{
 			setup : function(el, options){
 				var diff = $(el).mxui_layout_wrap()[0]
@@ -51,6 +78,13 @@ steal('jquery',
 					
 				}
 			},
+			/*
+			 * @param {Element} el
+			 * The element you wish to be resizable.
+			 *
+			 * @param {Object} options
+			 * The options that will be extended over the defaults.
+			 */
 			init : function(el, options){
 				//draw in resizeable
 				this.element.height(this.element.height())
