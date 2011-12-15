@@ -26,15 +26,40 @@ steal('jquery',
 		 * @description Adds a resizable hook to the bottom right of an element allowing you to drag the handle to resize the element.
 		 *
 		 * Adds a resizable hook to the bottom right of an element 
-		 * allowing you to drag the handle to resize the element.
+		 * allowing you to drag the handle to resize the element. This can be
+		 * useful for expanding `textarea`s or implementing a resizable window
+		 * system.
+		 *
+		 * # Example
+		 *
+		 * Given the following markup:
+		 *
+		 *		<label>
+		 *			<textarea id="comment" name="comment"></textarea>
+		 *		</label>
+		 *
+		 * You can make the textarea resizable using the following code:
 		 *
 		 *		$("textarea").mxui_layout_resize({
 		 *			minHeight : 40,
 		 *			minWidth: 120
 		 *		});
 		 *
+		 *	This adds a small, stylable `div` to the lower right corner of
+		 *	the textarea which acts as a draggable hook to resize the element.
+		 *	To style this element (recommended), use the class `.ui-resizable-handle` 
+		 *	in your stylesheet.
+		 *
 		 * ## Demo
 		 * @demo mxui/layout/resize/resize.html
+		 *
+		 * @param {Object} options Object literal defining the minimum height
+		 * and width the element should be allowed to be resized to.
+		 *
+		 *	- `minHeight` - The minimum height the element will be allowed to
+		 *	resize to.
+		 *	- `minWidth` - The minimum width the element will be allowed to
+		 *	resize to.
 		 */
 
 		$.Controller("Mxui.Layout.Resize",
