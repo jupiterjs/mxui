@@ -10,6 +10,7 @@ $.event.special.activate = {
 
 /**
  * @class Mxui.Nav.Selectable
+ * @test mxui/nav/selectable/funcunit.html
  * @parent Mxui
  * 
  * Selectable provides keyboard and mouse selection to a group of 
@@ -93,6 +94,17 @@ $.event.special.activate = {
  *   
  *   - __outsideDeactivate__ `true` - Deactivate selected when a click or 
  *     keypress happens outside the selectable. 
+ *     
+ * Use them like:
+ * 
+ *     $('#menu').mxui_nav_selectable({
+ *       selectOn : "tr",
+ *       selectedClassName : "ui-hover",
+ *       activateClassName: "ui-active",
+ *       multiActivate: false,
+ *       cache: true,
+ *       outsideDeactivate: false
+ *     })
  */
 $.Controller.extend('Mxui.Nav.Selectable',{
     defaults : {
@@ -172,19 +184,15 @@ $.Controller.extend('Mxui.Nav.Selectable',{
 	 */
 	selected : function(el, autoFocus){
 		// get old selected
-
 		// if getter
 		if(!el){
 			return this._getSelected();
 		}else{
 			//we are setting ...
 			el = $(el);
-			// deselect old
 			
 			// don't need to deselect, this will be done by select event
-			//this.deselected();
 			
-			console.log("selecting ...", el, autoFocus)
 			// set new selected, don't set class, done by trigger
 			this._selected = el;
 			
@@ -281,9 +289,8 @@ $.Controller.extend('Mxui.Nav.Selectable',{
 			
 			// deselect if we haven't focused, or we are 
 			// leaving something not the focused element
-			if(!this._focused /*|| el[0] !== this._focused[0]*/){ //make sure it's deselected
+			if(!this._focused ){ //make sure it's deselected
 				this.deselected();
-				console.log("huh?")
 			}
 			
 		}
@@ -293,7 +300,9 @@ $.Controller.extend('Mxui.Nav.Selectable',{
 		
     },
     "{selectOn} focusin": function(el, ev){
-        this.selected(el, false);
+		this.times = !this.times ? 1 : this.times + 1;
+        
+		this.selected(el, false);
 		this._focused = el;
     },
 	"{selectOn} focusout": function(el, ev){
@@ -316,13 +325,10 @@ $.Controller.extend('Mxui.Nav.Selectable',{
 		}
     },
     "{selectOn} select" : function(el, ev){
-		console.log("select event")
 		var selected = this.element.find( "."+this.options.selectedClassName ).not(el);
         if (selected.length) {
-			console.log("deselecting")
             selected.trigger('deselect');
         }
-		console.log("adding className")
         el.addClass( this.options.selectedClassName );
     },
     "{selectOn} deselect": function(el, ev){
@@ -331,13 +337,13 @@ $.Controller.extend('Mxui.Nav.Selectable',{
     "{selectOn} keydown": function(el, ev){
 		// we are keying, this means we dont
 		// accept mouse select events w/o a move
-		
+
 		// set keying for a brief time.
 		// this is to support when keying scrolls.
-		
 		var key = ev.key()
 		if(/down|up|right|left/.test(key)){
 			var nextEl = this.moveTo(el, key);
+			
 			this.selected(nextEl, true);
 			ev.preventDefault();
 			this.keying = true;
