@@ -156,23 +156,31 @@
         <script type='text/javascript' src='../../../steal/steal.js'></script>
 		<script type='text/javascript'>
 			steal('mxui/layout/split','mxui/layout/resize').then(function(){
+				// opposite of $().closest
+				$.fn.farthest = function(selector){
+					var $parent = this.parent(selector);
+					return ($parent.length > 0) ? $parent.farthest(selector) : this;
+				};
+				
 				var addButtons = function(){
-					$(this).after( $('#buttons').clone().removeAttr('id').show() );
-				}
+					var buttons = $('#buttons').clone()
+									.removeAttr('id')
+									.data('containerid', $(this).attr('id'))
+									.show();
+					$(this).farthest('.container').after(buttons);
+				};
 				
 				$('.vertical-splitter').mxui_layout_split({ direction: "vertical", panelClass: "panel" })
 					.each(addButtons).mxui_layout_resize();
 				
-				
 				$('.horizontal-splitter').mxui_layout_split({ direction: "horizontal", panelClass: "panel" })
-					.each(addButtons)
+					.each(addButtons);
 				
-				$('#container3').mxui_layout_resize()
-
+				$('#container3').mxui_layout_resize();
 				
 				$(document.body).delegate("a","click", function(ev){
 					var action = this.className,
-						container = $(this).parent().prev();
+						container = $('#' + $(this).parent().data('containerid'));
 					
 					switch(action){
 						case "add" : 
