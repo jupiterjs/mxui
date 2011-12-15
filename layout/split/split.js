@@ -4,15 +4,19 @@ steal('jquery/controller', 'jquery/event/drag/limit', 'jquery/dom/dimensions', '
 	/**
 	 * @class Mxui.Layout.Split
 	 * @parent Mxui
+	 * MXUI.Layout.Split is a splitter control that will split two or more elements
+	 * and allow the end-user to size the elements using a 'splitter bar'.
+	 * 
+	 * @description Makes a splitter control.
 	 * 
 	 * Makes a splitter control that will split two or more elements and provide a
 	 * "spitter bar" to the user to adjust the size. While it does support absolutely
-	 * positioned elements, floated elements perform better.
+	 * positioned elements, floated elements will perform better.
 	 * 
 	 * The splitter control tries to auto-detect whether it should be vertical or horizontal, but
-	 * sometimes it's not able to, so you might have to pass the direction in the options.
+	 * sometimes it's not able to do so, so you might have to pass the direction in the options.
 	 * 
-	 * If you have the following HTML:
+	 * If you have this HTML:
 	 *
 	 *     <div class='parent'>
 	 *       <div class='panel'></div>
@@ -30,7 +34,7 @@ steal('jquery/controller', 'jquery/event/drag/limit', 'jquery/dom/dimensions', '
 	 * To hide panels by default, apply the <code>hidden</code> CSS class to the panel.
 	 * To make a panel collapsible, apply the <code>collapsible</code> CSS class to the panel. 
 	 * 
-	 * Currently you can't have 2 collasible panels beside each other, e.g.:
+	 * Currently you can't have 2 collapsible panels beside each other, e.g.:
 	 *
 	 *     <div class='collapsible'>...</div>
 	 *     <div class='split'>...</div>
@@ -46,7 +50,11 @@ steal('jquery/controller', 'jquery/event/drag/limit', 'jquery/dom/dimensions', '
 	 * 
 	 * For some larger, more complex examples, see [here](/mxui/layout/split/split.html).
 	 */
-	$.Controller.extend("Mxui.Layout.Split", {
+	$.Controller.extend("Mxui.Layout.Split",
+	/** 
+	 * @static
+	 */
+	{
 		defaults: {
 			active: "active",
 			hover: "split-hover",
@@ -72,8 +80,13 @@ steal('jquery/controller', 'jquery/event/drag/limit', 'jquery/dom/dimensions', '
 				dragDir: "vertical"
 			}
 		}
-	}, {
+	},
+	/** 
+	 * @prototype
+	 */
+	{
 		/**
+		 * @hide
 		 * Init method called by JMVC base controller.
 		 */
 		init: function() {
@@ -100,6 +113,7 @@ steal('jquery/controller', 'jquery/event/drag/limit', 'jquery/dom/dimensions', '
 		},
 
 		/**
+		 * @hide
 		 * Sizes the split bar and split elements initally.  This is different from size in that fact
 		 * that intial size retains the elements widths and resizes what can't fit to be within the parent dims.
 		 * @param {Object} c
@@ -137,6 +151,7 @@ steal('jquery/controller', 'jquery/event/drag/limit', 'jquery/dom/dimensions', '
 		},
 
 		/**
+		 * @hide
 		 * Appends a split bar.
 		 * @param {Object} dir
 		 */
@@ -161,33 +176,18 @@ steal('jquery/controller', 'jquery/event/drag/limit', 'jquery/dom/dimensions', '
 			return this.element.children((this.options.panelClass ? "." + this.options.panelClass : "") + ":not(.splitter):visible")
 		},
 
-		/**
-		 * Adds hover class to splitter bar.
-		 * @param {Object} el
-		 * @param {Object} ev
-		 */
 		".splitter mouseenter": function( el, ev ) {
 			if (!this.dragging ) {
 				el.addClass(this.options.hover)
 			}
 		},
 
-		/**
-		 * Removes hover class from splitter bar.
-		 * @param {Object} el
-		 * @param {Object} ev
-		 */
 		".splitter mouseleave": function( el, ev ) {
 			if (!this.dragging ) {
 				el.removeClass(this.options.hover)
 			}
 		},
 
-		/**
-		 * For accessibility support, listen to key inputs on the split bar.
-		 * @param {Object} el
-		 * @param {Object} ev
-		 */
 		".splitter keydown": function( el, ev ) {
 			var offset = el.offset();
 			switch ( ev.key() ) {
@@ -203,12 +203,6 @@ steal('jquery/controller', 'jquery/event/drag/limit', 'jquery/dom/dimensions', '
 			}
 		},
 
-		/**
-		 * Drag init event for the '.splitter' split bar.
-		 * @param {Object} el
-		 * @param {Object} ev
-		 * @param {Object} drag
-		 */
 		".splitter draginit": function( el, ev, drag ) {
 			drag.noSelection();
 			drag.limit(this.element);
@@ -233,6 +227,7 @@ steal('jquery/controller', 'jquery/event/drag/limit', 'jquery/dom/dimensions', '
 		},
 
 		/**
+		 * @hide
 		 * Internal method for getting the cache info for an element
 		 * @param {Object} el
 		 */
@@ -309,12 +304,6 @@ steal('jquery/controller', 'jquery/event/drag/limit', 'jquery/dom/dimensions', '
 			}, 1);
 		},
 
-		/**
-		 * As the split bar is dragged, resize.
-		 * @param {Object} el
-		 * @param {Object} ev
-		 * @param {Object} drag
-		 */
 		".splitter dragmove": function( el, ev, drag ) {
 			var moved = this.moveTo(el, drag.location[this.dirs.pos](), this.moveCache)
 
@@ -323,12 +312,6 @@ steal('jquery/controller', 'jquery/event/drag/limit', 'jquery/dom/dimensions', '
 			}
 		},
 
-		/**
-		 * Drag end event for the '.splitter' split bar.
-		 * @param {Object} el
-		 * @param {Object} ev
-		 * @param {Object} drag
-		 */
 		".splitter dragend": function( el, ev, drag ) {
 			this.dragging = false;
 			el.removeClass(this.options.hover)
@@ -423,11 +406,6 @@ steal('jquery/controller', 'jquery/event/drag/limit', 'jquery/dom/dimensions', '
 			target.remove();
 		},
 
-		/**
-		 * Collasper button in split panel was clicked.
-		 * @param {Object} el
-		 * @param {Object} event
-		 */
 		".collapser click": function( el, event ) {
 			this.toggleCollapse(el.parent());
 		},
@@ -502,6 +480,7 @@ steal('jquery/controller', 'jquery/event/drag/limit', 'jquery/dom/dimensions', '
 		},
 
 		/**
+		 * @hide
 		 * Takes elements and animates them to the right size
 		 * @param {jQuery} [els] child elements
 		 * @param {Boolean} [animate] animate the change
