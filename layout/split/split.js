@@ -53,7 +53,7 @@ function( $ ) {
 	 * 
 	 * ## Examples
 	 * 
-	 * For some larger, more complex examples, see [here](/mxui/layout/split/split.html).
+	 * For some larger, more complex examples, see [//mxui/layout/split/split.html here].
 	 */
 	$.Controller.extend("Mxui.Layout.Split",
 	/** 
