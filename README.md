@@ -15,11 +15,13 @@ The following lists each widget by how production ready it is:
   - Bgiframe - adds an iframe to stop IE's 'bleed' problem
   - Sortable - sorting items
   - Fill - manages widget's heights.  Makes layout a breeze.
-  
+  - Accordion - a simple accordion widget
+    
 ### Close: Tested, API Finalized
 
+  - Selectable - provides keyboard and mouse navigation through
+    a common interface.
 
-  - Accordion - a simple accordion widget
   
 ### Near: API Finalized or Tested
 
@@ -29,8 +31,6 @@ The following lists each widget by how production ready it is:
   - Resize - allows resizing of widgets
   - Split - a splitter widget
   - Slider - a slider
-  - Selectable - provides keyboard and mouse navigation through
-    a common interface.
   
 ### Far:
 
