@@ -1,0 +1,43 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
+            "http://www.w3.org/TR/html4/strict.dtd">
+<html lang="en">
+  <head>
+    <title>splitter</title>
+    <link type="text/css" href="../resize/resize.css" rel="stylesheet" />
+    <style type='text/css'>
+      #container {
+        border: solid 1px;
+        width: 350px;
+        height: 400px;
+        margin: 10px;
+        position: relative;
+      }
+      #container.mxui_layout_split .vsplitter {
+        width: 10px;
+      }
+      .panel {
+        background-color: #ddddee;
+      }
+   </style>
+</head>
+<body>
+<div id="demo-html">
+<div id="container" class="container vertical-splitter">
+  <div class="panel" style="float:left;width:200px;">
+    Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.
+  </div>
+  <div class="panel" style="float:left;width:200px;">
+    Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.
+  </div>
+</div>
+</div>
+
+<script type='text/javascript' src='../../../steal/steal.js'></script>
+<script type='text/javascript'>
+steal('mxui/layout/split','mxui/layout/resize').then(function(){
+  $('#container').mxui_layout_split({ direction: "vertical", panelClass: "panel" })
+    .mxui_layout_resize();
+});
+</script>
+</body>
+</html>

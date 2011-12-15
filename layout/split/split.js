@@ -4,27 +4,47 @@ steal('jquery/controller', 'jquery/event/drag/limit', 'jquery/dom/dimensions', '
 	/**
 	 * @class Mxui.Layout.Split
 	 * @parent Mxui
-	 * MXUI.Layout.Split is a splitter control that will split two or more elements
-	 * and allow the end-user to size the elements using a 'splitter bar'.
 	 * 
-	 * It allows for floating and absolutely positioned elements ,although, 
-	 * floating is higher performance.
+	 * Makes a splitter control that will split two or more elements and provide a
+	 * "spitter bar" to the user to adjust the size. While it does support absolutely
+	 * positioned elements, floated elements perform better.
 	 * 
-	 * It tries to auto-detect whether it should be vertical or horizontal but
-	 * sometimes it's not able to so you might have to pass the direction in the options.
+	 * The splitter control tries to auto-detect whether it should be vertical or horizontal, but
+	 * sometimes it's not able to, so you might have to pass the direction in the options.
 	 * 
-	 * Example Usage:
-	 * $('.parent).mxui_layout_split();
-	 * <div class='parent'><div class='panel'><div class='panel'></div>
+	 * If you have the following HTML:
+	 *
+	 *     <div class='parent'>
+	 *       <div class='panel'></div>
+	 *       <div class='panel'></div>
+	 *     </div>
 	 * 
-	 * API Notes:
+	 * The following will create the splitter control:
 	 * 
-	 * To hide panels by default, apply the 'hidden' css class to the panel.
+	 *     $('.parent').mxui_layout_split();
 	 * 
-	 * To make a panel collapsible, apply the 'collapsible' css class to the panel. 
-	 * Currently you can't have 2 collasible panels beside each other. 
-	 * E.g. <div class='collapsible'><div class='split'><div class='collapsible'> Only one or the other can be collapsible.
+	 * You can also provide the splitter direction:
 	 * 
+	 *     $('.parent').mxui_layout_split({ direction: 'vertical' });
+	 * 
+	 * To hide panels by default, apply the <code>hidden</code> CSS class to the panel.
+	 * To make a panel collapsible, apply the <code>collapsible</code> CSS class to the panel. 
+	 * 
+	 * Currently you can't have 2 collasible panels beside each other, e.g.:
+	 *
+	 *     <div class='collapsible'>...</div>
+	 *     <div class='split'>...</div>
+	 *     <div class='collapsible'>...</div>
+	 *
+	 * Only one or the other can be collapsible.
+	 * 
+	 * ## Demo
+	 * 
+	 * @demo mxui/layout/split/demo.html
+	 * 
+	 * ## Examples
+	 * 
+	 * For some larger, more complex examples, see [here](/mxui/layout/split/split.html).
 	 */
 	$.Controller.extend("Mxui.Layout.Split", {
 		defaults: {
