@@ -9,12 +9,11 @@
 				width:50px;
             }
 			.selected{
-				background-color: #DFB946;
+				
 				border:1px solid black;
 			}
 			.activated{
 				background-color: red;
-				border:1px solid black;
 			}
         </style>
 	</head>
@@ -95,46 +94,36 @@
             <li><span class="selectable">fifty</span></li>
             <li><span class="selectable">fiftyone</span></li>
             <li><span class="selectable">fiftytwo</span></li>
-            <li><span class="selectable">fiftythree</span></li>
-            <li><span class="selectable">fiftyfour</span></li>
-            <li><span class="selectable">fiftyfive</span></li>
-            <li><span class="selectable">fiftysix</span></li>
-            <li><span class="selectable">fiftyseven</span></li>
-            <li><span class="selectable">fiftyeight</span></li>
-            <li><span class="selectable">fiftynine</span></li>
-            <li><span class="selectable">sixty</span></li>
-            <li><span class="selectable">sixtyone</span></li>
-            <li><span class="selectable">sixtytwo</span></li>
-            <li><span class="selectable">sixtythree</span></li>
-            <li><span class="selectable">sixtyfour</span></li>
-            <li><span class="selectable">sixtyfive</span></li>
-            <li><span class="selectable">sixtysix</span></li>
-            <li><span class="selectable">sixtyseven</span></li>
-            <li><span class="selectable">sixtyeight</span></li>
-            <li><span class="selectable">sixtynine</span></li>
-            <li><span class="selectable">seventy</span></li>
-            <li><span class="selectable">seventyone</span></li>
-            <li><span class="selectable">seventytwo</span></li>
-            <li><span class="selectable">seventythree</span></li>
-            <li><span class="selectable">seventyfour</span></li>
-            <li><span class="selectable">seventyfive</span></li>
-            <li><span class="selectable">seventysix</span></li>
-            <li><span class="selectable">seventyseven</span></li>
-            <li><span class="selectable">seventyeight</span></li>
-            <li><span class="selectable">seventynine</span></li>
-            <li><span class="selectable">eighty</span></li>
 		</div>
+		
+		<table id='table'>
+			<tr>
+				<td><a tabindex='0'>One</a></td>
+				<td><a tabindex='0'>One</a></td>
+				<td><a tabindex='0'>One</a></td>
+			</tr>
+			<tr>
+				<td><a tabindex='0'>One</a></td>
+				<td><a tabindex='0' id='center'>One</a></td>
+				<td><a tabindex='0'>One</a></td>
+			</tr>
+			<tr>
+				<td><a tabindex='0'>One</a></td>
+				<td><a tabindex='0'>One</a></td>
+				<td><a tabindex='0'>One</a></td>
+			</tr>
+		</table>
 		<script type='text/javascript' 
                 src='../../../steal/steal.js'>   
         </script>
 		<script type='text/javascript'>
-		steal('mxui/util/selectable').then(function(){
-			$(function(){
-				$('#menu, #nested_menu, #overflow_menu').mxui_util_selectable();
-				$('#overflow_menu .selectable').each(function(i, el){
-					$(el).attr("tabindex", "0");
-				});
+		steal('mxui/nav/selectable').then(function(){
+
+			$('#menu, #nested_menu, #overflow_menu, #table').mxui_nav_selectable();
+			$('#overflow_menu .selectable').each(function(i, el){
+				$(el).attr("tabindex", "0");
 			});
+	
 		})
         </script>
 	</body>

@@ -49,26 +49,21 @@
 				src='../../../steal/steal.js'>
 		</script>
 		<script type='text/javascript'>
-			steal("mxui/form/combobox/select", "mxui/form/combobox/ajax", "jquery/dom/fixture").then(function($){
-
-        $(function(){
-          $("input#combobox_demo").mxui_form_combobox({
-            items: [
-              { value: "1", text: "hola", enabled: "true", selected: true, children: [
-                { value: "5", text: "chicago", enabled: "true", children: [] },
-                { value: "6", text: "kansas", enabled: "true", children: [
-                  { value: "7", text: "losangeles", enabled: "true", children: [] }
-                ] }
-              ] },
-              { value: "2", text: "mundo", enabled: "true", children: [] },
-              { value: "3", text: "nuevo", enabled: "true", children: [
-                { value: "8", text: "sanfrancisco", enabled: "true", children: [] }
-              ] },
-              { value: "4", text: "viva", enabled: "true", children: [] }
-            ] });
-          });
-        });
-
+steal("mxui/form/combobox").then(function($){
+  $(function(){
+    $("input#combobox_demo").mxui_form_combobox({
+      items: [
+        { value: "1", text: "Chicago", enabled: true, selected: true },
+        { value: "2", text: "Kansas City", enabled: true },
+        { value: "3", text: "Los Angeles", enabled: true },
+        { value: "4", text: "San Fransisco", enabled: true },
+        { value: "5", text: "San Jose", enabled: true },
+        { value: "6", text: "San Mateo", enabled: true },
+        { value: "7", text: "Philadelphia", enabled: false }
+      ]
+    });
+  });
+});
 		</script>
 	</body>
 </html>

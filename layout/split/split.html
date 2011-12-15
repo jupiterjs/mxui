@@ -133,7 +133,7 @@
 		<h3>Horizontal And Vertical</h3>
 		<p>
 			$(&quot;#container4&quot;).mxui_layout_split({ direction: &quot;vertical&quot; });</br>
-			$(&quot;#container4inside&quot;).mj_ui_split({ direction: &quot;horizontal&quot; });
+			$(&quot;#container4inside&quot;).mxui_layout_split({ direction: &quot;horizontal&quot; });
 		</p>
 		<div id='container4' class="container vertical-splitter">
 	    	<div class='panel' style="float:left;width:200px;">
@@ -168,6 +168,8 @@
 					.each(addButtons)
 				
 				$('#container3').mxui_layout_resize()
+				$('#container4inside').mxui_layout_resize()
+				$('#container4').mxui_layout_resize()
 				
 				$(document.body).delegate("a","click", function(ev){
 					var action = this.className,

@@ -23,4 +23,4 @@ steal(
 	'mxui/nav/tabs',
 	'mxui/nav/toolbar',
 	
-	'mxui/util/selectable')	
+	'mxui/nav/selectable')	
