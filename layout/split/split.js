@@ -1,5 +1,10 @@
-steal('jquery/controller', 'jquery/event/drag/limit', 'jquery/dom/dimensions', 'jquery/event/key', 'jquery/event/resize')
-	.then('./split.css').then(function( $ ) {
+steal('./split.css',
+	'jquery/controller',
+	'jquery/event/drag/limit', 
+	'jquery/dom/dimensions', 
+	'jquery/event/key', 
+	'jquery/event/resize',
+function( $ ) {
 
 	/**
 	 * @class Mxui.Layout.Split
@@ -114,8 +119,10 @@ steal('jquery/controller', 'jquery/event/drag/limit', 'jquery/dom/dimensions', '
 
 		/**
 		 * @hide
-		 * Sizes the split bar and split elements initally.  This is different from size in that fact
-		 * that intial size retains the elements widths and resizes what can't fit to be within the parent dims.
+		 * Sizes the split bar and split elements initially.  This is 
+		 * different from size in that fact
+		 * that initial size retains the elements widths and resizes 
+		 * what can't fit to be within the parent dims.
 		 * @param {Object} c
 		 */
 		initalSetup: function( c ) {
@@ -126,8 +133,9 @@ steal('jquery/controller', 'jquery/event/drag/limit', 'jquery/dom/dimensions', '
 				$c.hasClass('collapsible') ? "left" : ($(c[i + 1]).hasClass('collapsible') ? "right" : undefined)));
 			}
 
-			var splitters = this.element.children(".splitter")
-			splitterDim = splitters[this.dirs.outer](),
+			var splitters = this.element.children(".splitter"),
+				splitterDim = splitters[this.dirs.outer](),
+				// why is this calculated and not used
 				total = this.element[this.dirs.dim]() - splitterDim * (c.length - 1),
 				pHeight = this.element.height();
 
@@ -334,7 +342,7 @@ steal('jquery/controller', 'jquery/event/drag/limit', 'jquery/dom/dimensions', '
 			if (!(data && data.force === true) && !this.forceNext ) {
 				var h = this.element.height(),
 					w = this.element.width()
-					if ( this.oldHeight == h && this.oldWidth == w ) {
+					if ( this.oldHeight == h && this.oldWidth == w && !this.needsSize) {
 						ev.stopPropagation();
 						return;
 					}
@@ -491,19 +499,30 @@ steal('jquery/controller', 'jquery/event/drag/limit', 'jquery/dom/dimensions', '
 			els = els || this.panels();
 			resizePanels = resizePanels == undefined ? true : false;
 
-			var splitters = this.element.children(".splitter:visible"),
+			var space = this.element[this.dirs.dim](),
+				splitters = this.element.children(".splitter:visible"),
 				splitterDim = splitters[this.dirs.outer](),
-				total = this.element[this.dirs.dim]() - (splitterDim * splitters.length),
+				total = space - (splitterDim * splitters.length),
 				// rounding remainder
 				remainder = 0,
 				dims = [],
 				newDims = [],
 				sum = 0,
-				i, c$, dim, increase, keepSized = false,
+				i, $c, dim, increase, keepSized = false,
 				curLeft = 0,
 				index, rawDim, newDim, pHeight = this.element.height(),
 				pWidth = this.element.width(),
 				length, start;
+
+			// if splitters are filling the entire width, it probably means the 
+			// style has not loaded
+			// this should be fixed by steal, but IE sucks
+			if(splitterDim === space){
+				this.needsSize = true;
+				return;
+			} else {
+				this.needsSize = false;
+			}
 
 			//makes els the right height
 			if ( keep ) {
@@ -519,7 +538,8 @@ steal('jquery/controller', 'jquery/event/drag/limit', 'jquery/dom/dimensions', '
 
 			//calculate current percentage of height
 			for ( i = 0; i < length; i++ ) {
-				$c = $(els[i]), dim = $c[this.dirs.outer](true);
+				$c = $(els[i]);
+				dim = $c[this.dirs.outer](true);
 				dims.push(dim);
 				sum += dim;
 			}
