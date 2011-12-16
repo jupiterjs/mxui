@@ -9,6 +9,8 @@ function( $ ) {
 	/**
 	 * @class Mxui.Layout.Split
 	 * @parent Mxui
+	 * @test mxui/layout/split/funcunit.html
+	 * 
 	 * MXUI.Layout.Split is a splitter control that will split two or more elements
 	 * and allow the end-user to size the elements using a 'splitter bar'.
 	 * 
