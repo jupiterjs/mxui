@@ -38,17 +38,53 @@ steal('jquery',
 		 *			<textarea id="comment" name="comment"></textarea>
 		 *		</label>
 		 *
-		 * You can make the textarea resizable using the following code:
+		 *	As well as the following css:
+		 *
+		 *		.ui-resizable-handle {
+		 *			display: block;
+		 *			font-size: 0.1px;
+		 *			position: absolute;
+		 *			z-index: 1000;
+		 *		}
+		 *
+		 *		.ui-resizable-s {
+		 *			bottom: -3px;
+		 *			cursor: s-resize;
+		 *			height: 7px;
+		 *			left: 0;
+		 *			width: 100%;
+		 *		}
+		 *		.ui-resizable-e {
+		 *			cursor: e-resize;
+		 *			height: 100%;
+		 *			right: -3px;
+		 *			top: 0;
+		 *			width: 7px;
+		 *			
+		 *		}
+		 *		.ui-resizable-se {
+		 *			bottom: 0px;
+		 *			cursor: se-resize;
+		 *			height: 12px;
+		 *			right: 0px;
+		 *			width: 12px;
+		 *			background-color: #ddddff;
+		 *		}
+		 *
+		 *	You can make the textarea resizable using the following code:
 		 *
 		 *		$("textarea").mxui_layout_resize({
 		 *			minHeight : 40,
 		 *			minWidth: 120
 		 *		});
 		 *
-		 *	This adds a small, stylable `div` to the lower right corner of
-		 *	the textarea which acts as a draggable hook to resize the element.
-		 *	To style this element (recommended), use the class `.ui-resizable-handle` 
-		 *	in your stylesheet.
+		 *	This adds three small `div`s to the element. One to the lower right
+		 *	corner, one to the bottom edge and one to the right edge. These
+		 *	divs become draggable hooks that allow you to resize the element.
+		 *	To style these elements, simply over ride the above css.
+		 *
+		 *	When resizing the initialized element, it emits the "resize" event.
+		 *
 		 *
 		 * ## Demo
 		 * @demo mxui/layout/resize/resize.html
@@ -76,10 +112,12 @@ steal('jquery',
 			defaults : {
 				minHeight: 10,
 				minWidth: 10,
-				handles : 'e, s, se'
+				handles : ["e", "s", "se"],
+				className: "ui-resizable-handle"
 			}
 		},
 		/**
+		 * @hide
 		 * @prototype
 		 */
 		{
@@ -104,6 +142,7 @@ steal('jquery',
 				}
 			},
 			/*
+			 * @hide
 			 * @param {Element} el
 			 * The element you wish to be resizable.
 			 *
@@ -112,13 +151,15 @@ steal('jquery',
 			 */
 			init : function(el, options){
 				//draw in resizeable
-				this.element.height(this.element.height())
-				this.element.prepend("<div class='ui-resizable-e ui-resizable-handle'/><div class='ui-resizable-s ui-resizable-handle'/><div class='ui-resizable-se ui-resizable-handle'/>")
+				this.element.height( this.element.height() );
+				this.element.prepend( $.map( this.options.handles, this.proxy( function( dir ) {
+					return "<div class='ui-resizable-" + [ dir, this.options.className ].join(" ") + "'/>";
+				})).join("") );
 			},
 			getDirection : function(el){
 				return el[0].className.match(/ui-resizable-(se|s|e)/)[1]
 			},
-			".ui-resizable-handle draginit" : function(el, ev, drag){
+			".{className} draginit" : function(el, ev, drag){
 				//get direction
 				//how far is top corner 
 				this.margin = this.element.offsetv().plus(this.element.dimensionsv('outer')).minus(  el.offsetv()  ) 
@@ -131,7 +172,7 @@ steal('jquery',
 				if(this.directionInfo[direction].limit)
 					drag[this.directionInfo[direction].limit]()
 			},
-			".ui-resizable-handle dragmove" : function(el, ev, drag){
+			".{className} dragmove" : function(el, ev, drag){
 
 				ev.preventDefault(); //prevent from drawing .. 
 				var direction = this.getDirection(el);
@@ -162,7 +203,7 @@ steal('jquery',
 				
 
 			},
-			".ui-resizable-handle dragend" : function(){
+			".{className} dragend" : function(){
 				if (!$.support.correctOverflow && this.overflow == "visible") {
 					this.element.css("overflow","visible")
 				}
