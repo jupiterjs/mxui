@@ -22,7 +22,8 @@ steal('jquery',
 		/**
 		 * @class Mxui.Layout.Resize
 		 * @parent Mxui
-		 *
+		 * @test mxui/layout/resize/funcunit.html
+		 * 
 		 * @description Adds a resizable hook to the bottom right of an element allowing you to drag the handle to resize the element.
 		 *
 		 * Adds a resizable hook to the bottom right of an element 
