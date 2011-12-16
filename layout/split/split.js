@@ -11,10 +11,8 @@ function( $ ) {
 	 * @parent Mxui
 	 * @test mxui/layout/split/funcunit.html
 	 * 
-	 * MXUI.Layout.Split is a splitter control that will split two or more elements
-	 * and allow the end-user to size the elements using a 'splitter bar'.
-	 * 
-	 * @description Makes a splitter control.
+	 * @description Makes a splitter control that will split two or more elements
+	 * and allow the end-user to size the elements using a "splitter bar."
 	 * 
 	 * Makes a splitter control that will split two or more elements and provide a
 	 * "spitter bar" to the user to adjust the size. While it does support absolutely
@@ -53,9 +51,23 @@ function( $ ) {
 	 * 
 	 * @demo mxui/layout/split/demo.html
 	 * 
+	 * ## Events
+	 * 
+	 * 
 	 * ## Examples
 	 * 
 	 * For some larger, more complex examples, see [//mxui/layout/split/split.html here].
+	 * 
+	 * @param {HTMLElement} element an HTMLElement or jQuery-wrapped element.
+	 * @param {Object} options options to set on the split
+	 * \[`default`\]:
+	 * 
+	 *   - __hover__ \[`"split-hover"`\] - CSS class to apply to a splitter when the mouse enters it
+	 *   - __direction__ - whether the panel layout is `"vertical"` or `"horizontal"`
+	 *   - __dragDistance__ \[`5`\] - maximum number of pixels away from the slider to initiate a drag
+	 *   - __panelClass__ - CSS class that indicates a child element is a panel of this container
+	 *      (by default any child is considered a panel)
+	 * @return {Mxui.Layout.Split}  
 	 */
 	$.Controller.extend("Mxui.Layout.Split",
 	/** 
@@ -97,7 +109,8 @@ function( $ ) {
 		 * Init method called by JMVC base controller.
 		 */
 		init: function() {
-			var c = this.panels();
+			//- Keep track of panels so that resize event is aware of panels that have been added/removed
+			var c = this._cachedPanels = this.panels();
 
 			//- Determine direction.  
 			//- TODO: Figure out better way to measure this since if its floating the panels and the 
@@ -180,7 +193,14 @@ function( $ ) {
 		},
 
 		/**
-		 * Returns all the panels.
+		 * Returns all the panels managed by this controller.
+		 * 
+		 * Given a `container`, iterate over its panels and collect their content:
+		 * 
+		 *     var content = '';
+		 *     container.mxui_layout_split('panels').each(function(el){
+		 *       content += el.text();
+		 *     });
 		 */
 		panels: function() {
 			return this.element.children((this.options.panelClass ? "." + this.options.panelClass : "") + ":not(.splitter):visible")
@@ -254,6 +274,7 @@ function( $ ) {
 		},
 
 		/**
+		 * @hide
 		 * Moves a slider to a specific offset in the page
 		 * @param {jQuery} el
 		 * @param {Number} newOffset The location in the page in the direction the slider moves
@@ -329,6 +350,7 @@ function( $ ) {
 		},
 
 		/**
+		 * @hide
 		 * Resizes the panels.
 		 * @param {Object} el
 		 * @param {Object} ev
@@ -343,12 +365,12 @@ function( $ ) {
 
 			if (!(data && data.force === true) && !this.forceNext ) {
 				var h = this.element.height(),
-					w = this.element.width()
-					if ( this.oldHeight == h && this.oldWidth == w && !this.needsSize) {
-						ev.stopPropagation();
-						return;
-					}
-					this.oldHeight = h;
+					w = this.element.width();
+				if ( this.oldHeight == h && this.oldWidth == w && !this.needsSize) {
+					ev.stopPropagation();
+					return;
+				}
+				this.oldHeight = h;
 				this.oldWidth = w;
 			}
 
@@ -421,7 +443,8 @@ function( $ ) {
 		},
 
 		/**
-		 * Collapses a splitter ..
+		 * @hide
+		 * Given a splitter bar element, collapses the appropriate panel.
 		 * @param {Object} el
 		 */
 		toggleCollapse: function( splitBar ) {
@@ -445,6 +468,11 @@ function( $ ) {
 
 		/**
 		 * Shows a panel that is currently hidden.
+		 * 
+		 * Given some `container`, cause its last panel to be shown:
+		 * 
+		 *     container.mxui_layout_split('showPanel', container.find('.panel:last'));
+		 *
 		 * @param {Object} panel
 		 * @param {Object} width
 		 */
@@ -474,6 +502,11 @@ function( $ ) {
 
 		/**
 		 * Hides a panel that is currently visible.
+		 * 
+		 * Given some `container`, cause its last panel to be hidden:
+		 * 
+		 *     container.mxui_layout_split('hidePanel', container.find('.panel:last'));
+		 *
 		 * @param {Object} panel
 		 * @param {Object} keepSplitter
 		 */
@@ -491,7 +524,7 @@ function( $ ) {
 
 		/**
 		 * @hide
-		 * Takes elements and animates them to the right size
+		 * Takes elements and animates them to the right size.
 		 * @param {jQuery} [els] child elements
 		 * @param {Boolean} [animate] animate the change
 		 * @param {jQuery} [keep] keep this element's width / height the same
