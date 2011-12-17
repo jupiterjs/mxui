@@ -8,7 +8,7 @@
  * Version 2.1.1
  */
 
-steal(function($){
+steal('jquery/controller',function($){
 
 /**
  * @class Mxui.Layout.Bgiframe
@@ -72,7 +72,7 @@ steal(function($){
  */
 
 
-$.Controller.extend("Mxui.Layout.Bgiframe",{
+$.Controller("Mxui.Layout.Bgiframe",{
 	init : function(s){
 		if ( $.browser.msie && /msie 6\.0/i.test(navigator.userAgent )) {
 			s = $.extend({

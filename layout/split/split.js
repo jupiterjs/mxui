@@ -82,7 +82,7 @@ function( $ ) {
 			dragDistance: 5,
 			panelClass: null
 		},
-		listensTo: ["insert", "remove"],
+		// listensTo: ["insert", "remove"],
 		directionMap: {
 			vertical: {
 				dim: "width",
@@ -406,9 +406,10 @@ function( $ ) {
 				panels = this.panels().get();
 			
 			$.each(panels, function(_, panel){
-				panel = $(panel);
+				
 				
 				if( $.inArray(panel, cached) == -1 ){
+					panel = $(panel);
 					panel.addClass("split");
 					panel.before(self.splitterEl(panel.hasClass('collapsible') && "right"));
 					

@@ -54,6 +54,10 @@ steal('jquery/controller',
 				})
 				.mxui_layout_bgiframe();	
 			
+		},
+		update : function(options){
+			this._super(options);
+			this.element.show().resize()
 		}
 	})
 })
