@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>tree</title>
+    <title>MXUI Demo</title>
 	 <link type="text/css" href="smoothness/jquery-ui-1.7.2.custom.css" rel="stylesheet" />          
 	<link type="text/css" href="layout/resize/resize.css" rel="stylesheet" />                       
     <style type='text/css'>
@@ -24,7 +24,7 @@
 			width: 165px;
 			border: solid 1px black;
 			text-align: center;
-			cursor: pointer;
+			cursor: move;
 		}
 		#accordion {
 			width: 33%;
@@ -52,84 +52,112 @@
 			list-style: none;
 		}
 		#sortable li {
-			float: left;
+			display: inline-block;
 			padding: 10px 3px;
 			border: dashed 1px blue;
-			
 		}
 		#sortable {
-			height: 40px;
+			background-color: #eeeeee;
 			overflow: auto;
+			white-space-collapse: collapse;
+			white-space: nowrap;
+			cursor: move;
+		}
+		td {
+			border: solid 2px white;
+		}
+		td.selected {
+			border: solid 2px orange;
+		}
+		td.activated {
+			background-color: yellow;
 		}
     </style>
    
 </head>
 <body>
-    <div id='resize'>
-    	The <span class='green'>green</span> div is a 
-		mxui_layout_resize. The <span class='red'>red</span>
-		div is a mxui_layout_fill and a mxui_layout_split.
-		<div id='fill'>
-			<div id='accordion'>
-				<h3>Block</h3>
-				<div>
-					Click <a href="javascript://" id='cb'>this</a>
-					to create a mxui_layout_block on
-					a hidden <code>#block</code> div.
-				</div>
-				<h3>Modal</h3>
-				<div>
-					Click <a href="javascript://" id='cm'>this</a>
-					to create a mxui_layout_modal on
-					a hidden <code>#modal</code> div.
-				</div>
+<div id='resize'>
+	The <span class='green'>green</span> div is a 
+	<a href="#!Mxui.Layout.Resize">Resize</a>. 
+	The <span class='red'>red</span> div is a 
+	<a href='#!Mxui.Layout.Fill'>Fill</a> 
+	and a <a href='#!Mxui.Layout.Split'>Split</a>.
+	<div id='fill'>
+		<div id='accordion'>
+			<h3>Accordion</h3>
+			<div>
+				This is a panel within an 
+				<a href='#!Mxui.Nav.Accordion'>Accordion</a>.
 			</div>
-			<div id='right'>
-				<table id='table_scroll'>
-					<thead>
-						<tr>
-							<th>Name</th>
-							<th>Descr iption</th>
-							<th>Link</th>
-						</tr>
-					</thead>
-					<tbody>
-						<tr><td>JavaScriptMVC</td>
-							<td>Foo</td>
-							<td>Bar</td></tr>
-						<tr><td>asfddsa</td>
-							<td>Foo</td>
-							<td>Bar</td></tr>
-						<tr><td>Java Scri MVC</td>
-							<td>Fo o</td>
-							<td>Bar</td></tr>
-						<tr><td>Java Scri MVC</td>
-							<td>Fo o</td>
-							<td>Bar</td></tr>
-						<tr><td>Java Scri MVC</td>
-							<td>Fo o</td>
-							<td>Bar</td></tr>
-						<tr><td>Java Scri MVC</td>
-							<td>Fo o</td>
-							<td>Bar</td></tr>	
-					</tbody>
-				</table>
-				<ul id='sortable'>
-					<li>Steal</li><li>FuncUnit</li>
-					<li>MXUI</li><li>jQueryMX</li>
-				</ul>
+			<h3>Block</h3>
+			<div>
+				Click <a href="javascript://" id='cb'>this</a>
+				to create a 
+				<a href='#!Mxui.Layout.Block'>mxui_layout_block</a>
+				on a hidden <code>#block</code> div.
+			</div>
+			<h3>Modal</h3>
+			<div>
+				Click <a href="javascript://" id='cm'>this</a>
+				to create a 
+				<a href='#!Mxui.Layout.Modal'>mxui_layout_modal</a> on
+				a hidden <code>#modal</code> div.
 			</div>
 		</div>
-		<div id='slider-container'>
-			<div id='slider'>
-				&larr;mxui_nav_slider&rarr;
-			</div>
+		<div id='right'>
+			<table id='table_scroll' cellpadding='0' cellspacing='0'>
+				<thead>
+					<tr>
+						<th>These</th>
+						<th>are table</th>
+						<th>headers</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr><td>This table</td>
+						<td>is a</td>
+						<td><a href="#!Mxui.Layout.TableScroll">
+							Table Scroll</a>.</td></tr>
+					<tr><td>It makes</td>
+						<td>a table</td>
+						<td>scrollable.</td></tr>
+					<tr><td>It is</td>
+						<td>useful for</td>
+						<td>making grids.</td></tr>
+					<tr><td>This table is</td>
+						<td>also a mxui</td>
+						<td><a href='#!Mxui.Nav.Selectable'>
+							nav_selectable</a>.</td></tr>
+					<tr><td>Selectable</td>
+						<td>handles key</td>
+						<td>and mouse events,</td></tr>
+					<tr><td>and mulit-</td>
+						<td>selection!</td>
+						<td>To try it,</td></tr>
+					<tr><td>click on</td>
+						<td>a table row.</td>
+						<td>Use the keyboard</td></tr>
+					<tr><td>to navigate.</td>
+						<td>Use SHIFT</td>
+						<td> and CTRL to</td></tr>
+					<tr><td>to multi-</td>
+						<td>select rows.</td>
+						<td></td></tr>
+				</tbody>
+			</table>
+			<ul id='sortable'><li>This</li><li>is</li><li>a</li><li>mxui_layout_sortable</li></ul>
 		</div>
-		<div id='modal'>I am a modal.
-			<a href="javascript://" id='hm'>Hide the modal</a>.
+	</div>
+	<div id='slider-container'>
+		<div id='slider'>
+			&larr;<a href="!#Mxui.Nav.Slider">Slider</a>&rarr;
 		</div>
+	</div>
+	<div id='modal'>I am a modal.
+		<a href="javascript://" id='hm'>Hide the modal</a>.
+	</div>
 		
-    </div>
+</div>
 	<div id='block'>I am a block.
 		<a href="javascript://" id='hb'>Hide the block</a>.
 	</div>
@@ -148,9 +176,10 @@ steal("mxui/layout/resize",
 	  "mxui/layout/block",
 	  "mxui/layout/sortable",
 	  "mxui/layout/table_scroll",
+	  "mxui/nav/selectable",
 	  function($){
     
-    $("#resize").mxui_layout_resize()
+	$("#resize").mxui_layout_resize()
     
 	$("#fill").mxui_layout_fill()
 		.mxui_layout_split({direction: "vertical"});
@@ -178,7 +207,33 @@ steal("mxui/layout/resize",
 		sortable: "li"
 	})
 	
-	$('#table_scroll').mxui_layout_table_scroll()
+	$('#table_scroll').mxui_layout_table_scroll();
+	$('tbody td').attr('tabindex',"0");
+	
+	$('tbody').mxui_nav_selectable();
+	
+	
+	// make links change parent window
+	// first handle clicking the slider
+	var last;
+	$('#slider a').mousedown(function(ev){
+		ev.preventDefault()
+		last = ev;
+	}).click(function(ev){
+		if(last.pageX != ev.pageX ||
+		   last.pageY != ev.pageY ){
+		   	ev.stopImmediatePropagation();
+			ev.preventDefault();
+		 }
+	})
+	
+	$('a').bind('click', function(ev){
+		var href = $(this).attr('href');
+		if(href.indexOf('#!') == 0){
+			ev.preventDefault();
+			parent.location.hash = href;
+		}
+	});
 })
 </script>
     </body>
