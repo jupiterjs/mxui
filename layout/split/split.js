@@ -109,8 +109,7 @@ function( $ ) {
 		 * Init method called by JMVC base controller.
 		 */
 		init: function() {
-			//- Keep track of panels so that resize event is aware of panels that have been added/removed
-			var c = this._cachedPanels = this.panels();
+			var c = this.panels();
 
 			//- Determine direction.  
 			//- TODO: Figure out better way to measure this since if its floating the panels and the 
@@ -170,6 +169,9 @@ function( $ ) {
 				$c.addClass("split");
 			}
 
+			//- Keep track of panels so that resize event is aware of panels that have been added/removed
+			this._cachedPanels = this.panels().get();
+
 			this.size();
 		},
 
@@ -201,6 +203,8 @@ function( $ ) {
 		 *     container.mxui_layout_split('panels').each(function(el){
 		 *       content += el.text();
 		 *     });
+		 * 
+		 * @return {jQuery} Returns a jQuery-wrapped nodelist of elements that are panels of this container.
 		 */
 		panels: function() {
 			return this.element.children((this.options.panelClass ? "." + this.options.panelClass : "") + ":not(.splitter):visible")
@@ -357,6 +361,8 @@ function( $ ) {
 		 * @param {Object} data
 		 */
 		resize: function( el, ev, data ) {
+			this.refresh();
+			
 			//if not visible do nothing
 			if (!this.element.is(":visible") ) {
 				this.oldHeight = this.oldWidth = 0;
@@ -379,63 +385,68 @@ function( $ ) {
 		},
 
 		/**
-		 * Inserts a new splitter.
-		 * @param {Object} el
-		 * @param {Object} ev
+		 * @hide
+		 * Refresh the state of the container by handling any panels that have been added or removed.
 		 */
-		insert: function( el, ev ) {
-			ev.stopPropagation();
-
-			if ( ev.target.parentNode != this.element[0] ) {
-				return;
-			}
-
-			var target = $(ev.target),
-				prevElm = target.prev();
-
-			target.addClass("split");
-			target.before(this.splitterEl(target.hasClass('collapsible') && "right"));
-			this.size(null, true, target);
-
-			if ( this.options.direction == "vertical" ) {
-				var splitBar = target.prev(),
-					pHeight = this.element.height();
-
-				splitBar.height(pHeight);
-				target.height(pHeight);
-			}
+		refresh: function(){
+			this.insert();
+			//this.remove();
+			
+			this._cachedPanels = this.panels().get();
 		},
 
 		/**
-		 * If an element is removed from this guy, react to it.
-		 * @param {Object} el
-		 * @param {Object} ev
+		 * @hide
+		 * Handles the insertion of new panels into the container.
+		 * @param {jQuery} panel
 		 */
-		remove: function( el, ev ) {
-			if ( ev.target.parentNode != this.element[0] ) {
-				return;
-			}
+		insert: function(){
+			var self = this,
+				cached = this._cachedPanels,
+				panels = this.panels().get();
+			
+			$.each(panels, function(_, panel){
+				panel = $(panel);
+				
+				if( $.inArray(panel, cached) == -1 ){
+					panel.addClass("split");
+					panel.before(self.splitterEl(panel.hasClass('collapsible') && "right"));
+					
+					self.size(null, true, panel);
 
-			var target = $(ev.target);
+					if ( self.options.direction == "vertical" ) {
+						var splitBar = panel.prev(),
+							pHeight = self.element.height();
 
-			//remove the splitter before us
-			var prev = target.prev(),
-				next;
-			if ( prev.length && prev.hasClass('splitter') ) {
-				prev.remove();
-			} else {
-				next = target.next();
-				if ( next.hasClass('splitter') ) next.remove();
-			}
-
-			//what if I am already not visible .. I should note that
-			if (!this.element.is(':visible') ) {
-				this.forceNext = true;
-			}
-
-			this.size(this.panels().not(target), true);
-
-			target.remove();
+						splitBar.height(pHeight);
+						panel.height(pHeight);
+					}
+				}
+			});
+		},
+		
+		/**
+		 * @hide
+		 * Handles the removal of a panel from the container.
+		 * @param {jQuery} panel
+		 */
+		remove: function(){
+			var self = this,
+				splitters = this.element.children('.spitter'),
+				removed = [];
+			
+			$.each(splitters, function(_, splitter){
+				splitter = $(splitter);
+				
+				var next = $(splitter).next();
+				if( next.length && next.hasClass('splitter') ){
+					removed.push( $(splitter).remove() );
+				}
+			});
+			
+			$(removed).remove();
+			
+			this.size(this.panels(), true);
 		},
 
 		".collapser click": function( el, event ) {

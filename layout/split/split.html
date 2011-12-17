@@ -185,10 +185,12 @@
 					switch(action){
 						case "add" : 
 							$("<div class='panel add' style='width:150px;float:left;'>Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.</div>")
-								.appendTo(container).trigger("insert");
+								.appendTo(container);
+							container.resize();
 							break;
 						case "remove" : 
-							container.find('.panel:last').trigger('remove');
+							container.find('.panel:last').remove();
+							container.resize();
 							break;
 						case "resize" : 
 							var grow = container.height() !== 600;
