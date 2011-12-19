@@ -136,13 +136,15 @@ $.Controller.extend('Mxui.Nav.Selectable',{
 	"{document} click":function(el,ev)
 	{
 		if(this.options.outsideDeactivate && 
-		
 			!$.contains(this.element[0],ev.target)  ){
+				
 			// if there's a click, keypress, or activate event 
 			// outside of us ... deactivate
-			this.element
-				.find("." + this.options.activatedClassName)
-				.trigger('deactivate');
+			var active = this.find("." + this.options.activatedClassName);
+			if(active.length){
+				active.trigger('deactivate');
+				this.element.trigger('outsideDeactivate');
+			}
 		}
 	},
 	// if we mouse out, and don't have focus -> deselect
