@@ -196,9 +196,9 @@
 							var grow = container.height() !== 600;
 						
 							if(grow){
-								container.height(600).width(500).trigger("resize");
+								container.height(600).width(500).resize();
 							}else{
-								container.height(400).width(300).trigger("resize");
+								container.height(400).width(300).resize();
 							}
 							break;
 						case "hide" : 

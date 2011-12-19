@@ -393,8 +393,13 @@ function( $ ) {
 		 * Refresh the state of the container by handling any panels that have been added or removed.
 		 */
 		refresh: function(){
+			// TODO: need to do a quick check to see if anything has been inserted or removed,
+			// otherwise dragging to resize is too inefficient
+			
 			this.insert();
 			this.remove();
+			
+			this.size(this.panels(), true);
 			
 			this._cachedPanels = this.panels().get();
 		},
@@ -406,20 +411,16 @@ function( $ ) {
 		 */
 		insert: function(){
 			var self = this,
-				cached = this._cachedPanels,
+				//cached = this._cachedPanels,
 				panels = this.panels().get();
 			
 			$.each(panels, function(_, panel){
+				panel = $(panel);
 				
-				
-				if( $.inArray(panel, cached) == -1 ){
-					panel = $(panel);
-					panel.addClass("split");
-					panel.before(self.splitterEl(panel.hasClass('collapsible') && "right"));
+				if( !panel.hasClass('split') ){
+					panel.before(self.splitterEl(panel.hasClass('collapsible') && 'right'));
 					
-					self.size(null, true, panel);
-
-					if ( self.options.direction == "vertical" ) {
+					if ( self.options.direction == 'vertical' ) {
 						var splitBar = panel.prev(),
 							pHeight = self.element.height();
 
@@ -440,21 +441,18 @@ function( $ ) {
 				splitters = this.element.children('.splitter'),
 				removed = [];
 			
-			
-			
 			$.each(splitters, function(_, splitter){
 				splitter = $(splitter);
 				
-				var next = $(splitter).next(self.options.panelClass ? 
-					":not(."+self.options.panelClass+")" : undefined );
-				if( !next.length || next.hasClass('splitter') ){
+				var prev = $(splitter).prev(),
+					next = $(splitter).next();
+				
+				if( !prev.length || !next.length || next.hasClass('splitter') ){
 					removed.push( splitter[0] );
-				} 
+				}
 			});
 			
 			$(removed).remove();
-			
-			this.size(this.panels(), true);
 		},
 
 		".collapser click": function( el, event ) {
