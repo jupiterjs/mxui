@@ -394,7 +394,7 @@ function( $ ) {
 		 */
 		refresh: function(){
 			this.insert();
-			//this.remove();
+			this.remove();
 			
 			this._cachedPanels = this.panels().get();
 		},
@@ -437,16 +437,19 @@ function( $ ) {
 		 */
 		remove: function(){
 			var self = this,
-				splitters = this.element.children('.spitter'),
+				splitters = this.element.children('.splitter'),
 				removed = [];
+			
+			
 			
 			$.each(splitters, function(_, splitter){
 				splitter = $(splitter);
 				
-				var next = $(splitter).next();
-				if( next.length && next.hasClass('splitter') ){
-					removed.push( $(splitter).remove() );
-				}
+				var next = $(splitter).next(self.options.panelClass ? 
+					":not(."+self.options.panelClass+")" : undefined );
+				if( !next.length || next.hasClass('splitter') ){
+					removed.push( splitter[0] );
+				} 
 			});
 			
 			$(removed).remove();
