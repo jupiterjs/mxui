@@ -365,7 +365,7 @@ function( $ ) {
 				return;
 			}
 			
-			this.refresh();
+			var refreshed = this.refresh();
 			
 			//if not visible do nothing
 			if (!this.element.is(":visible") ) {
@@ -373,7 +373,7 @@ function( $ ) {
 				return;
 			}
 
-			if (!(data && data.force === true) && !this.forceNext ) {
+			if (!(data && data.force === true) && !this.forceNext && !refreshed) {
 				var h = this.element.height(),
 					w = this.element.width();
 				if ( this.oldHeight == h && this.oldWidth == w && !this.needsSize) {
@@ -396,12 +396,10 @@ function( $ ) {
 			// TODO: need to do a quick check to see if anything has been inserted or removed,
 			// otherwise dragging to resize is too inefficient
 			
-			this.insert();
-			this.remove();
-			
-			this.size(this.panels(), true);
+			var res = this.insert() || this.remove();
 			
 			this._cachedPanels = this.panels().get();
+			return res;
 		},
 
 		/**
@@ -412,14 +410,16 @@ function( $ ) {
 		insert: function(){
 			var self = this,
 				//cached = this._cachedPanels,
-				panels = this.panels().get();
+				panels = this.panels().get(),
+				added = false;
 			
 			$.each(panels, function(_, panel){
 				panel = $(panel);
 				
 				if( !panel.hasClass('split') ){
-					panel.before(self.splitterEl(panel.hasClass('collapsible') && 'right'));
-					
+					panel.before(self.splitterEl(panel.hasClass('collapsible') && 'right'))
+						.addClass('split')
+					added = true;
 					if ( self.options.direction == 'vertical' ) {
 						var splitBar = panel.prev(),
 							pHeight = self.element.height();
@@ -429,6 +429,7 @@ function( $ ) {
 					}
 				}
 			});
+			return added;
 		},
 		
 		/**
@@ -451,8 +452,10 @@ function( $ ) {
 					removed.push( splitter[0] );
 				}
 			});
-			
-			$(removed).remove();
+			if(removed.length){
+				$(removed).remove();
+				return true;
+			}
 		},
 
 		".collapser click": function( el, event ) {
