@@ -361,6 +361,10 @@ function( $ ) {
 		 * @param {Object} data
 		 */
 		resize: function( el, ev, data ) {
+			if(!this.element.is(":visible")){
+				return;
+			}
+			
 			this.refresh();
 			
 			//if not visible do nothing
