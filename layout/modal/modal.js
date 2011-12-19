@@ -73,7 +73,7 @@ steal('jquery/controller', 'jquery/event/resize', 'mxui/layout/positionable', '.
 		},
 		listensTo: ["show", "hide", "move"]
 	}, {
-		setup: function(el, options){
+		setup: function(el, options) {
 			var opts = $.extend({}, this.Class.defaults, options)
 			if(opts.overlay === true){
 				options.overlayElement = $('<div class="'+opts.overlayClass+'"></div>');

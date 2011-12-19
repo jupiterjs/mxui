@@ -24,7 +24,7 @@ steal('jquery',
 		 * @parent Mxui
 		 * @test mxui/layout/resize/funcunit.html
 		 * 
-		 * @description Adds a resizable hook to the bottom right of an element allowing you to drag the handle to resize the element.
+		 * @description Makes an element resizable.
 		 *
 		 * Adds a resizable hook to the bottom right of an element 
 		 * allowing you to drag the handle to resize the element. This can be
@@ -100,9 +100,6 @@ steal('jquery',
 		 */
 
 		$.Controller("Mxui.Layout.Resize",
-		/**
-		 * @static
-		 */
 		{
 			/*
 			 * - minHeight - The minimum height the element will be allowed to
@@ -117,10 +114,6 @@ steal('jquery',
 				className: "ui-resizable-handle"
 			}
 		},
-		/**
-		 * @hide
-		 * @prototype
-		 */
 		{
 			setup : function(el, options){
 				var diff = $(el).mxui_layout_wrap()[0]

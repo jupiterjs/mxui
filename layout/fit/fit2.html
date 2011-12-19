@@ -10,7 +10,7 @@
 			.padding2 {height:130px;}
 			.fittable {width:140px;background-color:#AAAAAA;border:1px solid blue;}			
         </style>
-       <link type="text/css" href="../../mxui/combobox/combobox.css" rel="stylesheet" />
+       <link type="text/css" href="/mxui/form/combobox/combobox.css" rel="stylesheet" />
 	</head>
 	<body>
 		<h3>Window as the scrollable container</h3>
@@ -43,10 +43,10 @@
 
 		
         <script type='text/javascript' 
-                src='../../steal/steal.js'>   
+                src='/steal/steal.js'>   
         </script>
         <script type='text/javascript'>
-            steal("mxui/fittable").then(function($){
+            steal("mxui/layout/fit").then(function($){
 				
 				var items = function(n) {
 					var items = ["<ul>"];
@@ -59,7 +59,7 @@
 			
 				$("#fittable1").css("opacity",0).html( items(5));				
 				$("#target1").click(function(ev){
-					$("#fittable1").fit({
+					$("#fittable1").mxui_layout_fit({
 						within:300,
 						of:$("#target1")
 					}).css("opacity",1);
@@ -67,7 +67,7 @@
 				
 				$("#fittable2").css("opacity",0).html( items(60));				
 				$("#target2").click(function(ev){
-					$("#fittable2").fit({
+					$("#fittable2").mxui_layout_fit({
 						within:300,
 						of:$("#target2")
 					}).css("opacity",1);
@@ -75,7 +75,7 @@
 				
 				$("#fittable3").css("opacity",0).html( items(30));				
 				$("#target3").click(function(ev){
-					$("#fittable3").fit({
+					$("#fittable3").mxui_layout_fit({
 						within:300,
 						of:$("#target3")
 					}).css("opacity",1);
@@ -83,7 +83,7 @@
 				
 				$("#fittable4").css("opacity",0).html( items(20));				
 				$("#target4").click(function(ev){
-					$("#fittable4").fit({
+					$("#fittable4").mxui_layout_fit({
 						within:300,
 						of:$("#target4")
 					}).css("opacity",1);

@@ -8,7 +8,7 @@
  * Version 2.1.1
  */
 
-steal(function($){
+steal('jquery/controller').then(function( $ ) {
 
 /**
  * @class Mxui.Layout.Bgiframe
