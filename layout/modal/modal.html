@@ -4,36 +4,66 @@
 	<head>
 		<title>modal</title>
         <style type='text/css'>
-            body {font-family: verdana}
+            body {font-family: verdana; height: 300px;}
             .error {border: solid 1px red;}
             .error_text { color: red; font-size: 10px;}
             td {padding: 3px;}
-			#modal {
+			.modal {
 				width: 300px;
-				height: 200px;
+				height: auto;
 				border: solid 1px black;
 				background-color: #eeeeff;
 			}
+			.custom-overlay {
+        background: rgba(255,0,247,0.5);
+        position: fixed;
+        top: 0;
+        bottom: 0;
+        right: 0;
+        left: 0;
+      }
         </style>
 	</head>
 	<body>
 	    <h1>Modal</h1>
-		<div id='modal'>
+		<div id='modal' class="modal">
 	    	<h3>Some Modal</h3>
 			<p>Here is some text. Blah blah blah. I am watching SNL with Jennifer Lopez.
 				She still has it.  But, I am not sure SNL does.
 			</p>
 	    </div>
-		<a href="#" id='show'>show as modal</a>
-		<script type='text/javascript' 
-                src='../../../steal/steal.js'>
-        </script>
+
+		<a href="#" id='show'>Show as modal</a>
+		<br />
+		<a href="#" id='show-stacked'>Show five stacked modals</a>
+		<br />
+		<a href="#" id='show-custom-overlay-class'>Show modal with custom overlay class</a>
+		<script type='text/javascript' src='../../../steal/steal.js'></script>
 		<script type='text/javascript'>
-      steal("mxui/layout/modal").then(function(){
-        $("#show").click(function(){
-          $("#modal").mxui_modal().trigger('show');
-        })
-      })
+		  steal('mxui/layout/modal', function(){
+  		  $("#show").click(function(){
+  				$("#modal").mxui_layout_modal({
+  				  overlay: false
+  				});
+  			})
+  			$('#show-stacked').click(function(){
+  			  for(var i = 1; i < 6; i++){
+  			    $('<div class="modal"">Test ' + i + '. <a href="#" class="close">Close</a></div>').mxui_layout_modal({
+    			    destroyOnHide: true,
+    			    overlay: true
+    			  }).find('.close').click(function(){
+    			    $(this).trigger('hide')
+    			  });
+  			  }
+  			})
+  			$("#show-custom-overlay-class").click(function(){
+  				$("#modal").mxui_layout_modal({
+  				  overlayClass: 'custom-overlay',
+  				  overlay: true
+  				});
+  			})
+  		})
+
 		</script>
 	</body>
 </html>

@@ -201,7 +201,11 @@ steal('jquery/dom/dimensions').then(function ($) {
 
         return fitAbove;
     }
-
+	/**
+	 * @function $.fn.mxui_layout_fit
+	 * @parent Mxui
+	 * @param {Object} options
+	 */
     $.fn.mxui_layout_fit = function (options) {
         // check if we have all necessary data before doing the work
         var of = options.of,

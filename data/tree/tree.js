@@ -2,12 +2,13 @@ steal( 'jquery/controller',
 	   'jquery/view/ejs',
 	   'jquery/lang/observe/delegate',
 	   'jquery/controller/view',
-	   'jquery/view/ejs' )
+	   'jquery/view/ejs',
+	   'mxui/data' )
 	.then( './views/init.ejs', function($){
 
 /**
  * @class Mxui.Data.Tree
- * 
+ * @parent Mxui
  * API
  *     
  *     // create
@@ -37,12 +38,18 @@ steal( 'jquery/controller',
 $.Controller('Mxui.Data.Tree',
 /** @Static */
 {
-	defaults : {}
+	defaults : {
+		initialParams: {}, // default parameters to populate the initial tree
+		parentId: 'parentId' // property on the model that identifies its parent
+	}
 },
 /** @Prototype */
 {
 	init : function(){
 		
+	},
+	modelId: function(model){
+		return model[ model.Class.id ];
 	},
 	// typically want to know the difference ...
 	"{state} expanded.* set" : function(state, ev, newVal){
@@ -74,36 +81,44 @@ $.Controller('Mxui.Data.Tree',
 			.addClass('ui-icon-carat-1-s')
 		
 		this.iconFor(parentId)
-		   		.removeClass('ui-icon-folder-collapsed')
-				.addClass('ui-icon-folder-open')
+			.removeClass('ui-icon-folder-collapsed')
+			.addClass('ui-icon-folder-open')
 		if( container.children().length ) {
 			// make sure to show it 
 			container.show();
 		} else {
-			this.options.model.findAll({parentId: parentId || null}, 
+			var params = $.extend({}, this.options.initialParams);
+			if(parentId) {
+				params[this.options.parentId] = parentId;
+			}
+			this.options.model.findAll(params, 
 				this.proxy( function(items){
-				
-			   		this.containerFor(parentId).html(this.view(this.options.view,items)).show();
-					
+					var container = this.containerFor(parentId);
+					container.html(this.view(this.options.view,items)).show();
+					this.element.trigger('leafExpanded', container);
 				})
 			);
 		}
 	},
 	collapse : function(parentId) {
-		this.containerFor(parentId).hide();
+		var container = this.containerFor(parentId)
+		container.hide();
 		this.toggleFor(parentId)
 			.addClass('ui-icon-carat-1-e')
 			.removeClass('ui-icon-carat-1-s');
 		this.iconFor(parentId)
 		   		.addClass('ui-icon-folder-collapsed')
 				.removeClass('ui-icon-folder-open')
+		this.element.trigger('leafCollapsed', container)
 	},
 	/**
 	 * Finds the name element
 	 * @param {Object} parentId
 	 */
 	elFor : function(parentId){
-		return new this.options.model({id: parentId}).elements(this.element);
+		var params = {};
+		params[this.options.model.id] = parentId;
+		return new this.options.model(params).elements(this.element);
 	},
 	/**
 	 * Finds the toggle element
@@ -130,10 +145,10 @@ $.Controller('Mxui.Data.Tree',
 		cb.call(this);
 	},
 	".ui-icon-carat-1-e click" : function(el){
-		this.options.state.attr('expanded.'+el.nextAll('.logical').model().id,true)
+		this.options.state.attr('expanded.'+this.modelId(el.nextAll('.' + this.options.model._shortName).model()),true)
 	},
 	".ui-icon-carat-1-s click" : function(el){
-		this.options.state.removeAttr('expanded.'+el.nextAll('.logical').model().id)
+		this.options.state.removeAttr('expanded.'+this.modelId(el.nextAll('.' + this.options.model._shortName).model()))
 	}
 })
 

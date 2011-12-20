@@ -3,12 +3,13 @@ steal('mxui/layout/table_scroll',
 	'jquery/controller/view',
 	'jquery/view/ejs',
 	'mxui/data/order',
-	'mxui/util/selectable')
-  .then('jquery-ui/ui/jquery.effects.core.js')
-  .then('jquery-ui/ui/jquery.effects.slide.js')
-//	.then('./views/th.ejs','./views/init.ejs','./views/list.ejs')
+	'mxui/nav/selectable')
+	.then('./views/th.ejs','./views/init.ejs','./views/list.ejs')
 	.then(function($){
 /**
+ * @class Mxui.Data.Grid
+ * @parent Mxui
+ * 
  * A simple data grid that is paginate-able and sortable.
  * 
  * ## Use
@@ -33,6 +34,11 @@ steal('mxui/layout/table_scroll',
  * The grid will automatically 'fill'
  * its parent element's height.
  * 
+ * @constructor
+ * 
+ * @param {Object} columns A object of columnName -> columnTitle pairs. Ex:
+ * 
+ *     columns : { title : "Title", date : "Date" }
  * 
  */
 
@@ -78,6 +84,13 @@ $.Controller.extend("Mxui.Data.Grid",{
 	listensTo : ["select","deselect"]
 },
 {
+	setup : function(el, options){
+		// check params has attrs
+		if(options && options.params && typeof options.params.attrs != 'function'){
+			options.params = new Mxui.Data(options.params)
+		}
+		this._super.apply(this, arguments);
+	},
 	init : function(){
 		//create the scrollable table
 		var count = 0;
@@ -98,7 +111,7 @@ $.Controller.extend("Mxui.Data.Grid",{
 			canUnsort: this.options.canUnsort
 		})
 		
-		this.options.selectable && this.$.tbody.mxui_util_selectable();
+		this.options.selectable && this.$.tbody.mxui_nav_selectable();
 		//this.scrollable.cache.thead.mxui_layout_resizer({selector: "th"});
 		this.element.addClass("grid");
 		if (this.options.filler) {
@@ -114,6 +127,7 @@ $.Controller.extend("Mxui.Data.Grid",{
 		ths.eq(0).addClass('ui-corner-left')
 		ths.eq(-1).addClass('ui-corner-right')
 
+		
 		if(this.options.loadImmediate){
 			this.options.model.findAll(this.options.params.attrs(), this.callback('list', true))
 		}
@@ -194,12 +208,15 @@ $.Controller.extend("Mxui.Data.Grid",{
 	 * @param {Object} newEls new elements to insert (they should be trs)
 	 */
 	append: function( row, newEls ) {
-		this.element.children(".mxui_layout_table_scroll").mxui_layout_table_scroll("append", row, newEls)
+		if( !newEls ) {
+			newEls = row;
+			row = undefined;
+		}
+		this.element.children(":first").mxui_layout_table_scroll("append",  newEls, row)
 	},
-  prepend: function(row, newEls){
-    this.element.children(".mxui_layout_table_scroll").mxui_layout_table_scroll("prepend", row, newEls)
-  },
-	// remove all content from the grid
+	/**
+	 * Remove all children from the table
+	 */
 	empty: function(){
 		this.element.children(".mxui_layout_table_scroll").mxui_layout_table_scroll("empty")
 	},

@@ -40,7 +40,11 @@ steal('jquery/event').then(function($){
 		focusBubble = 'focusbubble',
 		blurBubble = 'blurbubble';
 	}
-		
+	/**
+	 * @class jQuery.event.special.selectin
+	 * @parent Mxui
+	 * @param {Object} handleObj
+	 */
 	$.event.special.selectin = {
 		add: function( handleObj ) {
 			if(handleObj.selector){

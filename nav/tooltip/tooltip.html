@@ -1,0 +1,53 @@
+<!DOCTYPE HTML>
+<html lang="en">
+	<head>
+		<title>tooltip</title>
+        <style type='text/css'>
+            body {font-family: verdana}
+			.target {
+				height: 50px;
+				width: 125px;
+				text-align: center;
+				line-height: 50px;
+				font-size: 16px;
+				background-color: #667;
+				color: #eee;
+				float: left;
+				margin: 50px;
+			}
+        </style>
+	</head>
+	<body>
+	    <h1>MXUI Tooltip Demo</h1>
+
+		<div class="target">Mouse Over</div>
+		<div class="target">Mouse Over</div>
+		<div class="target">Mouse Over</div>
+		<div class="target">Mouse Over</div>
+		<div class="target">Mouse Over</div>
+		<div class="target">Mouse Over</div>
+		<div class="target">Mouse Over</div>
+		<div class="target">Mouse Over</div>
+		<div class="target">Mouse Over</div>
+		<div class="target">Mouse Over</div>
+		<div class="target">Mouse Over</div>
+		<div class="target">Mouse Over</div>
+
+		<script type='text/javascript' src='../../../steal/steal.js'></script>
+		<script type='text/javascript'>
+			steal('mxui/nav/tooltip', function(){
+				var themes = [ "info", "huawei", "success", "error", "notice" ],
+					dirs = [ "n", "ne", "en", "e", "es", "se", "s", "sw", "ws", "w", "wn", "nw" ];
+
+				$(".target").each(function( i, target ) {
+					$(target).mxui_nav_tooltip({
+						content: [ themes[ i % themes.length ], dirs[ i % dirs.length ] ].join(" "),
+						theme: themes[ i % themes.length ],
+						position: dirs[ i % dirs.length ]
+					}).mxui_nav_tooltip("show");
+				});
+
+			})
+		</script>
+	</body>
+</html>

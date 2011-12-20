@@ -10,10 +10,11 @@ steal('mxui/form/combobox').then(function(){
 					className = el.attr("class"),
 					name = el.attr("name");
 					
-				var input = $("<input type='text' />")
-							.attr("id", id)
-							.attr("name", name)
-							.addClass(className)
+				var input = $("<input type='text' />").attr({
+					id: id,
+					name : name,
+					className : className
+				})
 							
 				var items = [], option, $option;
 				el.find("option").each(function(){

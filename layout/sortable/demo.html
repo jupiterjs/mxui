@@ -1,0 +1,63 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
+            "http://www.w3.org/TR/html4/strict.dtd">
+<html lang="en">
+	<head>
+		<title>sortable</title>
+    <style type='text/css'>
+			h4 {
+				margin: 0 0 0.5em 0;
+			}
+			#vegetables {
+				border: solid 1px green;
+				display:inline-block;
+				margin-bottom: 1em;
+				padding: 5px;
+			}
+			#vegetables:after,
+			#draggables:after {
+				clear:both;
+				content:".";
+				display:block;
+				height:0;
+				visibility:hidden;
+			}
+			.sortable,
+			.draggable {
+				cursor: pointer;
+				float: left;
+				border: dashed 2px red;
+				margin: 0 2px;
+				padding: 5px;
+			}
+			.draggable {
+				border-color: blue;
+			}
+		</style>
+	</head>
+	<body>
+		<div id="demo">
+			<h4>Sortable</h4>
+			<div id='vegetables'>
+				<div class='sortable'>Carrots</div>
+				<div class='sortable'>Onions</div>
+				<div class='sortable'>Lettuce</div>
+			</div>
+			<h4>Draggables</h4>
+			<div id='draggables'>
+				<div class='draggable'>Potatoes</div>
+				<div class='draggable'>Peppers</div>
+				<div class='draggable'>Beans</div>
+			</div>
+		</div>
+		<script type='text/javascript' src='../../../steal/steal.js'></script>
+		<script type='text/javascript'>
+			steal("mxui/layout/sortable" , function(){
+				$("#vegetables").mxui_layout_sortable();
+				$(".draggable").bind("draginit",function(){});
+			})
+		</script>
+		<script type='text/javascript'>
+			DEMO_HTML = document.getElementById('demo').innerHTML;
+		</script>
+	</body>
+</html>

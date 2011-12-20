@@ -4,9 +4,118 @@ steal('jquery/controller',
 	'jquery/event/default',
 	'jquery/event/drag/scroll').then(function($){
 	
+	// Constants for scroll direction
+	var HORIZONTAL = 'horizontal',
+		VERTICAL = 'vertical';
+
 	/**
-	 * Makes a sortable control that can accept outside draggables
-	 * @param {Object} el
+	 * @class Mxui.Layout.Sortable
+	 * @parent Mxui
+	 * @test mxui/layout/sortable/funcunit.html
+	 * 
+	 * @description Makes a sortable control that can accept outside draggables.
+	 * 
+	 * Makes a sortable control that can accept outside draggables.
+	 * This is useful for making lists that can be added to, removed 
+	 * from, or re-ordered.
+	 * 
+	 * ## Basic Example
+	 * 
+	 * If you have the following html:
+	 * 
+	 *		<div id='vegetables'>
+	 *			<div class='sortable'>Carrots</div>
+	 *			<div class='sortable'>Onions</div>
+	 *			<div class='sortable'>Lettuce</div>
+	 *		</div>
+	 * 
+	 * The following will make the list sortable:
+	 * 
+	 *     $('#vegetables').mxui_layout_sortable()
+	 * 
+	 * Additionally, you can set up draggable items:
+	 * 
+	 *		<div id='draggables'>
+	 *			<div class='draggable'>Potatoes</div>
+	 *			<div class='draggable'>Peppers</div>
+	 *			<div class='draggable'>Beans</div>
+	 *		</div>
+	 *
+	 * Then make them draggable:
+	 * 
+	 *     $('.draggable').bind("draginit",function(){})
+	 * 
+	 * This will allow you to have the list of items that can be re-ordered, 
+	 * but you can also add new items by dragging them into the list.
+	 * 
+	 * ## Demo
+	 * 
+	 * @demo mxui/layout/sortable/demo.html
+	 * 
+	 * ## How it works
+	 * 
+	 * When re-ordering items, the drag position of the item is monitored. When 
+	 * the item is dragged past the midpoint of the next item (as determined by 
+	 * [Mxui.Layout.Sortable.prototype.where where]), they have their spots 
+	 * swapped.
+	 *
+	 * When injecting new items, the item is dragged over the list and creates a 
+	 * clone of the new item using the `makePlaceHolder` option method. The clone 
+	 * has its visibility hidden until the new item is dropped into the list.
+	 *
+	 * ## Using a custom placeholder
+	 * 
+	 * By default, the dragged element will be cloned and injected into the list.
+	 * This process can be overridden by setting a custom `makePlaceHolder` 
+	 * option method.
+	 *
+	 * 	$("#vegetables").mxui_layout_sortable({
+	 *			makePlaceHolder : function(el, ev, drop, drag){
+	 *				return drag.element.clone().css({
+	 *					"backgroundColor" : "blue",
+	 *					"visibility" : "hidden",
+	 *					"position" : "",
+	 *					"float" : "left"
+	 *				});
+	 *			}
+	 * 	});
+	 *
+	 * ## Injecting a group of elements with a single drag
+	 *
+	 * Multiple items can be injected into the list while dragging a single item 
+	 * by changing the `makePlaceHolder` option method to return more than one 
+	 * placeholder.
+	 *
+	 * 	$("#vegetables").mxui_layout_sortable({
+	 *			makePlaceHolder : function(el, ev, drop, drag){
+	 *				var css = {
+	 *							"visibility":"hidden",
+	 *							"position" : "",
+	 *							"float" : "left"
+	 *						},
+	 *						placeholders = $(drag.movingElement).clone().css(css);
+	 *				$.each($.find('.draggables').not(drag.movingElement), function(i, child) {
+	 *					placeholders = placeholders.add($(child).clone().css(css));
+	 *				});
+	 *				return placeholders;
+	 *			}
+	 * 	});
+	 * 
+	 * @constructor
+	 * 
+	 * @param {HTMLElement} el
+	 * @param {Object} [options] Values to configure
+	 * the behavior of sortable:
+	 * 
+	 * - `makePlaceHolder` - A function used to create a placeholder clone of 
+	 * 		dragged element.
+	 * - `sortable` - The name of the class to be used for sortable items.
+	 * - `direction` - The direction with which to constrain dragging within 
+	 *		the list: `"horizontal"` (default) or `"vertical"`.
+	 * - `scrolls` - The element to scroll as the size of the list changes.
+	 * - `scrollOptions` - Additional scrolling options.
+	 *
+	 * @return {mxui.layout.sortable}
 	 */
 	$.Controller("Mxui.Layout.Sortable",{
 		defaults:{
@@ -15,14 +124,19 @@ steal('jquery/controller',
 				return drag.element.clone().css({
 					"visibility":"hidden",
 					"position" : "",
-					"float" : "left"
+					"float" : this.direction === VERTICAL ? "none" : "left"
 				})
 			},
 			sortable : ".sortable",
+			direction: HORIZONTAL,
 			scrolls : null,
 			scrollOptions: {}
 		}
-	},{
+	},
+	/** 
+	 * @prototype
+	 */
+	{
 		"{sortable} dragdown" : function(el, ev){
 			ev.preventDefault();
 		},
@@ -34,7 +148,7 @@ steal('jquery/controller',
 			}
 			
 			drag.limit(this.element);
-			drag.horizontal();
+			drag[this.options.direction]();
 			//clone the drag and hide placehodler
 			var clone = el.clone().addClass("sortable-placeholder").css("visibility","hidden")
 			el.after(clone)
@@ -45,7 +159,8 @@ steal('jquery/controller',
 		"{sortable} dragend" : function(el){
 			el.css({
 				"position": "",
-				left: ""
+				left: "",
+				top: ""
 			})
 			el.trigger("sortable.end")
 		},
@@ -97,28 +212,32 @@ steal('jquery/controller',
 			var res = this.where(ev,drag.movingElement),
 				placeholder = this.find(".sortable-placeholder")
 
-			if(res.el[0] != placeholder[0]){
+			if($.inArray(res.el[0], placeholder) === -1){
 				placeholder.detach()
 				res.el[res.pos](placeholder)
 			}
 		},
 		/**
-		 * Returns where the element should be placed
-		 * @param {Object} ev
-		 * @param {Object} not
-		 * @return {object} position object with
+		 * Returns where the element should be placed within the list.
+		 * @param {Object} ev 	The drag event.
+		 * @param {Object} [not]	Elements that should not be considered sortable.
+		 * @return {object} Positioning object
 		 * 
-		 *   - el - the element to positoin the placeholder relative to
-		 *   - pos - 
+		 * - `el` - The element to position the placeholder relative to.
+		 * - `pos` - The injection method (`before|append|after`).
 		 */
 		where : function(ev, not){
 			var sortables = this.find(this.options.sortable).not(not || []),
-				sortable;
+				sortable,
+				isVertical = this.options.direction === VERTICAL,
+				page = isVertical ? 'pageY' : 'pageX',
+				position = isVertical ? 'top' : 'left',
+				dimension = isVertical ? 'height' : 'width';
 
 			for(var i=0; i < sortables.length; i++){
 				//check if cursor is past 1/2 way
 				sortable =  $(sortables[i]);
-				if (ev.pageX < Math.floor(sortable.offset().left+sortable.width()/2)) {
+				if (ev[page] < Math.floor(sortable.offset()[position]+sortable[dimension]()/2)) {
 					return {
 						pos: "before",
 						el: sortable
@@ -132,7 +251,7 @@ steal('jquery/controller',
 					}
 			}
 			//check if it is at the end ...
-			if (ev.pageX >= Math.floor(sortable.offset().left+sortable.width()/2)) {
+			if (ev[page] >= Math.floor(sortable.offset()[position]+sortable[dimension]()/2)) {
 				return {
 						pos: "after",
 						el: sortable

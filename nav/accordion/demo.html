@@ -1,0 +1,53 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
+            "http://www.w3.org/TR/html4/strict.dtd">
+<html lang="en">
+	<head>
+		<title>accordion</title>
+        <style type='text/css'>
+            body {font-family: verdana}
+            .error {border: solid 1px red;}
+            .error_text { color: red; font-size: 10px;}
+            td {padding: 3px;}
+			#accordion {
+				height: 200px;
+				width: 300px;
+				border: solid 1px #666;
+			}
+			ul {
+				margin: 0px;
+				overflow: auto;
+			}
+        </style>
+		
+		<link rel="stylesheet" type="text/css" href="../../smoothness/jquery-ui-1.7.2.custom.css" />
+		
+	</head>
+	<body>
+<div id="demo-html">
+<div id='accordion'>
+  <h3>Baked Goods</h3>
+  <ul>
+    <li>Cookies</li><li>Cake</li><li>Bread</li>
+	<li>Pie</li><li>Muffin</li><li>Loaf</li>
+	<li>Scones</li><li>Brownies</li><li>Tart</li>
+  </ul>
+  <h3>Americana</h3>
+  <ul>
+    <li>Hot Dog</li><li>Hamburger</li><li>Pie</li>
+  </ul>
+  <h3>Other</h3>
+  <div>I like Italian, Mexian, Thai,
+    Sushi, Chinese, Ethiopian.
+  </div>
+</div>	
+</div>	
+<script type='text/javascript' src='../../../steal/steal.js'></script>
+<script type='text/javascript'  id="demo-source">
+steal('mxui/nav/accordion',function(){	
+
+  $('#accordion').mxui_nav_accordion();
+	
+});
+</script>
+	</body>
+</html>
