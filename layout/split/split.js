@@ -598,7 +598,9 @@ function( $ ) {
 				curLeft = 0,
 				index, rawDim, newDim, pHeight = this.element.height(),
 				pWidth = this.element.width(),
-				length, start;
+				length, 
+				start,
+				keepIndex = keep ? els.index(keep[0]) : -1;
 
 			// if splitters are filling the entire width, it probably means the 
 			// style has not loaded
@@ -612,8 +614,14 @@ function( $ ) {
 
 			//makes els the right height
 			if ( keep ) {
-				els = els.not(keep);
+				//els = els.not(keep);
 				total = total - $(keep)[this.dirs.outer]();
+				/*if( this.options.direction == "vertical" ) {
+					keep.height(pHeight);
+				} else {
+					// probably do not need to set.  Only need to if
+					// laid out with abs position horizontally
+				}*/
 			}
 
 			length = els.length;
@@ -627,7 +635,9 @@ function( $ ) {
 				$c = $(els[i]);
 				dim = $c[this.dirs.outer](true);
 				dims.push(dim);
-				sum += dim;
+				if( keepIndex !== i ) {
+					sum += dim;
+				}
 			}
 
 			increase = total / sum;
@@ -638,8 +648,12 @@ function( $ ) {
 				dim = dims[index];
 				rawDim = (dim * increase) + remainder;
 				newDim = (i == length + start - 1 ? total : Math.round(rawDim));
-				newDims[index] = newDim;
-				total = total - newDim;
+				if (keepIndex !== i) {
+					newDims[index] = newDim;
+					total = total - newDim;
+				} else {
+					newDims[index] = dim;
+				}
 			}
 
 			//resize splitters to new height if vertical (horizontal will automatically be the right width)
