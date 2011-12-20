@@ -22,14 +22,27 @@ steal('jquery/controller',
 	 * 
 	 * @demo mxui/layout/block/block.html
 	 */	
-	$.Controller("Mxui.Layout.Block", 
-	{
+	$.Controller("Mxui.Layout.Block", {
 		defaults : {
 			zIndex: 9999
 		},
 		listensTo: ['show','hide']
-	},{
-		init : function(){
+	}, {
+		setup: function( el, option ) {
+			var parent;
+			if ( option && ( $.isWindow( option ) || option.jquery )) {
+				parent = option;
+			} else if ( ({}).toString.call( option ) == "[object String]" ) {
+				parent = $( option );
+			} else {
+				parent = window;
+			}
+
+			this._super(el, {
+				parent : parent
+			});
+		},
+		init : function() {
 
 			this.element.show().mxui_layout_positionable();
 
@@ -42,6 +55,15 @@ steal('jquery/controller',
 				});
 			}
 
+			if ( ! $.isWindow( this.options.parent )) {
+				// If its an element, make sure it's relatively positioned
+				this.options.parent.css("position", "relative");
+				// Put the block inside of the parent if it's not
+				if ( $.contains( this.options.parent, this.element ) ) {
+					this.options.parent.append( this.element.detach() );
+				}
+			}
+
 			this.element
 				.css({
 					top: "0px", 
@@ -50,7 +72,7 @@ steal('jquery/controller',
 				})
 				.mxui_layout_fill({
 					all: true, 
-					parent: window
+					parent: this.options.parent
 				})
 				.mxui_layout_bgiframe();	
 			

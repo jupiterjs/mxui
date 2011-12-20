@@ -102,6 +102,9 @@ steal(
 		},
 		"dragmove": function( el, ev, drag ) {
 			this.determineValue();
+			this.element.trigger( "changing", this.value )
+		},
+		"dragend": function( el, ev, drag ) {
 			this.element.trigger( "change", this.value )
 		},
 		determineValue : function() {

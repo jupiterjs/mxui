@@ -38,9 +38,14 @@
         </script>
 		<script type='text/javascript'>
 			steal('mxui/nav/slider', function(){
-				$("#slider").mxui_nav_slider({interval: 1, min: 1, max: 10, val: 5})
-				.change(function(ev, value){
-					$('#value').val(value)
+				var value = $('#value');
+				$("#slider").mxui_nav_slider({
+					interval: 1, 
+					min: 1, 
+					max: 10, 
+					val: 5
+				}).bind("changing change", function( ev, newValue ) {
+					value.val( newValue );
 				});
 			})
 			
