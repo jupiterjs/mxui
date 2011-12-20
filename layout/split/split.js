@@ -71,12 +71,18 @@ function( $ ) {
 	 * The splitter widget responds to the [jQuery.event.special.resize resize] event by performing a quick
 	 * check to see if any panel elements have been inserted or removed, and updating its internal
 	 * state to reflect the changes. Simply add or remove whatever panel elements you wish from the DOM
-	 * using any appropriate jQuery methods, and then call `resize` on it:
+	 * using any appropriate jQuery methods, and then trigger the `resize` event on it:
 	 * 
 	 *     var container = $('#container');
 	 *     container.append($('<div class="panel">New Content</div>'));
 	 *     container.find('.panel:first').remove();
 	 *     container.resize();
+	 * 
+	 * If you need to preserve the dimensions of any of the panels on resize, you can pass a `keep` option
+	 * to the `resize` event, which is a [jQuery jQuery] object containing the elements to preserve:
+	 * 
+	 *     var el = container.append($('<div class="panel">do not resize</div>'))
+	 *     container.trigger('resize', { keep: el });
 	 * 
 	 * ## Demo
 	 * 
@@ -109,6 +115,7 @@ function( $ ) {
 			dragDistance: 5,
 			panelClass: null
 		},
+		listensTo: ['resize'],
 		directionMap: {
 			vertical: {
 				dim: "width",

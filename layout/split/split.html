@@ -180,15 +180,15 @@
 				$(document.body).delegate("a","click", function(ev){
 					var action = this.className,
 						container = $('#' + $(this).parent().data('containerid'));
-				
+					
 					switch(action){
 						case "add" :
-							container.find('.panel:last').clone()
+							var el = container.find('.panel:last').clone()
 								.width(150)
 								.addClass('add')
 								.removeClass('split')
 								.appendTo(container);
-							container.resize();
+							container.trigger('resize', { keep: el });
 							break;
 						case "remove" :
 							container.find('.panel:last').remove();
