@@ -11,62 +11,89 @@ function( $ ) {
 	 * @parent Mxui
 	 * @test mxui/layout/split/funcunit.html
 	 * 
-	 * @description Makes a splitter control that will split two or more elements
-	 * and allow the end-user to size the elements using a "splitter bar."
+	 * @description Makes a splitter widget.
 	 * 
-	 * Makes a splitter control that will split two or more elements and provide a
-	 * "spitter bar" to the user to adjust the size. While it does support absolutely
-	 * positioned elements, floated elements will perform better.
+	 * The splitter widget manages a container whose content "panels" can be independently resized. It
+	 * does this by inserting a "splitter bar" between each panel element, which can be dragged or
+	 * optionally collapsed.
 	 * 
-	 * The splitter control tries to auto-detect whether it should be vertical or horizontal, but
-	 * sometimes it's not able to do so, so you might have to pass the direction in the options.
+	 * Panel elements can be added or removed from the container at any time using ordinary DOM manipulation.
+	 * The spliter widget will automatically adjust the splitter bars anytime a `resize` event is triggered.
 	 * 
-	 * If you have this HTML:
+	 * The splitter widget will try to auto-detect whether it should operate in `vertical` or `horizontal`
+	 * mode by inspecting the positions of its first two elements. If the panels can wrap due to floating
+	 * content, or the container does not have two elements at initialization time, this check may be
+	 * unreliable, so just pass the direction in the options.
+	 * 
+	 * ## Basics
+	 * 
+	 * Suppose you have this HTML:
 	 *
-	 *     <div class='parent'>
-	 *       <div class='panel'></div>
-	 *       <div class='panel'></div>
+	 *     <div id="container">
+	 *       <div class="panel">Content 1</div>
+	 *       <div class="panel">Content 2</div>
+	 *       <div class="panel">Content 3</div>
 	 *     </div>
 	 * 
-	 * The following will create the splitter control:
+	 * The following will create the splitter widget:
 	 * 
-	 *     $('.parent').mxui_layout_split();
+	 *     $('#container').mxui_layout_split();
 	 * 
-	 * You can also provide the splitter direction:
+	 * You can also provide the direction explicitly:
 	 * 
-	 *     $('.parent').mxui_layout_split({ direction: 'vertical' });
+	 *     $('#container').mxui_layout_split({ direction: 'vertical' });
 	 * 
-	 * To hide panels by default, apply the <code>hidden</code> CSS class to the panel.
-	 * To make a panel collapsible, apply the <code>collapsible</code> CSS class to the panel. 
+	 * The `direction` parameter refers to the splitter bar: `vertical` bars mean that the panels are arranged
+	 * from left-to-right, and `horizontal` bars mean the panels are arranged from top-to-bottom.
 	 * 
-	 * Currently you can't have 2 collapsible panels beside each other, e.g.:
-	 *
-	 *     <div class='collapsible'>...</div>
-	 *     <div class='split'>...</div>
-	 *     <div class='collapsible'>...</div>
-	 *
-	 * Only one or the other can be collapsible.
+	 * To indicate that a panel should be collapsible, simply apply the <code>collapsible</code> CSS class
+	 * to the panel.
+	 * 
+	 * ## Styling
+	 * 
+	 * The splitter widget uses a number of CSS classes that permit fine-grained control over the look
+	 * and feel of various elements. The most commonly used are the following:
+	 * 
+	 *   - `.mxui_layout_split`: the container itself
+	 *     - `.splitter`: splitter bars
+	 *     - `.vsplitter`: only vertical splitter bars
+	 *     - `.hsplitter`: only horizontal splitter bars
+	 *     - `.collapser`: collapser buttons
+	 *     - `.left-collapse`: only left collapser buttons
+	 *     - `.right-collapse`: only right collapser buttons
+	 * 
+	 * Additionally, the `panelClass` initialization option allows you to specify which subelements of
+	 * the container should be interpreted as panel elements, and the `hover` option specifies a CSS class
+	 * which will be applied to a splitter when the user hovers over it.
+	 * 
+	 * ## Events
+	 * 
+	 * The splitter widget responds to the [jQuery.event.special.resize resize] event by performing a quick
+	 * check to see if any panel elements have been inserted or removed, and updating its internal
+	 * state to reflect the changes. Simply add or remove whatever panel elements you wish from the DOM
+	 * using any appropriate jQuery methods, and then call `resize` on it:
+	 * 
+	 *     var container = $('#container');
+	 *     container.append($('<div class="panel">New Content</div>'));
+	 *     container.find('.panel:first').remove();
+	 *     container.resize();
 	 * 
 	 * ## Demo
 	 * 
 	 * @demo mxui/layout/split/demo.html
 	 * 
-	 * ## Events
-	 * 
-	 * 
-	 * ## Examples
+	 * ## More Examples
 	 * 
 	 * For some larger, more complex examples, see [//mxui/layout/split/split.html here].
 	 * 
 	 * @param {HTMLElement} element an HTMLElement or jQuery-wrapped element.
-	 * @param {Object} options options to set on the split
-	 * \[`default`\]:
+	 * @param {Object} options options to set on the split:
 	 * 
-	 *   - __hover__ \[`"split-hover"`\] - CSS class to apply to a splitter when the mouse enters it
-	 *   - __direction__ - whether the panel layout is `"vertical"` or `"horizontal"`
-	 *   - __dragDistance__ \[`5`\] - maximum number of pixels away from the slider to initiate a drag
+	 *   - __hover__ (def. `"split-hover"`) - CSS class to apply to a splitter when the mouse enters it
+	 *   - __direction__ - whether the panel layout is `"vertical"` or `"horizontal"` (see above)
+	 *   - __dragDistance__ (def. `5`) - maximum number of pixels away from the slider to initiate a drag
 	 *   - __panelClass__ - CSS class that indicates a child element is a panel of this container
-	 *      (by default any child is considered a panel)
+	 *      					(by default any child is considered a panel)
 	 * @return {Mxui.Layout.Split}  
 	 */
 	$.Controller.extend("Mxui.Layout.Split",
@@ -82,7 +109,6 @@ function( $ ) {
 			dragDistance: 5,
 			panelClass: null
 		},
-		// listensTo: ["insert", "remove"],
 		directionMap: {
 			vertical: {
 				dim: "width",
@@ -128,6 +154,7 @@ function( $ ) {
 				}
 			}
 			
+			this.element.css('overflow', 'hidden');
 			this.initalSetup(c);
 		},
 
@@ -144,7 +171,7 @@ function( $ ) {
 			for ( var i = 0; i < c.length - 1; i++ ) {
 				var $c = $(c[i]);
 				$c.after(this.splitterEl(
-				$c.hasClass('collapsible') ? "left" : ($(c[i + 1]).hasClass('collapsible') ? "right" : undefined)));
+					$c.hasClass('collapsible') ? "left" : ($(c[i + 1]).hasClass('collapsible') ? "right" : undefined)));
 			}
 
 			var splitters = this.element.children(".splitter"),
@@ -181,11 +208,8 @@ function( $ ) {
 		 * @param {Object} dir
 		 */
 		splitterEl: function( dir ) {
-			var splitter = $("<div class='" + this.options.direction.substr(0, 1) + "splitter splitter' tabindex='0'>");
-
-			if ( this.usingAbsPos ) {
-				splitter.css("position", "absolute");
-			}
+			var splitter = $("<div class='" + this.options.direction.substr(0, 1) + "splitter splitter' tabindex='0'>")
+							.css("position", this.usingAbsPos ? "absolute" : "relative");
 
 			if ( dir ) {
 				splitter.append("<a class='" + dir + "-collapse collapser' href='javascript://'></a>")
@@ -393,13 +417,9 @@ function( $ ) {
 		 * Refresh the state of the container by handling any panels that have been added or removed.
 		 */
 		refresh: function(){
-			// TODO: need to do a quick check to see if anything has been inserted or removed,
-			// otherwise dragging to resize is too inefficient
-			
-			var res = this.insert() || this.remove();
-			
+			var modified = this.insert() || this.remove();
 			this._cachedPanels = this.panels().get();
-			return res;
+			return modified;
 		},
 
 		/**
@@ -419,7 +439,9 @@ function( $ ) {
 				if( !panel.hasClass('split') ){
 					panel.before(self.splitterEl(panel.hasClass('collapsible') && 'right'))
 						.addClass('split')
+					
 					added = true;
+					
 					if ( self.options.direction == 'vertical' ) {
 						var splitBar = panel.prev(),
 							pHeight = self.element.height();
@@ -429,6 +451,7 @@ function( $ ) {
 					}
 				}
 			});
+			
 			return added;
 		},
 		
@@ -452,6 +475,7 @@ function( $ ) {
 					removed.push( splitter[0] );
 				}
 			});
+			
 			if(removed.length){
 				$(removed).remove();
 				return true;
@@ -503,11 +527,11 @@ function( $ ) {
 					panel.width(width);
 				}
 
-				panel.removeClass('hidden');
+				panel.show();
 
 				var prevElm = panel.prev();
 				if ( prevElm.hasClass('splitter') ) {
-					prevElm.removeClass('hidden');
+					prevElm.show();
 				} else {
 					//- if it was hidden by start, it didn't get a 
 					//- splitter added so we need to add one here
@@ -532,10 +556,10 @@ function( $ ) {
 		 */
 		hidePanel: function( panel, keepSplitter ) {
 			if ( panel.is(':visible') || panel.hasClass('collapsed') ) {
-				panel.addClass('hidden');
+				panel.hide();
 
 				if (!keepSplitter ) {
-					panel.prev().addClass('hidden');
+					panel.prev().hide();
 				}
 
 				this.size();
