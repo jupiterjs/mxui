@@ -65,31 +65,39 @@ steal(
 		}
 	}, {
 
+		setup : function( el, options ) {
+			options = $.extend( this.constructor.defaults, options || {} );
+			options.$ = {
+				tooltip : $( $.View( "./views/tooltip.ejs", options ) )
+			}
+			$.each( ["outer", "inner", "arrow"], this.proxy( function( i, className ) {
+				options.$[ className ] = options.$.tooltip.find( "." + className );
+			}));
+			this._super( el, options );
+		},
+
+
 		init : function() {
 
-			this.tooltip = $( $.View( "./views/tooltip.ejs", this.options ) );
 
 			// save references to each compontent of the tooltip
-			$.each( ["outer", "inner", "arrow"], this.proxy( function( i, className ) {
-				this.tooltip[ className ] = this.tooltip.find( "." + className );
-			}));
 
 			// Append template to the offset parent
-			this.element.offsetParent().append( this.tooltip );
+			this.element.offsetParent().append( this.options.$.tooltip );
 
 			// Spacing for arrows and stuff is calculated off the margin,
 			// perhaps should be changed to a setting
-			this.space = parseInt( this.tooltip.outer.css("margin-left"), 10 );
+			this.space = parseInt( this.options.$.outer.css("margin-left"), 10 );
 
 			// Position tooltip
 			this.determinePosition();
 			this.setPosition();
 
 			$.each( ["width", "height"], this.proxy( function( i, dim ) {
-				this.tooltip[ dim ]( this.tooltip[ dim ]() );
+				this.options.$.tooltip[ dim ]( this.options.$.tooltip[ dim ]() );
 			}));
 
-			this.tooltip.css({
+			this.options.$.tooltip.css({
 				display: this.options.showEvent ? "none" : "block",
 				visibility: "visible"
 			});
@@ -99,18 +107,24 @@ steal(
 			if ( supportsTransitions ) {
 				setTimeout( this.proxy( function() {
 					$.each(prefixes, this.proxy( function( i, prefix ) {
-						this.tooltip.css( prefix + "transition", "top .5s ease-in-out, left .5s ease-in-out" );
+						this.options.$.tooltip.css( prefix + "transition", "top .5s ease-in-out, left .5s ease-in-out" );
 					}));
 				}), 0);
 			}
-
-			if ( this.options.showEvent == "mouseenter" ) {
-				this.tooltip
-					.bind("mouseenter", this.callback("show"))
-					.bind("mouseleave", this.callback("hide"));
-			}
-
 		},
+
+		"{$.tooltip} mouseenter" : function() {
+			if ( this.options.showEvent == "mouseenter" ) {
+				this.show();
+			}
+		},
+
+		"{$.tooltip} mouseleave" : function() {
+			if ( this.options.showEvent == "mouseenter" ) {
+				this.hide();
+			}
+		},
+
 		determineCorners: function() {
 			var arrowSpacing = this.space * 2,
 				offsetSpacing = this.space * 4;
@@ -202,7 +216,7 @@ steal(
 				position
 			);
 
-			this.tooltip
+			this.options.$
 				.arrow
 				.addClass( this.position.arrowClass )
 				.css( "border-width", this.space )
@@ -210,58 +224,58 @@ steal(
 			this.determineCorners();
 
 			if ( positionArrays.my.length == 2 ) {
-				this.tooltip.arrow.css( this.corners[ this.options.position ].arrowCss );
+				this.options.$.arrow.css( this.corners[ this.options.position ].arrowCss );
 				$.extend( this.position, {
 					offset : this.corners[ this.options.position ].offset.join(" ")
 				});
 			} else {
-				this.tooltip.arrow.css( this.position.arrowMargin, "-" + this.space + "px");
+				this.options.$.arrow.css( this.position.arrowMargin, "-" + this.space + "px");
 			}
 
 		},
 
 		setPosition: function() {
-			var isHidden = this.tooltip.css("display") == "none";
+			var isHidden = this.options.$.tooltip.css("display") == "none";
 
 			if ( isHidden ) {
-				this.tooltip.css({
+				this.options.$.tooltip.css({
 					visibility: "hidden",
 					display: "block"
 				})
 
-				this.tooltip.mxui_layout_positionable(
+				this.options.$.tooltip.mxui_layout_positionable(
 					$.extend({
 						of : this.element,
 						collision : "none"
 					}, this.position )
 				);
 
-				this.tooltip.css({
+				this.options.$.tooltip.css({
 					visibility: "visible",
 					display: "none"
 				})
 			} else {
-				this.tooltip.mxui_layout_positionable(
+				this.options.$.tooltip.mxui_layout_positionable(
 					$.extend({
 						of : this.element,
 						collision : "none",
 						using: this.proxy( function( pos ) {
-							this.tooltip.stop( true, false )[ supportsTransitions ? "css" : "animate" ]( pos );
+							this.options.$.tooltip.stop( true, false )[ supportsTransitions ? "css" : "animate" ]( pos );
 						})
 					}, this.position )
 				);
 			}
-			this.tooltip.mxui_layout_positionable("move");
+			this.options.$.tooltip.mxui_layout_positionable("move");
 		},
 
 		show : function() {
 			clearTimeout( this.options.hideTimeoutId );
-			this.tooltip.stop( true, true )[ this.options.showEffect ]();
+			this.options.$.tooltip.stop( true, true )[ this.options.showEffect ]();
 		},
 
 		hide : function() {
 			this.options.hideTimeoutId = setTimeout(this.proxy( function() {
-				this.tooltip[ this.options.hideEffect ]();
+				this.options.$.tooltip[ this.options.hideEffect ]();
 			}), this.options.hidetimeout );
 		},
 
@@ -274,7 +288,8 @@ steal(
 		},
 
 		"destroy" : function() {
-			this.tooltip.remove();
+			this.options.$.tooltip.remove();
+			delete this.options.$;
 			this._super();
 		},
 

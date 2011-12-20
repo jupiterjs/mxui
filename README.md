@@ -36,11 +36,11 @@ fork and clone
 
 You can also install Mxui from the command line.  Run:
 
-    js steal/getjs mxui
+    ./js steal/getjs mxui
     
 If you only want part of MXUI, you can install that like:
 
-    js steal/getjs mxui/layout/fill
+    ./js steal/getjs mxui/layout/fill
     
 
 

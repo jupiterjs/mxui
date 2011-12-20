@@ -15,8 +15,8 @@ steal('jquery/controller',
 	 * element sets its width and height to the window's width and height and sets its z-index to a 
 	 * configurable value (default is 9999).
 	 * 
-	 * To block the browser screen just attach Mxui.Block to an element and trigger 'show'.
-	 * 
+	 * To block the browser screen just attach Mxui.Block to an element you wish to act as a blocker and
+	 * trigger the `show` event.
 	 * 
 	 * 		$("#blocker").mxui_block().trigger('show')	
 	 * 

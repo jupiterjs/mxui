@@ -2,48 +2,49 @@ steal('jquery/controller', 'jquery/event/resize', 'mxui/layout/positionable', '.
 	/**
 	 * @class Mxui.Layout.Modal
 	 * @parent Mxui
+	 * @test mxui/nav/modal/modal_test.js
 	 * 
 	 * A basic modal implementation. 
 	 * 
 	 * ## Use
 	 *
-	 * Call mxui_layout_modal method on any jQuery object.
+	 * Call `mxui_layout_modal` method on any jQuery object.
 	 *
-	 *    $('#modal').mxui_layout_modal();
+	 *		$('#modal').mxui_layout_modal();
 	 *
 	 * This will take the jQuery object and place it centered
 	 * on the window. If you want the overlay over the page, use
 	 * the overlay option:
 	 *
-	 *    $('modal').mxui_layout_modal({overlay: true});
+	 *		$('modal').mxui_layout_modal({overlay: true});
 	 *
 	 * This will create <div class="mxui_layout_modal-overlay"></div> element 
 	 * and display it over the page. Default CSS applied to the overlay is:
 	 * 
-	 *    .mxui_layout_modal-overlay {
-	 *      background: rgba(0,0,0,0.5);
-	 *      position: fixed;
-	 *      top: 0;
-	 *      bottom: 0;
-	 *      right: 0;
-	 *      left: 0;
-	 *    }
+	 *		.mxui_layout_modal-overlay {
+	 *			background: rgba(0,0,0,0.5);
+	 *			position: fixed;
+	 *			top: 0;
+	 *			bottom: 0;
+	 *			right: 0;
+	 *			left: 0;
+	 *		}
 	 *
 	 * You can either overwrite that CSS in your stylesheet, or you
 	 * can use pass the overlay class as an option to the mxui_layout_modal:
 	 *
-	 *    $('modal').mxui_layout_modal({
-	 *      overlay: true, 
-	 *      overlayClass: 'my-overlay-class'
-	 *    });
+	 *		$('modal').mxui_layout_modal({
+	 *			overlay: true, 
+	 *			overlayClass: 'my-overlay-class'
+	 *		});
 	 *
 	 * By default modals will be hidden and left in the DOM after you trigger "hide"
 	 * on the modal element. If you want to destroy the modal (and overlay) you can pass
 	 * true to the destroyOnHide option:
 	 *
-	 *    $('modal').mxui_layout_modal({
-	 *      destroyOnHide: true
-	 *    });
+	 *		$('modal').mxui_layout_modal({
+	 *			destroyOnHide: true
+	 *		});
 	 *
 	 * You can hide or destroy the modal by pressing the "Escape" key or by clicking on
 	 * the overlay element (if overlay exists).
@@ -52,6 +53,8 @@ steal('jquery/controller', 'jquery/event/resize', 'mxui/layout/positionable', '.
 	 * cover the existing modal windows. If you use the "Escape" key to hide the modals
 	 * they will be hidden one by one in the reverse order they were created.
 	 *
+	 * ## Demo
+	 * @demo mxui/layout/modal/modal.html
 	 */
 	
 	/* Starting z-index for modals. We use stack variable to keep open models in order */
@@ -73,7 +76,7 @@ steal('jquery/controller', 'jquery/event/resize', 'mxui/layout/positionable', '.
 		},
 		listensTo: ["show", "hide", "move"]
 	}, {
-		setup: function(el, options){
+		setup: function(el, options) {
 			var opts = $.extend({}, this.Class.defaults, options)
 			if(opts.overlay === true){
 				options.overlayElement = $('<div class="'+opts.overlayClass+'"></div>');
