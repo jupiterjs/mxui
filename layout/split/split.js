@@ -82,7 +82,7 @@ function( $ ) {
 			dragDistance: 5,
 			panelClass: null
 		},
-		listensTo: ["insert", "remove"],
+		// listensTo: ["insert", "remove"],
 		directionMap: {
 			vertical: {
 				dim: "width",
@@ -109,8 +109,7 @@ function( $ ) {
 		 * Init method called by JMVC base controller.
 		 */
 		init: function() {
-			//- Keep track of panels so that resize event is aware of panels that have been added/removed
-			var c = this._cachedPanels = this.panels();
+			var c = this.panels();
 
 			//- Determine direction.  
 			//- TODO: Figure out better way to measure this since if its floating the panels and the 
@@ -170,6 +169,9 @@ function( $ ) {
 				$c.addClass("split");
 			}
 
+			//- Keep track of panels so that resize event is aware of panels that have been added/removed
+			this._cachedPanels = this.panels().get();
+
 			this.size();
 		},
 
@@ -201,6 +203,8 @@ function( $ ) {
 		 *     container.mxui_layout_split('panels').each(function(el){
 		 *       content += el.text();
 		 *     });
+		 * 
+		 * @return {jQuery} Returns a jQuery-wrapped nodelist of elements that are panels of this container.
 		 */
 		panels: function() {
 			return this.element.children((this.options.panelClass ? "." + this.options.panelClass : "") + ":not(.splitter):visible")
@@ -357,13 +361,19 @@ function( $ ) {
 		 * @param {Object} data
 		 */
 		resize: function( el, ev, data ) {
+			if(!this.element.is(":visible")){
+				return;
+			}
+			
+			var refreshed = this.refresh();
+			
 			//if not visible do nothing
 			if (!this.element.is(":visible") ) {
 				this.oldHeight = this.oldWidth = 0;
 				return;
 			}
 
-			if (!(data && data.force === true) && !this.forceNext ) {
+			if (!(data && data.force === true) && !this.forceNext && !refreshed) {
 				var h = this.element.height(),
 					w = this.element.width();
 				if ( this.oldHeight == h && this.oldWidth == w && !this.needsSize) {
@@ -379,63 +389,73 @@ function( $ ) {
 		},
 
 		/**
-		 * Inserts a new splitter.
-		 * @param {Object} el
-		 * @param {Object} ev
+		 * @hide
+		 * Refresh the state of the container by handling any panels that have been added or removed.
 		 */
-		insert: function( el, ev ) {
-			ev.stopPropagation();
-
-			if ( ev.target.parentNode != this.element[0] ) {
-				return;
-			}
-
-			var target = $(ev.target),
-				prevElm = target.prev();
-
-			target.addClass("split");
-			target.before(this.splitterEl(target.hasClass('collapsible') && "right"));
-			this.size(null, true, target);
-
-			if ( this.options.direction == "vertical" ) {
-				var splitBar = target.prev(),
-					pHeight = this.element.height();
-
-				splitBar.height(pHeight);
-				target.height(pHeight);
-			}
+		refresh: function(){
+			// TODO: need to do a quick check to see if anything has been inserted or removed,
+			// otherwise dragging to resize is too inefficient
+			
+			var res = this.insert() || this.remove();
+			
+			this._cachedPanels = this.panels().get();
+			return res;
 		},
 
 		/**
-		 * If an element is removed from this guy, react to it.
-		 * @param {Object} el
-		 * @param {Object} ev
+		 * @hide
+		 * Handles the insertion of new panels into the container.
+		 * @param {jQuery} panel
 		 */
-		remove: function( el, ev ) {
-			if ( ev.target.parentNode != this.element[0] ) {
-				return;
+		insert: function(){
+			var self = this,
+				//cached = this._cachedPanels,
+				panels = this.panels().get(),
+				added = false;
+			
+			$.each(panels, function(_, panel){
+				panel = $(panel);
+				
+				if( !panel.hasClass('split') ){
+					panel.before(self.splitterEl(panel.hasClass('collapsible') && 'right'))
+						.addClass('split')
+					added = true;
+					if ( self.options.direction == 'vertical' ) {
+						var splitBar = panel.prev(),
+							pHeight = self.element.height();
+
+						splitBar.height(pHeight);
+						panel.height(pHeight);
+					}
+				}
+			});
+			return added;
+		},
+		
+		/**
+		 * @hide
+		 * Handles the removal of a panel from the container.
+		 * @param {jQuery} panel
+		 */
+		remove: function(){
+			var self = this,
+				splitters = this.element.children('.splitter'),
+				removed = [];
+			
+			$.each(splitters, function(_, splitter){
+				splitter = $(splitter);
+				
+				var prev = $(splitter).prev(),
+					next = $(splitter).next();
+				
+				if( !prev.length || !next.length || next.hasClass('splitter') ){
+					removed.push( splitter[0] );
+				}
+			});
+			if(removed.length){
+				$(removed).remove();
+				return true;
 			}
-
-			var target = $(ev.target);
-
-			//remove the splitter before us
-			var prev = target.prev(),
-				next;
-			if ( prev.length && prev.hasClass('splitter') ) {
-				prev.remove();
-			} else {
-				next = target.next();
-				if ( next.hasClass('splitter') ) next.remove();
-			}
-
-			//what if I am already not visible .. I should note that
-			if (!this.element.is(':visible') ) {
-				this.forceNext = true;
-			}
-
-			this.size(this.panels().not(target), true);
-
-			target.remove();
 		},
 
 		".collapser click": function( el, event ) {

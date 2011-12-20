@@ -707,11 +707,12 @@ if ( $.uiBackCompat !== false ) {
 
 			$.each( [ "left", "top" ], function( i, dir ) {
 				if ( $.ui.position[ collision[i] ] ) {
+					var isEvent = ((options.of && options.of.preventDefault) != null);				
 					$.ui.position[ collision[i] ][ dir ]( position, {
 						targetWidth: targetWidth,
 						targetHeight: targetHeight,
 						elem: elem,
-						within : $(options.of) || window,
+						within : $((isEvent || !options.of)  ? window : options.of),
 						collisionPosition : {
 							marginLeft: parseInt( $.curCSS( elem[0], "marginLeft", true ) ) || 0,
 							marginTop: parseInt( $.curCSS( elem[0], "marginTop", true ) ) || 0

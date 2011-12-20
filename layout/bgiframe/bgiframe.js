@@ -73,7 +73,7 @@ steal('jquery/controller').then(function( $ ) {
  */
 
 
-$.Controller.extend("Mxui.Layout.Bgiframe",{
+$.Controller("Mxui.Layout.Bgiframe",{
 	init : function(s){
 		if ( $.browser.msie && /msie 6\.0/i.test(navigator.userAgent )) {
 			s = $.extend({
