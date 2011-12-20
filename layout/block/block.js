@@ -8,17 +8,28 @@ steal('jquery/controller',
 	 * @plugin mxui/block
 	 * @test mxui/layout/block/funcunit.html
 	 * 
-	 * Blocks the browser screen from user interaction.
+	 * Blocks the browser screen or element from user interaction.
 	 * 
 	 * Sometimes it is necessary to block the browser from user interaction such as when a spinner image
 	 * is giving the user feedback that a request for data is taking place. Mxui.Block attaches to an 
 	 * element sets its width and height to the window's width and height and sets its z-index to a 
 	 * configurable value (default is 9999).
 	 * 
-	 * To block the browser screen just attach Mxui.Block to an element you wish to act as a blocker and
-	 * trigger the `show` event.
+	 * To block the browser screen just attach Mxui.Block to an element you
+	 * wish to act as a blocker:
 	 * 
-	 * 		$("#blocker").mxui_block().trigger('show')	
+	 * 		$("#blocker").mxui_block();
+	 *
+	 * If you'd like to block a specifc element, simply pass it as the argument
+	 * to the Mxui.Block call:
+	 *
+	 *		$("#blocker").mxui_block( $("#parent") );
+	 *
+	 * You can also simply pass a string selector as the argument to determine
+	 * the parent
+	 *
+	 *		$("#blocker").mxui_block("#parent");
+	 *
 	 * 
 	 * @demo mxui/layout/block/block.html
 	 */	
