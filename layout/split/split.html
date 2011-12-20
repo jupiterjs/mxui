@@ -188,7 +188,7 @@
 								.addClass('add')
 								.removeClass('split')
 								.appendTo(container);
-							container.trigger('resize', { keep: el });
+							container.resize();
 							break;
 						case "remove" :
 							container.find('.panel:last').remove();

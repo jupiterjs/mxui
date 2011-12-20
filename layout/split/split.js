@@ -62,6 +62,9 @@ function( $ ) {
 	 *     - `.left-collapse`: only left collapser buttons
 	 *     - `.right-collapse`: only right collapser buttons
 	 * 
+	 * You can see the standard styles for the splitter widget
+	 * [https://github.com/jupiterjs/mxui/blob/master/layout/split/split.css here].
+	 * 
 	 * Additionally, the `panelClass` initialization option allows you to specify which subelements of
 	 * the container should be interpreted as panel elements, and the `hover` option specifies a CSS class
 	 * which will be applied to a splitter when the user hovers over it.
@@ -77,12 +80,6 @@ function( $ ) {
 	 *     container.append($('<div class="panel">New Content</div>'));
 	 *     container.find('.panel:first').remove();
 	 *     container.resize();
-	 * 
-	 * If you need to preserve the dimensions of any of the panels on resize, you can pass a `keep` option
-	 * to the `resize` event, which is a [jQuery jQuery] object containing the elements to preserve:
-	 * 
-	 *     var el = container.append($('<div class="panel">do not resize</div>'))
-	 *     container.trigger('resize', { keep: el });
 	 * 
 	 * ## Demo
 	 * 
@@ -396,9 +393,16 @@ function( $ ) {
 				return;
 			}
 			
-			var refreshed = this.refresh();
+			var changed = this.refresh(),
+				refreshed = (!!changed.inserted.length || changed.removed),
+				keepEl = data && data.keep;
+			if( !keepEl && changed.inserted.length ){
+				// if no keep element was provided, and at least one element was inserted,
+				// keep the first inserted element's dimensions/position
+				keepEl = $(changed.inserted.get(0));
+			}
 			
-			//if not visible do nothing
+			// if not visible do nothing
 			if (!this.element.is(":visible") ) {
 				this.oldHeight = this.oldWidth = 0;
 				return;
@@ -416,7 +420,7 @@ function( $ ) {
 			}
 
 			this.forceNext = false;
-			this.size(null, null, data && data.keep, false);
+			this.size(null, null, keepEl, false);
 		},
 
 		/**
@@ -424,9 +428,12 @@ function( $ ) {
 		 * Refresh the state of the container by handling any panels that have been added or removed.
 		 */
 		refresh: function(){
-			var modified = this.insert() || this.remove();
+			var changed = {
+				inserted: this.insert(),
+				removed: this.remove()
+			};
 			this._cachedPanels = this.panels().get();
-			return modified;
+			return changed;
 		},
 
 		/**
@@ -438,7 +445,7 @@ function( $ ) {
 			var self = this,
 				//cached = this._cachedPanels,
 				panels = this.panels().get(),
-				added = false;
+				inserted = [];
 			
 			$.each(panels, function(_, panel){
 				panel = $(panel);
@@ -447,7 +454,7 @@ function( $ ) {
 					panel.before(self.splitterEl(panel.hasClass('collapsible') && 'right'))
 						.addClass('split')
 					
-					added = true;
+					inserted.push(panel);
 					
 					if ( self.options.direction == 'vertical' ) {
 						var splitBar = panel.prev(),
@@ -459,7 +466,7 @@ function( $ ) {
 				}
 			});
 			
-			return added;
+			return $(inserted);
 		},
 		
 		/**
@@ -483,7 +490,7 @@ function( $ ) {
 				}
 			});
 			
-			if(removed.length){
+			if( removed.length ){
 				$(removed).remove();
 				return true;
 			}
@@ -612,16 +619,9 @@ function( $ ) {
 				this.needsSize = false;
 			}
 
-			//makes els the right height
+			// adjust total by the dimensions of the element whose size we want to keep
 			if ( keep ) {
-				//els = els.not(keep);
 				total = total - $(keep)[this.dirs.outer]();
-				/*if( this.options.direction == "vertical" ) {
-					keep.height(pHeight);
-				} else {
-					// probably do not need to set.  Only need to if
-					// laid out with abs position horizontally
-				}*/
 			}
 
 			length = els.length;
@@ -648,11 +648,14 @@ function( $ ) {
 				dim = dims[index];
 				rawDim = (dim * increase) + remainder;
 				newDim = (i == length + start - 1 ? total : Math.round(rawDim));
-				if (keepIndex !== i) {
+				
+				if (keepIndex == i) {
+					// if we're keeping this element's size, use the original dimensions
+					newDims[index] = dim;
+				} else {
+					// use the adjusted dimensions
 					newDims[index] = newDim;
 					total = total - newDim;
-				} else {
-					newDims[index] = dim;
 				}
 			}
 
@@ -663,7 +666,6 @@ function( $ ) {
 
 			// Adjust widths for each pane and account for rounding
 			for ( i = 0; i < length; i++ ) {
-
 				$c = $(els[i]);
 
 				var dim = this.options.direction == "horizontal" ? {
@@ -676,7 +678,6 @@ function( $ ) {
 
 				if ( animate && !this.usingAbsPos ) {
 					$c.animate(dim, "fast", function() {
-
 						if ( resizePanels ) {
 							$(this).trigger('resize', [false]);
 						}
