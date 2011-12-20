@@ -18,17 +18,17 @@ steal('jquery/controller',
 	 * To block the browser screen just attach Mxui.Block to an element you
 	 * wish to act as a blocker:
 	 * 
-	 * 		$("#blocker").mxui_block();
+	 *		$("#blocker").mxui_layout_block();
 	 *
 	 * If you'd like to block a specifc element, simply pass it as the argument
 	 * to the Mxui.Block call:
 	 *
-	 *		$("#blocker").mxui_block( $("#parent") );
+	 *		$("#blocker").mxui_layout_block( $("#parent") );
 	 *
 	 * You can also simply pass a string selector as the argument to determine
 	 * the parent
 	 *
-	 *		$("#blocker").mxui_block("#parent");
+	 *		$("#blocker").mxui_layout_block("#parent");
 	 *
 	 * 
 	 * @demo mxui/layout/block/block.html
@@ -46,7 +46,7 @@ steal('jquery/controller',
 			} else if ( ({}).toString.call( option ) == "[object String]" ) {
 				parent = $( option );
 			} else {
-				parent = window;
+				parent = el.parent();
 			}
 
 			this._super(el, {
@@ -70,7 +70,7 @@ steal('jquery/controller',
 				// If its an element, make sure it's relatively positioned
 				this.options.parent.css("position", "relative");
 				// Put the block inside of the parent if it's not
-				if ( $.contains( this.options.parent, this.element ) ) {
+				if ( ! $.contains( this.options.parent[0], this.element[0] ) ) {
 					this.options.parent.append( this.element.detach() );
 				}
 			}
