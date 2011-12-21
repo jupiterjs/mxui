@@ -394,9 +394,9 @@ function( $ ) {
 			}
 			
 			var changed = this.refresh(),
-				refreshed = (!!changed.inserted.length || changed.removed),
+				refreshed = ( !! changed.inserted.length || changed.removed ),
 				keepEl = data && data.keep;
-			if( !keepEl && changed.inserted.length ){
+			if ( ! keepEl && changed.inserted.length ){
 				// if no keep element was provided, and at least one element was inserted,
 				// keep the first inserted element's dimensions/position
 				keepEl = $(changed.inserted.get(0));
@@ -668,13 +668,15 @@ function( $ ) {
 			for ( i = 0; i < length; i++ ) {
 				$c = $(els[i]);
 
-				var dim = this.options.direction == "horizontal" ? {
-					outerHeight: newDims[i],
-					outerWidth: pWidth
-				} : {
-					outerWidth: newDims[i],
-					outerHeight: pHeight
-				};
+				var minWidth = $c.data("split-min-width") || 0,
+					minHeight = $c.data("split-min-height") || 0,
+					dim = this.options.direction == "horizontal" ? {
+						outerHeight: Math.max( newDims[i], minHeight ),
+						outerWidth: Math.max( pWidth, minWidth )
+					} : {
+						outerWidth: Math.max( newDims[i], minWidth ),
+						outerHeight: Math.max( pHeight, minHeight )
+					};
 
 				if ( animate && !this.usingAbsPos ) {
 					$c.animate(dim, "fast", function() {
