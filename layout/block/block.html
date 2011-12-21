@@ -7,8 +7,20 @@
 			.error_text { color: red; font-size: 10px;}
 			td {padding: 3px;}
 
-			#blocker {
-				background-color: green;
+			#blocker1 {
+				background-color: #090;
+			}
+
+			#blocker2 {
+				background-color: #009;
+			}
+
+			#block-div {
+				width: 400px;
+				height: 200px;
+				text-align: center;
+				line-height: 200px;
+				border: 1px dotted #aaa;
 			}
 
 		</style>
@@ -17,20 +29,32 @@
 	<body>
 		<div id="demo-html">		
 			<h1>Block</h1>
-			<div id='blocker'></div>
-			<button>I'm a clickable button</button>
-			<a href='#' id='block'>Open Block</a>
+			<div id='blocker1'></div>
+			<div id='blocker2'></div>
+			<button class="one">I'm a clickable button</button>
+			<a href='#' id='block'>Block the window</a>
+			<a href='#' id='block2'>Block the element</a>
+
+			<div id="block-div">
+				Block a specific element
+				<button class="two">I'm a clickable button</button>
+			</div>
 		</div>
 		<script type='text/javascript' src='../../../steal/steal.js?mxui/layout/block'></script>
 <script id="demo-source" type='text/javascript'>
 steal('mxui/layout/block', function(){
 	$(function(){
 
-		$("#blocker").css("opacity", 0.3);
+		$("#blocker1, #blocker2").css("opacity", 0.3);
 
 		$("#block").click(function(){
-			$("#blocker").mxui_layout_block();
+			$("#blocker1").mxui_layout_block( window );
 			$("button").text("Can't click me anymore!");
+		});
+
+		$("#block2").click(function(){
+			$("#blocker2").mxui_layout_block( "#block-div" );
+			$("button.two").text("Can't click me anymore!");
 		});
 
 

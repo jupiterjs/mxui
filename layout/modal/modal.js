@@ -49,6 +49,14 @@ steal('jquery/controller', 'jquery/event/resize', 'mxui/layout/positionable', '.
 	 * You can hide or destroy the modal by pressing the "Escape" key or by clicking on
 	 * the overlay element (if overlay exists).
 	 *
+	 * Modals can also be attached to an element rather than the window using
+	 * the `of` option.
+	 *
+	 *		$('modal').mxui_layout_modal({
+	 *			of : $("#box"),
+	 *			overlay: true
+	 *		});
+	 *
 	 * Modal windows can be stacked one on top of another. If modal has overlay, it will
 	 * cover the existing modal windows. If you use the "Escape" key to hide the modals
 	 * they will be hidden one by one in the reverse order they were created.
@@ -80,7 +88,14 @@ steal('jquery/controller', 'jquery/event/resize', 'mxui/layout/positionable', '.
 			var opts = $.extend({}, this.Class.defaults, options)
 			if(opts.overlay === true){
 				options.overlayElement = $('<div class="'+opts.overlayClass+'"></div>');
-				$('body').append(options.overlayElement.hide())
+				if ( $.isWindow( opts.of ) ) {
+					$(document.body).append( options.overlayElement )
+					options.overlayPosition = "fixed";
+				} else {
+					opts.of.css("position", "relative").append( options.overlayElement )
+					options.overlayPosition = "absolute";
+				}
+				options.overlayElement.hide()
 			}
 			this._super.apply(this, [el, options])
 		},
@@ -132,11 +147,14 @@ steal('jquery/controller', 'jquery/event/resize', 'mxui/layout/positionable', '.
 				stack.unshift(this.stackId);
 			}
 			if(this.options.overlay === true){
-				this.options.overlayElement.show().css({'z-index': ++zIndex, position: 'fixed'})
+				this.options.overlayElement.show().css({
+					'z-index': ++zIndex, 
+					position: this.options.overlayPosition
+				})
 			}
 			this.element.css({'display': 'block', 'z-index': ++zIndex});
 			this._super();
-			this.element.css('position', 'fixed');
+			this.element.css('position', this.options.overlayPosition );
 			this.closeOnEscapeCb = this.callback(this.closeOnEscape);
 		},
 		"{document} keyup" : function(el, ev){
