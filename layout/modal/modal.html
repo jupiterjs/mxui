@@ -35,22 +35,26 @@
 				right: 0;
 				left: 0;
 			}
+			#customOverlayElement {
+				line-height: 20px;
+				text-align: left;
+			}
         </style>
 	</head>
 	<body>
 	    <h1>Modal</h1>
 		<ul>
 			<li>
-				<a href="#" id='show'>Show as modal</a>
+				<a href="javascript://" id='show'>Show as modal</a>
 			</li>
 			<li>
-				<a href="#" id='show-stacked'>Show five stacked modals</a>
+				<a href="javascript://" id='show-stacked'>Show five stacked modals</a>
 			</li>
 			<li>
-				<a href="#" id='show-custom-overlay-class'>Show modal with custom overlay class</a>
+				<a href="javascript://" id='show-custom-overlay-class'>Show modal with custom overlay class</a>
 			</li>
 			<li>
-				<a href="#" id='show-custom-element'>Show modal within an element</a>
+				<a href="javascript://" id='show-custom-element'>Show modal within an element</a>
 			</li>
 		</ul>
 		<div id="elem">
@@ -67,6 +71,7 @@
 			<p>I'm a modal inside of an element.
 			</p>
 	    </div>
+		<div id="customOverlayElement" style="display: none">This is a custom overlay element</div>
 		<script type='text/javascript' src='../../../steal/steal.js'></script>
 		<script type='text/javascript'>
 		  steal('mxui/layout/modal', function(){
@@ -94,7 +99,7 @@
   			$("#show-custom-element").click(function(){
   				$("#modal2").mxui_layout_modal({
   				  overlayClass: 'custom-overlay-2',
-				  overlay: true,
+				  overlay: $("#customOverlayElement"),
 				  of: $("#elem")
   				});
   			})

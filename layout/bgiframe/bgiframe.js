@@ -36,6 +36,9 @@ steal('jquery/controller').then(function( $ ) {
  * 
  *		<div><iframe class="bgiframe".../><p>Paragraph</p></div>
  *
+ * This plugin was adapted from the jQueryUI bgiframe plugin, which can be
+ * found [here](http://docs.jquery.com/Plugins/bgiframe).
+ *
  * @param {Map|Optional} settings - settings to configure the iframe.
  *
  *	- `{String|Number}` top The iframe must be offset to the top
