@@ -14,10 +14,12 @@ steal('jquery/controller', 'jquery/event/resize', 'mxui/layout/positionable', '.
 	 *		$('#modal').mxui_layout_modal();
 	 *
 	 * This will take the jQuery object and place it centered
-	 * on the window. If you want the overlay over the page, use
+	 * on the window. If you want an overlay over the page behind the modal, use
 	 * the overlay option:
 	 *
-	 *		$('modal').mxui_layout_modal({overlay: true});
+	 *		$('modal').mxui_layout_modal({
+	 *			overlay: true
+	 *		});
 	 *
 	 * This will create <div class="mxui_layout_modal-overlay"></div> element 
 	 * and display it over the page. Default CSS applied to the overlay is:
@@ -88,7 +90,6 @@ steal('jquery/controller', 'jquery/event/resize', 'mxui/layout/positionable', '.
 	 *	destroyed when it's `hide` method is called.
 	 *
 	 * @return {mxui.layout.modal}
-	
 	 */
 	
 	/* Starting z-index for modals. We use stack variable to keep open models in order */
