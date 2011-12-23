@@ -1,0 +1,105 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
+            "http://www.w3.org/TR/html4/strict.dtd">
+<html lang="en">
+	<head>
+		<title>selectable</title>
+        <style type='text/css'>
+            li{
+            	list-style:none;
+				width:120px;
+				border: solid 1px #aaaabb;
+				background-color: #ddddee;
+				padding: 10px;
+            }
+			#menu {
+				
+			}
+			#menu .selected{
+				background-color: #efefff;
+			}
+			#menu .activated{
+				background-color: #dddddd;
+			}
+			td .selected{
+				border:3px dotted green;
+			}
+			td .activated{
+				background-color: #ccffcc;
+			}
+			td a {
+				border: solid 3px white;
+				display: block;
+				padding: 15px 5px 5px 5px;
+				height: 30px;
+				text-align: center;
+				width: 70px;
+				font-size: 16px;
+			}
+			body {
+				font-family: Helvetica, Arial , sans-serif;
+				padding: 10px;
+				margin: 0px;
+			}
+			th, h5 {
+				text-decoration: underline;
+				font-size: 15px;
+			}
+			th, td, h5 {
+				padding: 0px;
+				margin: 0px;
+			}
+			h5 { width: 140px; text-align: center; 
+			     margin-bottom: 20px;
+				 top: 5px;
+			}
+			#table {
+				position: absolute;
+				left: 200px;
+				top: 8px;
+			}
+			
+        </style>
+	</head>
+	<body>
+<div id="demo-html">
+<h5>Menu Layout</h5>
+<div id='menu'>
+    <li tabindex="0">JavaScriptMVC</li>
+    <li tabindex="0">StealJS</li>
+    <li tabindex="0">FuncUnit</li>
+</div>
+
+<table id='table'>
+	<tr>
+		<th colspan='3'>Grid Layout</th>
+	</tr>
+	<tr>
+		<td><a tabindex='0'>Cookies</a></td>
+		<td><a tabindex='0'>Cake</a></td>
+		<td><a tabindex='0'>Bread</a></td>
+	</tr>
+	<tr>
+		<td><a tabindex='0'>Pie</a></td>
+		<td><a tabindex='0' id='center'>Muffin</a></td>
+		<td><a tabindex='0'>Loaf</a></td>
+	</tr>
+	<tr>
+		<td><a tabindex='0'>Scones</a></td>
+		<td><a tabindex='0'>Brownies</a></td>
+		<td><a tabindex='0'>Tart</a></td>
+	</tr>
+</table>
+</div>	
+		
+		<script type='text/javascript' 
+                src='../../../steal/steal.js'>   
+        </script>
+<script type='text/javascript' id="demo-source">
+steal('mxui/nav/selectable',function(){
+
+	$('#menu, #table').mxui_nav_selectable();
+
+})
+</script>
+	</body>
+</html>

@@ -57,30 +57,47 @@ steal(
 			hideEvent: "mouseleave",
 			showEffect: "show",
 			hideEffect: "fadeOut",
+			showTimeout: 200,
+			hideTimeout: 500,
+			showTimeoutId: null,
+			hideTimeoutId: null,
 			position: "n"
 		}
 	}, {
 
+		setup : function( el, options ) {
+			options = $.extend( this.constructor.defaults, options || {} );
+			options.$ = {
+				tooltip : $( $.View( "./views/tooltip.ejs", options ) )
+			}
+			$.each( ["outer", "inner", "arrow"], this.proxy( function( i, className ) {
+				options.$[ className ] = options.$.tooltip.find( "." + className );
+			}));
+			this._super( el, options );
+		},
+
+
 		init : function() {
 
-			this.tooltip = $( $.View( "./views/tooltip.ejs", this.options ) );
 
 			// save references to each compontent of the tooltip
-			$.each( ["outer", "inner", "arrow"], this.proxy( function( i, className ) {
-				this.tooltip[ className ] = this.tooltip.find( "." + className );
-			}));
 
 			// Append template to the offset parent
-			this.element.offsetParent().append( this.tooltip );
+			this.element.offsetParent().append( this.options.$.tooltip );
 
-			this.space = parseInt( this.tooltip.outer.css("margin-left"), 10 );
-			this.determinePosition();
-
+			// Spacing for arrows and stuff is calculated off the margin,
+			// perhaps should be changed to a setting
+			this.space = parseInt( this.options.$.outer.css("margin-left"), 10 );
 
 			// Position tooltip
+			this.determinePosition();
 			this.setPosition();
 
-			this.tooltip.css({
+			$.each( ["width", "height"], this.proxy( function( i, dim ) {
+				this.options.$.tooltip[ dim ]( this.options.$.tooltip[ dim ]() );
+			}));
+
+			this.options.$.tooltip.css({
 				display: this.options.showEvent ? "none" : "block",
 				visibility: "visible"
 			});
@@ -90,70 +107,82 @@ steal(
 			if ( supportsTransitions ) {
 				setTimeout( this.proxy( function() {
 					$.each(prefixes, this.proxy( function( i, prefix ) {
-						this.tooltip.css( prefix + "transition", "top .5s ease-in-out, left .5s ease-in-out" );
+						this.options.$.tooltip.css( prefix + "transition", "top .5s ease-in-out, left .5s ease-in-out" );
 					}));
 				}), 0);
 			}
 		},
 
+		"{$.tooltip} mouseenter" : function() {
+			if ( this.options.showEvent == "mouseenter" ) {
+				this.show();
+			}
+		},
+
+		"{$.tooltip} mouseleave" : function() {
+			if ( this.options.showEvent == "mouseenter" ) {
+				this.hide();
+			}
+		},
+
 		determineCorners: function() {
-			var threeSpaces = this.space * 3,
-				fiveSpaces = this.space * 5;
+			var arrowSpacing = this.space * 2,
+				offsetSpacing = this.space * 4;
 
 			this.corners= {
 				ne: {
 					arrowCss: {
-						left: threeSpaces
+						left: arrowSpacing
 					},
-					offset : [ -( fiveSpaces ), 0 ]
+					offset : [ -( offsetSpacing ), 0 ]
 				},
 				en: {
 					arrowCss: {
 						top : "initial",
-						bottom: threeSpaces
+						bottom: arrowSpacing
 					},
-					offset : [ 0, ( fiveSpaces ) ]
+					offset : [ 0, ( offsetSpacing ) ]
 				},
 				es: {
 					arrowCss: {
 						bottom : "initial",
-						top: threeSpaces
+						top: arrowSpacing
 					},
-					offset : [ 0, -( fiveSpaces ) ]
+					offset : [ 0, -( offsetSpacing ) ]
 				},
 				se: {
 					arrowCss: {
-						left: threeSpaces
+						left: arrowSpacing
 					},
-					offset : [ -( fiveSpaces ), 0 ]
+					offset : [ -( offsetSpacing ), 0 ]
 				},
 				sw: {
 					arrowCss: {
-						right: threeSpaces,
+						right: arrowSpacing,
 						left: "initial"
 					},
-					offset : [ ( fiveSpaces ), 0 ]
+					offset : [ ( offsetSpacing ), 0 ]
 				},
 				ws: {
 					arrowCss: {
 						bottom : "initial",
-						top: threeSpaces
+						top: arrowSpacing
 					},
-					offset : [ 0, -( fiveSpaces ) ]
+					offset : [ 0, -( offsetSpacing ) ]
 				},
 				wn: {
 					arrowCss: {
 						top: "initial",
-						bottom: threeSpaces
+						bottom: arrowSpacing
 					},
-					offset : [ 0, ( fiveSpaces ) ]
+					offset : [ 0, ( offsetSpacing ) ]
 				},
 				nw: {
 					arrowCss: {
-						right: threeSpaces,
+						right: arrowSpacing,
 						left: "initial"
 					},
-					offset : [ ( fiveSpaces ), 0 ]
+					offset : [ ( offsetSpacing ), 0 ]
 				}
 			}
 		},
@@ -187,7 +216,7 @@ steal(
 				position
 			);
 
-			this.tooltip
+			this.options.$
 				.arrow
 				.addClass( this.position.arrowClass )
 				.css( "border-width", this.space )
@@ -195,56 +224,59 @@ steal(
 			this.determineCorners();
 
 			if ( positionArrays.my.length == 2 ) {
-				this.tooltip.arrow.css( this.corners[ this.options.position ].arrowCss );
+				this.options.$.arrow.css( this.corners[ this.options.position ].arrowCss );
 				$.extend( this.position, {
 					offset : this.corners[ this.options.position ].offset.join(" ")
 				});
 			} else {
-				this.tooltip.arrow.css( this.position.arrowMargin, "-" + this.space + "px");
+				this.options.$.arrow.css( this.position.arrowMargin, "-" + this.space + "px");
 			}
 
 		},
 
 		setPosition: function() {
-			// TODO: Change to mxui_layout_positionable
-			var isHidden = this.tooltip.css("display") == "none";
+			var isHidden = this.options.$.tooltip.css("display") == "none";
 
 			if ( isHidden ) {
-				this.tooltip.css({
+				this.options.$.tooltip.css({
 					visibility: "hidden",
 					display: "block"
 				})
 
-				this.tooltip.position(
+				this.options.$.tooltip.mxui_layout_positionable(
 					$.extend({
 						of : this.element,
 						collision : "none"
 					}, this.position )
 				);
 
-				this.tooltip.css({
+				this.options.$.tooltip.css({
 					visibility: "visible",
 					display: "none"
 				})
 			} else {
-				this.tooltip.position(
+				this.options.$.tooltip.mxui_layout_positionable(
 					$.extend({
 						of : this.element,
 						collision : "none",
 						using: this.proxy( function( pos ) {
-							this.tooltip.stop( true, false )[ supportsTransitions ? "css" : "animate" ]( pos );
+							this.options.$.tooltip.stop( true, false )[ supportsTransitions ? "css" : "animate" ]( pos );
 						})
 					}, this.position )
 				);
 			}
+			this.options.$.tooltip.mxui_layout_positionable("move");
 		},
 
 		show : function() {
-			this.tooltip[ this.options.showEffect ]();
+			clearTimeout( this.options.hideTimeoutId );
+			this.options.$.tooltip.stop( true, true )[ this.options.showEffect ]();
 		},
 
 		hide : function() {
-			this.tooltip[ this.options.hideEffect ]();
+			this.options.hideTimeoutId = setTimeout(this.proxy( function() {
+				this.options.$.tooltip[ this.options.hideEffect ]();
+			}), this.options.hidetimeout );
 		},
 
 		"{showEvent}" : function() {
@@ -256,7 +288,8 @@ steal(
 		},
 
 		"destroy" : function() {
-			this.tooltip.remove();
+			this.options.$.tooltip.remove();
+			delete this.options.$;
 			this._super();
 		},
 

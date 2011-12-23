@@ -1,36 +1,65 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
-            "http://www.w3.org/TR/html4/strict.dtd">
+<!doctype html>
 <html lang="en">
 	<head>
-		<title>block</title>
-        <style type='text/css'>
-            body {font-family: verdana}
-            .error {border: solid 1px red;}
-            .error_text { color: red; font-size: 10px;}
-            td {padding: 3px;}
-			#blocker {
-				width: 0;
-				height: 0;
-				background-color: green;
+		<style type='text/css'>
+			body {font-family: verdana}
+			.error {border: solid 1px red;}
+			.error_text { color: red; font-size: 10px;}
+			td {padding: 3px;}
+
+			#blocker1 {
+				background-color: #090;
 			}
-        </style>
+
+			#blocker2 {
+				background-color: #009;
+			}
+
+			#block-div {
+				width: 400px;
+				height: 200px;
+				text-align: center;
+				line-height: 200px;
+				border: 1px dotted #aaa;
+			}
+
+		</style>
+		<title>Block</title>
 	</head>
 	<body>
-<div id="demo-html">		
-<h1>Block</h1>
-<div id='blocker'></div>
-<a href='#' id='block'>Block</a>
-</div>
-		<script type='text/javascript' 
-                src='../../../steal/steal.js?steal[app]=mxui/layout/block&steal[env]=development'>   
-        </script>
+		<div id="demo-html">		
+			<h1>Block</h1>
+			<div id='blocker1'></div>
+			<div id='blocker2'></div>
+			<button class="one">I'm a clickable button</button>
+			<a href='#' id='block'>Block the window</a>
+			<a href='#' id='block2'>Block the element</a>
+
+			<div id="block-div">
+				Block a specific element
+				<button class="two">I'm a clickable button</button>
+			</div>
+		</div>
+		<script type='text/javascript' src='../../../steal/steal.js?mxui/layout/block'></script>
 <script id="demo-source" type='text/javascript'>
-$(function(){
-	$("#blocker").css("opacity",0.5);
-	$("#block").click(function(){
-		$("#blocker").mxui_layout_block().trigger('show')
-	});			
-})
+steal('mxui/layout/block', function(){
+	$(function(){
+
+		$("#blocker1, #blocker2").css("opacity", 0.3);
+
+		$("#block").click(function(){
+			$("#blocker1").mxui_layout_block( window );
+			$("button").text("Can't click me anymore!");
+		});
+
+		$("#block2").click(function(){
+			$("#blocker2").mxui_layout_block( "#block-div" );
+			$("button.two").text("Can't click me anymore!");
+		});
+
+
+	})
+});
 </script>
 	</body>
 </html>

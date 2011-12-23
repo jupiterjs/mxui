@@ -1,32 +1,109 @@
-steal('jquery/controller', 'jquery/event/drag/limit', 'jquery/dom/dimensions', 'jquery/event/key', 'jquery/event/resize')
-	.then('./split.css').then(function( $ ) {
+steal('./split.css',
+	'jquery/controller',
+	'jquery/event/drag/limit', 
+	'jquery/dom/dimensions', 
+	'jquery/event/key', 
+	'jquery/event/resize',
+function( $ ) {
 
 	/**
 	 * @class Mxui.Layout.Split
 	 * @parent Mxui
-	 * MXUI.Layout.Split is a splitter control that will split two or more elements
-	 * and allow the end-user to size the elements using a 'splitter bar'.
+	 * @test mxui/layout/split/funcunit.html
 	 * 
-	 * It allows for floating and absolutely positioned elements ,although, 
-	 * floating is higher performance.
+	 * @description Makes a splitter widget.
 	 * 
-	 * It tries to auto-detect whether it should be vertical or horizontal but
-	 * sometimes it's not able to so you might have to pass the direction in the options.
+	 * The splitter widget manages a container whose content "panels" can be independently resized. It
+	 * does this by inserting a "splitter bar" between each panel element, which can be dragged or
+	 * optionally collapsed.
 	 * 
-	 * Example Usage:
-	 * $('.parent).mxui_layout_split();
-	 * <div class='parent'><div class='panel'><div class='panel'></div>
+	 * Panel elements can be added or removed from the container at any time using ordinary DOM manipulation.
+	 * The spliter widget will automatically adjust the splitter bars anytime a `resize` event is triggered.
 	 * 
-	 * API Notes:
+	 * The splitter widget will try to auto-detect whether it should operate in `vertical` or `horizontal`
+	 * mode by inspecting the positions of its first two elements. If the panels can wrap due to floating
+	 * content, or the container does not have two elements at initialization time, this check may be
+	 * unreliable, so just pass the direction in the options.
 	 * 
-	 * To hide panels by default, apply the 'hidden' css class to the panel.
+	 * ## Basics
 	 * 
-	 * To make a panel collapsible, apply the 'collapsible' css class to the panel. 
-	 * Currently you can't have 2 collasible panels beside each other. 
-	 * E.g. <div class='collapsible'><div class='split'><div class='collapsible'> Only one or the other can be collapsible.
+	 * Suppose you have this HTML:
+	 *
+	 *     <div id="container">
+	 *       <div class="panel">Content 1</div>
+	 *       <div class="panel">Content 2</div>
+	 *       <div class="panel">Content 3</div>
+	 *     </div>
 	 * 
+	 * The following will create the splitter widget:
+	 * 
+	 *     $('#container').mxui_layout_split();
+	 * 
+	 * You can also provide the direction explicitly:
+	 * 
+	 *     $('#container').mxui_layout_split({ direction: 'vertical' });
+	 * 
+	 * The `direction` parameter refers to the splitter bar: `vertical` bars mean that the panels are arranged
+	 * from left-to-right, and `horizontal` bars mean the panels are arranged from top-to-bottom.
+	 * 
+	 * To indicate that a panel should be collapsible, simply apply the <code>collapsible</code> CSS class
+	 * to the panel.
+	 * 
+	 * ## Styling
+	 * 
+	 * The splitter widget uses a number of CSS classes that permit fine-grained control over the look
+	 * and feel of various elements. The most commonly used are the following:
+	 * 
+	 *   - `.mxui_layout_split`: the container itself
+	 *     - `.splitter`: splitter bars
+	 *     - `.vsplitter`: only vertical splitter bars
+	 *     - `.hsplitter`: only horizontal splitter bars
+	 *     - `.collapser`: collapser buttons
+	 *     - `.left-collapse`: only left collapser buttons
+	 *     - `.right-collapse`: only right collapser buttons
+	 * 
+	 * You can see the standard styles for the splitter widget
+	 * [https://github.com/jupiterjs/mxui/blob/master/layout/split/split.css here].
+	 * 
+	 * Additionally, the `panelClass` initialization option allows you to specify which subelements of
+	 * the container should be interpreted as panel elements, and the `hover` option specifies a CSS class
+	 * which will be applied to a splitter when the user hovers over it.
+	 * 
+	 * ## Events
+	 * 
+	 * The splitter widget responds to the [jQuery.event.special.resize resize] event by performing a quick
+	 * check to see if any panel elements have been inserted or removed, and updating its internal
+	 * state to reflect the changes. Simply add or remove whatever panel elements you wish from the DOM
+	 * using any appropriate jQuery methods, and then trigger the `resize` event on it:
+	 * 
+	 *     var container = $('#container');
+	 *     container.append($('<div class="panel">New Content</div>'));
+	 *     container.find('.panel:first').remove();
+	 *     container.resize();
+	 * 
+	 * ## Demo
+	 * 
+	 * @demo mxui/layout/split/demo.html
+	 * 
+	 * ## More Examples
+	 * 
+	 * For some larger, more complex examples, see [//mxui/layout/split/split.html here].
+	 * 
+	 * @param {HTMLElement} element an HTMLElement or jQuery-wrapped element.
+	 * @param {Object} options options to set on the split:
+	 * 
+	 *   - __hover__ (def. `"split-hover"`) - CSS class to apply to a splitter when the mouse enters it
+	 *   - __direction__ - whether the panel layout is `"vertical"` or `"horizontal"` (see above)
+	 *   - __dragDistance__ (def. `5`) - maximum number of pixels away from the slider to initiate a drag
+	 *   - __panelClass__ - CSS class that indicates a child element is a panel of this container
+	 *      					(by default any child is considered a panel)
+	 * @return {Mxui.Layout.Split}  
 	 */
-	$.Controller.extend("Mxui.Layout.Split", {
+	$.Controller.extend("Mxui.Layout.Split",
+	/** 
+	 * @static
+	 */
+	{
 		defaults: {
 			active: "active",
 			hover: "split-hover",
@@ -35,7 +112,7 @@ steal('jquery/controller', 'jquery/event/drag/limit', 'jquery/dom/dimensions', '
 			dragDistance: 5,
 			panelClass: null
 		},
-		listensTo: ["insert", "remove"],
+		listensTo: ['resize'],
 		directionMap: {
 			vertical: {
 				dim: "width",
@@ -52,8 +129,13 @@ steal('jquery/controller', 'jquery/event/drag/limit', 'jquery/dom/dimensions', '
 				dragDir: "vertical"
 			}
 		}
-	}, {
+	},
+	/** 
+	 * @prototype
+	 */
+	{
 		/**
+		 * @hide
 		 * Init method called by JMVC base controller.
 		 */
 		init: function() {
@@ -76,12 +158,16 @@ steal('jquery/controller', 'jquery/event/drag/limit', 'jquery/dom/dimensions', '
 				}
 			}
 			
+			this.element.css('overflow', 'hidden');
 			this.initalSetup(c);
 		},
 
 		/**
-		 * Sizes the split bar and split elements initally.  This is different from size in that fact
-		 * that intial size retains the elements widths and resizes what can't fit to be within the parent dims.
+		 * @hide
+		 * Sizes the split bar and split elements initially.  This is 
+		 * different from size in that fact
+		 * that initial size retains the elements widths and resizes 
+		 * what can't fit to be within the parent dims.
 		 * @param {Object} c
 		 */
 		initalSetup: function( c ) {
@@ -89,11 +175,12 @@ steal('jquery/controller', 'jquery/event/drag/limit', 'jquery/dom/dimensions', '
 			for ( var i = 0; i < c.length - 1; i++ ) {
 				var $c = $(c[i]);
 				$c.after(this.splitterEl(
-				$c.hasClass('collapsible') ? "left" : ($(c[i + 1]).hasClass('collapsible') ? "right" : undefined)));
+					$c.hasClass('collapsible') ? "left" : ($(c[i + 1]).hasClass('collapsible') ? "right" : undefined)));
 			}
 
-			var splitters = this.element.children(".splitter")
-			splitterDim = splitters[this.dirs.outer](),
+			var splitters = this.element.children(".splitter"),
+				splitterDim = splitters[this.dirs.outer](),
+				// why is this calculated and not used
 				total = this.element[this.dirs.dim]() - splitterDim * (c.length - 1),
 				pHeight = this.element.height();
 
@@ -113,19 +200,20 @@ steal('jquery/controller', 'jquery/event/drag/limit', 'jquery/dom/dimensions', '
 				$c.addClass("split");
 			}
 
+			//- Keep track of panels so that resize event is aware of panels that have been added/removed
+			this._cachedPanels = this.panels().get();
+
 			this.size();
 		},
 
 		/**
+		 * @hide
 		 * Appends a split bar.
 		 * @param {Object} dir
 		 */
 		splitterEl: function( dir ) {
-			var splitter = $("<div class='" + this.options.direction.substr(0, 1) + "splitter splitter' tabindex='0'>");
-
-			if ( this.usingAbsPos ) {
-				splitter.css("position", "absolute");
-			}
+			var splitter = $("<div class='" + this.options.direction.substr(0, 1) + "splitter splitter' tabindex='0'>")
+							.css("position", this.usingAbsPos ? "absolute" : "relative");
 
 			if ( dir ) {
 				splitter.append("<a class='" + dir + "-collapse collapser' href='javascript://'></a>")
@@ -135,39 +223,33 @@ steal('jquery/controller', 'jquery/event/drag/limit', 'jquery/dom/dimensions', '
 		},
 
 		/**
-		 * Returns all the panels.
+		 * Returns all the panels managed by this controller.
+		 * 
+		 * Given a `container`, iterate over its panels and collect their content:
+		 * 
+		 *     var content = '';
+		 *     container.mxui_layout_split('panels').each(function(el){
+		 *       content += el.text();
+		 *     });
+		 * 
+		 * @return {jQuery} Returns a jQuery-wrapped nodelist of elements that are panels of this container.
 		 */
 		panels: function() {
 			return this.element.children((this.options.panelClass ? "." + this.options.panelClass : "") + ":not(.splitter):visible")
 		},
 
-		/**
-		 * Adds hover class to splitter bar.
-		 * @param {Object} el
-		 * @param {Object} ev
-		 */
 		".splitter mouseenter": function( el, ev ) {
 			if (!this.dragging ) {
 				el.addClass(this.options.hover)
 			}
 		},
 
-		/**
-		 * Removes hover class from splitter bar.
-		 * @param {Object} el
-		 * @param {Object} ev
-		 */
 		".splitter mouseleave": function( el, ev ) {
 			if (!this.dragging ) {
 				el.removeClass(this.options.hover)
 			}
 		},
 
-		/**
-		 * For accessibility support, listen to key inputs on the split bar.
-		 * @param {Object} el
-		 * @param {Object} ev
-		 */
 		".splitter keydown": function( el, ev ) {
 			var offset = el.offset();
 			switch ( ev.key() ) {
@@ -183,12 +265,6 @@ steal('jquery/controller', 'jquery/event/drag/limit', 'jquery/dom/dimensions', '
 			}
 		},
 
-		/**
-		 * Drag init event for the '.splitter' split bar.
-		 * @param {Object} el
-		 * @param {Object} ev
-		 * @param {Object} drag
-		 */
 		".splitter draginit": function( el, ev, drag ) {
 			drag.noSelection();
 			drag.limit(this.element);
@@ -213,6 +289,7 @@ steal('jquery/controller', 'jquery/event/drag/limit', 'jquery/dom/dimensions', '
 		},
 
 		/**
+		 * @hide
 		 * Internal method for getting the cache info for an element
 		 * @param {Object} el
 		 */
@@ -229,6 +306,7 @@ steal('jquery/controller', 'jquery/event/drag/limit', 'jquery/dom/dimensions', '
 		},
 
 		/**
+		 * @hide
 		 * Moves a slider to a specific offset in the page
 		 * @param {jQuery} el
 		 * @param {Number} newOffset The location in the page in the direction the slider moves
@@ -289,12 +367,6 @@ steal('jquery/controller', 'jquery/event/drag/limit', 'jquery/dom/dimensions', '
 			}, 1);
 		},
 
-		/**
-		 * As the split bar is dragged, resize.
-		 * @param {Object} el
-		 * @param {Object} ev
-		 * @param {Object} drag
-		 */
 		".splitter dragmove": function( el, ev, drag ) {
 			var moved = this.moveTo(el, drag.location[this.dirs.pos](), this.moveCache)
 
@@ -303,12 +375,6 @@ steal('jquery/controller', 'jquery/event/drag/limit', 'jquery/dom/dimensions', '
 			}
 		},
 
-		/**
-		 * Drag end event for the '.splitter' split bar.
-		 * @param {Object} el
-		 * @param {Object} ev
-		 * @param {Object} drag
-		 */
 		".splitter dragend": function( el, ev, drag ) {
 			this.dragging = false;
 			el.removeClass(this.options.hover)
@@ -316,104 +382,127 @@ steal('jquery/controller', 'jquery/event/drag/limit', 'jquery/dom/dimensions', '
 		},
 
 		/**
+		 * @hide
 		 * Resizes the panels.
 		 * @param {Object} el
 		 * @param {Object} ev
 		 * @param {Object} data
 		 */
 		resize: function( el, ev, data ) {
-			//if not visible do nothing
+			if(!this.element.is(":visible")){
+				return;
+			}
+			
+			var changed = this.refresh(),
+				refreshed = ( !! changed.inserted.length || changed.removed ),
+				keepEl = data && data.keep;
+			if ( ! keepEl && changed.inserted.length ){
+				// if no keep element was provided, and at least one element was inserted,
+				// keep the first inserted element's dimensions/position
+				keepEl = $(changed.inserted.get(0));
+			}
+			
+			// if not visible do nothing
 			if (!this.element.is(":visible") ) {
 				this.oldHeight = this.oldWidth = 0;
 				return;
 			}
 
-			if (!(data && data.force === true) && !this.forceNext ) {
+			if (!(data && data.force === true) && !this.forceNext && !refreshed) {
 				var h = this.element.height(),
-					w = this.element.width()
-					if ( this.oldHeight == h && this.oldWidth == w ) {
-						ev.stopPropagation();
-						return;
-					}
-					this.oldHeight = h;
+					w = this.element.width();
+				if ( this.oldHeight == h && this.oldWidth == w && !this.needsSize) {
+					ev.stopPropagation();
+					return;
+				}
+				this.oldHeight = h;
 				this.oldWidth = w;
 			}
 
 			this.forceNext = false;
-			this.size(null, null, data && data.keep, false);
+			this.size(null, null, keepEl, false);
 		},
 
 		/**
-		 * Inserts a new splitter.
-		 * @param {Object} el
-		 * @param {Object} ev
+		 * @hide
+		 * Refresh the state of the container by handling any panels that have been added or removed.
 		 */
-		insert: function( el, ev ) {
-			ev.stopPropagation();
-
-			if ( ev.target.parentNode != this.element[0] ) {
-				return;
-			}
-
-			var target = $(ev.target),
-				prevElm = target.prev();
-
-			target.addClass("split");
-			target.before(this.splitterEl(target.hasClass('collapsible') && "right"));
-			this.size(null, true, target);
-
-			if ( this.options.direction == "vertical" ) {
-				var splitBar = target.prev(),
-					pHeight = this.element.height();
-
-				splitBar.height(pHeight);
-				target.height(pHeight);
-			}
+		refresh: function(){
+			var changed = {
+				inserted: this.insert(),
+				removed: this.remove()
+			};
+			this._cachedPanels = this.panels().get();
+			return changed;
 		},
 
 		/**
-		 * If an element is removed from this guy, react to it.
-		 * @param {Object} el
-		 * @param {Object} ev
+		 * @hide
+		 * Handles the insertion of new panels into the container.
+		 * @param {jQuery} panel
 		 */
-		remove: function( el, ev ) {
-			if ( ev.target.parentNode != this.element[0] ) {
-				return;
+		insert: function(){
+			var self = this,
+				//cached = this._cachedPanels,
+				panels = this.panels().get(),
+				inserted = [];
+			
+			$.each(panels, function(_, panel){
+				panel = $(panel);
+				
+				if( !panel.hasClass('split') ){
+					panel.before(self.splitterEl(panel.hasClass('collapsible') && 'right'))
+						.addClass('split')
+					
+					inserted.push(panel);
+					
+					if ( self.options.direction == 'vertical' ) {
+						var splitBar = panel.prev(),
+							pHeight = self.element.height();
+
+						splitBar.height(pHeight);
+						panel.height(pHeight);
+					}
+				}
+			});
+			
+			return $(inserted);
+		},
+		
+		/**
+		 * @hide
+		 * Handles the removal of a panel from the container.
+		 * @param {jQuery} panel
+		 */
+		remove: function(){
+			var self = this,
+				splitters = this.element.children('.splitter'),
+				removed = [];
+			
+			$.each(splitters, function(_, splitter){
+				splitter = $(splitter);
+				
+				var prev = $(splitter).prev(),
+					next = $(splitter).next();
+				
+				if( !prev.length || !next.length || next.hasClass('splitter') ){
+					removed.push( splitter[0] );
+				}
+			});
+			
+			if( removed.length ){
+				$(removed).remove();
+				return true;
 			}
-
-			var target = $(ev.target);
-
-			//remove the splitter before us
-			var prev = target.prev(),
-				next;
-			if ( prev.length && prev.hasClass('splitter') ) {
-				prev.remove();
-			} else {
-				next = target.next();
-				if ( next.hasClass('splitter') ) next.remove();
-			}
-
-			//what if I am already not visible .. I should note that
-			if (!this.element.is(':visible') ) {
-				this.forceNext = true;
-			}
-
-			this.size(this.panels().not(target), true);
-
-			target.remove();
 		},
 
-		/**
-		 * Collasper button in split panel was clicked.
-		 * @param {Object} el
-		 * @param {Object} event
-		 */
 		".collapser click": function( el, event ) {
 			this.toggleCollapse(el.parent());
 		},
 
 		/**
-		 * Collapses a splitter ..
+		 * @hide
+		 * Given a splitter bar element, collapses the appropriate panel.
 		 * @param {Object} el
 		 */
 		toggleCollapse: function( splitBar ) {
@@ -437,6 +526,11 @@ steal('jquery/controller', 'jquery/event/drag/limit', 'jquery/dom/dimensions', '
 
 		/**
 		 * Shows a panel that is currently hidden.
+		 * 
+		 * Given some `container`, cause its last panel to be shown:
+		 * 
+		 *     container.mxui_layout_split('showPanel', container.find('.panel:last'));
+		 *
 		 * @param {Object} panel
 		 * @param {Object} width
 		 */
@@ -447,11 +541,11 @@ steal('jquery/controller', 'jquery/event/drag/limit', 'jquery/dom/dimensions', '
 					panel.width(width);
 				}
 
-				panel.removeClass('hidden');
+				panel.show();
 
 				var prevElm = panel.prev();
 				if ( prevElm.hasClass('splitter') ) {
-					prevElm.removeClass('hidden');
+					prevElm.show();
 				} else {
 					//- if it was hidden by start, it didn't get a 
 					//- splitter added so we need to add one here
@@ -466,15 +560,20 @@ steal('jquery/controller', 'jquery/event/drag/limit', 'jquery/dom/dimensions', '
 
 		/**
 		 * Hides a panel that is currently visible.
+		 * 
+		 * Given some `container`, cause its last panel to be hidden:
+		 * 
+		 *     container.mxui_layout_split('hidePanel', container.find('.panel:last'));
+		 *
 		 * @param {Object} panel
 		 * @param {Object} keepSplitter
 		 */
 		hidePanel: function( panel, keepSplitter ) {
 			if ( panel.is(':visible') || panel.hasClass('collapsed') ) {
-				panel.addClass('hidden');
+				panel.hide();
 
 				if (!keepSplitter ) {
-					panel.prev().addClass('hidden');
+					panel.prev().hide();
 				}
 
 				this.size();
@@ -482,7 +581,8 @@ steal('jquery/controller', 'jquery/event/drag/limit', 'jquery/dom/dimensions', '
 		},
 
 		/**
-		 * Takes elements and animates them to the right size
+		 * @hide
+		 * Takes elements and animates them to the right size.
 		 * @param {jQuery} [els] child elements
 		 * @param {Boolean} [animate] animate the change
 		 * @param {jQuery} [keep] keep this element's width / height the same
@@ -492,23 +592,35 @@ steal('jquery/controller', 'jquery/event/drag/limit', 'jquery/dom/dimensions', '
 			els = els || this.panels();
 			resizePanels = resizePanels == undefined ? true : false;
 
-			var splitters = this.element.children(".splitter:visible"),
+			var space = this.element[this.dirs.dim](),
+				splitters = this.element.children(".splitter:visible"),
 				splitterDim = splitters[this.dirs.outer](),
-				total = this.element[this.dirs.dim]() - (splitterDim * splitters.length),
+				total = space - (splitterDim * splitters.length),
 				// rounding remainder
 				remainder = 0,
 				dims = [],
 				newDims = [],
 				sum = 0,
-				i, c$, dim, increase, keepSized = false,
+				i, $c, dim, increase, keepSized = false,
 				curLeft = 0,
 				index, rawDim, newDim, pHeight = this.element.height(),
 				pWidth = this.element.width(),
-				length, start;
+				length, 
+				start,
+				keepIndex = keep ? els.index(keep[0]) : -1;
 
-			//makes els the right height
+			// if splitters are filling the entire width, it probably means the 
+			// style has not loaded
+			// this should be fixed by steal, but IE sucks
+			if(splitterDim === space){
+				this.needsSize = true;
+				return;
+			} else {
+				this.needsSize = false;
+			}
+
+			// adjust total by the dimensions of the element whose size we want to keep
 			if ( keep ) {
-				els = els.not(keep);
 				total = total - $(keep)[this.dirs.outer]();
 			}
 
@@ -520,9 +632,12 @@ steal('jquery/controller', 'jquery/event/drag/limit', 'jquery/dom/dimensions', '
 
 			//calculate current percentage of height
 			for ( i = 0; i < length; i++ ) {
-				$c = $(els[i]), dim = $c[this.dirs.outer](true);
+				$c = $(els[i]);
+				dim = $c[this.dirs.outer](true);
 				dims.push(dim);
-				sum += dim;
+				if( keepIndex !== i ) {
+					sum += dim;
+				}
 			}
 
 			increase = total / sum;
@@ -533,8 +648,15 @@ steal('jquery/controller', 'jquery/event/drag/limit', 'jquery/dom/dimensions', '
 				dim = dims[index];
 				rawDim = (dim * increase) + remainder;
 				newDim = (i == length + start - 1 ? total : Math.round(rawDim));
-				newDims[index] = newDim;
-				total = total - newDim;
+				
+				if (keepIndex == i) {
+					// if we're keeping this element's size, use the original dimensions
+					newDims[index] = dim;
+				} else {
+					// use the adjusted dimensions
+					newDims[index] = newDim;
+					total = total - newDim;
+				}
 			}
 
 			//resize splitters to new height if vertical (horizontal will automatically be the right width)
@@ -544,20 +666,20 @@ steal('jquery/controller', 'jquery/event/drag/limit', 'jquery/dom/dimensions', '
 
 			// Adjust widths for each pane and account for rounding
 			for ( i = 0; i < length; i++ ) {
-
 				$c = $(els[i]);
 
-				var dim = this.options.direction == "horizontal" ? {
-					outerHeight: newDims[i],
-					outerWidth: pWidth
-				} : {
-					outerWidth: newDims[i],
-					outerHeight: pHeight
-				};
+				var minWidth = $c.data("split-min-width") || 0,
+					minHeight = $c.data("split-min-height") || 0,
+					dim = this.options.direction == "horizontal" ? {
+						outerHeight: Math.max( newDims[i], minHeight ),
+						outerWidth: Math.max( pWidth, minWidth )
+					} : {
+						outerWidth: Math.max( newDims[i], minWidth ),
+						outerHeight: Math.max( pHeight, minHeight )
+					};
 
 				if ( animate && !this.usingAbsPos ) {
 					$c.animate(dim, "fast", function() {
-
 						if ( resizePanels ) {
 							$(this).trigger('resize', [false]);
 						}

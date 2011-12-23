@@ -4,7 +4,7 @@
 	<head>
 		<title>modal</title>
         <style type='text/css'>
-            body {font-family: verdana; height: 2000px;}
+            body {font-family: verdana;}
             .error {border: solid 1px red;}
             .error_text { color: red; font-size: 10px;}
             td {padding: 3px;}
@@ -14,29 +14,64 @@
 				border: solid 1px black;
 				background-color: #eeeeff;
 			}
+			#elem {
+				width: 400px;
+				height: 300px;
+				line-height: 300px;
+				border: 1px dotted #aaa;
+				text-align: center;
+			}
 			.custom-overlay {
-        background: rgba(255,0,247,0.5);
-        position: fixed;
-        top: 0;
-        bottom: 0;
-        right: 0;
-        left: 0;
-      }
+				background: rgba(255,0,247,0.5);
+				top: 0;
+				bottom: 0;
+				right: 0;
+				left: 0;
+			}
+			.custom-overlay-2 {
+				background: rgba(0,0,200,0.5);
+				top: 0;
+				bottom: 0;
+				right: 0;
+				left: 0;
+			}
+			#customOverlayElement {
+				line-height: 20px;
+				text-align: left;
+			}
         </style>
 	</head>
 	<body>
 	    <h1>Modal</h1>
+		<ul>
+			<li>
+				<a href="javascript://" id='show'>Show as modal</a>
+			</li>
+			<li>
+				<a href="javascript://" id='show-stacked'>Show five stacked modals</a>
+			</li>
+			<li>
+				<a href="javascript://" id='show-custom-overlay-class'>Show modal with custom overlay class</a>
+			</li>
+			<li>
+				<a href="javascript://" id='show-custom-element'>Show modal within an element</a>
+			</li>
+		</ul>
+		<div id="elem">
+			Just a random element
+		</div>
 		<div id='modal' class="modal">
 	    	<h3>Some Modal</h3>
 			<p>Here is some text. Blah blah blah. I am watching SNL with Jennifer Lopez.
 				She still has it.  But, I am not sure SNL does.
 			</p>
 	    </div>
-		<a href="#" id='show'>Show as modal</a>
-		<br />
-		<a href="#" id='show-stacked'>Show five stacked modals</a>
-		<br />
-		<a href="#" id='show-custom-overlay-class'>Show modal with custom overlay class</a>
+		<div id='modal2' class="modal" style="display: none">
+	    	<h3>Some Modal</h3>
+			<p>I'm a modal inside of an element.
+			</p>
+	    </div>
+		<div id="customOverlayElement" style="display: none">This is a custom overlay element</div>
 		<script type='text/javascript' src='../../../steal/steal.js'></script>
 		<script type='text/javascript'>
 		  steal('mxui/layout/modal', function(){
@@ -59,6 +94,13 @@
   				$("#modal").mxui_layout_modal({
   				  overlayClass: 'custom-overlay',
   				  overlay: true
+  				});
+  			})
+  			$("#show-custom-element").click(function(){
+  				$("#modal2").mxui_layout_modal({
+  				  overlayClass: 'custom-overlay-2',
+				  overlay: $("#customOverlayElement"),
+				  of: $("#elem")
   				});
   			})
   		})

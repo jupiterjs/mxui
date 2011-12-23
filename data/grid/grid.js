@@ -3,7 +3,7 @@ steal('mxui/layout/table_scroll',
 	'jquery/controller/view',
 	'jquery/view/ejs',
 	'mxui/data/order',
-	'mxui/util/selectable')
+	'mxui/nav/selectable')
 	.then('./views/th.ejs','./views/init.ejs','./views/list.ejs')
 	.then(function($){
 /**
@@ -92,7 +92,7 @@ $.Controller.extend("Mxui.Data.Grid",{
 			canUnsort: this.options.canUnsort
 		})
 		
-		this.options.selectable && this.$.tbody.mxui_util_selectable();
+		this.options.selectable && this.$.tbody.mxui_nav_selectable();
 		//this.scrollable.cache.thead.mxui_layout_resizer({selector: "th"});
 		this.element.addClass("grid");
 		if (this.options.filler) {

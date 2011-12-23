@@ -1,175 +1,7 @@
 steal('jquery/controller').then(function($){
-    
-	
-	$.Controller("Mxui.Layout.Positionable",
-    {
-		listensTo : ["show",'move'],
-		iframe: false,
-		keep : false //keeps it where it belongs
-    },
-    {
-       /**
-        * 
-        * @param {Object} element
-        * @param {Object} options
-        * 		my
-        *       at
-        *       of
-        */
-	   init : function(element, options){
-           this.element.css("position","absolute");
-           if(!this.options.keep){
-				this.element[0].parentNode.removeChild(this.element[0])
-				document.body.appendChild(this.element[0]);
-		   }
-       },
-       show : function(el, ev, position){
-		   this.move.apply(this, arguments)
-           //clicks elsewhere should hide
-       },
-	   move : function(el, ev, positionFrom){
-   			
-			var options  = $.extend({},this.options);
-			    options.of= positionFrom || options.of;
-			if(!options.of)	return;
-			var target = $( options.of ),
-				collision = ( options.collision || "flip" ).split( " " ),
-				offset = options.offset ? options.offset.split( " " ) : [ 0, 0 ],
-				targetWidth,
-				targetHeight,
-				basePosition;
-		
-			if ( options.of.nodeType === 9 ) {
-				targetWidth = target.width();
-				targetHeight = target.height();
-				basePosition = { top: 0, left: 0 };
-			} else if ( options.of.scrollTo && options.of.document ) {
-				targetWidth = target.width();
-				targetHeight = target.height();
-				basePosition = { top: target.scrollTop(), left: target.scrollLeft() };
-			} else if ( options.of.preventDefault ) {
-				// force left top to allow flipping
-				options.at = "left top";
-				targetWidth = targetHeight = 0;
-				basePosition = { top: options.of.pageY, left: options.of.pageX };
-			} else if (options.of.top){
-				options.at = "left top";
-				targetWidth = targetHeight = 0;
-				basePosition = { top: options.of.top, left: options.of.left };
-				
-			}else {
-				targetWidth = target.outerWidth();
-				targetHeight = target.outerHeight();
-				if(false){
-					var to = target.offset();
-					
-					var eo =this.element.parent().children(":first").offset();
-					
-					basePosition = {
-						left: to.left - eo.left,
-						top: to.top -eo.top
-					}
-				}else{
-					basePosition = target.offset();
-				}
-				
-			}
-		
-			// force my and at to have valid horizontal and veritcal positions
-			// if a value is missing or invalid, it will be converted to center 
-			$.each( [ "my", "at" ], function() {
-				var pos = ( options[this] || "" ).split( " " );
-				if ( pos.length === 1) {
-					pos = horizontalPositions.test( pos[0] ) ?
-						pos.concat( [verticalDefault] ) :
-						verticalPositions.test( pos[0] ) ?
-							[ horizontalDefault ].concat( pos ) :
-							[ horizontalDefault, verticalDefault ];
-				}
-				pos[ 0 ] = horizontalPositions.test( pos[0] ) ? pos[ 0 ] : horizontalDefault;
-				pos[ 1 ] = verticalPositions.test( pos[1] ) ? pos[ 1 ] : verticalDefault;
-				options[ this ] = pos;
-			});
-		
-			// normalize collision option
-			if ( collision.length === 1 ) {
-				collision[ 1 ] = collision[ 0 ];
-			}
-		
-			// normalize offset option
-			offset[ 0 ] = parseInt( offset[0], 10 ) || 0;
-			if ( offset.length === 1 ) {
-				offset[ 1 ] = offset[ 0 ];
-			}
-			offset[ 1 ] = parseInt( offset[1], 10 ) || 0;
-		
-			if ( options.at[0] === "right" ) {
-				basePosition.left += targetWidth;
-			} else if (options.at[0] === horizontalDefault ) {
-				basePosition.left += targetWidth / 2;
-			}
-		
-			if ( options.at[1] === "bottom" ) {
-				basePosition.top += targetHeight;
-			} else if ( options.at[1] === verticalDefault ) {
-				basePosition.top += targetHeight / 2;
-			}
-		
-			basePosition.left += offset[ 0 ];
-			basePosition.top += offset[ 1 ];
-			
-			
-			var elem = this.element,
-				elemWidth = elem.outerWidth(),
-				elemHeight = elem.outerHeight(),
-				position = $.extend( {}, basePosition ),
-				over,
-				myOffset,
-				atOffset;
-
-			if ( options.my[0] === "right" ) {
-				position.left -= elemWidth;
-			} else if ( options.my[0] === horizontalDefault ) {
-				position.left -= elemWidth / 2;
-			}
-	
-			if ( options.my[1] === "bottom" ) {
-				position.top -= elemHeight;
-			} else if ( options.my[1] === verticalDefault ) {
-				position.top -= elemHeight / 2;
-			}
-	
-			$.each( [ "left", "top" ], function( i, dir ) {
-				if ( $.ui.position[ collision[i] ] ) {
-					$.ui.position[ collision[i] ][ dir ]( position, {
-						targetWidth: targetWidth,
-						targetHeight: targetHeight,
-						elemWidth: elemWidth,
-						elemHeight: elemHeight,
-						offset: offset,
-						my: options.my,
-						at: options.at
-					});
-				}
-			});
-	
-			// if elem is hidden, show it before setting offset
-			var visible = elem.is(":visible")
-			if(!visible){
-				elem.css("opacity", 0)
-					.show()
-				
-			}
-			elem.offset( $.extend( position, { using: options.using } ) )
-			if(!visible){
-				elem.css("opacity", 1)
-					.hide();
-			}
-	   }
-   })
 
 /*
- * jQuery UI Position @VERSION
+ * jQuery UI Position 1.9m6
  *
  * Copyright 2011, AUTHORS.txt (http://jqueryui.com/about)
  * Dual licensed under the MIT or GPL Version 2 licenses.
@@ -177,6 +9,7 @@ steal('jquery/controller').then(function($){
  *
  * http://docs.jquery.com/UI/Position
  */
+(function( $, undefined ) {
 
 $.ui = $.ui || {};
 
@@ -351,12 +184,6 @@ $.fn.position = function( options ) {
 
 		position.left += myOffset[ 0 ];
 		position.top += myOffset[ 1 ];
-
-		// if the browser doesn't support fractions, then round for consistent results
-		if ( !$.support.offsetFractions ) {
-			position.left = Math.round( position.left );
-			position.top = Math.round( position.top );
-		}
 
 		collisionPosition = {
 			marginLeft: marginLeft,
@@ -551,7 +378,7 @@ $.ui.position = {
 				newOverBottom;
 			if ( overTop < 0 ) {
 				newOverBottom = position.top + myOffset + atOffset + offset + data.collisionHeight - outerHeight - withinOffset;
-				if ( ( position.top + myOffset + atOffset + offset) > overTop && ( newOverBottom < 0 || newOverBottom < Math.abs( overTop ) ) ) {
+				if ( newOverBottom < 0 || newOverBottom < Math.abs( overTop ) ) {
 					data.elem
 						.addClass( "ui-flipped-bottom" );
 
@@ -560,7 +387,7 @@ $.ui.position = {
 			}
 			else if ( overBottom > 0 ) {
 				newOverTop = position.top -  data.collisionPosition.marginTop + myOffset + atOffset + offset - withinOffset;
-				if ( ( position.top + myOffset + atOffset + offset) > overBottom && ( newOverTop > 0 || Math.abs( newOverTop ) < overBottom ) ) {
+				if ( newOverTop > 0 || Math.abs( newOverTop ) < overBottom ) {
 					data.elem
 						.addClass( "ui-flipped-top" );
 
@@ -580,45 +407,6 @@ $.ui.position = {
 		}
 	}
 };
-
-// fraction support test
-(function () {
-	var testElement, testElementParent, testElementStyle, offsetLeft, i
-		body = document.getElementsByTagName( "body" )[ 0 ], 
-		div = document.createElement( "div" );
-
-	//Create a "fake body" for testing based on method used in jQuery.support
-	testElement = document.createElement( body ? "div" : "body" );
-	testElementStyle = {
-		visibility: "hidden",
-		width: 0,
-		height: 0,
-		border: 0,
-		margin: 0,
-		background: "none"
-	};
-	if ( body ) {
-		jQuery.extend( testElementStyle, {
-			position: "absolute",
-			left: "-1000px",
-			top: "-1000px"
-		});
-	}
-	for ( i in testElementStyle ) {
-		testElement.style[ i ] = testElementStyle[ i ];
-	}
-	testElement.appendChild( div );
-	testElementParent = body || document.documentElement;
-	testElementParent.insertBefore( testElement, testElementParent.firstChild );
-
-	div.style.cssText = "position: absolute; left: 10.7432222px;";
-
-	offsetLeft = $( div ).offset().left;
-	$.support.offsetFractions = offsetLeft > 10 && offsetLeft < 11;
-
-	testElement.innerHTML = "";
-	testElementParent.removeChild( testElement );
-})();
 
 // DEPRECATED
 if ( $.uiBackCompat !== false ) {
@@ -653,8 +441,305 @@ if ( $.uiBackCompat !== false ) {
 				offset: undefined
 			} ) );
 		}
-	}( jQuery ) );
+	}( $ ) );
 }
+
+}( $ ) );
+
+    
+	
+	/**
+	 * @class Mxui.Layout.Positionable
+	 * @parent Mxui
+	 *
+	 * @description Allows you to position an element relative to another element.
+	 *
+	 * The positionable plugin allows you to position an element relative to
+	 * another. It abstracts all of the calculating you might have to do when
+	 * implementing UI widgets, such as tooltips and autocompletes.
+	 *
+	 * # Basic Example
+	 *
+	 * Given the following markup:
+	 *
+	 *		<a id="target" href="http://jupiterjs.com/">Jupiter!</a>
+	 *		<div id="tooltip">Jupiter JavaScript Consulting</div>
+	 *
+	 * To position the tooltip element above the anchor link, you would use the
+	 * following code:
+	 *
+	 *		// Initialize the positionable plugin
+	 *		$("#tooltip").mxui_layout_positionable({
+	 *			my: "bottom",
+	 *			at: "top",
+	 *			of: $("#target")
+	 *		});
+	 *
+	 *		// Trigger the move event on the tooltip to move it's position
+	 *		$("#tooltip").trigger("move");
+	 *
+	 * In the options passed to the positionable plugin, we're telling the plugin
+	 * to align the bottom of the `#tooltip` element to the top of the
+	 * `#target` element.
+	 *
+	 * # Autocomplete Example
+	 *
+	 * Given the following markup:
+	 *
+	 *		<form>
+	 *			<label>
+	 *				Search
+	 *				<input type="text" name="search" />
+	 *			</label>
+	 *		</form>
+	 *		<ul id="autocomplete">
+	 *		</ul>
+	 *
+	 * You could easily implement an autocompleting search input using the
+	 * following code:
+	 *
+	 *		// Position the autocomplete list below the search input
+	 *		$("#autocomplete").mxui_layout_positionable({
+	 *			my: "top left",
+	 *			at: "bottom left",
+	 *			of: $("#search")
+	 *		});
+	 *		
+	 *		// Autocomplete controller
+	 *		$.Controller("Autocomplete", {
+	 *			"keyup" : function( el, ev ) {
+	 *				this.options.list.show();
+	 *				$.ajax({
+	 *					url : "/search.php",
+	 *					data : el.val(),
+	 *					success : this.callback("updateResults")
+	 *				});
+	 *			},
+	 *			"blur" : function() {
+	 *				this.options.list.hide();
+	 *			},
+	 *			"updateResults" : function( json ) {
+	 *				this.options.list.html( "views/autocomplete-list.ejs", json );
+	 *			},
+	 *			"{list} li click" : function( el, ev ) {
+	 *				this.blur();
+	 *				this.element.val( el.text() );
+	 *			}
+	 *		});
+	 *		
+	 *		// Initialize the autocomplete controller on the search element
+	 *		$("#search").autocomplete({
+	 *			list: $("#autocomplete")
+	 *		});
+	 *
+	 *
+	 * ## Demo
+	 * @demo mxui/layout/positionable/positionable.html
+	 *
+	 * @param {Object} options Object literal describing how to position the
+	 * current element against another.
+	 *
+	 *	- `my` {String} - String containing the edge of the positionable element to be
+	 *   used in positioning. Possbile values are:
+	 *	- `at` {String} - String containing the edge of the target element to be
+	 *   used in positioning.
+	 *	- Possible values for both the `my` and `at` options include:
+	 *		- `"top"`
+	 *		- `"center"`
+	 *		- `"bottom"`
+	 *		- `"left"`
+	 *		- `"right"`
+	 *		- Horizontal and vertical values can be used in conjunction with
+	 *		eachother, separated by a space. For example, `"bottom left"`.
+	 *	- `of` {jQuery} - The target DOM element.
+	 *	- `collision` {String} - Collision strategy to be used in case the positionable
+	 *	element does not fit in the window. Possible values include
+	 *		- `fit` - Attempts to position the element as close as possible to
+	 *		the target without clipping the positionable.
+	 *		- `flip` - Flips the element to the opposite side of the target.
+	 *		- `none` - Don't use any collision strategey.
+	 *	- `using` {Function} - function that recieves the calculated position
+	 *	in the format of `{ top: x, left: y }` to handle the positioning. If a
+	 *	`using` parameter is passed, the element won't be positioned
+	 *	automatically, but must be positioned by hand in the `using` callback.
+	 *
+	 * 
+	 * This plugin is built on top of the [jQuery UI Position Plugin](http://docs.jquery.com/UI/Position),
+	 * so you may refer to their documentation for more advanced usage.
+	 */
+	$.Controller("Mxui.Layout.Positionable",
+    {
+
+		rhorizontal : /left|center|right/,
+		rvertical : /top|center|bottom/,
+		hdefault : "center",
+		vdefault : "center",
+		listensTo : ["show",'move'],
+		iframe: false,
+		keep : false //keeps it where it belongs
+    },
+	/** 
+	 * @prototype
+	 */
+    {
+	   init : function(element, options) {
+           this.element.css("position","absolute");
+           if(!this.options.keep){
+				this.element[0].parentNode.removeChild(this.element[0])
+				document.body.appendChild(this.element[0]);
+		   }
+       },
+       show : function(el, ev, position){
+		   this.move.apply(this, arguments)
+           //clicks elsewhere should hide
+       },
+	   move : function(el, ev, positionFrom){
+	
+			var options  = $.extend({},this.options);
+			    options.of= positionFrom || options.of;
+			if(!options.of)	return;
+			var target = $( options.of ),
+				collision = ( options.collision || "flip" ).split( " " ),
+				offset = options.offset ? options.offset.split( " " ) : [ 0, 0 ],
+				targetWidth,
+				targetHeight,
+				basePosition;
+		
+			if ( options.of.nodeType === 9 ) {
+				targetWidth = target.width();
+				targetHeight = target.height();
+				basePosition = { top: 0, left: 0 };
+			} else if ( options.of.scrollTo && options.of.document ) {
+				targetWidth = target.width();
+				targetHeight = target.height();
+				basePosition = { top: target.scrollTop(), left: target.scrollLeft() };
+			} else if ( options.of.preventDefault ) {
+				// force left top to allow flipping
+				options.at = "left top";
+				targetWidth = targetHeight = 0;
+				basePosition = { top: options.of.pageY, left: options.of.pageX };
+			} else if (options.of.top){
+				options.at = "left top";
+				targetWidth = targetHeight = 0;
+				basePosition = { top: options.of.top, left: options.of.left };
+				
+			} else {
+				targetWidth = target.outerWidth();
+				targetHeight = target.outerHeight();
+				if(false){
+					var to = target.offset();
+					
+					var eo =this.element.parent().children(":first").offset();
+					
+					basePosition = {
+						left: to.left - eo.left,
+						top: to.top -eo.top
+					}
+				}else{
+					basePosition = target.offset();
+				}
+				
+			}
+		
+			// force my and at to have valid horizontal and veritcal positions
+			// if a value is missing or invalid, it will be converted to center 
+			$.each( [ "my", "at" ], this.proxy( function( i, val ) {
+				var pos = ( options[val] || "" ).split( " " );
+				if ( pos.length === 1) {
+					pos = this.Class.rhorizontal.test( pos[0] ) ?
+						pos.concat( [this.Class.vdefault] ) :
+						this.Class.rvertical.test( pos[0] ) ?
+							[ this.Class.hdefault ].concat( pos ) :
+							[ this.Class.hdefault, this.Class.vdefault ];
+				}
+				pos[ 0 ] = this.Class.rhorizontal.test( pos[0] ) ? pos[ 0 ] : this.Class.hdefault;
+				pos[ 1 ] = this.Class.rvertical.test( pos[1] ) ? pos[ 1 ] : this.Class.vdefault;
+				options[ val ] = pos;
+			}));
+		
+			// normalize collision option
+			if ( collision.length === 1 ) {
+				collision[ 1 ] = collision[ 0 ];
+			}
+		
+			// normalize offset option
+			offset[ 0 ] = parseInt( offset[0], 10 ) || 0;
+			if ( offset.length === 1 ) {
+				offset[ 1 ] = offset[ 0 ];
+			}
+			offset[ 1 ] = parseInt( offset[1], 10 ) || 0;
+		
+			if ( options.at[0] === "right" ) {
+				basePosition.left += targetWidth;
+			} else if (options.at[0] === this.Class.hdefault ) {
+				basePosition.left += targetWidth / 2;
+			}
+		
+			if ( options.at[1] === "bottom" ) {
+				basePosition.top += targetHeight;
+			} else if ( options.at[1] === this.Class.vdefault ) {
+				basePosition.top += targetHeight / 2;
+			}
+		
+			basePosition.left += offset[ 0 ];
+			basePosition.top += offset[ 1 ];
+			
+			
+			var elem = this.element,
+				elemWidth = elem.outerWidth(),
+				elemHeight = elem.outerHeight(),
+				position = $.extend( {}, basePosition ),
+				over,
+				myOffset,
+				atOffset;
+
+			if ( options.my[0] === "right" ) {
+				position.left -= elemWidth;
+			} else if ( options.my[0] === this.Class.hdefault ) {
+				position.left -= elemWidth / 2;
+			}
+	
+			if ( options.my[1] === "bottom" ) {
+				position.top -= elemHeight;
+			} else if ( options.my[1] === this.Class.vdefault ) {
+				position.top -= elemHeight / 2;
+			}
+
+			$.each( [ "left", "top" ], function( i, dir ) {
+				if ( $.ui.position[ collision[i] ] ) {
+					var isEvent = ((options.of && options.of.preventDefault) != null);				
+					$.ui.position[ collision[i] ][ dir ]( position, {
+						targetWidth: targetWidth,
+						targetHeight: targetHeight,
+						elem: elem,
+						within : $((isEvent || !options.of)  ? window : options.of),
+						collisionPosition : {
+							marginLeft: parseInt( $.curCSS( elem[0], "marginLeft", true ) ) || 0,
+							marginTop: parseInt( $.curCSS( elem[0], "marginTop", true ) ) || 0
+						},
+						elemWidth: elemWidth,
+						elemHeight: elemHeight,
+						offset: offset,
+						my: options.my,
+						at: options.at
+					});
+				}
+			});
+	
+			// if elem is hidden, show it before setting offset
+			var visible = elem.is(":visible")
+			if(!visible){
+				elem.css("opacity", 0)
+					.show()
+				
+			}
+			elem.offset( $.extend( position, { using: options.using } ) )
+			if(!visible){
+				elem.css("opacity", 1)
+					.hide();
+			}
+	   }
+   })
 
 
 });
