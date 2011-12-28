@@ -100,8 +100,25 @@ steal('funcunit').then(function(){
 				outer = second.outerWidth();
 			equals(S('#container2 .splitter:eq(1)').offset().left, offset.left+outer, "right position");
 		})
-	})
+	});
 	
+	test("panel keeps min width when resized", function(){
+		S('#container_min_width').visible(function(){
+			S('#container_min_width .splitter:first').drag('-500 +0', function(){
+				var panelWidth = S('#container_min_width .panel:first').width();
+				ok(panelWidth >= 100, "panel keeps min-width");
+			});
+		});
+	});
+	
+	test("panel keeps min width when container resized", function(){
+		S('#container_min_width').visible(function(){
+			S('#container_min_width .ui-resizable-e').drag('-1000 +0', function(){
+				var panelWidth = S('#container_min_width .panel:first').width();
+				ok(panelWidth >= 100, "panel keeps min-width");
+			});
+		});
+	});
 	
 	/*
 	test("Remove Panel",function(){ 

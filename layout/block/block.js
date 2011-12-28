@@ -8,28 +8,52 @@ steal('jquery/controller',
 	 * @plugin mxui/block
 	 * @test mxui/layout/block/funcunit.html
 	 * 
-	 * Blocks the browser screen from user interaction.
+	 * Blocks the browser screen or element from user interaction.
 	 * 
 	 * Sometimes it is necessary to block the browser from user interaction such as when a spinner image
 	 * is giving the user feedback that a request for data is taking place. Mxui.Block attaches to an 
 	 * element sets its width and height to the window's width and height and sets its z-index to a 
 	 * configurable value (default is 9999).
 	 * 
-	 * To block the browser screen just attach Mxui.Block to an element you wish to act as a blocker and
-	 * trigger the `show` event.
+	 * To block the browser screen just attach Mxui.Block to an element you
+	 * wish to act as a blocker:
 	 * 
-	 * 		$("#blocker").mxui_block().trigger('show')	
+	 *		$("#blocker").mxui_layout_block();
+	 *
+	 * If you'd like to block a specifc element, simply pass it as the argument
+	 * to the Mxui.Block call:
+	 *
+	 *		$("#blocker").mxui_layout_block( $("#parent") );
+	 *
+	 * You can also simply pass a string selector as the argument to determine
+	 * the parent
+	 *
+	 *		$("#blocker").mxui_layout_block("#parent");
+	 *
 	 * 
 	 * @demo mxui/layout/block/block.html
 	 */	
-	$.Controller("Mxui.Layout.Block", 
-	{
+	$.Controller("Mxui.Layout.Block", {
 		defaults : {
 			zIndex: 9999
 		},
 		listensTo: ['show','hide']
-	},{
-		init : function(){
+	}, {
+		setup: function( el, option ) {
+			var parent;
+			if ( option && ( $.isWindow( option ) || option.jquery )) {
+				parent = option;
+			} else if ( ({}).toString.call( option ) == "[object String]" ) {
+				parent = $( option );
+			} else {
+				parent = el.parent();
+			}
+
+			this._super(el, {
+				parent : parent
+			});
+		},
+		init : function() {
 
 			this.element.show().mxui_layout_positionable();
 
@@ -42,6 +66,15 @@ steal('jquery/controller',
 				});
 			}
 
+			if ( ! $.isWindow( this.options.parent )) {
+				// If its an element, make sure it's relatively positioned
+				this.options.parent.css("position", "relative");
+				// Put the block inside of the parent if it's not
+				if ( ! $.contains( this.options.parent[0], this.element[0] ) ) {
+					this.options.parent.append( this.element.detach() );
+				}
+			}
+
 			this.element
 				.css({
 					top: "0px", 
@@ -50,7 +83,7 @@ steal('jquery/controller',
 				})
 				.mxui_layout_fill({
 					all: true, 
-					parent: window
+					parent: this.options.parent
 				})
 				.mxui_layout_bgiframe();	
 			
