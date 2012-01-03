@@ -576,7 +576,38 @@ if ( $.uiBackCompat !== false ) {
 		vdefault : "center",
 		listensTo : ["show",'move'],
 		iframe: false,
-		keep : false //keeps it where it belongs
+		keep : false, //keeps it where it belongs,
+		scrollbarWidth: function() {
+			var w1, w2,
+				div = $( "<div style='display:block;width:50px;height:50px;overflow:hidden;'><div style='height:100px;width:auto;'></div></div>" ),
+				innerDiv = div.children()[0];
+	
+			$( "body" ).append( div );
+			w1 = innerDiv.offsetWidth;
+			div.css( "overflow", "scroll" );
+	
+			w2 = innerDiv.offsetWidth;
+	
+			if ( w1 === w2 ) {
+				w2 = div[0].clientWidth;
+			}
+	
+			div.remove();
+	
+			return w1 - w2; 
+		},
+		getScrollInfo: function(within) {
+			var notWindow = within[0] !== window,
+				overflowX = notWindow ? within.css( "overflow-x" ) : "",
+				overflowY = notWindow ? within.css( "overflow-y" ) : "",
+				scrollbarWidth = overflowX === "auto" || overflowX === "scroll" ? $.position.scrollbarWidth() : 0,
+				scrollbarHeight = overflowY === "auto" || overflowY === "scroll" ? $.position.scrollbarWidth() : 0;
+	
+			return {
+				height: within.height() < within[0].scrollHeight ? scrollbarHeight : 0,
+				width: within.width() < within[0].scrollWidth ? scrollbarWidth : 0
+			};
+		}
     },
 	/** 
 	 * @prototype
@@ -689,6 +720,7 @@ if ( $.uiBackCompat !== false ) {
 				elemWidth = elem.outerWidth(),
 				elemHeight = elem.outerHeight(),
 				position = $.extend( {}, basePosition ),
+				getScrollInfo = this.Class.getScrollInfo,
 				over,
 				myOffset,
 				atOffset;
@@ -707,16 +739,26 @@ if ( $.uiBackCompat !== false ) {
 
 			$.each( [ "left", "top" ], function( i, dir ) {
 				if ( $.ui.position[ collision[i] ] ) {
-					var isEvent = ((options.of && options.of.preventDefault) != null);				
+					var isEvent = ((options.of && options.of.preventDefault) != null),
+						within = $(isEvent || !options.of ? window : options.of),
+						marginLeft = parseInt( $.curCSS( elem[0], "marginLeft", true ) ) || 0,
+						marginTop = parseInt( $.curCSS( elem[0], "marginTop", true ) ) || 0;
+						
+					var scrollInfo = getScrollInfo(within);
+						
 					$.ui.position[ collision[i] ][ dir ]( position, {
 						targetWidth: targetWidth,
 						targetHeight: targetHeight,
 						elem: elem,
-						within : $((isEvent || !options.of)  ? window : options.of),
+						within : within,
 						collisionPosition : {
 							marginLeft: parseInt( $.curCSS( elem[0], "marginLeft", true ) ) || 0,
 							marginTop: parseInt( $.curCSS( elem[0], "marginTop", true ) ) || 0
 						},
+						collisionWidth: elemWidth + marginLeft +
+							( parseInt( $.curCSS( elem[0], "marginRight", true ) ) || 0 ) + scrollInfo.width,
+						collisionHeight: elemHeight + marginTop +
+							( parseInt( $.curCSS( elem[0], "marginBottom", true ) ) || 0 ) + scrollInfo.height,
 						elemWidth: elemWidth,
 						elemHeight: elemHeight,
 						offset: offset,

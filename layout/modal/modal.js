@@ -130,15 +130,15 @@ steal('jquery/controller', 'jquery/event/resize', 'mxui/layout/positionable', '.
 				if ( $.isWindow( opts.of ) ) {
 					$(document.body).append( options.overlayElement.detach() )
 					options.overlayPosition = "fixed";
-					console.log( 'here', options );
+					//console.log( 'here', options );
 				} else {
 					opts.of.css("position", "relative").append( options.overlayElement.detach() )
 					options.overlayPosition = "absolute";
-					console.log( 'there', options );
+					//console.log( 'there', options );
 				}
 
 
-				console.log( options.overlayElement, options.overlayElement.parent() );
+				//console.log( options.overlayElement, options.overlayElement.parent() );
 				options.overlayElement.hide()
 
 			}
