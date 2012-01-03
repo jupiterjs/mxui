@@ -2,8 +2,9 @@ steal('jquery/controller', 'jquery/event/resize', 'mxui/layout/positionable', '.
 	/**
 	 * @class Mxui.Layout.Modal
 	 * @parent Mxui
-	 * @test mxui/nav/modal/modal_test.js
+	 * @test mxui/layout/modal/funcunit.html
 	 * 
+	 * @description A basic modal implementation. 
 	 * A basic modal implementation. 
 	 * 
 	 * ## Use
@@ -13,10 +14,12 @@ steal('jquery/controller', 'jquery/event/resize', 'mxui/layout/positionable', '.
 	 *		$('#modal').mxui_layout_modal();
 	 *
 	 * This will take the jQuery object and place it centered
-	 * on the window. If you want the overlay over the page, use
+	 * on the window. If you want an overlay over the page behind the modal, use
 	 * the overlay option:
 	 *
-	 *		$('modal').mxui_layout_modal({overlay: true});
+	 *		$('modal').mxui_layout_modal({
+	 *			overlay: true
+	 *		});
 	 *
 	 * This will create <div class="mxui_layout_modal-overlay"></div> element 
 	 * and display it over the page. Default CSS applied to the overlay is:
@@ -36,6 +39,13 @@ steal('jquery/controller', 'jquery/event/resize', 'mxui/layout/positionable', '.
 	 *		$('modal').mxui_layout_modal({
 	 *			overlay: true, 
 	 *			overlayClass: 'my-overlay-class'
+	 *		});
+	 *
+	 * Alternatively, if you'd like to use a custom element as your overlay,
+	 * simply pass it in the overlay option:
+	 *
+	 *		$('modal').mxui_layout_modal({
+	 *			overlay: $(".custom_overlay")
 	 *		});
 	 *
 	 * By default modals will be hidden and left in the DOM after you trigger "hide"
@@ -63,6 +73,23 @@ steal('jquery/controller', 'jquery/event/resize', 'mxui/layout/positionable', '.
 	 *
 	 * ## Demo
 	 * @demo mxui/layout/modal/modal.html
+	 * @constructor
+	 * 
+	 * @param {Object} [options] Values to configure the behavior of modal:
+	 * 
+	 *	- `overlay` - An element to block the screen behind the modal. When
+	 *	clicked, the modal closes.
+	 *		- `{Boolean}` - If true an overlay will be created and used.
+	 *		- `{HTMLElement}` - If an element is passed, that element will be
+	 *		used as the overlay. This is useful for implementing custom
+	 *		overlays.
+	 *	- `overlayClass` - `{String}` - A class name to be added to the overlay element.
+	 *	- `of` - `{HTMLElement}` - The element you would like the modal to be applied to. The
+	 *	default is the `window`.
+	 *	- `destroyOnHide` - `{Boolean}` - If `true`, the modal will be
+	 *	destroyed when it's `hide` method is called.
+	 *
+	 * @return {mxui.layout.modal}
 	 */
 	
 	/* Starting z-index for modals. We use stack variable to keep open models in order */
@@ -83,19 +110,37 @@ steal('jquery/controller', 'jquery/event/resize', 'mxui/layout/positionable', '.
 			overlayClass : "mxui_layout_modal-overlay"
 		},
 		listensTo: ["show", "hide", "move"]
-	}, {
+	}, 
+	/*
+	 * @prototype
+	 */
+	{
 		setup: function(el, options) {
 			var opts = $.extend({}, this.Class.defaults, options)
-			if(opts.overlay === true){
-				options.overlayElement = $('<div class="'+opts.overlayClass+'"></div>');
-				if ( $.isWindow( opts.of ) ) {
-					$(document.body).append( options.overlayElement )
-					options.overlayPosition = "fixed";
-				} else {
-					opts.of.css("position", "relative").append( options.overlayElement )
-					options.overlayPosition = "absolute";
+			if ( opts.overlay ) {
+				if ( opts.overlay === true ) {
+					options.overlayElement = $('<div />', {
+						"class" : opts.overlayClass
+					});
+				} else if ( opts.overlay.jquery ) {
+					options.overlayElement = opts.overlay;
+					options.overlayElement.addClass( opts.overlayClass );
 				}
+
+				if ( $.isWindow( opts.of ) ) {
+					$(document.body).append( options.overlayElement.detach() )
+					options.overlayPosition = "fixed";
+					//console.log( 'here', options );
+				} else {
+					opts.of.css("position", "relative").append( options.overlayElement.detach() )
+					options.overlayPosition = "absolute";
+					//console.log( 'there', options );
+				}
+
+
+				//console.log( options.overlayElement, options.overlayElement.parent() );
 				options.overlayElement.hide()
+
 			}
 			this._super.apply(this, [el, options])
 		},
@@ -146,7 +191,7 @@ steal('jquery/controller', 'jquery/event/resize', 'mxui/layout/positionable', '.
 				stack.splice(stack.indexOf(this.stackId), 1);
 				stack.unshift(this.stackId);
 			}
-			if(this.options.overlay === true){
+			if ( this.options.overlayElement ){
 				this.options.overlayElement.show().css({
 					'z-index': ++zIndex, 
 					position: this.options.overlayPosition
