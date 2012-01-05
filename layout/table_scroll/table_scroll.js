@@ -272,8 +272,8 @@ steal('mxui/layout/table_fill').then(function( $ ) {
 			} else {
 				this.$.tbody.append(els);
 			}
-
-			this.element.resize();
+			this.changed(true)
+			//this.element.resize();
 		},
 		/**
 		 * Empties the table body.
