@@ -111,7 +111,9 @@ steal('mxui/layout/positionable','mxui/nav/menuable','jquery/event/hover').then(
 		">show" : function(el, ev){
 		   if(ev.target == this.element[0]){
 				this.element.show();
-		   }
+        // prevent the event to trigger the positionable "show" handler
+        ev.stopPropagation()
+		 }
 			
 		}
    });
@@ -145,14 +147,14 @@ steal('mxui/layout/positionable','mxui/nav/menuable','jquery/event/hover').then(
     */
    Mxui.Nav.Menu.extend("Mxui.UI.Menu",{
    		defaults: {
-			types : [Mxui.Layout.Positionable("Mxui.UI.TopLeft",{defaults: {my: "left top",at: "right top"}},{}), 
+			types : [Mxui.Layout.Positionable("Mxui.UI.TopLeft",{defaults: {my: "left top",at: "right top", keep:true}},{}),
 					 Mxui.UI.Highlight],
 			select_event : "hoverenter",
 			child_selector : "li",
 			class_names : "ui-widget-content ui-menu ui-widget ui-corner-all",
 			child_class_names : "ui-menu-item ui-state-default", 
 			apply_types_to_top : true,
-		//	active : "ui-state-active"
+			active : "ui-state-active"
 		}
 	},{})
    
