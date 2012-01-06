@@ -124,14 +124,13 @@
 <div class="positionable" style="width:120px; height: 40px; line-height: 40px">
 	Drag me!
 </div>
-
+</div>
 <script type='text/javascript' 
                 src='/steal/steal.js'
                 package='main.js'
                 compress='false'>   
 </script>
 <script type='text/javascript'>
-	
 	steal(
 		"mxui/layout/positionable",
 		'jquery/event/drag'
@@ -182,6 +181,7 @@
 					.mxui_layout_positionable( options )
 					.trigger( "move", $parent );
 			});
+
 		}
 		
 		$positionable
