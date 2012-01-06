@@ -21,6 +21,10 @@
 				padding:0.5em 1em;
 				cursor: pointer;
 			}
+      #menu2{
+        relative: absolute;
+        top: 200px;
+      }
 		</style>
 	</head>
 	<body>
@@ -50,6 +54,7 @@
             
             </li>
         </ul>
+
         <ul id='menu2'>
             <li>A
                 <ul>
@@ -81,14 +86,34 @@
             </li>
         </ul>
 
-		<script type='text/javascript' 
+		<script type='text/javascript'
                 src='../../../steal/steal.js'>   
         </script>
         <script type='text/javascript'>
             steal('mxui/nav/menu').then(function(){
-				$("#menu1").mxui_nav_menu();
-            	$("#menu2").mxui_ui_menu().show().trigger("move", {top: 60, left: 280});
-			});
+				      $("#menu1").mxui_nav_menu();
+
+              Mxui.UI.Menu.extend("Enhanced.UI.menu", {},
+                {
+                "mouseleave": function(el,e){
+                  if(this.options.level == 0){
+                    this.element.children('.'+this.options.select).trigger('deactivate')
+                  }
+                },
+                ">show" : function(el, ev){
+                   if(ev.target == this.element[0]){
+                    this.element.show();
+                    // prevent the event to trigger the positionable "show" handler
+                    ev.stopPropagation()
+                    this.element.children('.'+this.options.active+":first").trigger('deactivate')
+                   }
+                }
+
+              })
+
+            	$("#menu2").enhanced_ui_menu().show()
+
+      			});
         </script>
 	</body>
 </html>
