@@ -177,22 +177,29 @@ steal('jquery/dom/dimensions', 'jquery/event/resize').then(function( $ ) {
 				parentHeight = parent.height() - (isWindow ? parseInt(container.css('marginBottom'), 10) || 0 : 0),
 				currentSize;
 			var div = '<div style="height: 0px; line-height:0px;overflow:hidden;' + (ev.data.inFloat ? 'clear: both' : '') + ';"/>'
+
 			if ( isBleeder ) {
 				//temporarily add a small div to use to figure out the 'bleed-through' margin
 				//of the last element
 				last = $(div).appendTo(container);
 				
 			}
-			
+			//console.log("?")
 			//for performance, we want to figure out the currently used height of the parent element
 			// as quick as possible
 			// we can use either offsetTop or offset depending ...
 			if ( last && last.length > 0 ) {
 				if ( last.offsetParent()[0] === container[0] ) {
+
 					currentSize = last[0].offsetTop + last.outerHeight();
 				} else if (last.offsetParent()[0] === container.offsetParent()[0]) {
+					// add pos abs for IE7 but
+					// might need to adjust for the addition of first's hheight
+					var curLast =last[0].offsetTop;
 					first = $(div).prependTo(container);
-					currentSize = ( last[0].offsetTop + last.outerHeight() ) - first[0].offsetTop;
+					
+					currentSize = ( curLast + last.outerHeight() ) - first[0].offsetTop;
+					
 					first.remove();
 				} else {
 					// add first so we know where to start from .. do not bleed in this case
@@ -202,7 +209,8 @@ steal('jquery/dom/dimensions', 'jquery/event/resize').then(function( $ ) {
 						'\nfirst',first, "first-top",
 						first.offset().top,
 						'parentMatch',
-						last.offsetParent()[0] === container.offsetParent()[0])*/
+						last.offsetParent()[0] === container.offsetParent()[0]);*/
+					
 					currentSize = ( last.offset().top + last.outerHeight() ) - first.offset().top //- container.offset().top
 					first.remove();
 				}

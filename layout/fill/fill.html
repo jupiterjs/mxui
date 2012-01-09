@@ -10,7 +10,7 @@
             .error_text { color: red; font-size: 10px;}
             td {border: solid 1px gray; padding: 3px; vertical-align: top;}
 			body {
-				margin : 0px;
+				margin : 0px 0px 60px 0px;
 				padding: 0px;
 			}
 			#header, #content, #footer{
@@ -68,6 +68,12 @@
 			}
 			#long {
 				height: 400px;
+				background-color: yellow;
+			}
+			#wraping-container {
+				background-color: green;
+			}
+			#wrapping-inner {
 				background-color: yellow;
 			}
         </style>
@@ -144,9 +150,22 @@
 		<div id='long'>I am very long ...</div>
 	</div>
 </div>
-		
+
 <h1>Content</h1>
-	<h1>Content</h1><h1>Content</h1>	
+	<h1>Content</h1><h1>Content</h1>
+	
+<h1>Same container</h1>
+
+<div id='wraping-container'>
+	a
+	<div style="height: 0px; line-height:0px; overflow:hidden;"></div>
+	<div id='wrapping-inner'>
+		Foo Bar <div style='position:absolute'>ab</div>
+	</div>
+</div>
+
+
+	
 		
 <script type='text/javascript' 
         src='../../../steal/steal.js'>   
