@@ -117,10 +117,8 @@ $.Controller.extend('Mxui.Nav.Selectable',{
 		multiActivate: true,
 		// caches 
 		cache : false,
-		
-		outsideDeactivate: true
-		
-
+		outsideDeactivate: true,
+		deactivateParent: document
     }
 },
 {
@@ -133,7 +131,7 @@ $.Controller.extend('Mxui.Nav.Selectable',{
 		this.lastMouse ={};
     },
 	
-	"{document} click":function(el,ev)
+	"{deactivateParent} click":function(el,ev)
 	{
 		if(this.options.outsideDeactivate && 
 			!$.contains(this.element[0],ev.target)  ){
