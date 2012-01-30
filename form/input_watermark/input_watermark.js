@@ -114,6 +114,16 @@ steal('jquery/controller', './input_watermark.css')
 				}
 			}
 		},
+		
+		/**
+		 * change listens for changes of value that might be caught from a auto-complete action just clicked.
+		 * @param el
+		 * @param ev
+		 */
+		"change":function(el,ev)
+		{
+			this.showHideWatermark();
+		},
 
 		/**
 		 * keydown and keyup handlers together provide a smoother watermark experience
@@ -122,11 +132,19 @@ steal('jquery/controller', './input_watermark.css')
 		 */
 		"keyup" : function (el,ev){
 			if(this.options.replaceOnType){
-				if(this.input.val() !== ""){
-					this.watermark.hide();
-				} else {
-					this.watermark.show();
-				}
+				this.showHideWatermark();
+			}
+		},
+		
+		/**
+		 * Show/Hides the watermark based on the value of the input box.
+		 */
+		showHideWatermark:function()
+		{
+			if(this.input.val() !== ""){
+				this.watermark.hide();
+			} else {
+				this.watermark.show();
 			}
 		},
 
