@@ -252,7 +252,7 @@ function( $ ) {
 
 		".splitter keydown": function( el, ev ) {
 			var offset = el.offset();
-			switch ( ev.key() ) {
+			switch ( ev.keyName() ) {
 			case 'right':
 				this.moveTo(el, offset.left + 1);
 				break;

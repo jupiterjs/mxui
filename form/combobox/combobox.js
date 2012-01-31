@@ -430,7 +430,7 @@ steal('jquery/controller', 'jquery/lang/json', 'mxui/util/scrollbar_width', 'jqu
 		 * @param {Keyup Event} ev The event that was fired.
 		 */
 		"input keyup": function( el, ev ) {
-			var key = ev.key(),
+			var key = ev.keyName(),
 				selectable = this.dropdown().children("ul").controller();
 			
 			switch(key){
