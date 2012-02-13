@@ -340,7 +340,7 @@ $.Controller.extend('Mxui.Nav.Selectable',{
 
 		// set keying for a brief time.
 		// this is to support when keying scrolls.
-		var key = ev.key()
+		var key = ev.keyName()
 		if(/down|up|right|left/.test(key)){
 			var nextEl = this.moveTo(el, key);
 			

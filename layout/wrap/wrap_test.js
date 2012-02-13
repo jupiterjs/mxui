@@ -2,9 +2,18 @@ steal('funcunit/qunit').then('mxui/layout/wrap',function(){
 
 module("mxui/layout/wrap");
 
+function addStyle(str){
+	var el = $('<style>').attr('type', 'text/css');
+	if(el[0].styleSheet) {
+		el[0].styleSheet.cssText = str;//IE
+	} else {
+		el.text(str);
+	}
+	el.appendTo($('head'));
+}
+
 test("margin moves", function(){
-	$("<style>.wrap {margin: 20px}</style>").appendTo(document.head)
-	
+	addStyle('.wrap {margin: 20px}');
 	
 	$('#qunit-test-area').html("<textarea class='wrap'>Here is my textarea</textarea>"+
 			"<input class='wrap' type='text'/>"+
