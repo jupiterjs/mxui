@@ -24,6 +24,9 @@
 .mxui_layout_split .split-hover {
 	background:#5f83b9;
 }
+.mxui_layout_split .collasped{
+	display:none;
+}
 .mxui_layout_split .disabled.vsplitter,
 .mxui_layout_split .disabled.hsplitter {
 	background:red;

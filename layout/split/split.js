@@ -151,8 +151,8 @@ function( $ ) {
 			$.Drag.distance = this.options.dragDistance;
 			this.dirs = this.Class.directionMap[this.options.direction];
 			this.usingAbsPos = c.eq(0).css('position') == "absolute";
+			
 			if(this.usingAbsPos){
-
 				if(!/absolute|relative|fixed/.test(this.element.css('position'))){
 					this.element.css('position','relative')
 				}
@@ -173,9 +173,21 @@ function( $ ) {
 		initalSetup: function( c ) {
 			//- Insert the splitter bars
 			for ( var i = 0; i < c.length - 1; i++ ) {
-				var $c = $(c[i]);
-				$c.after(this.splitterEl(
-					$c.hasClass('collapsible') ? "left" : ($(c[i + 1]).hasClass('collapsible') ? "right" : undefined)));
+				var $c = $(c[i]),
+					$cCollasible = $c.hasClass('collapsible'),
+					$cCollasped = $c.hasClass('collasped'),
+					$nxt = $(c[i + 1]),
+					$nxtCollasible = $nxt.hasClass('collapsible'),
+					$nxtCollasped = $nxt.hasClass('collasped'),
+					dir;
+					
+				if(($cCollasible && !$cCollasped) || ($nxtCollasible && $nxtCollasped)){
+					dir = "left"
+				} else if(($nxtCollasible && !$nxtCollasped) || ($cCollasible && $cCollasped)){
+					dir = "right";
+				}
+				
+				$c.after(this.splitterEl(dir));
 			}
 
 			var splitters = this.element.children(".splitter"),
@@ -193,10 +205,9 @@ function( $ ) {
 			//- Size the elements				  
 			for ( var i = 0; i < c.length; i++ ) {
 				var $c = $(c[i]);
+				
 				// store in data for faster lookup
 				$c.data("split-min-" + this.dirs.dim, parseInt($c.css('min-' + this.dirs.dim)));
-
-
 				$c.addClass("split");
 			}
 
@@ -235,7 +246,7 @@ function( $ ) {
 		 * @return {jQuery} Returns a jQuery-wrapped nodelist of elements that are panels of this container.
 		 */
 		panels: function() {
-			return this.element.children((this.options.panelClass ? "." + this.options.panelClass : "") + ":not(.splitter):visible")
+			return this.element.children((this.options.panelClass ? "." + this.options.panelClass : "") + ":not(.splitter)")
 		},
 
 		".splitter mouseenter": function( el, ev ) {
@@ -519,8 +530,7 @@ function( $ ) {
 			} else {
 				this.hidePanel(elmToTakeActionOn, true);
 			}
-
-			elmToTakeActionOn.toggleClass('collapsed');
+			
 			splitBar.children().toggleClass('left-collapse').toggleClass('right-collapse');
 		},
 
@@ -542,6 +552,8 @@ function( $ ) {
 				}
 
 				panel.show();
+				panel.removeClass('collapsed');
+				panel.trigger('toggle', true)
 
 				var prevElm = panel.prev();
 				if ( prevElm.hasClass('splitter') ) {
@@ -571,6 +583,8 @@ function( $ ) {
 		hidePanel: function( panel, keepSplitter ) {
 			if ( panel.is(':visible') || panel.hasClass('collapsed') ) {
 				panel.hide();
+				panel.addClass('collasped');
+				panel.trigger('toggle', false)
 
 				if (!keepSplitter ) {
 					panel.prev().hide();
@@ -633,7 +647,7 @@ function( $ ) {
 			//calculate current percentage of height
 			for ( i = 0; i < length; i++ ) {
 				$c = $(els[i]);
-				dim = $c[this.dirs.outer](true);
+				dim = $c.hasClass('collasped') ? 0 : $c[this.dirs.outer](true);
 				dims.push(dim);
 				if( keepIndex !== i ) {
 					sum += dim;
@@ -677,6 +691,14 @@ function( $ ) {
 						outerWidth: Math.max( newDims[i], minWidth ),
 						outerHeight: Math.max( pHeight, minHeight )
 					};
+					
+				if($c.hasClass('collasped')){
+					if(this.options.direction == "horizontal"){
+						dim.outerHeight = 0;
+					} else {
+						dim.outerWidth = 0;
+					}
+				}
 
 				if ( animate && !this.usingAbsPos ) {
 					$c.animate(dim, "fast", function() {
