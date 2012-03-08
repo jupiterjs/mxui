@@ -175,15 +175,15 @@ function( $ ) {
 			for ( var i = 0; i < c.length - 1; i++ ) {
 				var $c = $(c[i]),
 					$cCollasible = $c.hasClass('collapsible'),
-					$cCollasped = $c.hasClass('collasped'),
+					$cCollapsed = $c.hasClass('collapsed'),
 					$nxt = $(c[i + 1]),
 					$nxtCollasible = $nxt.hasClass('collapsible'),
-					$nxtCollasped = $nxt.hasClass('collasped'),
+					$nxtCollapsed = $nxt.hasClass('collapsed'),
 					dir;
 					
-				if(($cCollasible && !$cCollasped) || ($nxtCollasible && $nxtCollasped)){
+				if(($cCollasible && !$cCollapsed) || ($nxtCollasible && $nxtCollapsed)){
 					dir = "left"
-				} else if(($nxtCollasible && !$nxtCollasped) || ($cCollasible && $cCollasped)){
+				} else if(($nxtCollasible && !$nxtCollapsed) || ($cCollasible && $cCollapsed)){
 					dir = "right";
 				}
 				
@@ -583,7 +583,7 @@ function( $ ) {
 		hidePanel: function( panel, keepSplitter ) {
 			if ( panel.is(':visible') || panel.hasClass('collapsed') ) {
 				panel.hide();
-				panel.addClass('collasped');
+				panel.addClass('collapsed');
 				panel.trigger('toggle', false)
 
 				if (!keepSplitter ) {
@@ -647,7 +647,7 @@ function( $ ) {
 			//calculate current percentage of height
 			for ( i = 0; i < length; i++ ) {
 				$c = $(els[i]);
-				dim = $c.hasClass('collasped') ? 0 : $c[this.dirs.outer](true);
+				dim = $c.hasClass('collapsed') ? 0 : $c[this.dirs.outer](true);
 				dims.push(dim);
 				if( keepIndex !== i ) {
 					sum += dim;
@@ -692,7 +692,7 @@ function( $ ) {
 						outerHeight: Math.max( pHeight, minHeight )
 					};
 					
-				if($c.hasClass('collasped')){
+				if($c.hasClass('collapsed')){
 					if(this.options.direction == "horizontal"){
 						dim.outerHeight = 0;
 					} else {
