@@ -141,7 +141,7 @@ $.Controller.extend('Mxui.Nav.Selectable',{
 			var active = this.find("." + this.options.activatedClassName);
 			if(active.length){
 				active.trigger('deactivate');
-				this.element.trigger('outsideDeactivate');
+				this.element.trigger('outsideDeactivate', [ $(ev.target) ]);
 			}
 		}
 	},
