@@ -619,7 +619,8 @@ function( $ ) {
 				curLeft = 0,
 				index, rawDim, newDim, pHeight = this.element.height(),
 				pWidth = this.element.width(),
-				length, 
+				length,
+				visibleLength, 
 				start,
 				keepIndex = keep ? els.index(keep[0]) : -1;
 
@@ -656,20 +657,29 @@ function( $ ) {
 
 			increase = total / sum;
 
-			// this randomly adjusts sizes so scaling is approximately equal
-			for ( i = start; i < length + start; i++ ) {
-				index = i >= length ? i - length : i;
-				dim = dims[index];
-				rawDim = (dim * increase) + remainder;
-				newDim = (i == length + start - 1 ? total : Math.round(rawDim));
-				
-				if (keepIndex == i) {
-					// if we're keeping this element's size, use the original dimensions
-					newDims[index] = dim;
-				} else {
-					// use the adjusted dimensions
-					newDims[index] = newDim;
-					total = total - newDim;
+			//when resizing the panels, we want to return them to evenly distributed heights/widths
+			if ( resizePanels ) {
+				visibleLength = els.filter(':visible').length;
+				for ( i = 0; i < length; i++ ) {
+					newDims[i] = Math.floor(total / visibleLength);
+				}
+			}
+			else {
+				// this randomly adjusts sizes so scaling is approximately equal
+				for ( i = start; i < length + start; i++ ) {
+					index = i >= length ? i - length : i;
+					dim = dims[index];
+					rawDim = (dim * increase) + remainder;
+					newDim = (i == length + start - 1 ? total : Math.round(rawDim));
+					
+					if (keepIndex == i) {
+						// if we're keeping this element's size, use the original dimensions
+						newDims[index] = dim;
+					} else {
+						// use the adjusted dimensions
+						newDims[index] = newDim;
+						total = total - newDim;
+					}
 				}
 			}
 
