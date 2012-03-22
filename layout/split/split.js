@@ -700,23 +700,26 @@ function( $ ) {
 					}
 				}
 
-				if ( animate && !this.usingAbsPos ) {
-					$c.animate(dim, "fast", function() {
+				// Only resize panels that are actually visible, otherwise leave the dimensions of the panel alone 
+				if ($c.is(':visible')) {
+					if ( animate && !this.usingAbsPos ) {
+						$c.animate(dim, "fast", function() {
+							if ( resizePanels ) {
+								$(this).trigger('resize', [false]);
+							}
+
+							if ( keep && !keepSized ) {
+								keep.trigger('resize', [false])
+								keepSized = true;
+							}
+						});
+					}
+					else {
+						$c.outerHeight(dim.outerHeight).outerWidth(dim.outerWidth);
+
 						if ( resizePanels ) {
-							$(this).trigger('resize', [false]);
+							$c.trigger('resize', [false]);
 						}
-
-						if ( keep && !keepSized ) {
-							keep.trigger('resize', [false])
-							keepSized = true;
-						}
-					});
-				}
-				else {
-					$c.outerHeight(dim.outerHeight).outerWidth(dim.outerWidth);
-
-					if ( resizePanels ) {
-						$c.trigger('resize', [false]);
 					}
 				}
 
