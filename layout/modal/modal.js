@@ -102,6 +102,7 @@ steal('jquery/controller', 'jquery/event/resize', 'mxui/layout/positionable', '.
 			my: 'center center',
 			at: 'center center',
 			of: window,
+			collision: 'fit fit',
 			// destroy modal when hide is triggered
 			destroyOnHide : false,
 			// show overlay if true
