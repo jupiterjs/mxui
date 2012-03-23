@@ -108,7 +108,9 @@ steal('jquery/controller', 'jquery/event/resize', 'mxui/layout/positionable', '.
 			// show overlay if true
 			overlay: false,
 			// class that will be applied to the overlay element
-			overlayClass : "mxui_layout_modal-overlay"
+			overlayClass : "mxui_layout_modal-overlay",
+			// close modal if overlay is clicked
+			overlayClick: true
 		},
 		listensTo: ["show", "hide", "move"]
 	}, 
@@ -210,7 +212,7 @@ steal('jquery/controller', 'jquery/event/resize', 'mxui/layout/positionable', '.
 			}
 		},
 		"{overlayElement} click" : function(el, ev){
-			this.hide();
+			if(this.options.overlayClick) { this.hide(); }
 		},
 		// Reposition the modal on window resize
 		"{window} resize" : function(el, ev){
