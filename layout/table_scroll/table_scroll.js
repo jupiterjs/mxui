@@ -7,7 +7,6 @@ steal('mxui/layout/table_fill').then(function( $ ) {
 			cells.eq(i).outerWidth(firstWidths[i]);
 		}
 	}
-
 	/**
 	 * @class Mxui.Layout.TableScroll
 	 * @parent Mxui

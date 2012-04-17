@@ -505,7 +505,7 @@
 
 				var parts = fullName.split(/\./),
 					shortName = parts.pop(),
-					current = $.Class.getObject(parts.join('.')),
+					current = $.String.getObject(parts.join('.')),
 					namespace = current;
 
 				

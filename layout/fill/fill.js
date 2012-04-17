@@ -115,7 +115,7 @@ steal('jquery/dom/dimensions', 'jquery/event/resize').then(function( $ ) {
 			if ( thePage ) {
 				options.parent = $(window)
 			}
-			
+
 			
 			this.each(function(){
 				
@@ -138,6 +138,7 @@ steal('jquery/dom/dimensions', 'jquery/event/resize').then(function( $ ) {
 			})
 			
 
+
 			
 			//add a resize to get things going
 			var func = function() {
@@ -154,13 +155,15 @@ steal('jquery/dom/dimensions', 'jquery/event/resize').then(function( $ ) {
 
 	$.extend(filler, {
 		parentResize: function( ev ) {
+
 			if (ev.data.filler.is(':hidden')) {
 				return;
 			}
-			
+
 			var parent = $(this),
 				isWindow = this == window,
 				container = (isWindow ? $(document.body) : parent),
+
 
 				//if the parent bleeds margins, we don't care what the last element's margin is
 				isBleeder = bleeder(parent),

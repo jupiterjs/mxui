@@ -16,7 +16,6 @@ steal('mxui/form/combobox').then(function(){
 					className : className
 				})
 							
-							
 				var items = [], option, $option;
 				el.find("option").each(function(){
 					$option = $(this);

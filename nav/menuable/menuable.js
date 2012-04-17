@@ -59,7 +59,7 @@ steal('jquery/controller',
 			if(this.activating)
 				return;
 			this.activating = true;
-			var options = this.options, oldActive = this.find("."+options.active+":first"), self= this;
+			var options = this.options, oldActive = this.element.children("."+options.active+":first"), self= this;
 			
 			ev.pause();
 			var doThis = function(){

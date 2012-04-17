@@ -1,3 +1,2 @@
-steal
- .plugins("funcunit")
- .then("select_test")
+steal("funcunit")
+ .then("mxui/form/combobox/test/select_test")
