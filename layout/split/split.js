@@ -110,7 +110,11 @@ function( $ ) {
 			splitter: "splitter",
 			direction: null,
 			dragDistance: 5,
-			panelClass: null
+			panelClass: null,
+			locale:{
+				collaspe: "Click to collapse",
+				expand: "Click to expand"
+			}
 		},
 		listensTo: ['resize'],
 		directionMap: {
@@ -179,15 +183,22 @@ function( $ ) {
 					$nxt = $(c[i + 1]),
 					$nxtCollasible = $nxt.hasClass('collapsible'),
 					$nxtCollapsed = $nxt.hasClass('collapsed'),
-					dir;
+					dir, txt;
+					
+				if($cCollasible && !$cCollapsed){
+					txt = this.options.locale.collaspe;
+				} else {
+					txt = this.options.locale.expand;
+				}
 					
 				if(($cCollasible && !$cCollapsed) || ($nxtCollasible && $nxtCollapsed)){
-					dir = "left"
+					dir = "left";
+					
 				} else if(($nxtCollasible && !$nxtCollapsed) || ($cCollasible && $cCollapsed)){
 					dir = "right";
 				}
 				
-				$c.after(this.splitterEl(dir));
+				$c.after(this.splitterEl(dir, txt));
 			}
 
 			var splitters = this.element.children(".splitter"),
@@ -222,12 +233,12 @@ function( $ ) {
 		 * Appends a split bar.
 		 * @param {Object} dir
 		 */
-		splitterEl: function( dir ) {
+		splitterEl: function( dir,txt ) {
 			var splitter = $("<div class='" + this.options.direction.substr(0, 1) + "splitter splitter' tabindex='0'>")
 							.css("position", this.usingAbsPos ? "absolute" : "relative");
 
 			if ( dir ) {
-				splitter.append("<a class='" + dir + "-collapse collapser' href='javascript://'></a>")
+				splitter.append("<a title='" + txt + "' class='" + dir + "-collapse collapser' href='javascript://'></a>")
 			}
 
 			return splitter;
@@ -521,14 +532,17 @@ function( $ ) {
 			var prevElm = splitBar.prev(),
 				nextElm = splitBar.next(),
 				elmToTakeActionOn = (prevElm.hasClass('collapsible') && prevElm) || (nextElm.hasClass('collapsible') && nextElm);
+				
 			if (!elmToTakeActionOn ) {
 				return;
 			}
 
 			if (!elmToTakeActionOn.is(':visible') ) {
 				this.showPanel(elmToTakeActionOn);
+				splitBar.find('a').attr('title', this.options.locale.collaspe);
 			} else {
 				this.hidePanel(elmToTakeActionOn, true);
+				splitBar.find('a').attr('title', this.options.locale.expand);
 			}
 			
 			splitBar.children().toggleClass('left-collapse').toggleClass('right-collapse');
@@ -619,8 +633,7 @@ function( $ ) {
 				curLeft = 0,
 				index, rawDim, newDim, pHeight = this.element.height(),
 				pWidth = this.element.width(),
-				length,
-				visibleLength, 
+				length, 
 				start,
 				keepIndex = keep ? els.index(keep[0]) : -1;
 
@@ -657,29 +670,20 @@ function( $ ) {
 
 			increase = total / sum;
 
-			//when resizing the panels, we want to return them to evenly distributed heights/widths
-			if ( resizePanels ) {
-				visibleLength = els.filter(':visible').length;
-				for ( i = 0; i < length; i++ ) {
-					newDims[i] = Math.floor(total / visibleLength);
-				}
-			}
-			else {
-				// this randomly adjusts sizes so scaling is approximately equal
-				for ( i = start; i < length + start; i++ ) {
-					index = i >= length ? i - length : i;
-					dim = dims[index];
-					rawDim = (dim * increase) + remainder;
-					newDim = (i == length + start - 1 ? total : Math.round(rawDim));
-					
-					if (keepIndex == i) {
-						// if we're keeping this element's size, use the original dimensions
-						newDims[index] = dim;
-					} else {
-						// use the adjusted dimensions
-						newDims[index] = newDim;
-						total = total - newDim;
-					}
+			// this randomly adjusts sizes so scaling is approximately equal
+			for ( i = start; i < length + start; i++ ) {
+				index = i >= length ? i - length : i;
+				dim = dims[index];
+				rawDim = (dim * increase) + remainder;
+				newDim = (i == length + start - 1 ? total : Math.round(rawDim));
+				
+				if (keepIndex == i) {
+					// if we're keeping this element's size, use the original dimensions
+					newDims[index] = dim;
+				} else {
+					// use the adjusted dimensions
+					newDims[index] = newDim;
+					total = total - newDim;
 				}
 			}
 
@@ -709,7 +713,7 @@ function( $ ) {
 						dim.outerWidth = 0;
 					}
 				}
-
+				
 				// Only resize panels that are actually visible, otherwise leave the dimensions of the panel alone 
 				if ($c.is(':visible')) {
 					if ( animate && !this.usingAbsPos ) {
@@ -739,7 +743,6 @@ function( $ ) {
 					$c.css(this.dirs.pos, curLeft)
 					splitters.eq(i).css(this.dirs.pos, curLeft + newDims[i])
 				}
-
 				// move the next location
 				curLeft = curLeft + newDims[i] + splitterDim;
 			}
