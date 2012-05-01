@@ -57,7 +57,7 @@ $.Controller.extend("Mxui.Data.Grid",{
 		offsetEmpties: true,
 		// set to false to turn off the filler
 		filler: true,
-		
+		header: '//mxui/data/grid/views/th',
 		// immediately uses the  model to request items for the grid
 		loadImmediate: true,
 		selectable : true
@@ -78,7 +78,7 @@ $.Controller.extend("Mxui.Data.Grid",{
 		for(var name in this.options.columns){
 			count++;
 		}
-		this.element.append( this.view({columns: this.options.columns, count: count}) )
+		 this.element.append( this.view({header: this.options.header, columns: this.options.columns, count: count}) );
 		
 		this.element.children('table').mxui_layout_table_scroll({
 			filler: this.options.filler
