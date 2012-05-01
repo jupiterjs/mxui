@@ -57,7 +57,7 @@ steal('jquery/controller','jquery/event/key').then(function(){
 
 			// Listen on keydown for backspace and delete, since those keys
 			// don't register keyCodes in IE's keypress event.
-			var key = ev.key();
+			var key = ev.keyName();
 			
 			if ((key === "backspace" || key === "delete")){
 				
@@ -71,7 +71,7 @@ steal('jquery/controller','jquery/event/key').then(function(){
 		
 		"keypress" : function(el, ev){
 			
-			var key = ev.key()
+			var key = ev.keyName()
 			
 			if (this.skip && (key == "backspace" || key == "delete") ){
 				return;
