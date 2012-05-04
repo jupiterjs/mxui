@@ -616,7 +616,6 @@ if ( $.uiBackCompat !== false ) {
 	   init : function(element, options) {
            this.element.css("position","absolute");
            if(!this.options.keep){
-				this.element[0].parentNode.removeChild(this.element[0])
 				document.body.appendChild(this.element[0]);
 		   }
        },
