@@ -201,8 +201,9 @@ steal('jquery/controller', 'jquery/event/resize', 'mxui/layout/positionable', '.
 				})
 			}
 			this.element.css({'display': 'block', 'z-index': ++zIndex});
-			this._super();
 			this.element.css('position', this.options.overlayPosition );
+			this.element.offset({left: 0, top: 0});
+			this._super();
 			this.closeOnEscapeCb = this.callback(this.closeOnEscape);
 		},
 		"{document} keyup" : function(el, ev){
