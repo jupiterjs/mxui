@@ -46,6 +46,7 @@ $.Controller.extend("Mxui.Data.Grid",{
 	defaults: {
 		columns: {},
 		params: new Mxui.Data,
+		rowClass: "",
 		row : null,
 		model : null,
 		noItems : "No Items",
@@ -126,7 +127,8 @@ $.Controller.extend("Mxui.Data.Grid",{
 		
 		var trs = $(this.view('list',{
 			row : this.options.row,
-			items: items
+			items: items,
+			rowClass: this.options.rowClass
 		}));
 		
 		if(clear){
